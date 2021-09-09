@@ -1,0 +1,3 @@
+Classrecursive'
+
+ Class `Class.recursive'`

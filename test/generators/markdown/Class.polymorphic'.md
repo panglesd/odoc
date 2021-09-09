@@ -1,0 +1,3 @@
+Classpolymorphic'
+
+ Class `Class.polymorphic'`
