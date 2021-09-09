@@ -403,6 +403,14 @@ end = struct
   let targets = Targets.(cmd, info)
 end
 
+module Odoc_md = Make_renderer (struct
+  type args = unit
+
+  let renderer = Markdown.renderer
+
+  let extra_args = Term.(const ())
+end)
+
 module Odoc_html = Make_renderer (struct
   type args = Html_page.args
 
@@ -572,6 +580,14 @@ module Odoc_latex = Make_renderer (struct
     Term.(const f $ with_children)
 end)
 
+module Odoc_markdown = Make_renderer (struct
+  type args = unit
+
+  let renderer = Markdown.renderer
+
+  let extra_args = Term.const ()
+end)
+
 module Depends = struct
   module Compile = struct
     let list_dependencies input_file =
@@ -720,6 +736,9 @@ let () =
       Odoc_html.process;
       Odoc_html.targets;
       Odoc_html.generate;
+      Odoc_markdown.process;
+      Odoc_markdown.targets;
+      Odoc_markdown.generate;
       Odoc_manpage.process;
       Odoc_manpage.targets;
       Odoc_manpage.generate;
