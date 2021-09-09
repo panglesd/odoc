@@ -152,7 +152,7 @@ let rec block (l : Block.t) =
       let continue r = if r = [] then noop else break ++ block r in
       match b.desc with
       | Inline i -> inline i ++ continue rest
-      | Paragraph i -> inline i ++ continue rest
+      | Paragraph i -> inline i ++ break ++ break ++ continue rest
       | List (list_typ, l) ->
           let f n b =
             let bullet =
