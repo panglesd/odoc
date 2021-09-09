@@ -403,14 +403,6 @@ end = struct
   let targets = Targets.(cmd, info)
 end
 
-module Odoc_md = Make_renderer (struct
-  type args = unit
-
-  let renderer = Markdown.renderer
-
-  let extra_args = Term.(const ())
-end)
-
 module Odoc_html = Make_renderer (struct
   type args = Html_page.args
 
