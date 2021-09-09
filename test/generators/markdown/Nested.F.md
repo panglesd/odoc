@@ -5,7 +5,11 @@ NestedF
 
 This is a functor F.
 
+
+
 Some additional comments.
+
+
 # Type
 
 
@@ -27,6 +31,8 @@ Some type.
 
 
 
+
+
 ### Values
 
 
@@ -34,6 +40,8 @@ Some type.
 ###### &nbsp; &nbsp; &nbsp; &nbsp;val y : t
 
 The value of y.
+
+
 
 end
 
@@ -51,6 +59,8 @@ end
 
 Some type.
 
+
+
 end
 
 
@@ -63,3 +73,5 @@ end
 ###### &nbsp; type t = Arg1.t * Arg2.t
 
 Some type.
+
+

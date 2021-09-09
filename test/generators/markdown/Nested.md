@@ -4,6 +4,8 @@ Nested
 
 
 This comment needs to be here before #235 is fixed.
+
+
 # Module
 
 
@@ -11,6 +13,8 @@ This comment needs to be here before #235 is fixed.
 ###### &nbsp; module X : sig ... end
 
 This is module X.
+
+
 
 
 
@@ -31,6 +35,8 @@ Some type.
 
 
 
+
+
 ### Values
 
 
@@ -39,9 +45,13 @@ Some type.
 
 The value of y.
 
+
+
 end
 
 This is module type Y.
+
+
 
 
 
@@ -55,6 +65,8 @@ This is a functor F.
 
 
 
+
+
 # Class
 
 
@@ -62,6 +74,8 @@ This is a functor F.
 ###### &nbsp; class virtual  z : object ... end
 
 This is class z.
+
+
 
 
 <a id="class-inherits"></a>

@@ -20,16 +20,22 @@ Labels
 Attached to type
 
 
+
+
 <a id="val-f"></a>
 ###### &nbsp; val f : [t](#type-t)
 
 Attached to value
 
 
+
+
 <a id="val-e"></a>
 ###### &nbsp; val e : unit -> [t](#type-t)
 
 Attached to external
+
+
 
 
 <a id="module-type-S"></a>
@@ -63,6 +69,8 @@ end
 Attached to exception
 
 
+
+
 <a id="type-x"></a>
 ###### &nbsp; type x = ..
 
@@ -81,16 +89,22 @@ Attached to exception
 Attached to extension
 
 
+
+
 <a id="module-S"></a>
 ###### &nbsp; module S := A
 
 Attached to module subst
 
 
+
+
 <a id="type-s"></a>
 ###### &nbsp; type s := [t](#type-t)
 
 Attached to type subst
+
+
 
 
 <a id="type-u"></a>
@@ -105,6 +119,8 @@ Attached to type subst
 
 
 
+
+
 <a id="type-v"></a>
 ###### &nbsp; type v = {
 
@@ -114,11 +130,15 @@ Attached to type subst
 
   Attached to field
 
+
+
 }
 
 
 
 Testing that labels can be referenced
+
+
 - [Attached to unit](#L1)
 
 - [Attached to nothing](#L2)

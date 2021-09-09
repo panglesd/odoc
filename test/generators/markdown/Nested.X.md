@@ -5,7 +5,11 @@ NestedX
 
 This is module X.
 
+
+
 Some additional comments.
+
+
 # Type
 
 
@@ -16,6 +20,8 @@ Some type.
 
 
 
+
+
 # Values
 
 
@@ -23,3 +29,5 @@ Some type.
 ###### &nbsp; val x : t
 
 The value of x.
+
+

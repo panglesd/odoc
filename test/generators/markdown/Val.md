@@ -7,6 +7,8 @@ Val
 Foo.
 
 
+
+
 <a id="val-undocumented"></a>
 ###### &nbsp; val undocumented : unit
 
@@ -16,3 +18,5 @@ Foo.
 ###### &nbsp; val documented_above : unit
 
 Bar.
+
+

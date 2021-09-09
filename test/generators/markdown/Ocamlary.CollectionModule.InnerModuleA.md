@@ -4,11 +4,15 @@ OcamlaryCollectionModuleInnerModuleA
 
 
 This comment is for `InnerModuleA
-`.<a id="type-t"></a>
+`.
+
+<a id="type-t"></a>
 ###### &nbsp; type t = collection
 
 This comment is for `t
 `.
+
+
 
 
 <a id="module-InnerModuleA'"></a>
@@ -16,6 +20,8 @@ This comment is for `t
 
 This comment is for `InnerModuleA'
 `.
+
+
 
 
 <a id="module-type-InnerModuleTypeA'"></a>
@@ -26,7 +32,11 @@ This comment is for `InnerModuleA'
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleTypeA'
 `.
+
+

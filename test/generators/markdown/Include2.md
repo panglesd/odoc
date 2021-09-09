@@ -7,7 +7,11 @@ Include2
 Comment about X that should not appear when including X below.
 
 
+
+
 Comment about X that should not appear when including X below.
+
+
 
 <a id="type-t"></a>
 ###### &nbsp; type t = int
@@ -20,11 +24,15 @@ Comment about X that should not appear when including X below.
 Top-comment of Y.
 
 
+
+
 <a id="module-Y_include_synopsis"></a>
 ###### &nbsp; module Y_include_synopsis : sig ... end
 
 The `include Y` below should have the synopsis from `Y
 `'s top-comment attached to it.
+
+
 
 
 <a id="module-Y_include_doc"></a>

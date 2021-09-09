@@ -3,7 +3,9 @@ Module_type_alias
  Module `Module_type_alias`
 
 
-Module Type Aliases<a id="module-type-A"></a>
+Module Type Aliases
+
+<a id="module-type-A"></a>
 ###### &nbsp; module type A = sig
 
 <a id="type-a"></a>

@@ -3,7 +3,9 @@ OcamlaryAliases
  Module `Ocamlary.Aliases`
 
 
-Let's imitate jst's layout.<a id="module-Foo"></a>
+Let's imitate jst's layout.
+
+<a id="module-Foo"></a>
 ###### &nbsp; module Foo : sig ... end
 
 
@@ -55,6 +57,8 @@ Let's imitate jst's layout.<a id="module-Foo"></a>
 Just for giggle, let's see what happens when we include `Foo
 `.
 
+
+
 <a id="module-A"></a>
 ###### &nbsp; module A = Foo.A
 
@@ -87,6 +91,8 @@ Just for giggle, let's see what happens when we include `Foo
 
 And also, let's refer to `A.t` and `Foo.B.id
 `
+
+
 
 <a id="module-P1"></a>
 ###### &nbsp; module P1 : sig ... end

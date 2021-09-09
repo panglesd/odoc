@@ -5,6 +5,8 @@ Ocamlary
 
 This is an _interface_ with **all** of the _module system_ features. This documentation demonstrates:
 
+
+
 - comment formatting
 
 - unassociated comments
@@ -12,6 +14,8 @@ This is an _interface_ with **all** of the _module system_ features. This docume
 - documentation sections
 
 - module system documentation including
+
+
 1) submodules
 
 2) module aliases
@@ -28,6 +32,8 @@ This is an _interface_ with **all** of the _module system_ features. This docume
 
 A numbered list:
 
+
+
 1) 3
 
 2) 2
@@ -38,20 +44,32 @@ A numbered list:
 David Sheets is the author.
 
 
+
+
 @author : David Sheets
 
 You may find more information about this HTML documentation renderer at 
 [github.com/dsheets/ocamlary](https://github.com/dsheets/ocamlary).
 
+
+
 This is some verbatim text:
+
+
 verbatim
 
 This is some verbatim text:
+
+
 [][df[]]}}
 
 Here is some raw LaTeX: 
 
+
+
 Here is an index table of `Empty` modules:
+
+
 
 @`Empty` : A plain, empty module
 
@@ -65,16 +83,28 @@ Here is an index table of `Empty` modules:
 Here is a table of links to indexes: `indexlist
 `
 
+
+
 Here is some superscript: x<sup>2
+
+
 
 Here is some subscript: x<sub>0
 
+
+
 Here are some escaped brackets: { [ @ ] }
+
+
 
 Here is some _emphasis_ `followed by code
 `.
 
+
+
 An unassociated comment
+
+
 
 
 # Level 1
@@ -102,6 +132,8 @@ An unassociated comment
 A plain, empty module
 
 
+
+
 <a id="module-type-Empty"></a>
 ###### &nbsp; module type Empty = sig
 
@@ -112,6 +144,8 @@ A plain, empty module
 end
 
 An ambiguous, misnamed module type
+
+
 
 
 <a id="module-type-MissingComment"></a>
@@ -127,6 +161,8 @@ An ambiguous, misnamed module type
 
 
 
+
+
 # Section 9000
 
 
@@ -135,6 +171,8 @@ An ambiguous, misnamed module type
 
 A plain module alias of `Empty
 `
+
+
 
 
 
@@ -148,10 +186,14 @@ end
 A plain, empty module signature
 
 
+
+
 <a id="module-type-EmptySigAlias"></a>
 ###### &nbsp; module type EmptySigAlias = EmptySig
 
 A plain, empty module signature alias of
+
+
 
 
 <a id="module-ModuleWithSignature"></a>
@@ -161,10 +203,14 @@ A plain module of a signature of `EmptySig
 ` (reference)
 
 
+
+
 <a id="module-ModuleWithSignatureAlias"></a>
 ###### &nbsp; module ModuleWithSignatureAlias : EmptySigAlias
 
 A plain module with an alias signature
+
+
 
 
 <a id="module-One"></a>
@@ -189,6 +235,8 @@ end
 end
 
 There's a signature in a module in this signature.
+
+
 
 
 <a id="module-type-SuperSig"></a>
@@ -272,6 +320,8 @@ For a good time, see `SuperSig`.SubSigA.subSig or `SuperSig
 `EmptySig
 ` is the module signature.
 
+
+
 <a id="module-Buffer"></a>
 ###### &nbsp; module Buffer : sig ... end
 
@@ -279,7 +329,11 @@ For a good time, see `SuperSig`.SubSigA.subSig or `SuperSig
 `.t
 
 
+
+
 Some text before exception title.
+
+
 
 
 ### Basic exception stuff
@@ -287,10 +341,14 @@ Some text before exception title.
 
 After exception title.
 
+
+
 <a id="exception-Kaboom"></a>
 ###### &nbsp; exception Kaboom of unit
 
 Unary exception constructor
+
+
 
 
 <a id="exception-Kablam"></a>
@@ -299,10 +357,14 @@ Unary exception constructor
 Binary exception constructor
 
 
+
+
 <a id="exception-Kapow"></a>
 ###### &nbsp; exception Kapow of unit * unit
 
 Unary exception constructor over binary tuple
+
+
 
 
 <a id="exception-EmptySig"></a>
@@ -312,11 +374,15 @@ Unary exception constructor over binary tuple
 `](#exception-EmptySig) is this exception.
 
 
+
+
 <a id="exception-EmptySigAlias"></a>
 ###### &nbsp; exception EmptySigAlias
 
 [`EmptySigAlias
 `](#exception-EmptySigAlias) is this exception.
+
+
 
 
 
@@ -330,17 +396,25 @@ Unary exception constructor over binary tuple
 `](#val-a_function) is the value below.
 
 
+
+
 <a id="val-a_function"></a>
 ###### &nbsp; val a_function : x:int -> int
 
 This is `a_function` with param and return type.
 
+
+
 @parameter x : the `x` coordinate
+
+
 
 
 
 @returns : the `y
 ` coordinate
+
+
 
 
 
@@ -364,11 +438,15 @@ This is `a_function` with param and return type.
 
 
 
+
+
 <a id="val-ocaml_org"></a>
 ###### &nbsp; val ocaml_org : string
 
 
 @see [http://ocaml.org/](http://ocaml.org/) : The OCaml Web site
+
+
 
 
 
@@ -383,6 +461,8 @@ This is `a_function` with param and return type.
 
 
 
+
+
 <a id="val-some_doc"></a>
 ###### &nbsp; val some_doc : string
 
@@ -393,10 +473,14 @@ This is `a_function` with param and return type.
 
 
 
+
+
 <a id="val-since_mesozoic"></a>
 ###### &nbsp; val since_mesozoic : unit
 
 This value was introduced in the Mesozoic era.
+
+
 
 @since : mesozoic
 
@@ -408,11 +492,17 @@ This value was introduced in the Mesozoic era.
 
 This value has had changes in 1.0.0, 1.1.0, and 1.2.0.
 
+
+
 @before 1.0.0 : before 1.0.0
 
 
 
+
+
 @before 1.1.0 : before 1.1.0
+
+
 
 
 
@@ -506,17 +596,23 @@ This comment is for `CollectionModule
 `.
 
 
+
+
 <a id="module-type-COLLECTION"></a>
 ###### &nbsp; module type COLLECTION = sig
 
 This comment is for `CollectionModule
 `.
 
+
+
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type collection
 
 This comment is for `collection
 `.
+
+
 
 
 <a id="type-element"></a>
@@ -534,6 +630,8 @@ This comment is for `t
 `.
 
 
+
+
 <a id="module-InnerModuleA'"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
@@ -542,10 +640,14 @@ This comment is for `t
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleA'
 `.
+
+
 
 
 <a id="module-type-InnerModuleTypeA'"></a>
@@ -556,14 +658,20 @@ This comment is for `InnerModuleA'
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleTypeA'`.
+
+
 
 end
 
 This comment is for `InnerModuleA
 `.
+
+
 
 
 <a id="module-type-InnerModuleTypeA"></a>
@@ -572,9 +680,13 @@ This comment is for `InnerModuleA
 This comment is for `InnerModuleTypeA
 `.
 
+
+
 end
 
 module type of
+
+
 
 
 <a id="module-Recollection"></a>
@@ -591,11 +703,15 @@ module type of
 This comment is for `CollectionModule
 `.
 
+
+
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type collection
 
 This comment is for `collection
 `.
+
+
 
 
 <a id="type-element"></a>
@@ -613,6 +729,8 @@ This comment is for `t
 `.
 
 
+
+
 <a id="module-InnerModuleA'"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
@@ -621,10 +739,14 @@ This comment is for `t
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleA'
 `.
+
+
 
 
 <a id="module-type-InnerModuleTypeA'"></a>
@@ -635,9 +757,13 @@ This comment is for `InnerModuleA'
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleTypeA'`.
+
+
 
 end
 
@@ -645,11 +771,15 @@ This comment is for `InnerModuleA
 `.
 
 
+
+
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
 This comment is for `InnerModuleTypeA
 `.
+
+
 
 end
 
@@ -692,6 +822,8 @@ This comment is for `t
 `.
 
 
+
+
 <a id="module-InnerModuleA'"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
@@ -700,10 +832,14 @@ This comment is for `t
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleA'
 `.
+
+
 
 
 <a id="module-type-InnerModuleTypeA'"></a>
@@ -714,9 +850,13 @@ This comment is for `InnerModuleA'
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleTypeA'`.
+
+
 
 end
 
@@ -724,11 +864,15 @@ This comment is for `InnerModuleA
 `.
 
 
+
+
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
 This comment is for `InnerModuleTypeA
 `.
+
+
 
 end
 
@@ -748,11 +892,15 @@ end
 This comment is for `CollectionModule
 `.
 
+
+
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type collection
 
 This comment is for `collection
 `.
+
+
 
 
 <a id="type-element"></a>
@@ -770,6 +918,8 @@ This comment is for `t
 `.
 
 
+
+
 <a id="module-InnerModuleA'"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
@@ -778,10 +928,14 @@ This comment is for `t
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleA'
 `.
+
+
 
 
 <a id="module-type-InnerModuleTypeA'"></a>
@@ -792,9 +946,13 @@ This comment is for `InnerModuleA'
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleTypeA'`.
+
+
 
 end
 
@@ -802,11 +960,15 @@ This comment is for `InnerModuleA
 `.
 
 
+
+
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
 This comment is for `InnerModuleTypeA
 `.
+
+
 
 end
 
@@ -829,11 +991,15 @@ end
 This comment is for `CollectionModule
 `.
 
+
+
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type collection
 
 This comment is for `collection
 `.
+
+
 
 
 <a id="type-element"></a>
@@ -851,6 +1017,8 @@ This comment is for `t
 `.
 
 
+
+
 <a id="module-InnerModuleA'"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
@@ -859,10 +1027,14 @@ This comment is for `t
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleA'
 `.
+
+
 
 
 <a id="module-type-InnerModuleTypeA'"></a>
@@ -873,9 +1045,13 @@ This comment is for `InnerModuleA'
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleTypeA'`.
+
+
 
 end
 
@@ -883,11 +1059,15 @@ This comment is for `InnerModuleA
 `.
 
 
+
+
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
 This comment is for `InnerModuleTypeA
 `.
+
+
 
 end
 
@@ -910,11 +1090,15 @@ end
 This comment is for `CollectionModule
 `.
 
+
+
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type collection
 
 This comment is for `collection
 `.
+
+
 
 
 <a id="type-element"></a>
@@ -932,6 +1116,8 @@ This comment is for `t
 `.
 
 
+
+
 <a id="module-InnerModuleA'"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
@@ -940,10 +1126,14 @@ This comment is for `t
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleA'
 `.
+
+
 
 
 <a id="module-type-InnerModuleTypeA'"></a>
@@ -954,9 +1144,13 @@ This comment is for `InnerModuleA'
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleTypeA'`.
+
+
 
 end
 
@@ -964,11 +1158,15 @@ This comment is for `InnerModuleA
 `.
 
 
+
+
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
 This comment is for `InnerModuleTypeA
 `.
+
+
 
 end
 
@@ -980,11 +1178,15 @@ end
 This module type includes two signatures.
 
 
+
+
 <a id="module-FunctorTypeOf"></a>
 ###### &nbsp; module FunctorTypeOf (Collection : module type of CollectionModule) : sig ... end
 
 This comment is for `FunctorTypeOf
 `.
+
+
 
 
 <a id="module-type-IncludeModuleType"></a>
@@ -995,6 +1197,8 @@ end
 
 This comment is for `IncludeModuleType
 `.
+
+
 
 
 <a id="module-type-ToInclude"></a>
@@ -1057,17 +1261,25 @@ end
 
 
 
+
+
 <a id="type-record.field2"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;`field2 : int;
 `
 
   This comment is for `field2`.
 
+
+
 }
 
 This comment is for `record`.
+
+
 This comment is also for `record
 `.
+
+
 
 
 <a id="type-mutable_record"></a>
@@ -1081,6 +1293,8 @@ This comment is also for `record
 
 
 
+
+
 <a id="type-mutable_record.b"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;`b : unit;`
 
@@ -1089,11 +1303,15 @@ This comment is also for `record
 
 
 
+
+
 <a id="type-mutable_record.c"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;`mutable c : int;`
 
   `c
 ` is third and mutable
+
+
 
 }
 
@@ -1123,11 +1341,15 @@ This comment is also for `record
 
 
 
+
+
 <a id="type-variant.ConstrB"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| ConstrB of int
 
   This comment is for `ConstrB
 `.
+
+
 
 
 
@@ -1139,6 +1361,8 @@ This comment is also for `record
 
 
 
+
+
 <a id="type-variant.ConstrD"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| ConstrD of int * int
 
@@ -1147,9 +1371,15 @@ This comment is also for `record
 
 
 
+
+
 This comment is for `variant`.
+
+
 This comment is also for `variant
 `.
+
+
 
 
 <a id="type-poly_variant"></a>
@@ -1173,7 +1403,11 @@ This comment is also for `variant
 
 This comment is for `poly_variant
 `.
+
+
 Wow! It was a polymorphic variant!
+
+
 
 
 <a id="type-full_gadt"></a>
@@ -1209,7 +1443,11 @@ Wow! It was a polymorphic variant!
 
 This comment is for `full_gadt
 `.
+
+
 Wow! It was a GADT!
+
+
 
 
 <a id="type-partial_gadt"></a>
@@ -1238,7 +1476,11 @@ Wow! It was a GADT!
 
 This comment is for `partial_gadt
 `.
+
+
 Wow! It was a mixed GADT!
+
+
 
 
 <a id="type-alias"></a>
@@ -1248,11 +1490,15 @@ This comment is for `alias
 `.
 
 
+
+
 <a id="type-tuple"></a>
 ###### &nbsp; type tuple = ([alias](#type-alias) * [alias](#type-alias)) * [alias](#type-alias) * ([alias](#type-alias) * [alias](#type-alias))
 
 This comment is for `tuple
 `.
+
+
 
 
 <a id="type-variant_alias"></a>
@@ -1290,6 +1536,8 @@ This comment is for `variant_alias
 `.
 
 
+
+
 <a id="type-record_alias"></a>
 ###### &nbsp; type record_alias = [record](#type-record) = {
 
@@ -1313,6 +1561,8 @@ This comment is for `record_alias
 `.
 
 
+
+
 <a id="type-poly_variant_union"></a>
 ###### &nbsp; type poly_variant_union = [ 
 
@@ -1334,6 +1584,8 @@ This comment is for `record_alias
 
 This comment is for `poly_variant_union
 `.
+
+
 
 
 <a id="type-poly_poly_variant"></a>
@@ -1477,6 +1729,8 @@ This comment is for `full_gadt_alias
 `.
 
 
+
+
 <a id="type-partial_gadt_alias"></a>
 ###### &nbsp; type 'a partial_gadt_alias = 'a [partial_gadt](#type-partial_gadt) = 
 
@@ -1505,11 +1759,15 @@ This comment is for `partial_gadt_alias
 `.
 
 
+
+
 <a id="exception-Exn_arrow"></a>
 ###### &nbsp; exception Exn_arrow : unit -> exn
 
 This comment is for [`Exn_arrow
 `](#exception-Exn_arrow).
+
+
 
 
 <a id="type-mutual_constr_a"></a>
@@ -1531,9 +1789,13 @@ This comment is for [`Exn_arrow
 
 
 
+
+
 This comment is for [`mutual_constr_a
 `](#type-mutual_constr_a) then [`mutual_constr_b
 `](#type-mutual_constr_b).
+
+
 
 
 <a id="type-mutual_constr_b"></a>
@@ -1553,9 +1815,13 @@ This comment is for [`mutual_constr_a
 
 
 
+
+
 This comment is for [`mutual_constr_b
 `](#type-mutual_constr_b) then [`mutual_constr_a
 `](#type-mutual_constr_a).
+
+
 
 
 <a id="type-rec_obj"></a>
@@ -1592,6 +1858,8 @@ This comment is for [`mutual_constr_b
 ###### &nbsp; type ext = ..
 
 A mystery wrapped in an ellipsis
+
+
 
 
 <a id="extension-decl-ExtA"></a>
@@ -1667,6 +1935,8 @@ A mystery wrapped in an ellipsis
 'a poly_ext
 
 
+
+
 <a id="extension-decl-Foo"></a>
 ###### &nbsp; type [poly_ext](#type-poly_ext) += 
 
@@ -1686,6 +1956,8 @@ A mystery wrapped in an ellipsis
 
 
 
+
+
 <a id="extension-decl-Quux"></a>
 ###### &nbsp; type [poly_ext](#type-poly_ext) += 
 
@@ -1693,6 +1965,8 @@ A mystery wrapped in an ellipsis
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| Quux of 'c
 
   'c poly_ext
+
+
 
 
 
@@ -1715,6 +1989,8 @@ A mystery wrapped in an ellipsis
 
 
 
+
+
 <a id="extension-decl-ZzzTop"></a>
 ###### &nbsp; type ExtMod.t += 
 
@@ -1727,16 +2003,22 @@ A mystery wrapped in an ellipsis
 
 
 
+
+
 <a id="val-launch_missiles"></a>
 ###### &nbsp; val launch_missiles : unit -> unit
 
 Rotate keys on my mark...
 
 
+
+
 <a id="type-my_mod"></a>
 ###### &nbsp; type my_mod = (module COLLECTION)
 
 A brown paper package tied up with string
+
+
 
 
 <a id="class-empty_class"></a>
@@ -2067,7 +2349,11 @@ end
 
 
 With ocamldoc, toplevel units will be linked and documented, while submodules will behave as simple references.
+
+
 With odoc, everything should be resolved (and linked) but only toplevel units will be documented.
+
+
 
 @`Dep1.X` : 
 
@@ -2123,6 +2409,8 @@ Some ref to `CanonicalTest`.Base__Tests.C.t and `CanonicalTest
 
 
 
+
+
 # Aliases again
 
 
@@ -2133,10 +2421,14 @@ Let's imitate jst's layout.
 
 
 
+
+
 # Section title splicing
 
 
 I can refer to
+
+
 - `{!section:indexmodules}
 ` : [Trying the {!modules: ...} command.](#indexmodules)
 
@@ -2144,6 +2436,8 @@ I can refer to
 ` : [Aliases again](#aliases)
 
 But also to things in submodules:
+
+
 - `{!section:SuperSig.SubSigA.subSig}` : `SuperSig
 `.SubSigA.subSig
 
@@ -2151,6 +2445,8 @@ But also to things in submodules:
 `
 
 And just to make sure we do not mess up:
+
+
 - `{{!section:indexmodules}A}` : [A](#indexmodules)
 
 - `{{!aliases}B}` : [B](#aliases)
@@ -2182,6 +2478,8 @@ end
 
 
 Here goes:
+
+
 - `{!module-M.t}` : `M.t`
 
 - `{!module-type-M.t}` : `M.t
@@ -2194,6 +2492,8 @@ Here goes:
 
 
 Some here should fail:
+
+
 - `{!Only_a_module.t}` : `Only_a_module.t`
 
 - `{!module-Only_a_module.t}` : `Only_a_module.t

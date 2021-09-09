@@ -5,10 +5,16 @@ Nestedz
 
 This is class z.
 
-Some additional comments.<a id="val-y"></a>
+
+
+Some additional comments.
+
+<a id="val-y"></a>
 ###### &nbsp; val y : int
 
 Some value.
+
+
 
 
 <a id="val-y'"></a>
@@ -24,6 +30,8 @@ Some value.
 ###### &nbsp; method z : int
 
 Some method.
+
+
 
 
 <a id="method-z'"></a>

@@ -7,6 +7,8 @@ Type
 Some _documentation_.
 
 
+
+
 <a id="type-alias"></a>
 ###### &nbsp; type alias = int
 
@@ -114,10 +116,14 @@ Some _documentation_.
 
 
 
+
+
 <a id="type-variant.D"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| D
 
   _bar_
+
+
 
 
 
@@ -220,11 +226,15 @@ Some _documentation_.
 
 
 
+
+
 <a id="type-record.d"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;`d : int;
 `
 
   _bar_
+
+
 
 
 
@@ -461,11 +471,15 @@ end
 
 
 
+
+
 <a id="extension-Another_extension"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| Another_extension
 
   Documentation for [`Another_extension
 `](#extension-Another_extension).
+
+
 
 
 

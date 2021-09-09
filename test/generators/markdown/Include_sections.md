@@ -15,6 +15,8 @@ Include_sections
 
 foo
 
+
+
 <a id="val-foo"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;val foo : unit
 
@@ -31,23 +33,33 @@ foo bar
 
 
 
+
+
 ## Something 1-bis
 
 
 Some text.
+
+
 end
 
 A module type.
+
+
 
 
 Let's include `Something
 ` once
 
 
+
+
 # Something 1
 
 
 foo
+
+
 
 
 ## Something 2
@@ -60,6 +72,8 @@ foo
 Some text.
 
 
+
+
 # Second include
 
 
@@ -67,10 +81,14 @@ Let's include `Something
 ` a second time: the heading level should be shift here.
 
 
+
+
 ## Something 1
 
 
 foo
+
+
 
 
 ### Something 2
@@ -83,16 +101,22 @@ foo
 Some text.
 
 
+
+
 ## Third include
 
 
 Shifted some more.
 
 
+
+
 ### Something 1
 
 
 foo
+
+
 
 
 #### Something 2
@@ -104,7 +128,11 @@ foo
 
 Some text.
 
+
+
 And let's include it again, but without inlining it this time: the ToC shouldn't grow.
+
+
 
 <a id="val-something"></a>
 ###### &nbsp; val something : unit
@@ -116,6 +144,8 @@ And let's include it again, but without inlining it this time: the ToC shouldn't
 
 
 foo
+
+
 
 <a id="val-foo"></a>
 ###### &nbsp; val foo : unit
@@ -133,7 +163,10 @@ foo bar
 
 
 
+
+
 ### Something 1-bis
 
 
 Some text.
+

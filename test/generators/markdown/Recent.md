@@ -51,10 +51,14 @@ end
 
 
 
+
+
 <a id="type-variant.D"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| D
 
   _bar_
+
+
 
 
 
@@ -89,6 +93,8 @@ end
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| B : int -> string [gadt](#type-gadt)
 
   foo
+
+
 
 
 
@@ -136,11 +142,15 @@ end
 
 
 
+
+
 <a id="type-polymorphic_variant.D"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```D
 `
 
   bar
+
+
 
  ]
 

@@ -4,11 +4,17 @@ Markup
 
 
 Here, we test the rendering of comment markup.
+
+
 # Sections
 
 
 Let's get these done first, because sections will be used to break up the rest of this test.
+
+
 Besides the section heading above, there are also
+
+
 
 
 ## Subsection headings
@@ -17,10 +23,14 @@ Besides the section heading above, there are also
 and
 
 
+
+
 ### Sub-subsection headings
 
 
 but odoc has banned deeper headings. There are also title headings, but they are only allowed in mld files.
+
+
 
 
 ### Anchors
@@ -29,10 +39,14 @@ but odoc has banned deeper headings. There are also title headings, but they are
 Sections can have attached [Anchors](#anchors), and it is possible to [link](#anchors) to them. Links to section headers should not be set in source code style.
 
 
+
+
 #### Paragraph
 
 
 Individual paragraphs can have a heading.
+
+
 
 
 ##### Subparagraph
@@ -41,24 +55,38 @@ Individual paragraphs can have a heading.
 Parts of a longer paragraph that can be considered alone can also have headings.
 
 
+
+
 # Styling
 
 
 This paragraph has some styled elements: **bold** and _italic_, **_bold italic_**, 
 _emphasis_, __emphasis_ within emphasis_, **_bold italic_**, super<sup>script, sub
 <sub>script. The line spacing should be enough for superscripts and subscripts not to look odd.
+
+
 Note: _In italics _emphasis_ is rendered as normal text while _emphasis 
                                                               _in_ emphasis_ is rendered in italics._ 
 _It also work the same in [links](#)[ ](#)[in](#)[ ](#)[italics](#)[ ](#)
 [with](#)[ ](#)[.](#)_
+
+
 `code
 ` is a different kind of markup that doesn't allow nested markup.
+
+
 It's possible for two markup elements to appear **next** _to_ each other and have a space, and appear 
 **next**_to_ each other with no space. It doesn't matter **how** _much_ space it was in the source: in this sentence, it was two space characters. And in this one, there is 
 **a** _newline_.
+
+
 This is also true between _non-_`code` markup _and_ `code
 `.
+
+
 Code can appear **inside `other` markup**. Its display shouldn't be affected.
+
+
 
 
 # Links and references
@@ -67,6 +95,8 @@ Code can appear **inside `other` markup**. Its display shouldn't be affected.
 This is a [link](#). It sends you to the top of this page. Links can have markup inside them: , , , 
 [super](#), [sub](#), and . Links can also be nested _[inside](#)_ markup. Links cannot be nested inside each other. This link has no replacement text: 
 [#](#). The text is filled in by odoc. This is a shorthand link: [#](#). The text is also filled in by odoc in this case.
+
+
 This is a reference to [`foo
 `](#val-foo). References can have replacement text: [the value foo](#val-foo). Except for the special lookup support, references are pretty much just like links. The replacement text can have nested styles: [
 **bold**](#val-foo), [_italic_](#val-foo), [_emphasis_](#val-foo), [super
@@ -75,10 +105,14 @@ This is a reference to [`foo
 **[`foo`](#val-foo)**. References can't be nested inside references, and links and references can't be nested inside each other.
 
 
+
+
 # Preformatted text
 
 
 This is a code block:
+
+
 let foo = ()
 (** There are some nested comments in here, but an unpaired comment
     terminator would terminate the whole doc surrounding comment. It's
@@ -87,6 +121,8 @@ let foo = ()
 let bar =
   ignore foo
 There are also verbatim blocks:
+
+
 The main difference is these don't get syntax highlighting.
 
 
@@ -106,12 +142,18 @@ The main difference is these don't get syntax highlighting.
 - Shorthand list items can span multiple lines, however trying to put two paragraphs into a shorthand list item using a double line break
 
 just creates a paragraph outside the list.
+
+
 - Similarly, inserting a blank line between two list items
 
 - creates two separate lists.
 
 - To get around this limitation, one
+
+
 can use explicitly-delimited lists.
+
+
 
 - This one is bulleted,
 
@@ -135,10 +177,14 @@ can use explicitly-delimited lists.
 The parser supports any ASCII-compatible encoding, in particuλar UTF-8.
 
 
+
+
 # Raw HTML
 
 
 Raw HTML can be  as inline elements into sentences.
+
+
 
 
 
@@ -169,6 +215,8 @@ Raw HTML can be  as inline elements into sentences.
 
 Each comment can end with zero or more tags. Here are some examples:
 
+
+
 @author : antron
 
 
@@ -177,7 +225,11 @@ Each comment can end with zero or more tags. Here are some examples:
 
 
 
+
+
 @parameter foo : unused
+
+
 
 
 
@@ -185,11 +237,17 @@ Each comment can end with zero or more tags. Here are some examples:
 
 
 
+
+
 @returns : never
 
 
 
+
+
 @see [#](#) : this url
+
+
 
 
 
@@ -198,7 +256,11 @@ Each comment can end with zero or more tags. Here are some examples:
 
 
 
+
+
 @see Foo : this document
+
+
 
 
 
@@ -210,6 +272,8 @@ Each comment can end with zero or more tags. Here are some examples:
 
 
 
+
+
 @version : -1
 
 
@@ -218,3 +282,5 @@ Each comment can end with zero or more tags. Here are some examples:
 ###### &nbsp; val foo : unit
 
 Comments in structure items **support** _markup_, t<sup>o<sub>o.
+
+

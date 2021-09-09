@@ -11,11 +11,15 @@ OcamlaryRecollection
 This comment is for `CollectionModule
 `.
 
+
+
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type collection
 
 This comment is for `collection
 `.
+
+
 
 
 <a id="type-element"></a>
@@ -33,6 +37,8 @@ This comment is for `t
 `.
 
 
+
+
 <a id="module-InnerModuleA'"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
@@ -41,10 +47,14 @@ This comment is for `t
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleA'
 `.
+
+
 
 
 <a id="module-type-InnerModuleTypeA'"></a>
@@ -55,9 +65,13 @@ This comment is for `InnerModuleA'
 
 This comment is for `t`.
 
+
+
 end
 
 This comment is for `InnerModuleTypeA'`.
+
+
 
 end
 
@@ -65,11 +79,15 @@ This comment is for `InnerModuleA
 `.
 
 
+
+
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
 This comment is for `InnerModuleTypeA
 `.
+
+
 
 end
 
@@ -82,11 +100,15 @@ end
 This comment is for `CollectionModule
 `.
 
+
+
 <a id="type-collection"></a>
 ###### &nbsp; type collection = C.element list
 
 This comment is for `collection
 `.
+
+
 
 
 <a id="type-element"></a>
@@ -101,8 +123,12 @@ This comment is for `InnerModuleA
 `.
 
 
+
+
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
 This comment is for `InnerModuleTypeA
 `.
+
+
