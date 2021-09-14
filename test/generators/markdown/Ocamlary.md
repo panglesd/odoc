@@ -1,6 +1,6 @@
 Ocamlary
 
- Module `Ocamlary`
+ Module `` Ocamlary`` 
 
 
 This is an _interface_ with **all** of the _module system_ features. This documentation demonstrates:
@@ -67,21 +67,21 @@ Here is some raw LaTeX:
 
 
 
-Here is an index table of `Empty` modules:
+Here is an index table of `` Empty``  modules:
 
 
 
-@`Empty` : A plain, empty module
+@`` Empty``  : A plain, empty module
 
 
 
-@`EmptyAlias` : A plain module alias of `Empty
-`
+@`` EmptyAlias``  : A plain module alias of `` Empty
+`` 
 
 
 
-Here is a table of links to indexes: `indexlist
-`
+Here is a table of links to indexes: `` indexlist
+`` 
 
 
 
@@ -97,8 +97,8 @@ Here are some escaped brackets: { [ @ ] }
 
 
 
-Here is some _emphasis_ `followed by code
-`.
+Here is some _emphasis_ `` followed by code
+`` .
 
 
 
@@ -169,8 +169,8 @@ An ambiguous, misnamed module type
 <a id="module-EmptyAlias"></a>
 ###### &nbsp; module EmptyAlias = Empty
 
-A plain module alias of `Empty
-`
+A plain module alias of `` Empty
+`` 
 
 
 
@@ -199,8 +199,8 @@ A plain, empty module signature alias of
 <a id="module-ModuleWithSignature"></a>
 ###### &nbsp; module ModuleWithSignature : EmptySig
 
-A plain module of a signature of `EmptySig
-` (reference)
+A plain module of a signature of `` EmptySig
+``  (reference)
 
 
 
@@ -314,19 +314,19 @@ end
 
 
 
-For a good time, see `SuperSig`.SubSigA.subSig or `SuperSig
-`.SubSigB.subSig or `SuperSig.EmptySig
-`. Section [Section 9000](#s9000) is also interesting. [EmptySig](#emptySig) is the section and 
-`EmptySig
-` is the module signature.
+For a good time, see `` SuperSig`` .SubSigA.subSig or `` SuperSig
+`` .SubSigB.subSig or `` SuperSig.EmptySig
+`` . Section [Section 9000](#s9000) is also interesting. [EmptySig](#emptySig) is the section and 
+`` EmptySig
+``  is the module signature.
 
 
 
 <a id="module-Buffer"></a>
 ###### &nbsp; module Buffer : sig ... end
 
-`Buffer
-`.t
+`` Buffer
+`` .t
 
 
 
@@ -370,8 +370,8 @@ Unary exception constructor over binary tuple
 <a id="exception-EmptySig"></a>
 ###### &nbsp; exception EmptySig
 
-`EmptySig` is a module and [`EmptySig
-`](#exception-EmptySig) is this exception.
+`` EmptySig``  is a module and [`` EmptySig
+`` ](#exception-EmptySig) is this exception.
 
 
 
@@ -379,8 +379,8 @@ Unary exception constructor over binary tuple
 <a id="exception-EmptySigAlias"></a>
 ###### &nbsp; exception EmptySigAlias
 
-[`EmptySigAlias
-`](#exception-EmptySigAlias) is this exception.
+[`` EmptySigAlias
+`` ](#exception-EmptySigAlias) is this exception.
 
 
 
@@ -392,8 +392,8 @@ Unary exception constructor over binary tuple
 <a id="type-a_function"></a>
 ###### &nbsp; type ('a, 'b) a_function = 'a -> 'b
 
-[`a_function`](#type-a_function) is this type and [`a_function
-`](#val-a_function) is the value below.
+[`` a_function`` ](#type-a_function) is this type and [`` a_function
+`` ](#val-a_function) is the value below.
 
 
 
@@ -401,18 +401,18 @@ Unary exception constructor over binary tuple
 <a id="val-a_function"></a>
 ###### &nbsp; val a_function : x:int -> int
 
-This is `a_function` with param and return type.
+This is `` a_function``  with param and return type.
 
 
 
-@parameter x : the `x` coordinate
+@parameter x : the `` x``  coordinate
 
 
 
 
 
-@returns : the `y
-` coordinate
+@returns : the `` y
+``  coordinate
 
 
 
@@ -455,8 +455,8 @@ This is `a_function` with param and return type.
 ###### &nbsp; val some_file : string
 
 
-@see `some_file` : The file called `some_file
-`
+@see `` some_file``  : The file called `` some_file
+`` 
 
 
 
@@ -467,8 +467,8 @@ This is `a_function` with param and return type.
 ###### &nbsp; val some_doc : string
 
 
-@see some_doc : The document called `some_doc
-`
+@see some_doc : The document called `` some_doc
+`` 
 
 
 
@@ -592,8 +592,8 @@ This value has had changes in 1.0.0, 1.1.0, and 1.2.0.
 <a id="module-CollectionModule"></a>
 ###### &nbsp; module CollectionModule : sig ... end
 
-This comment is for `CollectionModule
-`.
+This comment is for `` CollectionModule
+`` .
 
 
 
@@ -601,16 +601,16 @@ This comment is for `CollectionModule
 <a id="module-type-COLLECTION"></a>
 ###### &nbsp; module type COLLECTION = sig
 
-This comment is for `CollectionModule
-`.
+This comment is for `` CollectionModule
+`` .
 
 
 
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type collection
 
-This comment is for `collection
-`.
+This comment is for `` collection
+`` .
 
 
 
@@ -626,8 +626,8 @@ This comment is for `collection
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
 
-This comment is for `t
-`.
+This comment is for `` t
+`` .
 
 
 
@@ -638,14 +638,14 @@ This comment is for `t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleA'
-`.
+This comment is for `` InnerModuleA'
+`` .
 
 
 
@@ -656,20 +656,21 @@ This comment is for `InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleTypeA'`.
+This comment is for `` InnerModuleTypeA'
+`` .
 
 
 
 end
 
-This comment is for `InnerModuleA
-`.
+This comment is for `` InnerModuleA
+`` .
 
 
 
@@ -677,8 +678,8 @@ This comment is for `InnerModuleA
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
-This comment is for `InnerModuleTypeA
-`.
+This comment is for `` InnerModuleTypeA
+`` .
 
 
 
@@ -700,16 +701,16 @@ module type of
 <a id="module-C"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module C : sig
 
-This comment is for `CollectionModule
-`.
+This comment is for `` CollectionModule
+`` .
 
 
 
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type collection
 
-This comment is for `collection
-`.
+This comment is for `` collection
+`` .
 
 
 
@@ -725,8 +726,8 @@ This comment is for `collection
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
 
-This comment is for `t
-`.
+This comment is for `` t
+`` .
 
 
 
@@ -737,14 +738,14 @@ This comment is for `t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleA'
-`.
+This comment is for `` InnerModuleA'
+`` .
 
 
 
@@ -755,20 +756,21 @@ This comment is for `InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleTypeA'`.
+This comment is for `` InnerModuleTypeA'
+`` .
 
 
 
 end
 
-This comment is for `InnerModuleA
-`.
+This comment is for `` InnerModuleA
+`` .
 
 
 
@@ -776,8 +778,8 @@ This comment is for `InnerModuleA
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
-This comment is for `InnerModuleTypeA
-`.
+This comment is for `` InnerModuleTypeA
+`` .
 
 
 
@@ -818,8 +820,8 @@ end
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
 
-This comment is for `t
-`.
+This comment is for `` t
+`` .
 
 
 
@@ -830,14 +832,14 @@ This comment is for `t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleA'
-`.
+This comment is for `` InnerModuleA'
+`` .
 
 
 
@@ -848,20 +850,21 @@ This comment is for `InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleTypeA'`.
+This comment is for `` InnerModuleTypeA'
+`` .
 
 
 
 end
 
-This comment is for `InnerModuleA
-`.
+This comment is for `` InnerModuleA
+`` .
 
 
 
@@ -869,8 +872,8 @@ This comment is for `InnerModuleA
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
-This comment is for `InnerModuleTypeA
-`.
+This comment is for `` InnerModuleTypeA
+`` .
 
 
 
@@ -889,16 +892,16 @@ end
 <a id="module-Q"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module Q : sig
 
-This comment is for `CollectionModule
-`.
+This comment is for `` CollectionModule
+`` .
 
 
 
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type collection
 
-This comment is for `collection
-`.
+This comment is for `` collection
+`` .
 
 
 
@@ -914,8 +917,8 @@ This comment is for `collection
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
 
-This comment is for `t
-`.
+This comment is for `` t
+`` .
 
 
 
@@ -926,14 +929,14 @@ This comment is for `t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleA'
-`.
+This comment is for `` InnerModuleA'
+`` .
 
 
 
@@ -944,20 +947,21 @@ This comment is for `InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleTypeA'`.
+This comment is for `` InnerModuleTypeA'
+`` .
 
 
 
 end
 
-This comment is for `InnerModuleA
-`.
+This comment is for `` InnerModuleA
+`` .
 
 
 
@@ -965,8 +969,8 @@ This comment is for `InnerModuleA
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
-This comment is for `InnerModuleTypeA
-`.
+This comment is for `` InnerModuleTypeA
+`` .
 
 
 
@@ -988,16 +992,16 @@ end
 <a id="module-Q"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module Q : sig
 
-This comment is for `CollectionModule
-`.
+This comment is for `` CollectionModule
+`` .
 
 
 
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type collection
 
-This comment is for `collection
-`.
+This comment is for `` collection
+`` .
 
 
 
@@ -1013,8 +1017,8 @@ This comment is for `collection
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
 
-This comment is for `t
-`.
+This comment is for `` t
+`` .
 
 
 
@@ -1025,14 +1029,14 @@ This comment is for `t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleA'
-`.
+This comment is for `` InnerModuleA'
+`` .
 
 
 
@@ -1043,20 +1047,21 @@ This comment is for `InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleTypeA'`.
+This comment is for `` InnerModuleTypeA'
+`` .
 
 
 
 end
 
-This comment is for `InnerModuleA
-`.
+This comment is for `` InnerModuleA
+`` .
 
 
 
@@ -1064,8 +1069,8 @@ This comment is for `InnerModuleA
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
-This comment is for `InnerModuleTypeA
-`.
+This comment is for `` InnerModuleTypeA
+`` .
 
 
 
@@ -1087,16 +1092,16 @@ end
 <a id="module-Q"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module Q : sig
 
-This comment is for `CollectionModule
-`.
+This comment is for `` CollectionModule
+`` .
 
 
 
 <a id="type-collection"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type collection
 
-This comment is for `collection
-`.
+This comment is for `` collection
+`` .
 
 
 
@@ -1112,8 +1117,8 @@ This comment is for `collection
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
 
-This comment is for `t
-`.
+This comment is for `` t
+`` .
 
 
 
@@ -1124,14 +1129,14 @@ This comment is for `t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleA'
-`.
+This comment is for `` InnerModuleA'
+`` .
 
 
 
@@ -1142,20 +1147,21 @@ This comment is for `InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleTypeA'`.
+This comment is for `` InnerModuleTypeA'
+`` .
 
 
 
 end
 
-This comment is for `InnerModuleA
-`.
+This comment is for `` InnerModuleA
+`` .
 
 
 
@@ -1163,8 +1169,8 @@ This comment is for `InnerModuleA
 <a id="module-type-InnerModuleTypeA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
 
-This comment is for `InnerModuleTypeA
-`.
+This comment is for `` InnerModuleTypeA
+`` .
 
 
 
@@ -1183,8 +1189,8 @@ This module type includes two signatures.
 <a id="module-FunctorTypeOf"></a>
 ###### &nbsp; module FunctorTypeOf (Collection : module type of CollectionModule) : sig ... end
 
-This comment is for `FunctorTypeOf
-`.
+This comment is for `` FunctorTypeOf
+`` .
 
 
 
@@ -1195,8 +1201,8 @@ This comment is for `FunctorTypeOf
 
 end
 
-This comment is for `IncludeModuleType
-`.
+This comment is for `` IncludeModuleType
+`` .
 
 
 
@@ -1253,31 +1259,31 @@ end
 ###### &nbsp; type record = {
 
 <a id="type-record.field1"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`field1 : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` field1 : int;
+`` 
 
-  This comment is for `field1
-`.
+  This comment is for `` field1
+`` .
 
 
 
 
 
 <a id="type-record.field2"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`field2 : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` field2 : int;
+`` 
 
-  This comment is for `field2`.
+  This comment is for `` field2`` .
 
 
 
 }
 
-This comment is for `record`.
+This comment is for `` record`` .
 
 
-This comment is also for `record
-`.
+This comment is also for `` record
+`` .
 
 
 
@@ -1286,30 +1292,30 @@ This comment is also for `record
 ###### &nbsp; type mutable_record = {
 
 <a id="type-mutable_record.a"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`mutable a : int;`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` mutable a : int;`` 
 
-  `a
-` is first and mutable
+  `` a
+``  is first and mutable
 
 
 
 
 
 <a id="type-mutable_record.b"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`b : unit;`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` b : unit;`` 
 
-  `b
-` is second and immutable
+  `` b
+``  is second and immutable
 
 
 
 
 
 <a id="type-mutable_record.c"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`mutable c : int;`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` mutable c : int;`` 
 
-  `c
-` is third and mutable
+  `` c
+``  is third and mutable
 
 
 
@@ -1321,8 +1327,8 @@ This comment is also for `record
 ###### &nbsp; type universe_record = {
 
 <a id="type-universe_record.nihilate"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`nihilate : a. 'a -> unit;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` nihilate : a. 'a -> unit;
+`` 
 
   
 
@@ -1336,8 +1342,8 @@ This comment is also for `record
 <a id="type-variant.TagA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| TagA
 
-  This comment is for `TagA
-`.
+  This comment is for `` TagA
+`` .
 
 
 
@@ -1346,8 +1352,8 @@ This comment is also for `record
 <a id="type-variant.ConstrB"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| ConstrB of int
 
-  This comment is for `ConstrB
-`.
+  This comment is for `` ConstrB
+`` .
 
 
 
@@ -1356,8 +1362,8 @@ This comment is also for `record
 <a id="type-variant.ConstrC"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| ConstrC of int * int
 
-  This comment is for binary `ConstrC
-`.
+  This comment is for binary `` ConstrC
+`` .
 
 
 
@@ -1366,18 +1372,18 @@ This comment is also for `record
 <a id="type-variant.ConstrD"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| ConstrD of int * int
 
-  This comment is for unary `ConstrD
-` of binary tuple.
+  This comment is for unary `` ConstrD
+``  of binary tuple.
 
 
 
 
 
-This comment is for `variant`.
+This comment is for `` variant`` .
 
 
-This comment is also for `variant
-`.
+This comment is also for `` variant
+`` .
 
 
 
@@ -1386,23 +1392,23 @@ This comment is also for `variant
 ###### &nbsp; type poly_variant = [ 
 
 <a id="type-poly_variant.TagA"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```TagA
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `TagA
+`` 
 
   
 
 
 
 <a id="type-poly_variant.ConstrB"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```ConstrB of int
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `ConstrB of int
+`` 
 
   
 
  ]
 
-This comment is for `poly_variant
-`.
+This comment is for `` poly_variant
+`` .
 
 
 Wow! It was a polymorphic variant!
@@ -1441,8 +1447,8 @@ Wow! It was a polymorphic variant!
 
 
 
-This comment is for `full_gadt
-`.
+This comment is for `` full_gadt
+`` .
 
 
 Wow! It was a GADT!
@@ -1474,8 +1480,8 @@ Wow! It was a GADT!
 
 
 
-This comment is for `partial_gadt
-`.
+This comment is for `` partial_gadt
+`` .
 
 
 Wow! It was a mixed GADT!
@@ -1486,8 +1492,8 @@ Wow! It was a mixed GADT!
 <a id="type-alias"></a>
 ###### &nbsp; type alias = [variant](#type-variant)
 
-This comment is for `alias
-`.
+This comment is for `` alias
+`` .
 
 
 
@@ -1495,8 +1501,8 @@ This comment is for `alias
 <a id="type-tuple"></a>
 ###### &nbsp; type tuple = ([alias](#type-alias) * [alias](#type-alias)) * [alias](#type-alias) * ([alias](#type-alias) * [alias](#type-alias))
 
-This comment is for `tuple
-`.
+This comment is for `` tuple
+`` .
 
 
 
@@ -1532,8 +1538,8 @@ This comment is for `tuple
 
 
 
-This comment is for `variant_alias
-`.
+This comment is for `` variant_alias
+`` .
 
 
 
@@ -1542,23 +1548,23 @@ This comment is for `variant_alias
 ###### &nbsp; type record_alias = [record](#type-record) = {
 
 <a id="type-record_alias.field1"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`field1 : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` field1 : int;
+`` 
 
   
 
 
 
 <a id="type-record_alias.field2"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`field2 : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` field2 : int;
+`` 
 
   
 
 }
 
-This comment is for `record_alias
-`.
+This comment is for `` record_alias
+`` .
 
 
 
@@ -1567,23 +1573,24 @@ This comment is for `record_alias
 ###### &nbsp; type poly_variant_union = [ 
 
 <a id="type-poly_variant_union.poly_variant"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ``[poly_variant](#type-poly_variant)
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | 
+`` `` [poly_variant](#type-poly_variant)
+`` 
 
   
 
 
 
 <a id="type-poly_variant_union.TagC"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```TagC
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `TagC
+`` 
 
   
 
  ]
 
-This comment is for `poly_variant_union
-`.
+This comment is for `` poly_variant_union
+`` .
 
 
 
@@ -1592,8 +1599,8 @@ This comment is for `poly_variant_union
 ###### &nbsp; type 'a poly_poly_variant = [ 
 
 <a id="type-poly_poly_variant.TagA"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```TagA of 'a
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `TagA of 'a
+`` 
 
   
 
@@ -1605,16 +1612,16 @@ This comment is for `poly_variant_union
 ###### &nbsp; type ('a, 'b) bin_poly_poly_variant = [ 
 
 <a id="type-bin_poly_poly_variant.TagA"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```TagA of 'a
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `TagA of 'a
+`` 
 
   
 
 
 
 <a id="type-bin_poly_poly_variant.ConstrB"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```ConstrB of 'b
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `ConstrB of 'b
+`` 
 
   
 
@@ -1661,32 +1668,32 @@ This comment is for `poly_variant_union
 ###### &nbsp; type nested_poly_variant = [ 
 
 <a id="type-nested_poly_variant.A"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```A
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `A
+`` 
 
   
 
 
 
 <a id="type-nested_poly_variant.B"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```B of [ `B1 | `B2 ]
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `B of [ `B1 | `B2 ]
+`` 
 
   
 
 
 
 <a id="type-nested_poly_variant.C"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```C
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `C
+`` 
 
   
 
 
 
 <a id="type-nested_poly_variant.D"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```D of [ `D1 of [ `D1a ] ]
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `D of [ `D1 of [ `D1a ] ]
+`` 
 
   
 
@@ -1725,8 +1732,8 @@ This comment is for `poly_variant_union
 
 
 
-This comment is for `full_gadt_alias
-`.
+This comment is for `` full_gadt_alias
+`` .
 
 
 
@@ -1755,8 +1762,8 @@ This comment is for `full_gadt_alias
 
 
 
-This comment is for `partial_gadt_alias
-`.
+This comment is for `` partial_gadt_alias
+`` .
 
 
 
@@ -1764,8 +1771,8 @@ This comment is for `partial_gadt_alias
 <a id="exception-Exn_arrow"></a>
 ###### &nbsp; exception Exn_arrow : unit -> exn
 
-This comment is for [`Exn_arrow
-`](#exception-Exn_arrow).
+This comment is for [`` Exn_arrow
+`` ](#exception-Exn_arrow).
 
 
 
@@ -1783,17 +1790,17 @@ This comment is for [`Exn_arrow
 <a id="type-mutual_constr_a.B_ish"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| B_ish of [mutual_constr_b](#type-mutual_constr_b)
 
-  This comment is between [`mutual_constr_a
-`](#type-mutual_constr_a) and [`mutual_constr_b
-`](#type-mutual_constr_b).
+  This comment is between [`` mutual_constr_a
+`` ](#type-mutual_constr_a) and [`` mutual_constr_b
+`` ](#type-mutual_constr_b).
 
 
 
 
 
-This comment is for [`mutual_constr_a
-`](#type-mutual_constr_a) then [`mutual_constr_b
-`](#type-mutual_constr_b).
+This comment is for [`` mutual_constr_a
+`` ](#type-mutual_constr_a) then [`` mutual_constr_b
+`` ](#type-mutual_constr_b).
 
 
 
@@ -1817,9 +1824,9 @@ This comment is for [`mutual_constr_a
 
 
 
-This comment is for [`mutual_constr_b
-`](#type-mutual_constr_b) then [`mutual_constr_a
-`](#type-mutual_constr_a).
+This comment is for [`` mutual_constr_b
+`` ](#type-mutual_constr_b) then [`` mutual_constr_a
+`` ](#type-mutual_constr_a).
 
 
 
@@ -2355,20 +2362,20 @@ With odoc, everything should be resolved (and linked) but only toplevel units wi
 
 
 
-@`Dep1.X` : 
+@`` Dep1.X``  : 
 
 
 
-@`DocOckTypes` : 
+@`` DocOckTypes``  : 
 
 
 
-@`Ocamlary.IncludeInclude1` : 
+@`` Ocamlary.IncludeInclude1``  : 
 
 
 
-@[`Ocamlary
-`](#) : This is an _interface_ with **all** of the _module system_ features. This documentation demonstrates:
+@[`` Ocamlary
+`` ](#) : This is an _interface_ with **all** of the _module system_ features. This documentation demonstrates:
 
 
 
@@ -2377,16 +2384,16 @@ With odoc, everything should be resolved (and linked) but only toplevel units wi
 
 
 
-@`IncludeInclude1`.IncludeInclude2 : 
+@`` IncludeInclude1`` .IncludeInclude2 : 
 
 
 
-@`Dep4`.T : 
+@`` Dep4`` .T : 
 
 
 
-@`A.Q
-` : 
+@`` A.Q
+``  : 
 
 
 
@@ -2402,10 +2409,10 @@ With odoc, everything should be resolved (and linked) but only toplevel units wi
 <a id="val-test"></a>
 ###### &nbsp; val test : 'a CanonicalTest.Base__.List.t -> unit
 
-Some ref to `CanonicalTest`.Base__Tests.C.t and `CanonicalTest
-`.Base__Tests.L.id. But also to `CanonicalTest
-`.Base__.List and `CanonicalTest
-`.Base__.List.t
+Some ref to `` CanonicalTest`` .Base__Tests.C.t and `` CanonicalTest
+`` .Base__Tests.L.id. But also to `` CanonicalTest
+`` .Base__.List and `` CanonicalTest
+`` .Base__.List.t
 
 
 
@@ -2429,32 +2436,33 @@ Let's imitate jst's layout.
 I can refer to
 
 
-- `{!section:indexmodules}
-` : [Trying the {!modules: ...} command.](#indexmodules)
+- `` {!section:indexmodules}
+``  : [Trying the {!modules: ...} command.](#indexmodules)
 
-- `{!aliases}
-` : [Aliases again](#aliases)
+- `` {!aliases}
+``  : [Aliases again](#aliases)
 
 But also to things in submodules:
 
 
-- `{!section:SuperSig.SubSigA.subSig}` : `SuperSig
-`.SubSigA.subSig
+- `` {!section:SuperSig.SubSigA.subSig}``  : `` SuperSig
+`` .SubSigA.subSig
 
-- `{!Aliases.incl}` : `incl
-`
+- `` {!Aliases.incl}``  : `` incl
+`` 
 
 And just to make sure we do not mess up:
 
 
-- `{{!section:indexmodules}A}` : [A](#indexmodules)
+- `` {{!section:indexmodules}A}``  : [A](#indexmodules)
 
-- `{{!aliases}B}` : [B](#aliases)
+- `` {{!aliases}B}
+``  : [B](#aliases)
 
-- `{{!section:SuperSig.SubSigA.subSig}C}` : C
+- `` {{!section:SuperSig.SubSigA.subSig}C}``  : C
 
-- `{{!Aliases.incl}D}
-` : D
+- `` {{!Aliases.incl}D}
+``  : D
 
 
 
@@ -2480,10 +2488,10 @@ end
 Here goes:
 
 
-- `{!module-M.t}` : `M.t`
+- `` {!module-M.t}``  : `` M.t`` 
 
-- `{!module-type-M.t}` : `M.t
-`
+- `` {!module-type-M.t}``  : `` M.t
+`` 
 
 
 <a id="module-Only_a_module"></a>
@@ -2494,13 +2502,14 @@ Here goes:
 Some here should fail:
 
 
-- `{!Only_a_module.t}` : `Only_a_module.t`
+- `` {!Only_a_module.t}``  : `` Only_a_module.t
+`` 
 
-- `{!module-Only_a_module.t}` : `Only_a_module.t
-`
+- `` {!module-Only_a_module.t}``  : `` Only_a_module.t
+`` 
 
-- `{!module-type-Only_a_module.t}` : `Only_a_module
-`.t : test
+- `` {!module-type-Only_a_module.t}``  : `` Only_a_module
+`` .t : test
 
 
 <a id="module-type-TypeExt"></a>
@@ -2568,4 +2577,4082 @@ end
 
 
 end
+
+
+OcamlaryEmpty
+
+ Module `` Ocamlary.Empty`` 
+
+
+A plain, empty module
+
+
+
+This module has a signature without any members.
+
+
+OcamlaryEmpty
+
+ Module type `` Ocamlary.Empty`` 
+
+
+An ambiguous, misnamed module type
+
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryMissingComment
+
+ Module type `` Ocamlary.MissingComment`` 
+
+
+An ambiguous, misnamed module type
+
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryEmptySig
+
+ Module type `` Ocamlary.EmptySig`` 
+
+
+A plain, empty module signature
+
+
+OcamlaryModuleWithSignature
+
+ Module `` Ocamlary.ModuleWithSignature`` 
+
+
+A plain module of a signature of `` EmptySig
+``  (reference)
+
+
+OcamlaryModuleWithSignatureAlias
+
+ Module `` Ocamlary.ModuleWithSignatureAlias`` 
+
+
+A plain module with an alias signature
+
+
+
+
+@deprecated : I don't like this element any more.
+
+
+
+
+OcamlaryOne
+
+ Module `` Ocamlary.One`` 
+<a id="type-one"></a>
+###### &nbsp; type one
+
+
+OcamlarySigForMod
+
+ Module type `` Ocamlary.SigForMod`` 
+
+
+There's a signature in a module in this signature.
+
+<a id="module-Inner"></a>
+###### &nbsp; module Inner : sig
+
+<a id="module-type-Empty"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type Empty = sig
+end
+
+
+end
+
+
+OcamlarySigForModInner
+
+ Module `` SigForMod.Inner`` 
+<a id="module-type-Empty"></a>
+###### &nbsp; module type Empty = sig
+end
+
+
+OcamlarySigForModInnerEmpty
+
+ Module type `` Inner.Empty`` 
+
+OcamlarySuperSig
+
+ Module type `` Ocamlary.SuperSig`` 
+<a id="module-type-SubSigA"></a>
+###### &nbsp; module type SubSigA = sig
+
+
+#### A Labeled Section Header Inside of a Signature
+
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t
+
+
+
+<a id="module-SubSigAMod"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module SubSigAMod : sig
+
+<a id="type-sub_sig_a_mod"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type sub_sig_a_mod
+
+
+end
+
+
+end
+
+
+
+<a id="module-type-SubSigB"></a>
+###### &nbsp; module type SubSigB = sig
+
+
+#### Another Labeled Section Header Inside of a Signature
+
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t
+
+
+end
+
+
+
+<a id="module-type-EmptySig"></a>
+###### &nbsp; module type EmptySig = sig
+
+<a id="type-not_actually_empty"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type not_actually_empty
+
+
+end
+
+
+
+<a id="module-type-One"></a>
+###### &nbsp; module type One = sig
+
+<a id="type-two"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type two
+
+
+end
+
+
+
+<a id="module-type-SuperSig"></a>
+###### &nbsp; module type SuperSig = sig
+end
+
+
+OcamlarySuperSigSubSigA
+
+ Module type `` SuperSig.SubSigA`` 
+
+### A Labeled Section Header Inside of a Signature
+
+
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="module-SubSigAMod"></a>
+###### &nbsp; module SubSigAMod : sig
+
+<a id="type-sub_sig_a_mod"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type sub_sig_a_mod
+
+
+end
+
+
+OcamlarySuperSigSubSigASubSigAMod
+
+ Module `` SubSigA.SubSigAMod`` 
+<a id="type-sub_sig_a_mod"></a>
+###### &nbsp; type sub_sig_a_mod
+
+
+OcamlarySuperSigSubSigB
+
+ Module type `` SuperSig.SubSigB`` 
+
+### Another Labeled Section Header Inside of a Signature
+
+
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlarySuperSigEmptySig
+
+ Module type `` SuperSig.EmptySig`` 
+<a id="type-not_actually_empty"></a>
+###### &nbsp; type not_actually_empty
+
+
+OcamlarySuperSigOne
+
+ Module type `` SuperSig.One`` 
+<a id="type-two"></a>
+###### &nbsp; type two
+
+
+OcamlarySuperSigSuperSig
+
+ Module type `` SuperSig.SuperSig`` 
+
+OcamlaryBuffer
+
+ Module `` Ocamlary.Buffer`` 
+
+
+`` Buffer
+`` .t
+
+<a id="val-f"></a>
+###### &nbsp; val f : Stdlib.Buffer.t -> unit
+
+
+OcamlaryCollectionModule
+
+ Module `` Ocamlary.CollectionModule`` 
+
+
+This comment is for `` CollectionModule
+`` .
+
+<a id="type-collection"></a>
+###### &nbsp; type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; module InnerModuleA : sig ... end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+OcamlaryCollectionModuleInnerModuleA
+
+ Module `` CollectionModule.InnerModuleA`` 
+
+
+This comment is for `` InnerModuleA
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; module InnerModuleA' : sig ... end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryCollectionModuleInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryCollectionModuleInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryCOLLECTION
+
+ Module type `` Ocamlary.COLLECTION`` 
+
+
+module type of
+
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+OcamlaryCOLLECTIONInnerModuleA
+
+ Module `` COLLECTION.InnerModuleA`` 
+
+
+This comment is for `` InnerModuleA
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryCOLLECTIONInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryCOLLECTIONInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryRecollection
+
+ Module `` Ocamlary.Recollection`` 
+
+# Parameters
+
+
+<a id="argument-1-C"></a>
+###### &nbsp; module C : sig
+
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+end
+
+
+
+
+# Signature
+
+
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; type collection = C.element list
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; type element = C.collection
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; module InnerModuleA : sig ... end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+OcamlaryRecollection1-C
+
+ Parameter `` Recollection.1-C`` 
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+OcamlaryRecollection1-CInnerModuleA
+
+ Module `` 1-C.InnerModuleA`` 
+
+
+This comment is for `` InnerModuleA
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryRecollection1-CInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryRecollection1-CInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryRecollectionInnerModuleA
+
+ Module `` Recollection.InnerModuleA`` 
+
+
+This comment is for `` InnerModuleA
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; module InnerModuleA' : sig ... end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryRecollectionInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryRecollectionInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryMMM
+
+ Module type `` Ocamlary.MMM`` 
+<a id="module-C"></a>
+###### &nbsp; module C : sig
+
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+end
+
+
+OcamlaryMMMC
+
+ Module `` MMM.C`` 
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+OcamlaryMMMCInnerModuleA
+
+ Module `` C.InnerModuleA`` 
+
+
+This comment is for `` InnerModuleA
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryMMMCInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryMMMCInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryRECOLLECTION
+
+ Module type `` Ocamlary.RECOLLECTION`` 
+<a id="module-C"></a>
+###### &nbsp; module C = Recollection(CollectionModule)
+
+
+OcamlaryRecollectionModule
+
+ Module type `` Ocamlary.RecollectionModule`` 
+<a id="type-collection"></a>
+###### &nbsp; type collection = CollectionModule.element list
+
+
+
+<a id="type-element"></a>
+###### &nbsp; type element = CollectionModule.collection
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+OcamlaryRecollectionModuleInnerModuleA
+
+ Module `` RecollectionModule.InnerModuleA`` 
+
+
+This comment is for `` InnerModuleA
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryRecollectionModuleInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryRecollectionModuleInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryA
+
+ Module type `` Ocamlary.A`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="module-Q"></a>
+###### &nbsp; module Q : sig
+
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+end
+
+
+OcamlaryAQ
+
+ Module `` A.Q`` 
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+OcamlaryAQInnerModuleA
+
+ Module `` Q.InnerModuleA`` 
+
+
+This comment is for `` InnerModuleA
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryAQInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryAQInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryB
+
+ Module type `` Ocamlary.B`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="module-Q"></a>
+###### &nbsp; module Q : sig
+
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+end
+
+
+OcamlaryBQ
+
+ Module `` B.Q`` 
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+OcamlaryBQInnerModuleA
+
+ Module `` Q.InnerModuleA`` 
+
+
+This comment is for `` InnerModuleA
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryBQInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryBQInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryC
+
+ Module type `` Ocamlary.C`` 
+
+
+This module type includes two signatures.
+
+
+
+- it includes `` A`` 
+
+- it includes `` B
+``  with some substitution
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="module-Q"></a>
+###### &nbsp; module Q : sig
+
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+end
+
+
+
+
+OcamlaryCQ
+
+ Module `` C.Q`` 
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+OcamlaryCQInnerModuleA
+
+ Module `` Q.InnerModuleA`` 
+
+
+This comment is for `` InnerModuleA
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryCQInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryCQInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryFunctorTypeOf
+
+ Module `` Ocamlary.FunctorTypeOf`` 
+
+
+This comment is for `` FunctorTypeOf
+`` .
+
+
+# Parameters
+
+
+<a id="argument-1-Collection"></a>
+###### &nbsp; module Collection : sig
+
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+end
+
+
+
+
+# Signature
+
+
+<a id="type-t"></a>
+###### &nbsp; type t = Collection.collection
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryFunctorTypeOf1-Collection
+
+ Parameter `` FunctorTypeOf.1-Collection`` 
+This comment is for `` CollectionModule
+`` .
+
+
+
+<a id="type-collection"></a>
+###### &nbsp; type collection
+
+This comment is for `` collection
+`` .
+
+
+
+
+<a id="type-element"></a>
+###### &nbsp; type element
+
+
+
+<a id="module-InnerModuleA"></a>
+###### &nbsp; module InnerModuleA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA"></a>
+###### &nbsp; module type InnerModuleTypeA = InnerModuleA.InnerModuleTypeA'
+
+This comment is for `` InnerModuleTypeA
+`` .
+
+
+
+OcamlaryFunctorTypeOf1-CollectionInnerModuleA
+
+ Module `` 1-Collection.InnerModuleA`` 
+
+
+This comment is for `` InnerModuleA
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = collection
+
+This comment is for `` t
+`` .
+
+
+
+
+<a id="module-InnerModuleA'"></a>
+###### &nbsp; module InnerModuleA' : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleA'
+`` .
+
+
+
+
+<a id="module-type-InnerModuleTypeA'"></a>
+###### &nbsp; module type InnerModuleTypeA' = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
+
+This comment is for `` t`` .
+
+
+
+end
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryFunctorTypeOf1-CollectionInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryFunctorTypeOf1-CollectionInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryIncludeModuleType
+
+ Module type `` Ocamlary.IncludeModuleType`` 
+
+
+This comment is for `` IncludeModuleType
+`` .
+
+
+OcamlaryToInclude
+
+ Module type `` Ocamlary.ToInclude`` 
+<a id="module-IncludedA"></a>
+###### &nbsp; module IncludedA : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t
+
+
+end
+
+
+
+<a id="module-type-IncludedB"></a>
+###### &nbsp; module type IncludedB = sig
+
+<a id="type-s"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type s
+
+
+end
+
+
+OcamlaryToIncludeIncludedA
+
+ Module `` ToInclude.IncludedA`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryToIncludeIncludedB
+
+ Module type `` ToInclude.IncludedB`` 
+<a id="type-s"></a>
+###### &nbsp; type s
+
+
+OcamlaryIncludedA
+
+ Module `` Ocamlary.IncludedA`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryIncludedB
+
+ Module type `` Ocamlary.IncludedB`` 
+<a id="type-s"></a>
+###### &nbsp; type s
+
+
+OcamlaryExtMod
+
+ Module `` Ocamlary.ExtMod`` 
+<a id="type-t"></a>
+###### &nbsp; type t = ..
+
+
+
+<a id="extension-decl-Leisureforce"></a>
+###### &nbsp; type t += 
+
+<a id="extension-Leisureforce"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;| Leisureforce
+
+  
+
+
+
+
+Ocamlaryempty_class
+
+ Class `` Ocamlary.empty_class`` 
+
+Ocamlaryone_method_class
+
+ Class `` Ocamlary.one_method_class`` 
+<a id="method-go"></a>
+###### &nbsp; method go : unit
+
+
+Ocamlarytwo_method_class
+
+ Class `` Ocamlary.two_method_class`` 
+<a id="method-one"></a>
+###### &nbsp; method one : one_method_class
+
+
+
+<a id="method-undo"></a>
+###### &nbsp; method undo : unit
+
+
+Ocamlaryparam_class
+
+ Class `` Ocamlary.param_class`` 
+<a id="method-v"></a>
+###### &nbsp; method v : 'a
+
+
+OcamlaryDep1
+
+ Module `` Ocamlary.Dep1`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S = sig
+
+<a id="class-c"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;class  c : object
+
+<a id="method-m"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;method m : int
+
+
+end
+
+
+end
+
+
+
+<a id="module-X"></a>
+###### &nbsp; module X : sig ... end
+
+
+OcamlaryDep1S
+
+ Module type `` Dep1.S`` 
+<a id="class-c"></a>
+###### &nbsp; class  c : object
+
+<a id="method-m"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;method m : int
+
+
+end
+
+
+OcamlaryDep1Sc
+
+ Class `` S.c`` 
+<a id="method-m"></a>
+###### &nbsp; method m : int
+
+
+OcamlaryDep1X
+
+ Module `` Dep1.X`` 
+<a id="module-Y"></a>
+###### &nbsp; module Y : S
+
+
+OcamlaryDep1XY
+
+ Module `` X.Y`` 
+<a id="class-c"></a>
+###### &nbsp; class  c : object ... end
+
+
+OcamlaryDep1XYc
+
+ Class `` Y.c`` 
+<a id="method-m"></a>
+###### &nbsp; method m : int
+
+
+OcamlaryDep2
+
+ Module `` Ocamlary.Dep2`` 
+
+# Parameters
+
+
+<a id="argument-1-Arg"></a>
+###### &nbsp; module Arg : sig
+
+<a id="module-type-S"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type S
+
+
+
+<a id="module-X"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module X : sig
+
+<a id="module-Y"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module Y : S
+
+
+end
+
+
+end
+
+
+
+
+# Signature
+
+
+<a id="module-A"></a>
+###### &nbsp; module A : sig ... end
+
+
+
+<a id="module-B"></a>
+###### &nbsp; module B = A.Y
+
+
+OcamlaryDep21-Arg
+
+ Parameter `` Dep2.1-Arg`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S
+
+
+
+<a id="module-X"></a>
+###### &nbsp; module X : sig
+
+<a id="module-Y"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : S
+
+
+end
+
+
+OcamlaryDep21-ArgX
+
+ Module `` 1-Arg.X`` 
+<a id="module-Y"></a>
+###### &nbsp; module Y : S
+
+
+OcamlaryDep2A
+
+ Module `` Dep2.A`` 
+<a id="module-Y"></a>
+###### &nbsp; module Y : Arg.S
+
+
+OcamlaryDep3
+
+ Module `` Ocamlary.Dep3`` 
+<a id="type-a"></a>
+###### &nbsp; type a
+
+
+OcamlaryDep4
+
+ Module `` Ocamlary.Dep4`` 
+<a id="module-type-T"></a>
+###### &nbsp; module type T = sig
+
+<a id="type-b"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type b
+
+
+end
+
+
+
+<a id="module-type-S"></a>
+###### &nbsp; module type S = sig
+
+<a id="module-X"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module X : sig
+
+<a id="type-b"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type b
+
+
+end
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : sig
+end
+
+
+end
+
+
+
+<a id="module-X"></a>
+###### &nbsp; module X : T
+
+
+OcamlaryDep4T
+
+ Module type `` Dep4.T`` 
+<a id="type-b"></a>
+###### &nbsp; type b
+
+
+OcamlaryDep4S
+
+ Module type `` Dep4.S`` 
+<a id="module-X"></a>
+###### &nbsp; module X : sig
+
+<a id="type-b"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type b
+
+
+end
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; module Y : sig
+end
+
+
+OcamlaryDep4SX
+
+ Module `` S.X`` 
+<a id="type-b"></a>
+###### &nbsp; type b
+
+
+OcamlaryDep4SY
+
+ Module `` S.Y`` 
+
+OcamlaryDep4X
+
+ Module `` Dep4.X`` 
+<a id="type-b"></a>
+###### &nbsp; type b
+
+
+OcamlaryDep5
+
+ Module `` Ocamlary.Dep5`` 
+
+# Parameters
+
+
+<a id="argument-1-Arg"></a>
+###### &nbsp; module Arg : sig
+
+<a id="module-type-T"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type T
+
+
+
+<a id="module-type-S"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type S = sig
+
+<a id="module-X"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module X : T
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module Y : sig
+end
+
+
+end
+
+
+
+<a id="module-X"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module X : T
+
+
+end
+
+
+
+
+# Signature
+
+
+<a id="module-Z"></a>
+###### &nbsp; module Z : Arg.S with module Y = Dep3
+
+
+OcamlaryDep51-Arg
+
+ Parameter `` Dep5.1-Arg`` 
+<a id="module-type-T"></a>
+###### &nbsp; module type T
+
+
+
+<a id="module-type-S"></a>
+###### &nbsp; module type S = sig
+
+<a id="module-X"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module X : T
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : sig
+end
+
+
+end
+
+
+
+<a id="module-X"></a>
+###### &nbsp; module X : T
+
+
+OcamlaryDep51-ArgS
+
+ Module type `` 1-Arg.S`` 
+<a id="module-X"></a>
+###### &nbsp; module X : T
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; module Y : sig
+end
+
+
+OcamlaryDep51-ArgSY
+
+ Module `` S.Y`` 
+
+OcamlaryDep5Z
+
+ Module `` Dep5.Z`` 
+<a id="module-X"></a>
+###### &nbsp; module X : Arg.T
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; module Y = Dep3
+
+
+OcamlaryDep6
+
+ Module `` Ocamlary.Dep6`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S = sig
+
+<a id="type-d"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type d
+
+
+end
+
+
+
+<a id="module-type-T"></a>
+###### &nbsp; module type T = sig
+
+<a id="module-type-R"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type R = S
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : sig
+
+<a id="type-d"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type d
+
+
+end
+
+
+end
+
+
+
+<a id="module-X"></a>
+###### &nbsp; module X : T
+
+
+OcamlaryDep6S
+
+ Module type `` Dep6.S`` 
+<a id="type-d"></a>
+###### &nbsp; type d
+
+
+OcamlaryDep6T
+
+ Module type `` Dep6.T`` 
+<a id="module-type-R"></a>
+###### &nbsp; module type R = S
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; module Y : sig
+
+<a id="type-d"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type d
+
+
+end
+
+
+OcamlaryDep6TY
+
+ Module `` T.Y`` 
+<a id="type-d"></a>
+###### &nbsp; type d
+
+
+OcamlaryDep6X
+
+ Module `` Dep6.X`` 
+<a id="module-type-R"></a>
+###### &nbsp; module type R = S
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; module Y : R
+
+
+OcamlaryDep6XY
+
+ Module `` X.Y`` 
+<a id="type-d"></a>
+###### &nbsp; type d
+
+
+OcamlaryDep7
+
+ Module `` Ocamlary.Dep7`` 
+
+# Parameters
+
+
+<a id="argument-1-Arg"></a>
+###### &nbsp; module Arg : sig
+
+<a id="module-type-S"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type S
+
+
+
+<a id="module-type-T"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type T = sig
+
+<a id="module-type-R"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type R = S
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module Y : R
+
+
+end
+
+
+
+<a id="module-X"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module X : sig
+
+<a id="module-type-R"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type R = S
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module Y : R
+
+
+end
+
+
+end
+
+
+
+
+# Signature
+
+
+<a id="module-M"></a>
+###### &nbsp; module M : Arg.T
+
+
+OcamlaryDep71-Arg
+
+ Parameter `` Dep7.1-Arg`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S
+
+
+
+<a id="module-type-T"></a>
+###### &nbsp; module type T = sig
+
+<a id="module-type-R"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type R = S
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : R
+
+
+end
+
+
+
+<a id="module-X"></a>
+###### &nbsp; module X : sig
+
+<a id="module-type-R"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type R = S
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : R
+
+
+end
+
+
+OcamlaryDep71-ArgT
+
+ Module type `` 1-Arg.T`` 
+<a id="module-type-R"></a>
+###### &nbsp; module type R = S
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; module Y : R
+
+
+OcamlaryDep71-ArgX
+
+ Module `` 1-Arg.X`` 
+<a id="module-type-R"></a>
+###### &nbsp; module type R = S
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; module Y : R
+
+
+OcamlaryDep7M
+
+ Module `` Dep7.M`` 
+<a id="module-type-R"></a>
+###### &nbsp; module type R = Arg.S
+
+
+
+<a id="module-Y"></a>
+###### &nbsp; module Y : R
+
+
+OcamlaryDep8
+
+ Module `` Ocamlary.Dep8`` 
+<a id="module-type-T"></a>
+###### &nbsp; module type T = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t
+
+
+end
+
+
+OcamlaryDep8T
+
+ Module type `` Dep8.T`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryDep9
+
+ Module `` Ocamlary.Dep9`` 
+
+# Parameters
+
+
+<a id="argument-1-X"></a>
+###### &nbsp; module X : sig
+
+<a id="module-type-T"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type T
+
+
+end
+
+
+
+
+# Signature
+
+
+<a id="module-type-T"></a>
+###### &nbsp; module type T = X.T
+
+
+OcamlaryDep91-X
+
+ Parameter `` Dep9.1-X`` 
+<a id="module-type-T"></a>
+###### &nbsp; module type T
+
+
+OcamlaryDep10
+
+ Module type `` Ocamlary.Dep10`` 
+<a id="type-t"></a>
+###### &nbsp; type t = int
+
+
+OcamlaryDep11
+
+ Module `` Ocamlary.Dep11`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S = sig
+
+<a id="class-c"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;class  c : object
+
+<a id="method-m"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;method m : int
+
+
+end
+
+
+end
+
+
+OcamlaryDep11S
+
+ Module type `` Dep11.S`` 
+<a id="class-c"></a>
+###### &nbsp; class  c : object
+
+<a id="method-m"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;method m : int
+
+
+end
+
+
+OcamlaryDep11Sc
+
+ Class `` S.c`` 
+<a id="method-m"></a>
+###### &nbsp; method m : int
+
+
+OcamlaryDep12
+
+ Module `` Ocamlary.Dep12`` 
+
+# Parameters
+
+
+<a id="argument-1-Arg"></a>
+###### &nbsp; module Arg : sig
+
+<a id="module-type-S"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type S
+
+
+end
+
+
+
+
+# Signature
+
+
+<a id="module-type-T"></a>
+###### &nbsp; module type T = Arg.S
+
+
+OcamlaryDep121-Arg
+
+ Parameter `` Dep12.1-Arg`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S
+
+
+OcamlaryDep13
+
+ Module `` Ocamlary.Dep13`` 
+<a id="class-c"></a>
+###### &nbsp; class  c : object ... end
+
+
+OcamlaryDep13c
+
+ Class `` Dep13.c`` 
+<a id="method-m"></a>
+###### &nbsp; method m : int
+
+
+OcamlaryWith1
+
+ Module type `` Ocamlary.With1`` 
+<a id="module-M"></a>
+###### &nbsp; module M : sig
+
+<a id="module-type-S"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type S
+
+
+end
+
+
+
+<a id="module-N"></a>
+###### &nbsp; module N : M.S
+
+
+OcamlaryWith1M
+
+ Module `` With1.M`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S
+
+
+OcamlaryWith2
+
+ Module `` Ocamlary.With2`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t
+
+
+end
+
+
+OcamlaryWith2S
+
+ Module type `` With2.S`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryWith3
+
+ Module `` Ocamlary.With3`` 
+<a id="module-M"></a>
+###### &nbsp; module M = With2
+
+
+
+<a id="module-N"></a>
+###### &nbsp; module N : M.S
+
+
+OcamlaryWith3N
+
+ Module `` With3.N`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryWith4
+
+ Module `` Ocamlary.With4`` 
+<a id="module-N"></a>
+###### &nbsp; module N : With2.S
+
+
+OcamlaryWith4N
+
+ Module `` With4.N`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryWith5
+
+ Module `` Ocamlary.With5`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t
+
+
+end
+
+
+
+<a id="module-N"></a>
+###### &nbsp; module N : S
+
+
+OcamlaryWith5S
+
+ Module type `` With5.S`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryWith5N
+
+ Module `` With5.N`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryWith6
+
+ Module `` Ocamlary.With6`` 
+<a id="module-type-T"></a>
+###### &nbsp; module type T = sig
+
+<a id="module-M"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module M : sig
+
+<a id="module-type-S"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type S
+
+
+
+<a id="module-N"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module N : S
+
+
+end
+
+
+end
+
+
+OcamlaryWith6T
+
+ Module type `` With6.T`` 
+<a id="module-M"></a>
+###### &nbsp; module M : sig
+
+<a id="module-type-S"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type S
+
+
+
+<a id="module-N"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module N : S
+
+
+end
+
+
+OcamlaryWith6TM
+
+ Module `` T.M`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S
+
+
+
+<a id="module-N"></a>
+###### &nbsp; module N : S
+
+
+OcamlaryWith7
+
+ Module `` Ocamlary.With7`` 
+
+# Parameters
+
+
+<a id="argument-1-X"></a>
+###### &nbsp; module X : sig
+
+<a id="module-type-T"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type T
+
+
+end
+
+
+
+
+# Signature
+
+
+<a id="module-type-T"></a>
+###### &nbsp; module type T = X.T
+
+
+OcamlaryWith71-X
+
+ Parameter `` With7.1-X`` 
+<a id="module-type-T"></a>
+###### &nbsp; module type T
+
+
+OcamlaryWith8
+
+ Module type `` Ocamlary.With8`` 
+<a id="module-M"></a>
+###### &nbsp; module M : sig
+
+<a id="module-type-S"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type S = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t
+
+
+end
+
+
+
+<a id="module-N"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module N : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = With5.N.t
+
+
+end
+
+
+end
+
+
+OcamlaryWith8M
+
+ Module `` With8.M`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t
+
+
+end
+
+
+
+<a id="module-N"></a>
+###### &nbsp; module N : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = With5.N.t
+
+
+end
+
+
+OcamlaryWith8MS
+
+ Module type `` M.S`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryWith8MN
+
+ Module `` M.N`` 
+<a id="type-t"></a>
+###### &nbsp; type t = With5.N.t
+
+
+OcamlaryWith9
+
+ Module `` Ocamlary.With9`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S = sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t
+
+
+end
+
+
+OcamlaryWith9S
+
+ Module type `` With9.S`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryWith10
+
+ Module `` Ocamlary.With10`` 
+<a id="module-type-T"></a>
+###### &nbsp; module type T = sig
+
+<a id="module-M"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module M : sig
+
+<a id="module-type-S"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type S
+
+
+end
+
+
+
+<a id="module-N"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module N : M.S
+
+
+end
+
+`` With10.T
+``  is a submodule type.
+
+
+
+OcamlaryWith10T
+
+ Module type `` With10.T`` 
+
+
+`` With10.T
+``  is a submodule type.
+
+<a id="module-M"></a>
+###### &nbsp; module M : sig
+
+<a id="module-type-S"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;module type S
+
+
+end
+
+
+
+<a id="module-N"></a>
+###### &nbsp; module N : M.S
+
+
+OcamlaryWith10TM
+
+ Module `` T.M`` 
+<a id="module-type-S"></a>
+###### &nbsp; module type S
+
+
+OcamlaryWith11
+
+ Module type `` Ocamlary.With11`` 
+<a id="module-M"></a>
+###### &nbsp; module M = With9
+
+
+
+<a id="module-N"></a>
+###### &nbsp; module N : sig
+
+<a id="type-t"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = int
+
+
+end
+
+
+OcamlaryWith11N
+
+ Module `` With11.N`` 
+<a id="type-t"></a>
+###### &nbsp; type t = int
+
+
+OcamlaryNestedInclude1
+
+ Module type `` Ocamlary.NestedInclude1`` 
+<a id="module-type-NestedInclude2"></a>
+###### &nbsp; module type NestedInclude2 = sig
+
+<a id="type-nested_include"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type nested_include
+
+
+end
+
+
+OcamlaryNestedInclude1NestedInclude2
+
+ Module type `` NestedInclude1.NestedInclude2`` 
+<a id="type-nested_include"></a>
+###### &nbsp; type nested_include
+
+
+OcamlaryNestedInclude2
+
+ Module type `` Ocamlary.NestedInclude2`` 
+<a id="type-nested_include"></a>
+###### &nbsp; type nested_include
+
+
+OcamlaryDoubleInclude1
+
+ Module `` Ocamlary.DoubleInclude1`` 
+<a id="module-DoubleInclude2"></a>
+###### &nbsp; module DoubleInclude2 : sig ... end
+
+
+OcamlaryDoubleInclude1DoubleInclude2
+
+ Module `` DoubleInclude1.DoubleInclude2`` 
+<a id="type-double_include"></a>
+###### &nbsp; type double_include
+
+
+OcamlaryDoubleInclude3
+
+ Module `` Ocamlary.DoubleInclude3`` 
+<a id="module-DoubleInclude2"></a>
+###### &nbsp; module DoubleInclude2 : sig ... end
+
+
+OcamlaryDoubleInclude3DoubleInclude2
+
+ Module `` DoubleInclude3.DoubleInclude2`` 
+<a id="type-double_include"></a>
+###### &nbsp; type double_include
+
+
+OcamlaryIncludeInclude1
+
+ Module `` Ocamlary.IncludeInclude1`` 
+<a id="module-type-IncludeInclude2"></a>
+###### &nbsp; module type IncludeInclude2 = sig
+
+<a id="type-include_include"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;type include_include
+
+
+end
+
+
+OcamlaryIncludeInclude1IncludeInclude2
+
+ Module type `` IncludeInclude1.IncludeInclude2`` 
+<a id="type-include_include"></a>
+###### &nbsp; type include_include
+
+
+OcamlaryIncludeInclude2
+
+ Module type `` Ocamlary.IncludeInclude2`` 
+<a id="type-include_include"></a>
+###### &nbsp; type include_include
+
+
+OcamlaryCanonicalTest
+
+ Module `` Ocamlary.CanonicalTest`` 
+<a id="module-Base"></a>
+###### &nbsp; module Base : sig ... end
+
+
+
+<a id="module-List_modif"></a>
+###### &nbsp; module List_modif : module type of Base.List with type 'c t = 'c Base.List.t
+
+
+OcamlaryCanonicalTestBase
+
+ Module `` CanonicalTest.Base`` 
+<a id="module-List"></a>
+###### &nbsp; module List : sig ... end
+
+
+OcamlaryCanonicalTestBaseList
+
+ Module `` Base.List`` 
+<a id="type-t"></a>
+###### &nbsp; type 'a t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : 'a t -> 'a t
+
+
+OcamlaryCanonicalTestList_modif
+
+ Module `` CanonicalTest.List_modif`` 
+<a id="type-t"></a>
+###### &nbsp; type 'c t = 'c Base.List.t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : 'a t -> 'a t
+
+
+OcamlaryAliases
+
+ Module `` Ocamlary.Aliases`` 
+
+
+Let's imitate jst's layout.
+
+<a id="module-Foo"></a>
+###### &nbsp; module Foo : sig ... end
+
+
+
+<a id="module-A'"></a>
+###### &nbsp; module A' = Foo.A
+
+
+
+<a id="type-tata"></a>
+###### &nbsp; type tata = Foo.A.t
+
+
+
+<a id="type-tbtb"></a>
+###### &nbsp; type tbtb = Foo.B.t
+
+
+
+<a id="type-tete"></a>
+###### &nbsp; type tete
+
+
+
+<a id="type-tata'"></a>
+###### &nbsp; type tata' = A'.t
+
+
+
+<a id="type-tete2"></a>
+###### &nbsp; type tete2 = Foo.E.t
+
+
+
+<a id="module-Std"></a>
+###### &nbsp; module Std : sig ... end
+
+
+
+<a id="type-stde"></a>
+###### &nbsp; type stde = Std.E.t
+
+
+
+
+### include of Foo
+
+
+Just for giggle, let's see what happens when we include `` Foo
+`` .
+
+
+
+<a id="module-A"></a>
+###### &nbsp; module A = Foo.A
+
+
+
+<a id="module-B"></a>
+###### &nbsp; module B = Foo.B
+
+
+
+<a id="module-C"></a>
+###### &nbsp; module C = Foo.C
+
+
+
+<a id="module-D"></a>
+###### &nbsp; module D = Foo.D
+
+
+
+<a id="module-E"></a>
+###### &nbsp; module E : sig ... end
+
+
+
+<a id="type-testa"></a>
+###### &nbsp; type testa = A.t
+
+
+
+And also, let's refer to `` A.t``  and `` Foo.B.id
+`` 
+
+
+
+<a id="module-P1"></a>
+###### &nbsp; module P1 : sig ... end
+
+
+
+<a id="module-P2"></a>
+###### &nbsp; module P2 : sig ... end
+
+
+
+<a id="module-X1"></a>
+###### &nbsp; module X1 = P2.Z
+
+
+
+<a id="module-X2"></a>
+###### &nbsp; module X2 = P2.Z
+
+
+
+<a id="type-p1"></a>
+###### &nbsp; type p1 = X1.t
+
+
+
+<a id="type-p2"></a>
+###### &nbsp; type p2 = X2.t
+
+
+OcamlaryAliasesFoo
+
+ Module `` Aliases.Foo`` 
+<a id="module-A"></a>
+###### &nbsp; module A : sig ... end
+
+
+
+<a id="module-B"></a>
+###### &nbsp; module B : sig ... end
+
+
+
+<a id="module-C"></a>
+###### &nbsp; module C : sig ... end
+
+
+
+<a id="module-D"></a>
+###### &nbsp; module D : sig ... end
+
+
+
+<a id="module-E"></a>
+###### &nbsp; module E : sig ... end
+
+
+OcamlaryAliasesFooA
+
+ Module `` Foo.A`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesFooB
+
+ Module `` Foo.B`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesFooC
+
+ Module `` Foo.C`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesFooD
+
+ Module `` Foo.D`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesFooE
+
+ Module `` Foo.E`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesStd
+
+ Module `` Aliases.Std`` 
+<a id="module-A"></a>
+###### &nbsp; module A = Foo.A
+
+
+
+<a id="module-B"></a>
+###### &nbsp; module B = Foo.B
+
+
+
+<a id="module-C"></a>
+###### &nbsp; module C = Foo.C
+
+
+
+<a id="module-D"></a>
+###### &nbsp; module D = Foo.D
+
+
+
+<a id="module-E"></a>
+###### &nbsp; module E = Foo.E
+
+
+OcamlaryAliasesE
+
+ Module `` Aliases.E`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesP1
+
+ Module `` Aliases.P1`` 
+<a id="module-Y"></a>
+###### &nbsp; module Y : sig ... end
+
+
+OcamlaryAliasesP1Y
+
+ Module `` P1.Y`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesP2
+
+ Module `` Aliases.P2`` 
+<a id="module-Z"></a>
+###### &nbsp; module Z = Z
+
+
+OcamlaryM
+
+ Module type `` Ocamlary.M`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryM
+
+ Module `` Ocamlary.M`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryOnly_a_module
+
+ Module `` Ocamlary.Only_a_module`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+OcamlaryTypeExt
+
+ Module type `` Ocamlary.TypeExt`` 
+<a id="type-t"></a>
+###### &nbsp; type t = ..
+
+
+
+<a id="extension-decl-C"></a>
+###### &nbsp; type t += 
+
+<a id="extension-C"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;| C
+
+  
+
+
+
+
+
+<a id="val-f"></a>
+###### &nbsp; val f : t -> unit
+
+
+OcamlaryTypeExtPruned
+
+ Module type `` Ocamlary.TypeExtPruned`` 
+<a id="extension-decl-C"></a>
+###### &nbsp; type [new_t](#type-new_t) += 
+
+<a id="extension-C"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;| C
+
+  
+
+
+
+
+
+<a id="val-f"></a>
+###### &nbsp; val f : [new_t](#type-new_t) -> unit
 

@@ -1,6 +1,6 @@
 Recent_implFooA
 
- Module `Foo.A`
+ Module `` Foo.A`` 
 <a id="type-t"></a>
 ###### &nbsp; type t = 
 

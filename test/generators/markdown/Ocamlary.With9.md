@@ -1,6 +1,6 @@
 OcamlaryWith9
 
- Module `Ocamlary.With9`
+ Module `` Ocamlary.With9`` 
 <a id="module-type-S"></a>
 ###### &nbsp; module type S = sig
 
@@ -9,4 +9,11 @@ OcamlaryWith9
 
 
 end
+
+
+OcamlaryWith9S
+
+ Module type `` With9.S`` 
+<a id="type-t"></a>
+###### &nbsp; type t
 

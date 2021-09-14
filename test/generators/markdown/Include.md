@@ -1,6 +1,6 @@
 Include
 
- Module `Include`
+ Module `` Include`` 
 <a id="module-type-Not_inlined"></a>
 ###### &nbsp; module type Not_inlined = sig
 
@@ -88,6 +88,50 @@ end
 
 
 
+
+
+<a id="val-a"></a>
+###### &nbsp; val a : [u](#type-u)
+
+
+IncludeNot_inlined
+
+ Module type `` Include.Not_inlined`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+IncludeInlined
+
+ Module type `` Include.Inlined`` 
+<a id="type-u"></a>
+###### &nbsp; type u
+
+
+IncludeNot_inlined_and_closed
+
+ Module type `` Include.Not_inlined_and_closed`` 
+<a id="type-v"></a>
+###### &nbsp; type v
+
+
+IncludeNot_inlined_and_opened
+
+ Module type `` Include.Not_inlined_and_opened`` 
+<a id="type-w"></a>
+###### &nbsp; type w
+
+
+IncludeInherent_Module
+
+ Module type `` Include.Inherent_Module`` 
+<a id="val-a"></a>
+###### &nbsp; val a : [t](#type-t)
+
+
+IncludeDorminant_Module
+
+ Module type `` Include.Dorminant_Module`` 
 
 
 <a id="val-a"></a>

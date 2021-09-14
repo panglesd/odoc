@@ -1,6 +1,6 @@
 AliasX
 
- Module `Alias.X`
+ Module `` Alias.X`` 
 <a id="type-t"></a>
 ###### &nbsp; type t = int
 

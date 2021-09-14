@@ -1,6 +1,6 @@
 Recent
 
- Module `Recent`
+ Module `` Recent`` 
 <a id="module-type-S"></a>
 ###### &nbsp; module type S = sig
 end
@@ -66,8 +66,8 @@ end
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| E of {
 
 <a id="type-variant.a"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`a : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` a : int;
+`` 
 
   
 
@@ -102,8 +102,8 @@ end
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| C : {
 
 <a id="type-gadt.a"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`a : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` a : int;
+`` 
 
   
 
@@ -119,24 +119,24 @@ end
 ###### &nbsp; type polymorphic_variant = [ 
 
 <a id="type-polymorphic_variant.A"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```A
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `A
+`` 
 
   
 
 
 
 <a id="type-polymorphic_variant.B"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```B of int
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `B of int
+`` 
 
   
 
 
 
 <a id="type-polymorphic_variant.C"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```C
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `C
+`` 
 
   foo
 
@@ -145,8 +145,8 @@ end
 
 
 <a id="type-polymorphic_variant.D"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```D
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `D
+`` 
 
   bar
 
@@ -217,16 +217,16 @@ end
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = [ 
 
 <a id="type-t.A"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;`| ```A
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;`` | `` `` `A
+`` 
 
   
 
 
 
 <a id="type-t.B"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;`| ```B
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;`` | `` `` `B
+`` 
 
   
 
@@ -234,4 +234,94 @@ end
 
 
 end
+
+
+RecentS
+
+ Module type `` Recent.S`` 
+
+RecentS1
+
+ Module type `` Recent.S1`` 
+
+# Parameters
+
+
+<a id="argument-1-_"></a>
+###### &nbsp; module _ : sig
+end
+
+
+
+
+# Signature
+
+RecentS11-_
+
+ Parameter `` S1.1-_`` 
+
+RecentZ
+
+ Module `` Recent.Z`` 
+<a id="module-Y"></a>
+###### &nbsp; module Y : sig ... end
+
+
+RecentZY
+
+ Module `` Z.Y`` 
+<a id="module-X"></a>
+###### &nbsp; module X : sig ... end
+
+
+RecentZYX
+
+ Module `` Y.X`` 
+<a id="type-t"></a>
+###### &nbsp; type 'a t
+
+
+RecentX
+
+ Module `` Recent.X`` 
+<a id="module-L"></a>
+###### &nbsp; module L := Z.Y
+
+
+
+<a id="type-t"></a>
+###### &nbsp; type t = int Z.Y.X.t
+
+
+
+<a id="type-u"></a>
+###### &nbsp; type u := int
+
+
+
+<a id="type-v"></a>
+###### &nbsp; type v = u Z.Y.X.t
+
+
+RecentPolyS
+
+ Module type `` Recent.PolyS`` 
+<a id="type-t"></a>
+###### &nbsp; type t = [ 
+
+<a id="type-t.A"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `A
+`` 
+
+  
+
+
+
+<a id="type-t.B"></a>
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `B
+`` 
+
+  
+
+ ]
 

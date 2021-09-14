@@ -1,6 +1,6 @@
 Functor2X
 
- Module `Functor2.X`
+ Module `` Functor2.X`` 
 
 # Parameters
 
@@ -43,4 +43,18 @@ end
 
 <a id="type-x_t"></a>
 ###### &nbsp; type x_t = y_t
+
+
+Functor2X1-Y
+
+ Parameter `` X.1-Y`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+Functor2X2-Z
+
+ Parameter `` X.2-Z`` 
+<a id="type-t"></a>
+###### &nbsp; type t
 

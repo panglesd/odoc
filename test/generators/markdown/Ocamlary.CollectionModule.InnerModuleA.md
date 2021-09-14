@@ -1,16 +1,16 @@
 OcamlaryCollectionModuleInnerModuleA
 
- Module `CollectionModule.InnerModuleA`
+ Module `` CollectionModule.InnerModuleA`` 
 
 
-This comment is for `InnerModuleA
-`.
+This comment is for `` InnerModuleA
+`` .
 
 <a id="type-t"></a>
 ###### &nbsp; type t = collection
 
-This comment is for `t
-`.
+This comment is for `` t
+`` .
 
 
 
@@ -18,8 +18,8 @@ This comment is for `t
 <a id="module-InnerModuleA'"></a>
 ###### &nbsp; module InnerModuleA' : sig ... end
 
-This comment is for `InnerModuleA'
-`.
+This comment is for `` InnerModuleA'
+`` .
 
 
 
@@ -30,13 +30,45 @@ This comment is for `InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `t`.
+This comment is for `` t`` .
 
 
 
 end
 
-This comment is for `InnerModuleTypeA'
-`.
+This comment is for `` InnerModuleTypeA'
+`` .
+
+
+
+OcamlaryCollectionModuleInnerModuleAInnerModuleA'
+
+ Module `` InnerModuleA.InnerModuleA'`` 
+
+
+This comment is for `` InnerModuleA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+
+This comment is for `` t
+`` .
+
+
+
+OcamlaryCollectionModuleInnerModuleAInnerModuleTypeA'
+
+ Module type `` InnerModuleA.InnerModuleTypeA'`` 
+
+
+This comment is for `` InnerModuleTypeA'
+`` .
+
+<a id="type-t"></a>
+###### &nbsp; type t = InnerModuleA'.t
+
+This comment is for `` t
+`` .
 
 

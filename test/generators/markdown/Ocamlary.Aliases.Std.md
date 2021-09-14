@@ -1,6 +1,6 @@
 OcamlaryAliasesStd
 
- Module `Aliases.Std`
+ Module `` Aliases.Std`` 
 <a id="module-A"></a>
 ###### &nbsp; module A = Foo.A
 

@@ -1,6 +1,6 @@
 Markup
 
- Module `Markup`
+ Module `` Markup`` 
 
 
 Here, we test the rendering of comment markup.
@@ -71,8 +71,8 @@ _It also work the same in [links](#)[ ](#)[in](#)[ ](#)[italics](#)[ ](#)
 [with](#)[ ](#)[.](#)_
 
 
-`code
-` is a different kind of markup that doesn't allow nested markup.
+`` code
+``  is a different kind of markup that doesn't allow nested markup.
 
 
 It's possible for two markup elements to appear **next** _to_ each other and have a space, and appear 
@@ -80,11 +80,11 @@ It's possible for two markup elements to appear **next** _to_ each other and hav
 **a** _newline_.
 
 
-This is also true between _non-_`code` markup _and_ `code
-`.
+This is also true between _non-_`` code``  markup _and_ `` code
+`` .
 
 
-Code can appear **inside `other` markup**. Its display shouldn't be affected.
+Code can appear **inside `` other``  markup**. Its display shouldn't be affected.
 
 
 
@@ -97,12 +97,12 @@ This is a [link](#). It sends you to the top of this page. Links can have markup
 [#](#). The text is filled in by odoc. This is a shorthand link: [#](#). The text is also filled in by odoc in this case.
 
 
-This is a reference to [`foo
-`](#val-foo). References can have replacement text: [the value foo](#val-foo). Except for the special lookup support, references are pretty much just like links. The replacement text can have nested styles: [
+This is a reference to [`` foo
+`` ](#val-foo). References can have replacement text: [the value foo](#val-foo). Except for the special lookup support, references are pretty much just like links. The replacement text can have nested styles: [
 **bold**](#val-foo), [_italic_](#val-foo), [_emphasis_](#val-foo), [super
-<sup>script](#val-foo), [sub<sub>script](#val-foo), and [`code
-`](#val-foo). It's also possible to surround a reference in a style: 
-**[`foo`](#val-foo)**. References can't be nested inside references, and links and references can't be nested inside each other.
+<sup>script](#val-foo), [sub<sub>script](#val-foo), and [`` code
+`` ](#val-foo). It's also possible to surround a reference in a style: 
+**[`` foo`` ](#val-foo)**. References can't be nested inside references, and links and references can't be nested inside each other.
 
 
 
@@ -165,8 +165,8 @@ can use explicitly-delimited lists.
 
 - and can include references
 
-- [`foo
-`](#val-foo)
+- [`` foo
+`` ](#val-foo)
 
 
 
@@ -192,20 +192,20 @@ Raw HTML can be  as inline elements into sentences.
 
 
 
-@`X` : 
+@`` X``  : 
 
 
 
-@`X` : 
+@`` X``  : 
 
 
 
-@`Y` : 
+@`` Y``  : 
 
 
 
-@`Z
-` : 
+@`` Z
+``  : 
 
 
 
@@ -251,8 +251,8 @@ Each comment can end with zero or more tags. Here are some examples:
 
 
 
-@see `foo.ml
-` : this file
+@see `` foo.ml
+``  : this file
 
 
 

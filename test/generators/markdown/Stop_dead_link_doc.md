@@ -1,6 +1,6 @@
 Stop_dead_link_doc
 
- Module `Stop_dead_link_doc`
+ Module `` Stop_dead_link_doc`` 
 <a id="module-Foo"></a>
 ###### &nbsp; module Foo : sig ... end
 
@@ -25,8 +25,8 @@ Stop_dead_link_doc
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| Bar of {
 
 <a id="type-bar.field"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`field : Foo.t;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` field : Foo.t;
+`` 
 
   
 
@@ -79,4 +79,11 @@ Stop_dead_link_doc
 
 <a id="type-another_bar_"></a>
 ###### &nbsp; type another_bar_
+
+
+Stop_dead_link_docFoo
+
+ Module `` Stop_dead_link_doc.Foo`` 
+<a id="type-t"></a>
+###### &nbsp; type t
 

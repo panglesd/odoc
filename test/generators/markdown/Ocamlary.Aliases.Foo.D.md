@@ -1,6 +1,6 @@
 OcamlaryAliasesFooD
 
- Module `Foo.D`
+ Module `` Foo.D`` 
 <a id="type-t"></a>
 ###### &nbsp; type t
 

@@ -1,6 +1,6 @@
 FunctorF1
 
- Module `Functor.F1`
+ Module `` Functor.F1`` 
 
 # Parameters
 
@@ -20,6 +20,13 @@ end
 # Signature
 
 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+FunctorF11-Arg
+
+ Parameter `` F1.1-Arg`` 
 <a id="type-t"></a>
 ###### &nbsp; type t
 

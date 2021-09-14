@@ -1,6 +1,6 @@
 OcamlaryAliases
 
- Module `Ocamlary.Aliases`
+ Module `` Ocamlary.Aliases`` 
 
 
 Let's imitate jst's layout.
@@ -54,8 +54,8 @@ Let's imitate jst's layout.
 ### include of Foo
 
 
-Just for giggle, let's see what happens when we include `Foo
-`.
+Just for giggle, let's see what happens when we include `` Foo
+`` .
 
 
 
@@ -89,8 +89,8 @@ Just for giggle, let's see what happens when we include `Foo
 
 
 
-And also, let's refer to `A.t` and `Foo.B.id
-`
+And also, let's refer to `` A.t``  and `` Foo.B.id
+`` 
 
 
 
@@ -121,4 +121,156 @@ And also, let's refer to `A.t` and `Foo.B.id
 
 <a id="type-p2"></a>
 ###### &nbsp; type p2 = X2.t
+
+
+OcamlaryAliasesFoo
+
+ Module `` Aliases.Foo`` 
+<a id="module-A"></a>
+###### &nbsp; module A : sig ... end
+
+
+
+<a id="module-B"></a>
+###### &nbsp; module B : sig ... end
+
+
+
+<a id="module-C"></a>
+###### &nbsp; module C : sig ... end
+
+
+
+<a id="module-D"></a>
+###### &nbsp; module D : sig ... end
+
+
+
+<a id="module-E"></a>
+###### &nbsp; module E : sig ... end
+
+
+OcamlaryAliasesFooA
+
+ Module `` Foo.A`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesFooB
+
+ Module `` Foo.B`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesFooC
+
+ Module `` Foo.C`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesFooD
+
+ Module `` Foo.D`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesFooE
+
+ Module `` Foo.E`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesStd
+
+ Module `` Aliases.Std`` 
+<a id="module-A"></a>
+###### &nbsp; module A = Foo.A
+
+
+
+<a id="module-B"></a>
+###### &nbsp; module B = Foo.B
+
+
+
+<a id="module-C"></a>
+###### &nbsp; module C = Foo.C
+
+
+
+<a id="module-D"></a>
+###### &nbsp; module D = Foo.D
+
+
+
+<a id="module-E"></a>
+###### &nbsp; module E = Foo.E
+
+
+OcamlaryAliasesE
+
+ Module `` Aliases.E`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesP1
+
+ Module `` Aliases.P1`` 
+<a id="module-Y"></a>
+###### &nbsp; module Y : sig ... end
+
+
+OcamlaryAliasesP1Y
+
+ Module `` P1.Y`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="val-id"></a>
+###### &nbsp; val id : t -> t
+
+
+OcamlaryAliasesP2
+
+ Module `` Aliases.P2`` 
+<a id="module-Z"></a>
+###### &nbsp; module Z = Z
 

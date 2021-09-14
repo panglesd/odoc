@@ -1,6 +1,6 @@
 Bugs
 
- Module `Bugs`
+ Module `` Bugs`` 
 <a id="type-opt"></a>
 ###### &nbsp; type 'a opt = 'a option
 

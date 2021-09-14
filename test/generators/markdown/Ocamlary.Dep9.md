@@ -1,6 +1,6 @@
 OcamlaryDep9
 
- Module `Ocamlary.Dep9`
+ Module `` Ocamlary.Dep9`` 
 
 # Parameters
 
@@ -22,4 +22,11 @@ end
 
 <a id="module-type-T"></a>
 ###### &nbsp; module type T = X.T
+
+
+OcamlaryDep91-X
+
+ Parameter `` Dep9.1-X`` 
+<a id="module-type-T"></a>
+###### &nbsp; module type T
 

@@ -1,6 +1,6 @@
 Module
 
- Module `Module`
+ Module `` Module`` 
 
 
 Foo.
@@ -250,3 +250,213 @@ end
 <a id="module-Recursive"></a>
 ###### &nbsp; module Recursive : sig ... end
 
+
+ModuleS
+
+ Module type `` Module.S`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="type-u"></a>
+###### &nbsp; type u
+
+
+
+<a id="type-v"></a>
+###### &nbsp; type 'a v
+
+
+
+<a id="type-w"></a>
+###### &nbsp; type ('a, 'b) w
+
+
+
+<a id="module-M"></a>
+###### &nbsp; module M : sig
+end
+
+
+ModuleSM
+
+ Module `` S.M`` 
+
+ModuleS3
+
+ Module type `` Module.S3`` 
+<a id="type-t"></a>
+###### &nbsp; type t = int
+
+
+
+<a id="type-u"></a>
+###### &nbsp; type u = string
+
+
+
+<a id="type-v"></a>
+###### &nbsp; type 'a v
+
+
+
+<a id="type-w"></a>
+###### &nbsp; type ('a, 'b) w
+
+
+
+<a id="module-M"></a>
+###### &nbsp; module M : sig
+end
+
+
+ModuleS3M
+
+ Module `` S3.M`` 
+
+ModuleS4
+
+ Module type `` Module.S4`` 
+<a id="type-u"></a>
+###### &nbsp; type u
+
+
+
+<a id="type-v"></a>
+###### &nbsp; type 'a v
+
+
+
+<a id="type-w"></a>
+###### &nbsp; type ('a, 'b) w
+
+
+
+<a id="module-M"></a>
+###### &nbsp; module M : sig
+end
+
+
+ModuleS4M
+
+ Module `` S4.M`` 
+
+ModuleS5
+
+ Module type `` Module.S5`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="type-u"></a>
+###### &nbsp; type u
+
+
+
+<a id="type-w"></a>
+###### &nbsp; type ('a, 'b) w
+
+
+
+<a id="module-M"></a>
+###### &nbsp; module M : sig
+end
+
+
+ModuleS5M
+
+ Module `` S5.M`` 
+
+ModuleS6
+
+ Module type `` Module.S6`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="type-u"></a>
+###### &nbsp; type u
+
+
+
+<a id="type-v"></a>
+###### &nbsp; type 'a v
+
+
+
+<a id="module-M"></a>
+###### &nbsp; module M : sig
+end
+
+
+ModuleS6M
+
+ Module `` S6.M`` 
+
+ModuleM'
+
+ Module `` Module.M'`` 
+
+ModuleS7
+
+ Module type `` Module.S7`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="type-u"></a>
+###### &nbsp; type u
+
+
+
+<a id="type-v"></a>
+###### &nbsp; type 'a v
+
+
+
+<a id="type-w"></a>
+###### &nbsp; type ('a, 'b) w
+
+
+
+<a id="module-M"></a>
+###### &nbsp; module M = M'
+
+
+ModuleS8
+
+ Module type `` Module.S8`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="type-u"></a>
+###### &nbsp; type u
+
+
+
+<a id="type-v"></a>
+###### &nbsp; type 'a v
+
+
+
+<a id="type-w"></a>
+###### &nbsp; type ('a, 'b) w
+
+
+ModuleS9
+
+ Module type `` Module.S9`` 
+
+ModuleMutually
+
+ Module `` Module.Mutually`` 
+
+ModuleRecursive
+
+ Module `` Module.Recursive`` 

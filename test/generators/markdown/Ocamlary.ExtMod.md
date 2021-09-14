@@ -1,6 +1,6 @@
 OcamlaryExtMod
 
- Module `Ocamlary.ExtMod`
+ Module `` Ocamlary.ExtMod`` 
 <a id="type-t"></a>
 ###### &nbsp; type t = ..
 

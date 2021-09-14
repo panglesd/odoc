@@ -1,6 +1,6 @@
 OcamlaryWith7
 
- Module `Ocamlary.With7`
+ Module `` Ocamlary.With7`` 
 
 # Parameters
 
@@ -22,4 +22,11 @@ end
 
 <a id="module-type-T"></a>
 ###### &nbsp; module type T = X.T
+
+
+OcamlaryWith71-X
+
+ Parameter `` With7.1-X`` 
+<a id="module-type-T"></a>
+###### &nbsp; module type T
 

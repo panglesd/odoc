@@ -1,6 +1,6 @@
 Type
 
- Module `Type`
+ Module `` Type`` 
 <a id="type-abstract"></a>
 ###### &nbsp; type abstract
 
@@ -83,8 +83,8 @@ Some _documentation_.
 ###### &nbsp; type variant_e = {
 
 <a id="type-variant_e.a"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`a : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` a : int;
+`` 
 
   
 
@@ -140,8 +140,8 @@ Some _documentation_.
 ###### &nbsp; type variant_c = {
 
 <a id="type-variant_c.a"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`a : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` a : int;
+`` 
 
   
 
@@ -203,24 +203,24 @@ Some _documentation_.
 ###### &nbsp; type record = {
 
 <a id="type-record.a"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`a : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` a : int;
+`` 
 
   
 
 
 
 <a id="type-record.b"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`mutable b : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` mutable b : int;
+`` 
 
   
 
 
 
 <a id="type-record.c"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`c : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` c : int;
+`` 
 
   foo
 
@@ -229,8 +229,8 @@ Some _documentation_.
 
 
 <a id="type-record.d"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`d : int;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` d : int;
+`` 
 
   _bar_
 
@@ -239,8 +239,8 @@ Some _documentation_.
 
 
 <a id="type-record.e"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`e : a. 'a;
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` e : a. 'a;
+`` 
 
   
 
@@ -252,32 +252,32 @@ Some _documentation_.
 ###### &nbsp; type polymorphic_variant = [ 
 
 <a id="type-polymorphic_variant.A"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```A
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `A
+`` 
 
   
 
 
 
 <a id="type-polymorphic_variant.B"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```B of int
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `B of int
+`` 
 
   
 
 
 
 <a id="type-polymorphic_variant.C"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```C of int * unit
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `C of int * unit
+`` 
 
   
 
 
 
 <a id="type-polymorphic_variant.D"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```D
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `D
+`` 
 
   
 
@@ -289,17 +289,17 @@ Some _documentation_.
 ###### &nbsp; type polymorphic_variant_extension = [ 
 
 <a id="type-polymorphic_variant_extension.polymorphic_variant"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| 
-``[polymorphic_variant](#type-polymorphic_variant)
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | 
+`` `` [polymorphic_variant](#type-polymorphic_variant)
+`` 
 
   
 
 
 
 <a id="type-polymorphic_variant_extension.E"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```E
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `E
+`` 
 
   
 
@@ -311,8 +311,8 @@ Some _documentation_.
 ###### &nbsp; type nested_polymorphic_variant = [ 
 
 <a id="type-nested_polymorphic_variant.A"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| ```A of [ `B | `C ]
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` `A of [ `B | `C ]
+`` 
 
   
 
@@ -329,9 +329,9 @@ Some _documentation_.
 ###### &nbsp; and private_extenion = private [> 
 
 <a id="type-private_extenion.polymorphic_variant"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`| 
-``[polymorphic_variant](#type-polymorphic_variant)
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | 
+`` `` [polymorphic_variant](#type-polymorphic_variant)
+`` 
 
   
 
@@ -466,8 +466,8 @@ end
 <a id="extension-Extension"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| Extension
 
-  Documentation for [`Extension
-`](#extension-Extension).
+  Documentation for [`` Extension
+`` ](#extension-Extension).
 
 
 
@@ -476,8 +476,8 @@ end
 <a id="extension-Another_extension"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| Another_extension
 
-  Documentation for [`Another_extension
-`](#extension-Another_extension).
+  Documentation for [`` Another_extension
+`` ](#extension-Another_extension).
 
 
 
@@ -511,4 +511,16 @@ end
 
 <a id="exception-Foo"></a>
 ###### &nbsp; exception Foo of int * int
+
+
+TypeX
+
+ Module type `` Type.X`` 
+<a id="type-t"></a>
+###### &nbsp; type t
+
+
+
+<a id="type-u"></a>
+###### &nbsp; type u
 

@@ -1,6 +1,6 @@
 OcamlaryIncludedA
 
- Module `Ocamlary.IncludedA`
+ Module `` Ocamlary.IncludedA`` 
 <a id="type-t"></a>
 ###### &nbsp; type t
 

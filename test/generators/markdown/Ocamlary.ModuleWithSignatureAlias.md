@@ -1,6 +1,6 @@
 OcamlaryModuleWithSignatureAlias
 
- Module `Ocamlary.ModuleWithSignatureAlias`
+ Module `` Ocamlary.ModuleWithSignatureAlias`` 
 
 
 A plain module with an alias signature

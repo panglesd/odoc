@@ -1,6 +1,6 @@
 Class
 
- Module `Class`
+ Module `` Class`` 
 <a id="class-type-empty"></a>
 ###### &nbsp; class type  empty = object
 end
@@ -49,3 +49,39 @@ end
 <a id="class-polymorphic'"></a>
 ###### &nbsp; class 'a polymorphic' : 'a polymorphic
 
+
+Classempty
+
+ Class type `` Class.empty`` 
+
+Classmutually
+
+ Class type `` Class.mutually`` 
+
+Classrecursive
+
+ Class type `` Class.recursive`` 
+
+Classmutually'
+
+ Class `` Class.mutually'`` 
+
+Classrecursive'
+
+ Class `` Class.recursive'`` 
+
+Classempty_virtual
+
+ Class type `` Class.empty_virtual`` 
+
+Classempty_virtual'
+
+ Class `` Class.empty_virtual'`` 
+
+Classpolymorphic
+
+ Class type `` Class.polymorphic`` 
+
+Classpolymorphic'
+
+ Class `` Class.polymorphic'`` 

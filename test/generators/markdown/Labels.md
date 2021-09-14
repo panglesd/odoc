@@ -1,6 +1,6 @@
 Labels
 
- Module `Labels`
+ Module `` Labels`` 
 
 # Attached to unit
 
@@ -125,8 +125,8 @@ Attached to type subst
 ###### &nbsp; type v = {
 
 <a id="type-v.f"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`f : [t](#type-t);
-`
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` f : [t](#type-t);
+`` 
 
   Attached to field
 
@@ -164,3 +164,27 @@ Testing that labels can be referenced
 - [Attached to constructor](#L12)
 
 - [Attached to field](#L13)
+
+LabelsA
+
+ Module `` Labels.A`` 
+
+# Attached to module
+
+LabelsS
+
+ Module type `` Labels.S`` 
+
+# Attached to module type
+
+Labelsc
+
+ Class `` Labels.c`` 
+
+# Attached to class
+
+Labelscs
+
+ Class type `` Labels.cs`` 
+
+# Attached to class type
