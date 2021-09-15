@@ -573,11 +573,17 @@ module Odoc_latex = Make_renderer (struct
 end)
 
 module Odoc_markdown = Make_renderer (struct
-  type args = unit
+  type args = Markdown.args
 
   let renderer = Markdown.renderer
 
-  let extra_args = Term.const ()
+  let generate_links =
+    let doc = "Generate links in markdown." in
+    Arg.(value & flag (info ~doc [ "generate-links" ]))
+
+  let extra_args =
+    let f generate_links = { Markdown.generate_links } in
+    Term.(const f $ generate_links)
 end)
 
 module Depends = struct

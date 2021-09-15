@@ -94,6 +94,8 @@ let style (style : style) content =
   | `Superscript -> command "<sup>" content
   | `Subscript -> command "<sub>" content
 
+let generate_links = ref false
+
 let rec source_code (s : Source.t) =
   match s with
   | [] -> noop
@@ -122,27 +124,32 @@ and inline (l : Inline.t) =
       | Styled (sty, content) -> style sty (inline content) ++ inline rest
       | Linebreak -> break ++ inline rest
       | Link (href, content) ->
-          (let rec f (content : Inline.t) =
-             match content with
-             | [] -> noop
-             | i :: rest -> (
-                 match i.desc with
-                 | Text s ->
-                     command "" (str "[%s]" s ++ str "(%s)" href) ++ f rest
-                 | _ -> noop ++ f rest)
-           in
-           f content)
-          ++ inline rest
-      | InternalLink (Resolved (link, content)) -> (
-          match link.page.parent with
-          | Some _ -> inline content ++ inline rest
-          | None ->
-              open_sq_bracket ++ inline content ++ close_sq_bracket
-              ++ open_parenthesis
-              ++ String ("#" ^ link.anchor)
-              ++ close_parenthesis ++ inline rest)
+          if !generate_links then
+            (let rec f (content : Inline.t) =
+               match content with
+               | [] -> noop
+               | i :: rest -> (
+                   match i.desc with
+                   | Text s ->
+                       command "" (str "[%s]" s ++ str "(%s)" href) ++ f rest
+                   | _ -> noop ++ f rest)
+             in
+             f content)
+            ++ inline rest
+          else inline content ++ inline rest
+      | InternalLink (Resolved (link, content)) ->
+          if !generate_links then
+            match link.page.parent with
+            | Some _ -> inline content ++ inline rest
+            | None ->
+                open_sq_bracket ++ inline content ++ close_sq_bracket
+                ++ open_parenthesis
+                ++ String ("#" ^ link.anchor)
+                ++ close_parenthesis ++ inline rest
+          else inline content ++ inline rest
       | InternalLink (Unresolved content) -> inline content ++ inline rest
-      | Source content -> env Any "`" "`" (source_code content) ++ inline rest
+      | Source content ->
+          env Any "`` " "`` " (source_code content) ++ inline rest
       | Raw_markup t -> raw_markup t ++ inline rest)
 
 let rec block (l : Block.t) =
@@ -292,19 +299,29 @@ let on_sub subp =
   | `Page p -> if Link.should_inline p.Subpage.content.url then Some 1 else None
   | `Include incl -> if inline_subpage incl.Include.status then Some 0 else None
 
-let page { Page.header; items = i; url; _ } =
+let rec calc_subpages (generate_links : bool) { Subpage.content; _ } =
+  [ page generate_links content ]
+
+and subpages generate_links i =
+  Utils.flatmap ~f:(calc_subpages generate_links) @@ Doctree.Subpages.compute i
+
+and page generate_links ({ Page.header; items; url; _ } as p) =
   let header = Shift.compute ~on_sub header in
-  let i = Shift.compute ~on_sub i in
+  let items = Shift.compute ~on_sub items in
+  let subpages = subpages generate_links p in
   Block
     ([ Inline (Link.for_printing url) ]
-    @ [ item "&nbsp; " header ++ item "&nbsp; " i ])
+    @ [ item "&nbsp; " header ++ item "&nbsp; " items ]
+    @ subpages)
 
 let rec subpage subp =
   let p = subp.Subpage.content in
   if Link.should_inline p.url then [] else [ render p ]
 
 and render (p : Page.t) =
-  let content fmt = Format.fprintf fmt "%a" Markup.pp (page p) in
+  let content fmt =
+    Format.fprintf fmt "%a" Markup.pp (page !generate_links p)
+  in
   let children = Utils.flatmap ~f:subpage @@ Subpages.compute p in
   let filename = Link.as_filename p.url in
   { Odoc_document.Renderer.filename; content; children }
