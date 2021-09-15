@@ -70,12 +70,12 @@ Some _documentation_.
 
 
 <a id="type-instance"></a>
-###### &nbsp; type instance = int [constructor](#type-constructor)
+###### &nbsp; type instance = int constructor
 
 
 
 <a id="type-long"></a>
-###### &nbsp; type long = [labeled_higher_order](#type-labeled_higher_order) -> [ `Bar | `Baz of [triple](#type-triple) ] -> [pair](#type-pair) -> [labeled](#type-labeled) -> [higher_order](#type-higher_order) -> (string -> int) -> (int, float, char, string, char, unit) CamlinternalFormatBasics.fmtty -> [nested_pair](#type-nested_pair) -> [arrow](#type-arrow) -> string -> [nested_pair](#type-nested_pair) array
+###### &nbsp; type long = labeled_higher_order -> [ `Bar | `Baz of triple ] -> pair -> labeled -> higher_order -> (string -> int) -> (int, float, char, string, char, unit) CamlinternalFormatBasics.fmtty -> nested_pair -> arrow -> string -> nested_pair array
 
 
 
@@ -128,7 +128,7 @@ Some _documentation_.
 
 
 <a id="type-variant.E"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| E of [variant_e](#type-variant_e)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| E of variant_e
 
   
 
@@ -153,21 +153,21 @@ Some _documentation_.
 ###### &nbsp; type _ gadt = 
 
 <a id="type-gadt.A"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| A : int [gadt](#type-gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| A : int gadt
 
   
 
 
 
 <a id="type-gadt.B"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| B : int -> string [gadt](#type-gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| B : int -> string gadt
 
   
 
 
 
 <a id="type-gadt.C"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| C : [variant_c](#type-variant_c) -> unit [gadt](#type-gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| C : variant_c -> unit gadt
 
   
 
@@ -179,7 +179,7 @@ Some _documentation_.
 ###### &nbsp; type degenerate_gadt = 
 
 <a id="type-degenerate_gadt.A"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| A : [degenerate_gadt](#type-degenerate_gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| A : degenerate_gadt
 
   
 
@@ -289,8 +289,7 @@ Some _documentation_.
 ###### &nbsp; type polymorphic_variant_extension = [ 
 
 <a id="type-polymorphic_variant_extension.polymorphic_variant"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`` | 
-`` `` [polymorphic_variant](#type-polymorphic_variant)
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` polymorphic_variant
 `` 
 
   
@@ -329,8 +328,7 @@ Some _documentation_.
 ###### &nbsp; and private_extenion = private [> 
 
 <a id="type-private_extenion.polymorphic_variant"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`` | 
-`` `` [polymorphic_variant](#type-polymorphic_variant)
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` polymorphic_variant
 `` 
 
   
@@ -391,7 +389,7 @@ end
 
 
 <a id="type-using_binary"></a>
-###### &nbsp; type using_binary = (int, int) [binary](#type-binary)
+###### &nbsp; type using_binary = (int, int) binary
 
 
 
@@ -426,7 +424,7 @@ end
 
 
 <a id="type-named_variant"></a>
-###### &nbsp; type 'a named_variant = 'a constraint 'a = [< [polymorphic_variant](#type-polymorphic_variant) ]
+###### &nbsp; type 'a named_variant = 'a constraint 'a = [< polymorphic_variant ]
 
 
 
@@ -461,13 +459,13 @@ end
 
 
 <a id="extension-decl-Extension"></a>
-###### &nbsp; type [extensible](#type-extensible) += 
+###### &nbsp; type extensible += 
 
 <a id="extension-Extension"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| Extension
 
-  Documentation for [`` Extension
-`` ](#extension-Extension).
+  Documentation for `` Extension
+`` .
 
 
 
@@ -476,8 +474,8 @@ end
 <a id="extension-Another_extension"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| Another_extension
 
-  Documentation for [`` Another_extension
-`` ](#extension-Another_extension).
+  Documentation for `` Another_extension
+`` .
 
 
 
@@ -489,7 +487,7 @@ end
 ###### &nbsp; type mutually = 
 
 <a id="type-mutually.A"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| A of [recursive](#type-recursive)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| A of recursive
 
   
 
@@ -501,7 +499,7 @@ end
 ###### &nbsp; and recursive = 
 
 <a id="type-recursive.B"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| B of [mutually](#type-mutually)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| B of mutually
 
   
 

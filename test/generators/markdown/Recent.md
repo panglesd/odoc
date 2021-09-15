@@ -83,14 +83,14 @@ end
 ###### &nbsp; type _ gadt = 
 
 <a id="type-gadt.A"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| A : int [gadt](#type-gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| A : int gadt
 
   
 
 
 
 <a id="type-gadt.B"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| B : int -> string [gadt](#type-gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| B : int -> string gadt
 
   foo
 
@@ -107,7 +107,7 @@ end
 
   
 
-} -> unit [gadt](#type-gadt)
+} -> unit gadt
 
   
 
@@ -170,7 +170,7 @@ end
 ###### &nbsp; type empty_conj = 
 
 <a id="type-empty_conj.X"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| X : [< `X of & 'a & int * float ] -> [empty_conj](#type-empty_conj)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| X : [< `X of & 'a & int * float ] -> empty_conj
 
   
 
@@ -182,7 +182,7 @@ end
 ###### &nbsp; type conj = 
 
 <a id="type-conj.X"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| X : [< `X of int & [< `B of int & float ] ] -> [conj](#type-conj)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| X : [< `X of int & [< `B of int & float ] ] -> conj
 
   
 

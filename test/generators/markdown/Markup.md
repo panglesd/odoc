@@ -36,7 +36,7 @@ but odoc has banned deeper headings. There are also title headings, but they are
 ### Anchors
 
 
-Sections can have attached [Anchors](#anchors), and it is possible to [link](#anchors) to them. Links to section headers should not be set in source code style.
+Sections can have attached Anchors, and it is possible to link to them. Links to section headers should not be set in source code style.
 
 
 
@@ -67,8 +67,7 @@ _emphasis_, __emphasis_ within emphasis_, **_bold italic_**, super<sup>script, s
 
 Note: _In italics _emphasis_ is rendered as normal text while _emphasis 
                                                               _in_ emphasis_ is rendered in italics._ 
-_It also work the same in [links](#)[ ](#)[in](#)[ ](#)[italics](#)[ ](#)
-[with](#)[ ](#)[.](#)_
+_It also work the same in links in italics with _emphasis _in_ emphasis_._
 
 
 `` code
@@ -92,17 +91,17 @@ Code can appear **inside `` other``  markup**. Its display shouldn't be affected
 # Links and references
 
 
-This is a [link](#). It sends you to the top of this page. Links can have markup inside them: , , , 
-[super](#), [sub](#), and . Links can also be nested _[inside](#)_ markup. Links cannot be nested inside each other. This link has no replacement text: 
-[#](#). The text is filled in by odoc. This is a shorthand link: [#](#). The text is also filled in by odoc in this case.
+This is a link. It sends you to the top of this page. Links can have markup inside them: 
+**bold**, _italics_, _emphasis_, super<sup>script, sub<sub>script, and 
+`` code
+`` . Links can also be nested _inside_ markup. Links cannot be nested inside each other. This link has no replacement text: #. The text is filled in by odoc. This is a shorthand link: #. The text is also filled in by odoc in this case.
 
 
-This is a reference to [`` foo
-`` ](#val-foo). References can have replacement text: [the value foo](#val-foo). Except for the special lookup support, references are pretty much just like links. The replacement text can have nested styles: [
-**bold**](#val-foo), [_italic_](#val-foo), [_emphasis_](#val-foo), [super
-<sup>script](#val-foo), [sub<sub>script](#val-foo), and [`` code
-`` ](#val-foo). It's also possible to surround a reference in a style: 
-**[`` foo`` ](#val-foo)**. References can't be nested inside references, and links and references can't be nested inside each other.
+This is a reference to `` foo
+`` . References can have replacement text: the value foo. Except for the special lookup support, references are pretty much just like links. The replacement text can have nested styles: 
+**bold**, _italic_, _emphasis_, super<sup>script, sub<sub>script, and 
+`` code
+`` . It's also possible to surround a reference in a style: **`` foo`` **. References can't be nested inside references, and links and references can't be nested inside each other.
 
 
 
@@ -165,8 +164,8 @@ can use explicitly-delimited lists.
 
 - and can include references
 
-- [`` foo
-`` ](#val-foo)
+- `` foo
+`` 
 
 
 
@@ -245,7 +244,7 @@ Each comment can end with zero or more tags. Here are some examples:
 
 
 
-@see [#](#) : this url
+@see # : this url
 
 
 

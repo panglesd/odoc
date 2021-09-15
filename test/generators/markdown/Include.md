@@ -66,7 +66,7 @@ end
 ###### &nbsp; module type Inherent_Module = sig
 
 <a id="val-a"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;val a : [t](#type-t)
+###### &nbsp; &nbsp; &nbsp; &nbsp;val a : t
 
 
 end
@@ -81,7 +81,7 @@ end
 
 
 <a id="val-a"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;val a : [u](#type-u)
+###### &nbsp; &nbsp; &nbsp; &nbsp;val a : u
 
 
 end
@@ -91,7 +91,7 @@ end
 
 
 <a id="val-a"></a>
-###### &nbsp; val a : [u](#type-u)
+###### &nbsp; val a : u
 
 
 IncludeNot_inlined
@@ -126,7 +126,7 @@ IncludeInherent_Module
 
  Module type `` Include.Inherent_Module`` 
 <a id="val-a"></a>
-###### &nbsp; val a : [t](#type-t)
+###### &nbsp; val a : t
 
 
 IncludeDorminant_Module
@@ -135,5 +135,5 @@ IncludeDorminant_Module
 
 
 <a id="val-a"></a>
-###### &nbsp; val a : [u](#type-u)
+###### &nbsp; val a : u
 

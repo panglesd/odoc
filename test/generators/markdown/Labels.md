@@ -23,7 +23,7 @@ Attached to type
 
 
 <a id="val-f"></a>
-###### &nbsp; val f : [t](#type-t)
+###### &nbsp; val f : t
 
 Attached to value
 
@@ -31,7 +31,7 @@ Attached to value
 
 
 <a id="val-e"></a>
-###### &nbsp; val e : unit -> [t](#type-t)
+###### &nbsp; val e : unit -> t
 
 Attached to external
 
@@ -77,7 +77,7 @@ Attached to exception
 
 
 <a id="extension-decl-X"></a>
-###### &nbsp; type [x](#type-x) += 
+###### &nbsp; type x += 
 
 <a id="extension-X"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| X
@@ -100,7 +100,7 @@ Attached to module subst
 
 
 <a id="type-s"></a>
-###### &nbsp; type s := [t](#type-t)
+###### &nbsp; type s := t
 
 Attached to type subst
 
@@ -125,7 +125,7 @@ Attached to type subst
 ###### &nbsp; type v = {
 
 <a id="type-v.f"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`` f : [t](#type-t);
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` f : t;
 `` 
 
   Attached to field
@@ -139,31 +139,31 @@ Attached to type subst
 Testing that labels can be referenced
 
 
-- [Attached to unit](#L1)
+- Attached to unit
 
-- [Attached to nothing](#L2)
+- Attached to nothing
 
-- [Attached to module](#L3)
+- Attached to module
 
-- [Attached to type](#L4)
+- Attached to type
 
-- [Attached to value](#L5)
+- Attached to value
 
-- [Attached to class](#L6)
+- Attached to class
 
-- [Attached to class type](#L7)
+- Attached to class type
 
-- [Attached to exception](#L8)
+- Attached to exception
 
-- [Attached to extension](#L9)
+- Attached to extension
 
-- [Attached to module subst](#L10)
+- Attached to module subst
 
-- [Attached to type subst](#L11)
+- Attached to type subst
 
-- [Attached to constructor](#L12)
+- Attached to constructor
 
-- [Attached to field](#L13)
+- Attached to field
 
 LabelsA
 

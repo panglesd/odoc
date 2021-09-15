@@ -48,8 +48,7 @@ David Sheets is the author.
 
 @author : David Sheets
 
-You may find more information about this HTML documentation renderer at 
-[github.com/dsheets/ocamlary](https://github.com/dsheets/ocamlary).
+You may find more information about this HTML documentation renderer at github.com/dsheets/ocamlary.
 
 
 
@@ -316,7 +315,7 @@ end
 
 For a good time, see `` SuperSig`` .SubSigA.subSig or `` SuperSig
 `` .SubSigB.subSig or `` SuperSig.EmptySig
-`` . Section [Section 9000](#s9000) is also interesting. [EmptySig](#emptySig) is the section and 
+`` . Section Section 9000 is also interesting. EmptySig is the section and 
 `` EmptySig
 ``  is the module signature.
 
@@ -370,8 +369,8 @@ Unary exception constructor over binary tuple
 <a id="exception-EmptySig"></a>
 ###### &nbsp; exception EmptySig
 
-`` EmptySig``  is a module and [`` EmptySig
-`` ](#exception-EmptySig) is this exception.
+`` EmptySig``  is a module and `` EmptySig
+``  is this exception.
 
 
 
@@ -379,8 +378,8 @@ Unary exception constructor over binary tuple
 <a id="exception-EmptySigAlias"></a>
 ###### &nbsp; exception EmptySigAlias
 
-[`` EmptySigAlias
-`` ](#exception-EmptySigAlias) is this exception.
+`` EmptySigAlias
+``  is this exception.
 
 
 
@@ -392,8 +391,8 @@ Unary exception constructor over binary tuple
 <a id="type-a_function"></a>
 ###### &nbsp; type ('a, 'b) a_function = 'a -> 'b
 
-[`` a_function`` ](#type-a_function) is this type and [`` a_function
-`` ](#val-a_function) is the value below.
+`` a_function``  is this type and `` a_function
+``  is the value below.
 
 
 
@@ -420,7 +419,7 @@ This is `` a_function``  with param and return type.
 
 
 <a id="val-fun_fun_fun"></a>
-###### &nbsp; val fun_fun_fun : ((int, int) [a_function](#type-a_function), (unit, unit) [a_function](#type-a_function)) [a_function](#type-a_function)
+###### &nbsp; val fun_fun_fun : ((int, int) a_function, (unit, unit) a_function) a_function
 
 
 
@@ -444,7 +443,7 @@ This is `` a_function``  with param and return type.
 ###### &nbsp; val ocaml_org : string
 
 
-@see [http://ocaml.org/](http://ocaml.org/) : The OCaml Web site
+@see http://ocaml.org/ : The OCaml Web site
 
 
 
@@ -636,7 +635,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -736,7 +735,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -830,7 +829,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -927,7 +926,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -1027,7 +1026,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -1127,7 +1126,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -1420,28 +1419,28 @@ Wow! It was a polymorphic variant!
 ###### &nbsp; type (_, _) full_gadt = 
 
 <a id="type-full_gadt.Tag"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| Tag : (unit, unit) [full_gadt](#type-full_gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| Tag : (unit, unit) full_gadt
 
   
 
 
 
 <a id="type-full_gadt.First"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| First : 'a -> ('a, unit) [full_gadt](#type-full_gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| First : 'a -> ('a, unit) full_gadt
 
   
 
 
 
 <a id="type-full_gadt.Second"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| Second : 'a -> (unit, 'a) [full_gadt](#type-full_gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| Second : 'a -> (unit, 'a) full_gadt
 
   
 
 
 
 <a id="type-full_gadt.Exist"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| Exist : 'a * 'b -> ('b, unit) [full_gadt](#type-full_gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| Exist : 'a * 'b -> ('b, unit) full_gadt
 
   
 
@@ -1460,21 +1459,21 @@ Wow! It was a GADT!
 ###### &nbsp; type 'a partial_gadt = 
 
 <a id="type-partial_gadt.AscribeTag"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| AscribeTag : 'a [partial_gadt](#type-partial_gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| AscribeTag : 'a partial_gadt
 
   
 
 
 
 <a id="type-partial_gadt.OfTag"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| OfTag of 'a [partial_gadt](#type-partial_gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| OfTag of 'a partial_gadt
 
   
 
 
 
 <a id="type-partial_gadt.ExistGadtTag"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| ExistGadtTag : ('a -> 'b) -> 'a [partial_gadt](#type-partial_gadt)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| ExistGadtTag : ('a -> 'b) -> 'a partial_gadt
 
   
 
@@ -1490,7 +1489,7 @@ Wow! It was a mixed GADT!
 
 
 <a id="type-alias"></a>
-###### &nbsp; type alias = [variant](#type-variant)
+###### &nbsp; type alias = variant
 
 This comment is for `` alias
 `` .
@@ -1499,7 +1498,7 @@ This comment is for `` alias
 
 
 <a id="type-tuple"></a>
-###### &nbsp; type tuple = ([alias](#type-alias) * [alias](#type-alias)) * [alias](#type-alias) * ([alias](#type-alias) * [alias](#type-alias))
+###### &nbsp; type tuple = (alias * alias) * alias * (alias * alias)
 
 This comment is for `` tuple
 `` .
@@ -1508,7 +1507,7 @@ This comment is for `` tuple
 
 
 <a id="type-variant_alias"></a>
-###### &nbsp; type variant_alias = [variant](#type-variant) = 
+###### &nbsp; type variant_alias = variant = 
 
 <a id="type-variant_alias.TagA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| TagA
@@ -1545,7 +1544,7 @@ This comment is for `` variant_alias
 
 
 <a id="type-record_alias"></a>
-###### &nbsp; type record_alias = [record](#type-record) = {
+###### &nbsp; type record_alias = record = {
 
 <a id="type-record_alias.field1"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;`` field1 : int;
@@ -1573,8 +1572,7 @@ This comment is for `` record_alias
 ###### &nbsp; type poly_variant_union = [ 
 
 <a id="type-poly_variant_union.poly_variant"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;`` | 
-`` `` [poly_variant](#type-poly_variant)
+###### &nbsp; &nbsp; &nbsp; &nbsp;`` | `` `` poly_variant
 `` 
 
   
@@ -1640,7 +1638,7 @@ This comment is for `` poly_variant_union
 
 
 <a id="type-open_poly_variant_alias"></a>
-###### &nbsp; type 'a open_poly_variant_alias = 'a [open_poly_variant](#type-open_poly_variant) [open_poly_variant2](#type-open_poly_variant2)
+###### &nbsp; type 'a open_poly_variant_alias = 'a open_poly_variant open_poly_variant2
 
 
 
@@ -1702,31 +1700,31 @@ This comment is for `` poly_variant_union
 
 
 <a id="type-full_gadt_alias"></a>
-###### &nbsp; type ('a, 'b) full_gadt_alias = ('a, 'b) [full_gadt](#type-full_gadt) = 
+###### &nbsp; type ('a, 'b) full_gadt_alias = ('a, 'b) full_gadt = 
 
 <a id="type-full_gadt_alias.Tag"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| Tag : (unit, unit) [full_gadt_alias](#type-full_gadt_alias)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| Tag : (unit, unit) full_gadt_alias
 
   
 
 
 
 <a id="type-full_gadt_alias.First"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| First : 'a -> ('a, unit) [full_gadt_alias](#type-full_gadt_alias)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| First : 'a -> ('a, unit) full_gadt_alias
 
   
 
 
 
 <a id="type-full_gadt_alias.Second"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| Second : 'a -> (unit, 'a) [full_gadt_alias](#type-full_gadt_alias)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| Second : 'a -> (unit, 'a) full_gadt_alias
 
   
 
 
 
 <a id="type-full_gadt_alias.Exist"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| Exist : 'a * 'b -> ('b, unit) [full_gadt_alias](#type-full_gadt_alias)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| Exist : 'a * 'b -> ('b, unit) full_gadt_alias
 
   
 
@@ -1739,24 +1737,24 @@ This comment is for `` full_gadt_alias
 
 
 <a id="type-partial_gadt_alias"></a>
-###### &nbsp; type 'a partial_gadt_alias = 'a [partial_gadt](#type-partial_gadt) = 
+###### &nbsp; type 'a partial_gadt_alias = 'a partial_gadt = 
 
 <a id="type-partial_gadt_alias.AscribeTag"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| AscribeTag : 'a [partial_gadt_alias](#type-partial_gadt_alias)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| AscribeTag : 'a partial_gadt_alias
 
   
 
 
 
 <a id="type-partial_gadt_alias.OfTag"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| OfTag of 'a [partial_gadt_alias](#type-partial_gadt_alias)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| OfTag of 'a partial_gadt_alias
 
   
 
 
 
 <a id="type-partial_gadt_alias.ExistGadtTag"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| ExistGadtTag : ('a -> 'b) -> 'a [partial_gadt_alias](#type-partial_gadt_alias)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| ExistGadtTag : ('a -> 'b) -> 'a partial_gadt_alias
 
   
 
@@ -1771,8 +1769,8 @@ This comment is for `` partial_gadt_alias
 <a id="exception-Exn_arrow"></a>
 ###### &nbsp; exception Exn_arrow : unit -> exn
 
-This comment is for [`` Exn_arrow
-`` ](#exception-Exn_arrow).
+This comment is for `` Exn_arrow
+`` .
 
 
 
@@ -1788,19 +1786,17 @@ This comment is for [`` Exn_arrow
 
 
 <a id="type-mutual_constr_a.B_ish"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| B_ish of [mutual_constr_b](#type-mutual_constr_b)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| B_ish of mutual_constr_b
 
-  This comment is between [`` mutual_constr_a
-`` ](#type-mutual_constr_a) and [`` mutual_constr_b
-`` ](#type-mutual_constr_b).
-
+  This comment is between `` mutual_constr_a``  and `` mutual_constr_b
+`` .
 
 
 
 
-This comment is for [`` mutual_constr_a
-`` ](#type-mutual_constr_a) then [`` mutual_constr_b
-`` ](#type-mutual_constr_b).
+
+This comment is for `` mutual_constr_a``  then `` mutual_constr_b
+`` .
 
 
 
@@ -1816,7 +1812,7 @@ This comment is for [`` mutual_constr_a
 
 
 <a id="type-mutual_constr_b.A_ish"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| A_ish of [mutual_constr_a](#type-mutual_constr_a)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| A_ish of mutual_constr_a
 
   This comment must be here for the next to associate correctly.
 
@@ -1824,15 +1820,14 @@ This comment is for [`` mutual_constr_a
 
 
 
-This comment is for [`` mutual_constr_b
-`` ](#type-mutual_constr_b) then [`` mutual_constr_a
-`` ](#type-mutual_constr_a).
+This comment is for `` mutual_constr_b``  then `` mutual_constr_a
+`` .
 
 
 
 
 <a id="type-rec_obj"></a>
-###### &nbsp; type rec_obj = < f : int; g : unit -> unit; h : [rec_obj](#type-rec_obj); >
+###### &nbsp; type rec_obj = < f : int; g : unit -> unit; h : rec_obj; >
 
 
 
@@ -1870,7 +1865,7 @@ A mystery wrapped in an ellipsis
 
 
 <a id="extension-decl-ExtA"></a>
-###### &nbsp; type [ext](#type-ext) += 
+###### &nbsp; type ext += 
 
 <a id="extension-ExtA"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| ExtA
@@ -1882,7 +1877,7 @@ A mystery wrapped in an ellipsis
 
 
 <a id="extension-decl-ExtB"></a>
-###### &nbsp; type [ext](#type-ext) += 
+###### &nbsp; type ext += 
 
 <a id="extension-ExtB"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| ExtB
@@ -1894,7 +1889,7 @@ A mystery wrapped in an ellipsis
 
 
 <a id="extension-decl-ExtC"></a>
-###### &nbsp; type [ext](#type-ext) += 
+###### &nbsp; type ext += 
 
 <a id="extension-ExtC"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| ExtC of unit
@@ -1904,7 +1899,7 @@ A mystery wrapped in an ellipsis
 
 
 <a id="extension-ExtD"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;| ExtD of [ext](#type-ext)
+###### &nbsp; &nbsp; &nbsp; &nbsp;| ExtD of ext
 
   
 
@@ -1913,7 +1908,7 @@ A mystery wrapped in an ellipsis
 
 
 <a id="extension-decl-ExtE"></a>
-###### &nbsp; type [ext](#type-ext) += 
+###### &nbsp; type ext += 
 
 <a id="extension-ExtE"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| ExtE
@@ -1925,7 +1920,7 @@ A mystery wrapped in an ellipsis
 
 
 <a id="extension-decl-ExtF"></a>
-###### &nbsp; type [ext](#type-ext) += 
+###### &nbsp; type ext += 
 
 <a id="extension-ExtF"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| ExtF
@@ -1945,7 +1940,7 @@ A mystery wrapped in an ellipsis
 
 
 <a id="extension-decl-Foo"></a>
-###### &nbsp; type [poly_ext](#type-poly_ext) += 
+###### &nbsp; type poly_ext += 
 
 <a id="extension-Foo"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| Foo of 'b
@@ -1966,7 +1961,7 @@ A mystery wrapped in an ellipsis
 
 
 <a id="extension-decl-Quux"></a>
-###### &nbsp; type [poly_ext](#type-poly_ext) += 
+###### &nbsp; type poly_ext += 
 
 <a id="extension-Quux"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| Quux of 'c
@@ -2374,8 +2369,8 @@ With odoc, everything should be resolved (and linked) but only toplevel units wi
 
 
 
-@[`` Ocamlary
-`` ](#) : This is an _interface_ with **all** of the _module system_ features. This documentation demonstrates:
+@`` Ocamlary
+``  : This is an _interface_ with **all** of the _module system_ features. This documentation demonstrates:
 
 
 
@@ -2437,10 +2432,10 @@ I can refer to
 
 
 - `` {!section:indexmodules}
-``  : [Trying the {!modules: ...} command.](#indexmodules)
+``  : Trying the {!modules: ...} command.
 
 - `` {!aliases}
-``  : [Aliases again](#aliases)
+``  : Aliases again
 
 But also to things in submodules:
 
@@ -2454,10 +2449,9 @@ But also to things in submodules:
 And just to make sure we do not mess up:
 
 
-- `` {{!section:indexmodules}A}``  : [A](#indexmodules)
+- `` {{!section:indexmodules}A}``  : A
 
-- `` {{!aliases}B}
-``  : [B](#aliases)
+- `` {{!aliases}B}``  : B
 
 - `` {{!section:SuperSig.SubSigA.subSig}C}``  : C
 
@@ -2546,7 +2540,7 @@ end
 
 
 <a id="extension-decl-C"></a>
-###### &nbsp; type [new_t](#type-new_t) += 
+###### &nbsp; type new_t += 
 
 <a id="extension-C"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| C
@@ -2561,7 +2555,7 @@ end
 ###### &nbsp; module type TypeExtPruned = sig
 
 <a id="extension-decl-C"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;type [new_t](#type-new_t) += 
+###### &nbsp; &nbsp; &nbsp; &nbsp;type new_t += 
 
 <a id="extension-C"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;| C
@@ -2573,7 +2567,7 @@ end
 
 
 <a id="val-f"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;val f : [new_t](#type-new_t) -> unit
+###### &nbsp; &nbsp; &nbsp; &nbsp;val f : new_t -> unit
 
 
 end
@@ -2914,7 +2908,7 @@ This comment is for `` InnerModuleA'
 `` .
 
 <a id="type-t"></a>
-###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; type t = (unit, unit) a_function
 
 This comment is for `` t
 `` .
@@ -2979,7 +2973,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -3047,7 +3041,7 @@ This comment is for `` t
 ###### &nbsp; module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -3087,7 +3081,7 @@ This comment is for `` InnerModuleA'
 `` .
 
 <a id="type-t"></a>
-###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; type t = (unit, unit) a_function
 
 This comment is for `` t
 `` .
@@ -3155,7 +3149,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -3284,7 +3278,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -3352,7 +3346,7 @@ This comment is for `` t
 ###### &nbsp; module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -3392,7 +3386,7 @@ This comment is for `` InnerModuleA'
 `` .
 
 <a id="type-t"></a>
-###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; type t = (unit, unit) a_function
 
 This comment is for `` t
 `` .
@@ -3467,7 +3461,7 @@ This comment is for `` InnerModuleA'
 `` .
 
 <a id="type-t"></a>
-###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; type t = (unit, unit) a_function
 
 This comment is for `` t
 `` .
@@ -3531,7 +3525,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -3619,7 +3613,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -3687,7 +3681,7 @@ This comment is for `` t
 ###### &nbsp; module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -3727,7 +3721,7 @@ This comment is for `` InnerModuleA'
 `` .
 
 <a id="type-t"></a>
-###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; type t = (unit, unit) a_function
 
 This comment is for `` t
 `` .
@@ -3786,7 +3780,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -3854,7 +3848,7 @@ This comment is for `` t
 ###### &nbsp; module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -3894,7 +3888,7 @@ This comment is for `` InnerModuleA'
 `` .
 
 <a id="type-t"></a>
-###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; type t = (unit, unit) a_function
 
 This comment is for `` t
 `` .
@@ -3963,7 +3957,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4051,7 +4045,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4119,7 +4113,7 @@ This comment is for `` t
 ###### &nbsp; module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4159,7 +4153,7 @@ This comment is for `` InnerModuleA'
 `` .
 
 <a id="type-t"></a>
-###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; type t = (unit, unit) a_function
 
 This comment is for `` t
 `` .
@@ -4228,7 +4222,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4316,7 +4310,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4384,7 +4378,7 @@ This comment is for `` t
 ###### &nbsp; module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4424,7 +4418,7 @@ This comment is for `` InnerModuleA'
 `` .
 
 <a id="type-t"></a>
-###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; type t = (unit, unit) a_function
 
 This comment is for `` t
 `` .
@@ -4503,7 +4497,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4593,7 +4587,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4661,7 +4655,7 @@ This comment is for `` t
 ###### &nbsp; module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4701,7 +4695,7 @@ This comment is for `` InnerModuleA'
 `` .
 
 <a id="type-t"></a>
-###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; type t = (unit, unit) a_function
 
 This comment is for `` t
 `` .
@@ -4774,7 +4768,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4875,7 +4869,7 @@ This comment is for `` t
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4943,7 +4937,7 @@ This comment is for `` t
 ###### &nbsp; module InnerModuleA' : sig
 
 <a id="type-t"></a>
-###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
 This comment is for `` t`` .
 
@@ -4983,7 +4977,7 @@ This comment is for `` InnerModuleA'
 `` .
 
 <a id="type-t"></a>
-###### &nbsp; type t = (unit, unit) [a_function](#type-a_function)
+###### &nbsp; type t = (unit, unit) a_function
 
 This comment is for `` t
 `` .
@@ -6642,7 +6636,7 @@ OcamlaryTypeExtPruned
 
  Module type `` Ocamlary.TypeExtPruned`` 
 <a id="extension-decl-C"></a>
-###### &nbsp; type [new_t](#type-new_t) += 
+###### &nbsp; type new_t += 
 
 <a id="extension-C"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;| C
@@ -6654,5 +6648,5 @@ OcamlaryTypeExtPruned
 
 
 <a id="val-f"></a>
-###### &nbsp; val f : [new_t](#type-new_t) -> unit
+###### &nbsp; val f : new_t -> unit
 
