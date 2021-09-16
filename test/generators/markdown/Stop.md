@@ -28,7 +28,7 @@ Now, we have a nested module, and it has a stop comment between its two items. W
 
 
 <a id="module-N"></a>
-###### &nbsp; module N : sig ... ###### &nbsp; end
+###### &nbsp; module N : sig ... end
 
 
 

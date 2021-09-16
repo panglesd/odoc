@@ -103,7 +103,10 @@ let rec source_code (s : Source.t) =
       match h with
       | Source.Elt i -> inline i ++ source_code t
       | Tag (None, s) -> source_code s ++ source_code t
-      | Tag (Some _, s) -> source_code s ++ source_code t)
+      | Tag (Some tag, s) -> (
+          match tag with
+          | "end" -> str "foo " ++ source_code s ++ source_code t
+          | _ -> source_code s ++ source_code t))
 
 and inline (l : Inline.t) =
   match l with
@@ -114,10 +117,7 @@ and inline (l : Inline.t) =
       | Text _ ->
           let l, _, rest =
             Doctree.Take.until l ~classify:(function
-              | { Inline.desc = Text s; _ } -> (
-                  match s with
-                  | "end" -> Accum [ "###### &nbsp; " ^ s ]
-                  | _ -> Accum [ s ])
+              | { Inline.desc = Text s; _ } -> Accum [ s ]
               | _ -> Stop_and_keep)
           in
           str {|%s|} (String.concat "" l) ++ inline rest

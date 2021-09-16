@@ -10,7 +10,7 @@ This comment needs to be here before #235 is fixed.
 
 
 <a id="module-X"></a>
-###### &nbsp; module X : sig ... ###### &nbsp; end
+###### &nbsp; module X : sig ... end
 
 This is module X.
 
@@ -47,7 +47,7 @@ The value of y.
 
 
 
-###### &nbsp; end
+end
 
 This is module type Y.
 
@@ -59,7 +59,7 @@ This is module type Y.
 
 
 <a id="module-F"></a>
-###### &nbsp; module F (Arg1 : Y) (Arg2 : sig ... ###### &nbsp; end) : sig ... ###### &nbsp; end
+###### &nbsp; module F (Arg1 : Y) (Arg2 : sig ... end) : sig ... end
 
 This is a functor F.
 
@@ -71,7 +71,7 @@ This is a functor F.
 
 
 <a id="class-z"></a>
-###### &nbsp; class virtual  z : object ... ###### &nbsp; end
+###### &nbsp; class virtual  z : object ... end
 
 This is class z.
 
@@ -79,7 +79,7 @@ This is class z.
 
 
 <a id="class-inherits"></a>
-###### &nbsp; class virtual  inherits : object ... ###### &nbsp; end
+###### &nbsp; class virtual  inherits : object ... end
 
 
 NestedX
@@ -195,7 +195,7 @@ The value of y.
 
 
 
-###### &nbsp; end
+end
 
 
 
@@ -213,7 +213,7 @@ Some type.
 
 
 
-###### &nbsp; end
+end
 
 
 

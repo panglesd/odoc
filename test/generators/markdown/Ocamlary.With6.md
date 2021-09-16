@@ -16,10 +16,10 @@ OcamlaryWith6
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module N : S
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryWith6T
@@ -37,7 +37,7 @@ OcamlaryWith6T
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module N : S
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryWith6TM

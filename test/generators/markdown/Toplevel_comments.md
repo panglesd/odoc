@@ -12,7 +12,7 @@ A doc comment at the beginning of a module is considered to be that module's doc
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 Doc of `` T
 `` , part 1.
@@ -21,7 +21,7 @@ Doc of `` T
 
 
 <a id="module-Include_inline"></a>
-###### &nbsp; module Include_inline : sig ... ###### &nbsp; end
+###### &nbsp; module Include_inline : sig ... end
 
 Doc of `` T
 `` , part 2.
@@ -30,7 +30,7 @@ Doc of `` T
 
 
 <a id="module-Include_inline'"></a>
-###### &nbsp; module Include_inline' : sig ... ###### &nbsp; end
+###### &nbsp; module Include_inline' : sig ... end
 
 Doc of `` Include_inline
 `` , part 1.
@@ -45,7 +45,7 @@ Doc of `` Include_inline
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 Doc of `` T
 `` , part 2.
@@ -60,7 +60,7 @@ Doc of `` T
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 Doc of `` Include_inline_T'
 `` , part 1.
@@ -69,7 +69,7 @@ Doc of `` Include_inline_T'
 
 
 <a id="module-M"></a>
-###### &nbsp; module M : sig ... ###### &nbsp; end
+###### &nbsp; module M : sig ... end
 
 Doc of `` M
 `` 
@@ -78,7 +78,7 @@ Doc of `` M
 
 
 <a id="module-M'"></a>
-###### &nbsp; module M' : sig ... ###### &nbsp; end
+###### &nbsp; module M' : sig ... end
 
 Doc of `` M'
 ``  from outside
@@ -87,7 +87,7 @@ Doc of `` M'
 
 
 <a id="module-M''"></a>
-###### &nbsp; module M'' : sig ... ###### &nbsp; end
+###### &nbsp; module M'' : sig ... end
 
 Doc of `` M''
 `` , part 1.
@@ -105,7 +105,7 @@ Doc of `` Alias
 
 
 <a id="class-c1"></a>
-###### &nbsp; class  c1 : int -> object ... ###### &nbsp; end
+###### &nbsp; class  c1 : int -> object ... end
 
 Doc of `` c1
 `` , part 1.
@@ -115,7 +115,7 @@ Doc of `` c1
 
 <a id="class-type-ct"></a>
 ###### &nbsp; class type  ct = object
-###### &nbsp; end
+end
 
 Doc of `` ct
 `` , part 1.
@@ -133,7 +133,7 @@ Doc of `` c2
 
 
 <a id="module-Ref_in_synopsis"></a>
-###### &nbsp; module Ref_in_synopsis : sig ... ###### &nbsp; end
+###### &nbsp; module Ref_in_synopsis : sig ... end
 
 `` t`` .
 

@@ -11,15 +11,15 @@ OcamlaryDep1
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;method m : int
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-X"></a>
-###### &nbsp; module X : sig ... ###### &nbsp; end
+###### &nbsp; module X : sig ... end
 
 
 OcamlaryDep1S
@@ -32,7 +32,7 @@ OcamlaryDep1S
 ###### &nbsp; &nbsp; &nbsp; &nbsp;method m : int
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryDep1Sc
@@ -53,7 +53,7 @@ OcamlaryDep1XY
 
  Module `` X.Y`` 
 <a id="class-c"></a>
-###### &nbsp; class  c : object ... ###### &nbsp; end
+###### &nbsp; class  c : object ... end
 
 
 OcamlaryDep1XYc

@@ -10,7 +10,7 @@ Labels
 
 
 <a id="module-A"></a>
-###### &nbsp; module A : sig ... ###### &nbsp; end
+###### &nbsp; module A : sig ... end
 
 
 
@@ -44,12 +44,12 @@ Attached to external
 
 ### Attached to module type
 
-###### &nbsp; end
+end
 
 
 
 <a id="class-c"></a>
-###### &nbsp; class  c : object ... ###### &nbsp; end
+###### &nbsp; class  c : object ... end
 
 
 
@@ -59,7 +59,7 @@ Attached to external
 
 ### Attached to class type
 
-###### &nbsp; end
+end
 
 
 

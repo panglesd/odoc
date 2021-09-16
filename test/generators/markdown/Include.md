@@ -8,7 +8,7 @@ Include
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -24,7 +24,7 @@ Include
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type u
 
 
-###### &nbsp; end
+end
 
 
 
@@ -40,7 +40,7 @@ Include
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type v
 
 
-###### &nbsp; end
+end
 
 
 
@@ -53,7 +53,7 @@ include Not_inlined_and_closed
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type w
 
 
-###### &nbsp; end
+end
 
 
 
@@ -69,7 +69,7 @@ include Not_inlined_and_closed
 ###### &nbsp; &nbsp; &nbsp; &nbsp;val a : t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -84,7 +84,7 @@ include Not_inlined_and_closed
 ###### &nbsp; &nbsp; &nbsp; &nbsp;val a : u
 
 
-###### &nbsp; end
+end
 
 
 

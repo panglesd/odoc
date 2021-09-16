@@ -8,7 +8,7 @@ OcamlaryDep8
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryDep8T

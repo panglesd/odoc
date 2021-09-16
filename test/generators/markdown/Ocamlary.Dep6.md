@@ -8,7 +8,7 @@ OcamlaryDep6
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type d
 
 
-###### &nbsp; end
+end
 
 
 
@@ -27,10 +27,10 @@ OcamlaryDep6
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type d
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -60,7 +60,7 @@ OcamlaryDep6T
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type d
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryDep6TY

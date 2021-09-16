@@ -8,12 +8,12 @@ Functor2
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-X"></a>
-###### &nbsp; module X (Y : S) (Z : S) : sig ... ###### &nbsp; end
+###### &nbsp; module X (Y : S) (Z : S) : sig ... end
 
 
 
@@ -31,7 +31,7 @@ Functor2
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -42,7 +42,7 @@ Functor2
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -64,7 +64,7 @@ Functor2
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type x_t = y_t
 
 
-###### &nbsp; end
+end
 
 
 Functor2S
@@ -88,7 +88,7 @@ Functor2X
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -99,7 +99,7 @@ Functor2X
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -149,7 +149,7 @@ Functor2XF
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -160,7 +160,7 @@ Functor2XF
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 

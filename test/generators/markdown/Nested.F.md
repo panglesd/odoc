@@ -43,7 +43,7 @@ The value of y.
 
 
 
-###### &nbsp; end
+end
 
 
 
@@ -61,7 +61,7 @@ Some type.
 
 
 
-###### &nbsp; end
+end
 
 
 

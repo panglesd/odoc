@@ -2,7 +2,7 @@ Stop_dead_link_doc
 
  Module `` Stop_dead_link_doc`` 
 <a id="module-Foo"></a>
-###### &nbsp; module Foo : sig ... ###### &nbsp; end
+###### &nbsp; module Foo : sig ... end
 
 
 

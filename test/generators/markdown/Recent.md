@@ -3,7 +3,7 @@ Recent
  Module `` Recent`` 
 <a id="module-type-S"></a>
 ###### &nbsp; module type S = sig
-###### &nbsp; end
+end
 
 
 
@@ -16,14 +16,14 @@ Recent
 
 <a id="argument-1-_"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module _ : sig
-###### &nbsp; end
+end
 
 
 
 
 ## Signature
 
-###### &nbsp; end
+end
 
 
 
@@ -201,12 +201,12 @@ Recent
 
 
 <a id="module-Z"></a>
-###### &nbsp; module Z : sig ... ###### &nbsp; end
+###### &nbsp; module Z : sig ... end
 
 
 
 <a id="module-X"></a>
-###### &nbsp; module X : sig ... ###### &nbsp; end
+###### &nbsp; module X : sig ... end
 
 
 
@@ -233,7 +233,7 @@ Recent
  ]
 
 
-###### &nbsp; end
+end
 
 
 RecentS
@@ -249,7 +249,7 @@ RecentS1
 
 <a id="argument-1-_"></a>
 ###### &nbsp; module _ : sig
-###### &nbsp; end
+end
 
 
 
@@ -264,14 +264,14 @@ RecentZ
 
  Module `` Recent.Z`` 
 <a id="module-Y"></a>
-###### &nbsp; module Y : sig ... ###### &nbsp; end
+###### &nbsp; module Y : sig ... end
 
 
 RecentZY
 
  Module `` Z.Y`` 
 <a id="module-X"></a>
-###### &nbsp; module X : sig ... ###### &nbsp; end
+###### &nbsp; module X : sig ... end
 
 
 RecentZYX

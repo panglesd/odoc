@@ -12,7 +12,7 @@ FunctorF2
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 

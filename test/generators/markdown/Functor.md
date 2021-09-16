@@ -8,7 +8,7 @@ Functor
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -26,7 +26,7 @@ Functor
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -38,7 +38,7 @@ Functor
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -53,7 +53,7 @@ Functor
 
 
 <a id="module-F3"></a>
-###### &nbsp; module F3 (Arg : S) : sig ... ###### &nbsp; end
+###### &nbsp; module F3 (Arg : S) : sig ... end
 
 
 
@@ -87,7 +87,7 @@ FunctorS1
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -120,7 +120,7 @@ FunctorF1
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -153,7 +153,7 @@ FunctorF2
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -186,7 +186,7 @@ FunctorF3
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -219,7 +219,7 @@ FunctorF4
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 

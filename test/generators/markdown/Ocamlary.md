@@ -126,7 +126,7 @@ An unassociated comment
 
 
 <a id="module-Empty"></a>
-###### &nbsp; module Empty : sig ... ###### &nbsp; end
+###### &nbsp; module Empty : sig ... end
 
 A plain, empty module
 
@@ -140,7 +140,7 @@ A plain, empty module
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 An ambiguous, misnamed module type
 
@@ -154,7 +154,7 @@ An ambiguous, misnamed module type
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 An ambiguous, misnamed module type
 
@@ -180,7 +180,7 @@ A plain module alias of `` Empty
 
 <a id="module-type-EmptySig"></a>
 ###### &nbsp; module type EmptySig = sig
-###### &nbsp; end
+end
 
 A plain, empty module signature
 
@@ -213,7 +213,7 @@ A plain module with an alias signature
 
 
 <a id="module-One"></a>
-###### &nbsp; module One : sig ... ###### &nbsp; end
+###### &nbsp; module One : sig ... end
 
 
 
@@ -225,13 +225,13 @@ A plain module with an alias signature
 
 <a id="module-type-Empty"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type Empty = sig
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 There's a signature in a module in this signature.
 
@@ -260,10 +260,10 @@ There's a signature in a module in this signature.
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type sub_sig_a_mod
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -278,7 +278,7 @@ There's a signature in a module in this signature.
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -289,7 +289,7 @@ There's a signature in a module in this signature.
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type not_actually_empty
 
 
-###### &nbsp; end
+end
 
 
 
@@ -300,16 +300,16 @@ There's a signature in a module in this signature.
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type two
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-type-SuperSig"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type SuperSig = sig
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -322,7 +322,7 @@ For a good time, see `` SuperSig`` .SubSigA.subSig or `` SuperSig
 
 
 <a id="module-Buffer"></a>
-###### &nbsp; module Buffer : sig ... ###### &nbsp; end
+###### &nbsp; module Buffer : sig ... end
 
 `` Buffer
 `` .t
@@ -589,7 +589,7 @@ This value has had changes in 1.0.0, 1.1.0, and 1.2.0.
 
 
 <a id="module-CollectionModule"></a>
-###### &nbsp; module CollectionModule : sig ... ###### &nbsp; end
+###### &nbsp; module CollectionModule : sig ... end
 
 This comment is for `` CollectionModule
 `` .
@@ -637,12 +637,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -656,19 +655,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -684,7 +682,7 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 module type of
 
@@ -739,12 +737,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -758,19 +755,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -786,10 +782,10 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -800,7 +796,7 @@ This comment is for `` InnerModuleTypeA
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module C = Recollection(CollectionModule)
 
 
-###### &nbsp; end
+end
 
 
 
@@ -835,12 +831,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -854,19 +849,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -882,7 +876,7 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
 
@@ -934,12 +928,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -953,19 +946,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -981,10 +973,10 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -1036,12 +1028,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -1055,19 +1046,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -1083,10 +1073,10 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -1138,12 +1128,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -1157,19 +1146,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -1185,12 +1173,12 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
 
 
-###### &nbsp; end
+end
 
 This module type includes two signatures.
 
@@ -1198,7 +1186,7 @@ This module type includes two signatures.
 
 
 <a id="module-FunctorTypeOf"></a>
-###### &nbsp; module FunctorTypeOf (Collection : module type of CollectionModule) : sig ... ###### &nbsp; end
+###### &nbsp; module FunctorTypeOf (Collection : module type of CollectionModule) : sig ... end
 
 This comment is for `` FunctorTypeOf
 `` .
@@ -1210,7 +1198,7 @@ This comment is for `` FunctorTypeOf
 ###### &nbsp; module type IncludeModuleType = sig
 
 
-###### &nbsp; end
+end
 
 This comment is for `` IncludeModuleType
 `` .
@@ -1228,7 +1216,7 @@ This comment is for `` IncludeModuleType
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -1239,15 +1227,15 @@ This comment is for `` IncludeModuleType
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type s
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-IncludedA"></a>
-###### &nbsp; module IncludedA : sig ... ###### &nbsp; end
+###### &nbsp; module IncludedA : sig ... end
 
 
 
@@ -1258,7 +1246,7 @@ This comment is for `` IncludeModuleType
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type s
 
 
-###### &nbsp; end
+end
 
 
 
@@ -1987,7 +1975,7 @@ A mystery wrapped in an ellipsis
 
 
 <a id="module-ExtMod"></a>
-###### &nbsp; module ExtMod : sig ... ###### &nbsp; end
+###### &nbsp; module ExtMod : sig ... end
 
 
 
@@ -2036,22 +2024,22 @@ A brown paper package tied up with string
 
 
 <a id="class-empty_class"></a>
-###### &nbsp; class  empty_class : object ... ###### &nbsp; end
+###### &nbsp; class  empty_class : object ... end
 
 
 
 <a id="class-one_method_class"></a>
-###### &nbsp; class  one_method_class : object ... ###### &nbsp; end
+###### &nbsp; class  one_method_class : object ... end
 
 
 
 <a id="class-two_method_class"></a>
-###### &nbsp; class  two_method_class : object ... ###### &nbsp; end
+###### &nbsp; class  two_method_class : object ... end
 
 
 
 <a id="class-param_class"></a>
-###### &nbsp; class 'a param_class : 'a -> object ... ###### &nbsp; end
+###### &nbsp; class 'a param_class : 'a -> object ... end
 
 
 
@@ -2066,12 +2054,12 @@ A brown paper package tied up with string
 
 
 <a id="module-Dep1"></a>
-###### &nbsp; module Dep1 : sig ... ###### &nbsp; end
+###### &nbsp; module Dep1 : sig ... end
 
 
 
 <a id="module-Dep2"></a>
-###### &nbsp; module Dep2 (Arg : sig ... ###### &nbsp; end) : sig ... ###### &nbsp; end
+###### &nbsp; module Dep2 (Arg : sig ... end) : sig ... end
 
 
 
@@ -2081,17 +2069,17 @@ A brown paper package tied up with string
 
 
 <a id="module-Dep3"></a>
-###### &nbsp; module Dep3 : sig ... ###### &nbsp; end
+###### &nbsp; module Dep3 : sig ... end
 
 
 
 <a id="module-Dep4"></a>
-###### &nbsp; module Dep4 : sig ... ###### &nbsp; end
+###### &nbsp; module Dep4 : sig ... end
 
 
 
 <a id="module-Dep5"></a>
-###### &nbsp; module Dep5 (Arg : sig ... ###### &nbsp; end) : sig ... ###### &nbsp; end
+###### &nbsp; module Dep5 (Arg : sig ... end) : sig ... end
 
 
 
@@ -2106,12 +2094,12 @@ A brown paper package tied up with string
 
 
 <a id="module-Dep6"></a>
-###### &nbsp; module Dep6 : sig ... ###### &nbsp; end
+###### &nbsp; module Dep6 : sig ... end
 
 
 
 <a id="module-Dep7"></a>
-###### &nbsp; module Dep7 (Arg : sig ... ###### &nbsp; end) : sig ... ###### &nbsp; end
+###### &nbsp; module Dep7 (Arg : sig ... end) : sig ... end
 
 
 
@@ -2121,12 +2109,12 @@ A brown paper package tied up with string
 
 
 <a id="module-Dep8"></a>
-###### &nbsp; module Dep8 : sig ... ###### &nbsp; end
+###### &nbsp; module Dep8 : sig ... end
 
 
 
 <a id="module-Dep9"></a>
-###### &nbsp; module Dep9 (X : sig ... ###### &nbsp; end) : sig ... ###### &nbsp; end
+###### &nbsp; module Dep9 (X : sig ... end) : sig ... end
 
 
 
@@ -2137,17 +2125,17 @@ A brown paper package tied up with string
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = int
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-Dep11"></a>
-###### &nbsp; module Dep11 : sig ... ###### &nbsp; end
+###### &nbsp; module Dep11 : sig ... end
 
 
 
 <a id="module-Dep12"></a>
-###### &nbsp; module Dep12 (Arg : sig ... ###### &nbsp; end) : sig ... ###### &nbsp; end
+###### &nbsp; module Dep12 (Arg : sig ... end) : sig ... end
 
 
 
@@ -2171,7 +2159,7 @@ A brown paper package tied up with string
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type S
 
 
-###### &nbsp; end
+end
 
 
 
@@ -2179,12 +2167,12 @@ A brown paper package tied up with string
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module N : M.S
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-With2"></a>
-###### &nbsp; module With2 : sig ... ###### &nbsp; end
+###### &nbsp; module With2 : sig ... end
 
 
 
@@ -2209,17 +2197,17 @@ A brown paper package tied up with string
 
 
 <a id="module-With5"></a>
-###### &nbsp; module With5 : sig ... ###### &nbsp; end
+###### &nbsp; module With5 : sig ... end
 
 
 
 <a id="module-With6"></a>
-###### &nbsp; module With6 : sig ... ###### &nbsp; end
+###### &nbsp; module With6 : sig ... end
 
 
 
 <a id="module-With7"></a>
-###### &nbsp; module With7 (X : sig ... ###### &nbsp; end) : sig ... ###### &nbsp; end
+###### &nbsp; module With7 (X : sig ... end) : sig ... end
 
 
 
@@ -2236,7 +2224,7 @@ A brown paper package tied up with string
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -2247,23 +2235,23 @@ A brown paper package tied up with string
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = With5.N.t
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-With9"></a>
-###### &nbsp; module With9 : sig ... ###### &nbsp; end
+###### &nbsp; module With9 : sig ... end
 
 
 
 <a id="module-With10"></a>
-###### &nbsp; module With10 : sig ... ###### &nbsp; end
+###### &nbsp; module With10 : sig ... end
 
 
 
@@ -2282,10 +2270,10 @@ A brown paper package tied up with string
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = int
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -2299,10 +2287,10 @@ A brown paper package tied up with string
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type nested_include
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -2313,7 +2301,7 @@ A brown paper package tied up with string
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type nested_include
 
 
-###### &nbsp; end
+end
 
 
 
@@ -2323,12 +2311,12 @@ A brown paper package tied up with string
 
 
 <a id="module-DoubleInclude1"></a>
-###### &nbsp; module DoubleInclude1 : sig ... ###### &nbsp; end
+###### &nbsp; module DoubleInclude1 : sig ... end
 
 
 
 <a id="module-DoubleInclude3"></a>
-###### &nbsp; module DoubleInclude3 : sig ... ###### &nbsp; end
+###### &nbsp; module DoubleInclude3 : sig ... end
 
 
 
@@ -2338,7 +2326,7 @@ A brown paper package tied up with string
 
 
 <a id="module-IncludeInclude1"></a>
-###### &nbsp; module IncludeInclude1 : sig ... ###### &nbsp; end
+###### &nbsp; module IncludeInclude1 : sig ... end
 
 
 
@@ -2349,7 +2337,7 @@ A brown paper package tied up with string
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type include_include
 
 
-###### &nbsp; end
+end
 
 
 
@@ -2409,7 +2397,7 @@ With odoc, everything should be resolved (and linked) but only toplevel units wi
 
 
 <a id="module-CanonicalTest"></a>
-###### &nbsp; module CanonicalTest : sig ... ###### &nbsp; end
+###### &nbsp; module CanonicalTest : sig ... end
 
 
 
@@ -2429,7 +2417,7 @@ Some ref to `` CanonicalTest`` .Base__Tests.C.t and `` CanonicalTest
 
 
 <a id="module-Aliases"></a>
-###### &nbsp; module Aliases : sig ... ###### &nbsp; end
+###### &nbsp; module Aliases : sig ... end
 
 Let's imitate jst's layout.
 
@@ -2482,12 +2470,12 @@ And just to make sure we do not mess up:
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-M"></a>
-###### &nbsp; module M : sig ... ###### &nbsp; end
+###### &nbsp; module M : sig ... end
 
 
 
@@ -2501,7 +2489,7 @@ Here goes:
 
 
 <a id="module-Only_a_module"></a>
-###### &nbsp; module Only_a_module : sig ... ###### &nbsp; end
+###### &nbsp; module Only_a_module : sig ... end
 
 
 
@@ -2542,7 +2530,7 @@ Some here should fail:
 ###### &nbsp; &nbsp; &nbsp; &nbsp;val f : t -> unit
 
 
-###### &nbsp; end
+end
 
 
 
@@ -2582,7 +2570,7 @@ Some here should fail:
 ###### &nbsp; &nbsp; &nbsp; &nbsp;val f : new_t -> unit
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryEmpty
@@ -2670,10 +2658,10 @@ There's a signature in a module in this signature.
 
 <a id="module-type-Empty"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type Empty = sig
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 OcamlarySigForModInner
@@ -2681,7 +2669,7 @@ OcamlarySigForModInner
  Module `` SigForMod.Inner`` 
 <a id="module-type-Empty"></a>
 ###### &nbsp; module type Empty = sig
-###### &nbsp; end
+end
 
 
 OcamlarySigForModInnerEmpty
@@ -2710,10 +2698,10 @@ OcamlarySuperSig
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type sub_sig_a_mod
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -2728,7 +2716,7 @@ OcamlarySuperSig
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -2739,7 +2727,7 @@ OcamlarySuperSig
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type not_actually_empty
 
 
-###### &nbsp; end
+end
 
 
 
@@ -2750,13 +2738,13 @@ OcamlarySuperSig
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type two
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-type-SuperSig"></a>
 ###### &nbsp; module type SuperSig = sig
-###### &nbsp; end
+end
 
 
 OcamlarySuperSigSubSigA
@@ -2778,7 +2766,7 @@ OcamlarySuperSigSubSigA
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type sub_sig_a_mod
 
 
-###### &nbsp; end
+end
 
 
 OcamlarySuperSigSubSigASubSigAMod
@@ -2852,7 +2840,7 @@ This comment is for `` collection
 
 
 <a id="module-InnerModuleA"></a>
-###### &nbsp; module InnerModuleA : sig ... ###### &nbsp; end
+###### &nbsp; module InnerModuleA : sig ... end
 
 This comment is for `` InnerModuleA
 `` .
@@ -2886,7 +2874,7 @@ This comment is for `` t
 
 
 <a id="module-InnerModuleA'"></a>
-###### &nbsp; module InnerModuleA' : sig ... ###### &nbsp; end
+###### &nbsp; module InnerModuleA' : sig ... end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -2900,12 +2888,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
@@ -2988,12 +2975,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3007,19 +2993,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -3058,12 +3043,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3077,12 +3061,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
@@ -3168,12 +3151,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3187,19 +3169,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -3215,7 +3196,7 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
 
@@ -3243,7 +3224,7 @@ This comment is for `` collection
 
 
 <a id="module-InnerModuleA"></a>
-###### &nbsp; module InnerModuleA : sig ... ###### &nbsp; end
+###### &nbsp; module InnerModuleA : sig ... end
 
 This comment is for `` InnerModuleA
 `` .
@@ -3299,12 +3280,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3318,19 +3298,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -3369,12 +3348,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3388,12 +3366,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
@@ -3450,7 +3427,7 @@ This comment is for `` t
 
 
 <a id="module-InnerModuleA'"></a>
-###### &nbsp; module InnerModuleA' : sig ... ###### &nbsp; end
+###### &nbsp; module InnerModuleA' : sig ... end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3464,12 +3441,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
@@ -3551,12 +3527,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3570,19 +3545,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -3598,7 +3572,7 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryMMMC
@@ -3641,12 +3615,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3660,19 +3633,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -3711,12 +3683,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3730,12 +3701,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
@@ -3812,12 +3782,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3831,19 +3800,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -3882,12 +3850,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -3901,12 +3868,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
@@ -3993,12 +3959,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4012,19 +3977,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -4040,7 +4004,7 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryAQ
@@ -4083,12 +4047,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4102,19 +4065,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -4153,12 +4115,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4172,12 +4133,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
@@ -4264,12 +4224,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4283,19 +4242,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -4311,7 +4269,7 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryBQ
@@ -4354,12 +4312,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4373,19 +4330,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -4424,12 +4380,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4443,12 +4398,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
@@ -4545,12 +4499,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4564,19 +4517,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -4592,7 +4544,7 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
 
@@ -4637,12 +4589,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4656,19 +4607,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -4707,12 +4657,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4726,12 +4675,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
@@ -4822,12 +4770,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4841,19 +4788,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -4869,7 +4815,7 @@ This comment is for `` InnerModuleTypeA
 
 
 
-###### &nbsp; end
+end
 
 
 
@@ -4925,12 +4871,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -4944,19 +4889,18 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA
 `` .
@@ -4995,12 +4939,11 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -5014,12 +4957,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .
@@ -5077,7 +5019,7 @@ OcamlaryToInclude
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5088,7 +5030,7 @@ OcamlaryToInclude
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type s
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryToIncludeIncludedA
@@ -5181,15 +5123,15 @@ OcamlaryDep1
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;method m : int
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-X"></a>
-###### &nbsp; module X : sig ... ###### &nbsp; end
+###### &nbsp; module X : sig ... end
 
 
 OcamlaryDep1S
@@ -5202,7 +5144,7 @@ OcamlaryDep1S
 ###### &nbsp; &nbsp; &nbsp; &nbsp;method m : int
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryDep1Sc
@@ -5223,7 +5165,7 @@ OcamlaryDep1XY
 
  Module `` X.Y`` 
 <a id="class-c"></a>
-###### &nbsp; class  c : object ... ###### &nbsp; end
+###### &nbsp; class  c : object ... end
 
 
 OcamlaryDep1XYc
@@ -5255,10 +5197,10 @@ OcamlaryDep2
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module Y : S
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5267,7 +5209,7 @@ OcamlaryDep2
 
 
 <a id="module-A"></a>
-###### &nbsp; module A : sig ... ###### &nbsp; end
+###### &nbsp; module A : sig ... end
 
 
 
@@ -5290,7 +5232,7 @@ OcamlaryDep21-Arg
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : S
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryDep21-ArgX
@@ -5324,7 +5266,7 @@ OcamlaryDep4
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type b
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5338,16 +5280,16 @@ OcamlaryDep4
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type b
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-Y"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : sig
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5372,13 +5314,13 @@ OcamlaryDep4S
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type b
 
 
-###### &nbsp; end
+end
 
 
 
 <a id="module-Y"></a>
 ###### &nbsp; module Y : sig
-###### &nbsp; end
+end
 
 
 OcamlaryDep4SX
@@ -5424,10 +5366,10 @@ OcamlaryDep5
 
 <a id="module-Y"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module Y : sig
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5435,7 +5377,7 @@ OcamlaryDep5
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module X : T
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5465,10 +5407,10 @@ OcamlaryDep51-Arg
 
 <a id="module-Y"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : sig
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5486,7 +5428,7 @@ OcamlaryDep51-ArgS
 
 <a id="module-Y"></a>
 ###### &nbsp; module Y : sig
-###### &nbsp; end
+end
 
 
 OcamlaryDep51-ArgSY
@@ -5515,7 +5457,7 @@ OcamlaryDep6
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type d
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5534,10 +5476,10 @@ OcamlaryDep6
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type d
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5567,7 +5509,7 @@ OcamlaryDep6T
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type d
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryDep6TY
@@ -5623,7 +5565,7 @@ OcamlaryDep7
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module Y : R
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5639,10 +5581,10 @@ OcamlaryDep7
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module Y : R
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5674,7 +5616,7 @@ OcamlaryDep71-Arg
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : R
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5690,7 +5632,7 @@ OcamlaryDep71-Arg
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : R
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryDep71-ArgT
@@ -5739,7 +5681,7 @@ OcamlaryDep8
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryDep8T
@@ -5763,7 +5705,7 @@ OcamlaryDep9
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type T
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5802,10 +5744,10 @@ OcamlaryDep11
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;method m : int
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryDep11S
@@ -5818,7 +5760,7 @@ OcamlaryDep11S
 ###### &nbsp; &nbsp; &nbsp; &nbsp;method m : int
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryDep11Sc
@@ -5842,7 +5784,7 @@ OcamlaryDep12
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type S
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5865,7 +5807,7 @@ OcamlaryDep13
 
  Module `` Ocamlary.Dep13`` 
 <a id="class-c"></a>
-###### &nbsp; class  c : object ... ###### &nbsp; end
+###### &nbsp; class  c : object ... end
 
 
 OcamlaryDep13c
@@ -5885,7 +5827,7 @@ OcamlaryWith1
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type S
 
 
-###### &nbsp; end
+end
 
 
 
@@ -5910,7 +5852,7 @@ OcamlaryWith2
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryWith2S
@@ -5963,7 +5905,7 @@ OcamlaryWith5
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -6003,10 +5945,10 @@ OcamlaryWith6
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module N : S
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryWith6T
@@ -6024,7 +5966,7 @@ OcamlaryWith6T
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module N : S
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryWith6TM
@@ -6053,7 +5995,7 @@ OcamlaryWith7
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type T
 
 
-###### &nbsp; end
+end
 
 
 
@@ -6085,7 +6027,7 @@ OcamlaryWith8
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -6096,10 +6038,10 @@ OcamlaryWith8
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = With5.N.t
 
 
-###### &nbsp; end
+end
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryWith8M
@@ -6112,7 +6054,7 @@ OcamlaryWith8M
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 
@@ -6123,7 +6065,7 @@ OcamlaryWith8M
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = With5.N.t
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryWith8MS
@@ -6150,7 +6092,7 @@ OcamlaryWith9
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryWith9S
@@ -6173,7 +6115,7 @@ OcamlaryWith10
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type S
 
 
-###### &nbsp; end
+end
 
 
 
@@ -6181,7 +6123,7 @@ OcamlaryWith10
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module N : M.S
 
 
-###### &nbsp; end
+end
 
 `` With10.T
 ``  is a submodule type.
@@ -6203,7 +6145,7 @@ OcamlaryWith10T
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type S
 
 
-###### &nbsp; end
+end
 
 
 
@@ -6233,7 +6175,7 @@ OcamlaryWith11
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = int
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryWith11N
@@ -6253,7 +6195,7 @@ OcamlaryNestedInclude1
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type nested_include
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryNestedInclude1NestedInclude2
@@ -6274,7 +6216,7 @@ OcamlaryDoubleInclude1
 
  Module `` Ocamlary.DoubleInclude1`` 
 <a id="module-DoubleInclude2"></a>
-###### &nbsp; module DoubleInclude2 : sig ... ###### &nbsp; end
+###### &nbsp; module DoubleInclude2 : sig ... end
 
 
 OcamlaryDoubleInclude1DoubleInclude2
@@ -6288,7 +6230,7 @@ OcamlaryDoubleInclude3
 
  Module `` Ocamlary.DoubleInclude3`` 
 <a id="module-DoubleInclude2"></a>
-###### &nbsp; module DoubleInclude2 : sig ... ###### &nbsp; end
+###### &nbsp; module DoubleInclude2 : sig ... end
 
 
 OcamlaryDoubleInclude3DoubleInclude2
@@ -6308,7 +6250,7 @@ OcamlaryIncludeInclude1
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type include_include
 
 
-###### &nbsp; end
+end
 
 
 OcamlaryIncludeInclude1IncludeInclude2
@@ -6329,7 +6271,7 @@ OcamlaryCanonicalTest
 
  Module `` Ocamlary.CanonicalTest`` 
 <a id="module-Base"></a>
-###### &nbsp; module Base : sig ... ###### &nbsp; end
+###### &nbsp; module Base : sig ... end
 
 
 
@@ -6341,7 +6283,7 @@ OcamlaryCanonicalTestBase
 
  Module `` CanonicalTest.Base`` 
 <a id="module-List"></a>
-###### &nbsp; module List : sig ... ###### &nbsp; end
+###### &nbsp; module List : sig ... end
 
 
 OcamlaryCanonicalTestBaseList
@@ -6376,7 +6318,7 @@ OcamlaryAliases
 Let's imitate jst's layout.
 
 <a id="module-Foo"></a>
-###### &nbsp; module Foo : sig ... ###### &nbsp; end
+###### &nbsp; module Foo : sig ... end
 
 
 
@@ -6411,7 +6353,7 @@ Let's imitate jst's layout.
 
 
 <a id="module-Std"></a>
-###### &nbsp; module Std : sig ... ###### &nbsp; end
+###### &nbsp; module Std : sig ... end
 
 
 
@@ -6450,7 +6392,7 @@ Just for giggle, let's see what happens when we include `` Foo
 
 
 <a id="module-E"></a>
-###### &nbsp; module E : sig ... ###### &nbsp; end
+###### &nbsp; module E : sig ... end
 
 
 
@@ -6465,12 +6407,12 @@ And also, let's refer to `` A.t``  and `` Foo.B.id
 
 
 <a id="module-P1"></a>
-###### &nbsp; module P1 : sig ... ###### &nbsp; end
+###### &nbsp; module P1 : sig ... end
 
 
 
 <a id="module-P2"></a>
-###### &nbsp; module P2 : sig ... ###### &nbsp; end
+###### &nbsp; module P2 : sig ... end
 
 
 
@@ -6497,27 +6439,27 @@ OcamlaryAliasesFoo
 
  Module `` Aliases.Foo`` 
 <a id="module-A"></a>
-###### &nbsp; module A : sig ... ###### &nbsp; end
+###### &nbsp; module A : sig ... end
 
 
 
 <a id="module-B"></a>
-###### &nbsp; module B : sig ... ###### &nbsp; end
+###### &nbsp; module B : sig ... end
 
 
 
 <a id="module-C"></a>
-###### &nbsp; module C : sig ... ###### &nbsp; end
+###### &nbsp; module C : sig ... end
 
 
 
 <a id="module-D"></a>
-###### &nbsp; module D : sig ... ###### &nbsp; end
+###### &nbsp; module D : sig ... end
 
 
 
 <a id="module-E"></a>
-###### &nbsp; module E : sig ... ###### &nbsp; end
+###### &nbsp; module E : sig ... end
 
 
 OcamlaryAliasesFooA
@@ -6623,7 +6565,7 @@ OcamlaryAliasesP1
 
  Module `` Aliases.P1`` 
 <a id="module-Y"></a>
-###### &nbsp; module Y : sig ... ###### &nbsp; end
+###### &nbsp; module Y : sig ... end
 
 
 OcamlaryAliasesP1Y

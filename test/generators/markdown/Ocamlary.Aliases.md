@@ -6,7 +6,7 @@ OcamlaryAliases
 Let's imitate jst's layout.
 
 <a id="module-Foo"></a>
-###### &nbsp; module Foo : sig ... ###### &nbsp; end
+###### &nbsp; module Foo : sig ... end
 
 
 
@@ -41,7 +41,7 @@ Let's imitate jst's layout.
 
 
 <a id="module-Std"></a>
-###### &nbsp; module Std : sig ... ###### &nbsp; end
+###### &nbsp; module Std : sig ... end
 
 
 
@@ -80,7 +80,7 @@ Just for giggle, let's see what happens when we include `` Foo
 
 
 <a id="module-E"></a>
-###### &nbsp; module E : sig ... ###### &nbsp; end
+###### &nbsp; module E : sig ... end
 
 
 
@@ -95,12 +95,12 @@ And also, let's refer to `` A.t``  and `` Foo.B.id
 
 
 <a id="module-P1"></a>
-###### &nbsp; module P1 : sig ... ###### &nbsp; end
+###### &nbsp; module P1 : sig ... end
 
 
 
 <a id="module-P2"></a>
-###### &nbsp; module P2 : sig ... ###### &nbsp; end
+###### &nbsp; module P2 : sig ... end
 
 
 
@@ -127,27 +127,27 @@ OcamlaryAliasesFoo
 
  Module `` Aliases.Foo`` 
 <a id="module-A"></a>
-###### &nbsp; module A : sig ... ###### &nbsp; end
+###### &nbsp; module A : sig ... end
 
 
 
 <a id="module-B"></a>
-###### &nbsp; module B : sig ... ###### &nbsp; end
+###### &nbsp; module B : sig ... end
 
 
 
 <a id="module-C"></a>
-###### &nbsp; module C : sig ... ###### &nbsp; end
+###### &nbsp; module C : sig ... end
 
 
 
 <a id="module-D"></a>
-###### &nbsp; module D : sig ... ###### &nbsp; end
+###### &nbsp; module D : sig ... end
 
 
 
 <a id="module-E"></a>
-###### &nbsp; module E : sig ... ###### &nbsp; end
+###### &nbsp; module E : sig ... end
 
 
 OcamlaryAliasesFooA
@@ -253,7 +253,7 @@ OcamlaryAliasesP1
 
  Module `` Aliases.P1`` 
 <a id="module-Y"></a>
-###### &nbsp; module Y : sig ... ###### &nbsp; end
+###### &nbsp; module Y : sig ... end
 
 
 OcamlaryAliasesP1Y

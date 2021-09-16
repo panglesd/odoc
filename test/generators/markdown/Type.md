@@ -354,7 +354,7 @@ Some _documentation_.
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type u
 
 
-###### &nbsp; end
+end
 
 
 

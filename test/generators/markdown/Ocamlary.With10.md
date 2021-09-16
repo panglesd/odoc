@@ -11,7 +11,7 @@ OcamlaryWith10
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module type S
 
 
-###### &nbsp; end
+end
 
 
 
@@ -19,7 +19,7 @@ OcamlaryWith10
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module N : M.S
 
 
-###### &nbsp; end
+end
 
 `` With10.T
 ``  is a submodule type.
@@ -41,7 +41,7 @@ OcamlaryWith10T
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module type S
 
 
-###### &nbsp; end
+end
 
 
 

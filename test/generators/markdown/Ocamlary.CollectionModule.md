@@ -21,7 +21,7 @@ This comment is for `` collection
 
 
 <a id="module-InnerModuleA"></a>
-###### &nbsp; module InnerModuleA : sig ... ###### &nbsp; end
+###### &nbsp; module InnerModuleA : sig ... end
 
 This comment is for `` InnerModuleA
 `` .
@@ -55,7 +55,7 @@ This comment is for `` t
 
 
 <a id="module-InnerModuleA'"></a>
-###### &nbsp; module InnerModuleA' : sig ... ###### &nbsp; end
+###### &nbsp; module InnerModuleA' : sig ... end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -69,12 +69,11 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t
-`` .
+This comment is for `` t`` .
 
 
 
-###### &nbsp; end
+end
 
 This comment is for `` InnerModuleTypeA'
 `` .

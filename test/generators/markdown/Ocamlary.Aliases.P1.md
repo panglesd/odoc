@@ -2,7 +2,7 @@ OcamlaryAliasesP1
 
  Module `` Aliases.P1`` 
 <a id="module-Y"></a>
-###### &nbsp; module Y : sig ... ###### &nbsp; end
+###### &nbsp; module Y : sig ... end
 
 
 OcamlaryAliasesP1Y

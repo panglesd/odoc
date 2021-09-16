@@ -2,14 +2,14 @@ RecentZ
 
  Module `` Recent.Z`` 
 <a id="module-Y"></a>
-###### &nbsp; module Y : sig ... ###### &nbsp; end
+###### &nbsp; module Y : sig ... end
 
 
 RecentZY
 
  Module `` Z.Y`` 
 <a id="module-X"></a>
-###### &nbsp; module X : sig ... ###### &nbsp; end
+###### &nbsp; module X : sig ... end
 
 
 RecentZYX
