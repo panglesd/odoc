@@ -2,12 +2,12 @@ Recent_impl
 
  Module `` Recent_impl`` 
 <a id="module-Foo"></a>
-###### &nbsp; module Foo : sig ... end
+###### &nbsp; module Foo : sig ... ###### &nbsp; end
 
 
 
 <a id="module-B"></a>
-###### &nbsp; module B : sig ... end
+###### &nbsp; module B : sig ... ###### &nbsp; end
 
 
 
@@ -28,7 +28,7 @@ Recent_impl
 
 <a id="argument-1-_"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module _ : sig
-end
+###### &nbsp; end
 
 
 
@@ -40,13 +40,13 @@ end
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t
 
 
-end
+###### &nbsp; end
 
 
 
 <a id="module-X"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module X : sig
-end
+###### &nbsp; end
 
 
 
@@ -54,7 +54,7 @@ end
 ###### &nbsp; &nbsp; &nbsp; &nbsp;val f : F(X).t
 
 
-end
+###### &nbsp; end
 
 
 
@@ -66,12 +66,12 @@ Recent_implFoo
 
  Module `` Recent_impl.Foo`` 
 <a id="module-A"></a>
-###### &nbsp; module A : sig ... end
+###### &nbsp; module A : sig ... ###### &nbsp; end
 
 
 
 <a id="module-B"></a>
-###### &nbsp; module B : sig ... end
+###### &nbsp; module B : sig ... ###### &nbsp; end
 
 
 Recent_implFooA
@@ -128,7 +128,7 @@ Recent_implS
 
 <a id="argument-1-_"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module _ : sig
-end
+###### &nbsp; end
 
 
 
@@ -140,13 +140,13 @@ end
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-end
+###### &nbsp; end
 
 
 
 <a id="module-X"></a>
 ###### &nbsp; module X : sig
-end
+###### &nbsp; end
 
 
 
@@ -163,7 +163,7 @@ Recent_implSF
 
 <a id="argument-1-_"></a>
 ###### &nbsp; module _ : sig
-end
+###### &nbsp; end
 
 
 

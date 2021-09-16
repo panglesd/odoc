@@ -2,7 +2,7 @@ Alias
 
  Module `` Alias`` 
 <a id="module-X"></a>
-###### &nbsp; module X : sig ... end
+###### &nbsp; module X : sig ... ###### &nbsp; end
 
 
 AliasX

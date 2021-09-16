@@ -2,27 +2,27 @@ OcamlaryAliasesFoo
 
  Module `` Aliases.Foo`` 
 <a id="module-A"></a>
-###### &nbsp; module A : sig ... end
+###### &nbsp; module A : sig ... ###### &nbsp; end
 
 
 
 <a id="module-B"></a>
-###### &nbsp; module B : sig ... end
+###### &nbsp; module B : sig ... ###### &nbsp; end
 
 
 
 <a id="module-C"></a>
-###### &nbsp; module C : sig ... end
+###### &nbsp; module C : sig ... ###### &nbsp; end
 
 
 
 <a id="module-D"></a>
-###### &nbsp; module D : sig ... end
+###### &nbsp; module D : sig ... ###### &nbsp; end
 
 
 
 <a id="module-E"></a>
-###### &nbsp; module E : sig ... end
+###### &nbsp; module E : sig ... ###### &nbsp; end
 
 
 OcamlaryAliasesFooA

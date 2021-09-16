@@ -20,10 +20,10 @@ OcamlaryDep2
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;module Y : S
 
 
-end
+###### &nbsp; end
 
 
-end
+###### &nbsp; end
 
 
 
@@ -32,7 +32,7 @@ end
 
 
 <a id="module-A"></a>
-###### &nbsp; module A : sig ... end
+###### &nbsp; module A : sig ... ###### &nbsp; end
 
 
 
@@ -55,7 +55,7 @@ OcamlaryDep21-Arg
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module Y : S
 
 
-end
+###### &nbsp; end
 
 
 OcamlaryDep21-ArgX

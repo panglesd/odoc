@@ -2,12 +2,12 @@ Recent_implFoo
 
  Module `` Recent_impl.Foo`` 
 <a id="module-A"></a>
-###### &nbsp; module A : sig ... end
+###### &nbsp; module A : sig ... ###### &nbsp; end
 
 
 
 <a id="module-B"></a>
-###### &nbsp; module B : sig ... end
+###### &nbsp; module B : sig ... ###### &nbsp; end
 
 
 Recent_implFooA

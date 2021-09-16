@@ -2,7 +2,7 @@ OcamlaryDoubleInclude3
 
  Module `` Ocamlary.DoubleInclude3`` 
 <a id="module-DoubleInclude2"></a>
-###### &nbsp; module DoubleInclude2 : sig ... end
+###### &nbsp; module DoubleInclude2 : sig ... ###### &nbsp; end
 
 
 OcamlaryDoubleInclude3DoubleInclude2

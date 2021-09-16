@@ -9,7 +9,7 @@ OcamlaryDep1XY
 
  Module `` X.Y`` 
 <a id="class-c"></a>
-###### &nbsp; class  c : object ... end
+###### &nbsp; class  c : object ... ###### &nbsp; end
 
 
 OcamlaryDep1XYc

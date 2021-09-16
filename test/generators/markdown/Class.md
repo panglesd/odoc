@@ -3,19 +3,19 @@ Class
  Module `` Class`` 
 <a id="class-type-empty"></a>
 ###### &nbsp; class type  empty = object
-end
+###### &nbsp; end
 
 
 
 <a id="class-type-mutually"></a>
 ###### &nbsp; class type  mutually = object
-end
+###### &nbsp; end
 
 
 
 <a id="class-type-recursive"></a>
 ###### &nbsp; class type  recursive = object
-end
+###### &nbsp; end
 
 
 
@@ -31,7 +31,7 @@ end
 
 <a id="class-type-empty_virtual"></a>
 ###### &nbsp; class type virtual  empty_virtual = object
-end
+###### &nbsp; end
 
 
 
@@ -42,7 +42,7 @@ end
 
 <a id="class-type-polymorphic"></a>
 ###### &nbsp; class type 'a polymorphic = object
-end
+###### &nbsp; end
 
 
 

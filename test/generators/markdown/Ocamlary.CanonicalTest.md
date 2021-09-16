@@ -2,7 +2,7 @@ OcamlaryCanonicalTest
 
  Module `` Ocamlary.CanonicalTest`` 
 <a id="module-Base"></a>
-###### &nbsp; module Base : sig ... end
+###### &nbsp; module Base : sig ... ###### &nbsp; end
 
 
 
@@ -14,7 +14,7 @@ OcamlaryCanonicalTestBase
 
  Module `` CanonicalTest.Base`` 
 <a id="module-List"></a>
-###### &nbsp; module List : sig ... end
+###### &nbsp; module List : sig ... ###### &nbsp; end
 
 
 OcamlaryCanonicalTestBaseList

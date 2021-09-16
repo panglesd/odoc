@@ -12,7 +12,7 @@ Functor2X
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-end
+###### &nbsp; end
 
 
 
@@ -23,7 +23,7 @@ end
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t
 
 
-end
+###### &nbsp; end
 
 
 

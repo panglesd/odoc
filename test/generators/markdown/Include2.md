@@ -2,7 +2,7 @@ Include2
 
  Module `` Include2`` 
 <a id="module-X"></a>
-###### &nbsp; module X : sig ... end
+###### &nbsp; module X : sig ... ###### &nbsp; end
 
 Comment about X that should not appear when including X below.
 
@@ -19,7 +19,7 @@ Comment about X that should not appear when including X below.
 
 
 <a id="module-Y"></a>
-###### &nbsp; module Y : sig ... end
+###### &nbsp; module Y : sig ... ###### &nbsp; end
 
 Top-comment of Y.
 
@@ -27,7 +27,7 @@ Top-comment of Y.
 
 
 <a id="module-Y_include_synopsis"></a>
-###### &nbsp; module Y_include_synopsis : sig ... end
+###### &nbsp; module Y_include_synopsis : sig ... ###### &nbsp; end
 
 The `` include Y``  below should have the synopsis from `` Y
 `` 's top-comment attached to it.
@@ -36,7 +36,7 @@ The `` include Y``  below should have the synopsis from `` Y
 
 
 <a id="module-Y_include_doc"></a>
-###### &nbsp; module Y_include_doc : sig ... end
+###### &nbsp; module Y_include_doc : sig ... ###### &nbsp; end
 
 
 Include2X

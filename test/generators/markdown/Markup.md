@@ -212,7 +212,7 @@ Raw HTML can be  as inline elements into sentences.
 # Tags
 
 
-Each comment can end with zero or more tags. Here are some examples:
+Each comment can ###### &nbsp; end with zero or more tags. Here are some examples:
 
 
 

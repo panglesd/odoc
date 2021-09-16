@@ -41,7 +41,7 @@ foo bar
 Some text.
 
 
-end
+###### &nbsp; end
 
 A module type.
 

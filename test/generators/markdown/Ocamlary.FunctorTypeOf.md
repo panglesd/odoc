@@ -50,11 +50,12 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t`` .
+This comment is for `` t
+`` .
 
 
 
-end
+###### &nbsp; end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -68,18 +69,19 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t`` .
+This comment is for `` t
+`` .
 
 
 
-end
+###### &nbsp; end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-end
+###### &nbsp; end
 
 This comment is for `` InnerModuleA
 `` .
@@ -95,7 +97,7 @@ This comment is for `` InnerModuleTypeA
 
 
 
-end
+###### &nbsp; end
 
 
 
@@ -151,11 +153,12 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t`` .
+This comment is for `` t
+`` .
 
 
 
-end
+###### &nbsp; end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -169,18 +172,19 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t`` .
+This comment is for `` t
+`` .
 
 
 
-end
+###### &nbsp; end
 
 This comment is for `` InnerModuleTypeA'
 `` .
 
 
 
-end
+###### &nbsp; end
 
 This comment is for `` InnerModuleA
 `` .
@@ -219,11 +223,12 @@ This comment is for `` t
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = (unit, unit) a_function
 
-This comment is for `` t`` .
+This comment is for `` t
+`` .
 
 
 
-end
+###### &nbsp; end
 
 This comment is for `` InnerModuleA'
 `` .
@@ -237,11 +242,12 @@ This comment is for `` InnerModuleA'
 <a id="type-t"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type t = InnerModuleA'.t
 
-This comment is for `` t`` .
+This comment is for `` t
+`` .
 
 
 
-end
+###### &nbsp; end
 
 This comment is for `` InnerModuleTypeA'
 `` .

@@ -38,10 +38,10 @@ The module needs at least one signature item, otherwise a bug causes the compile
 
 <a id="module-M"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module M : sig
-end
+###### &nbsp; end
 
 
-end
+###### &nbsp; end
 
 
 
@@ -80,10 +80,10 @@ end
 
 <a id="module-M"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module M : sig
-end
+###### &nbsp; end
 
 
-end
+###### &nbsp; end
 
 
 
@@ -107,10 +107,10 @@ end
 
 <a id="module-M"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module M : sig
-end
+###### &nbsp; end
 
 
-end
+###### &nbsp; end
 
 
 
@@ -134,10 +134,10 @@ end
 
 <a id="module-M"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module M : sig
-end
+###### &nbsp; end
 
 
-end
+###### &nbsp; end
 
 
 
@@ -166,15 +166,15 @@ end
 
 <a id="module-M"></a>
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module M : sig
-end
+###### &nbsp; end
 
 
-end
+###### &nbsp; end
 
 
 
 <a id="module-M'"></a>
-###### &nbsp; module M' : sig ... end
+###### &nbsp; module M' : sig ... ###### &nbsp; end
 
 
 
@@ -205,7 +205,7 @@ end
 ###### &nbsp; &nbsp; &nbsp; &nbsp;module M = M'
 
 
-end
+###### &nbsp; end
 
 
 
@@ -231,23 +231,23 @@ end
 ###### &nbsp; &nbsp; &nbsp; &nbsp;type ('a, 'b) w
 
 
-end
+###### &nbsp; end
 
 
 
 <a id="module-type-S9"></a>
 ###### &nbsp; module type S9 = sig
-end
+###### &nbsp; end
 
 
 
 <a id="module-Mutually"></a>
-###### &nbsp; module Mutually : sig ... end
+###### &nbsp; module Mutually : sig ... ###### &nbsp; end
 
 
 
 <a id="module-Recursive"></a>
-###### &nbsp; module Recursive : sig ... end
+###### &nbsp; module Recursive : sig ... ###### &nbsp; end
 
 
 ModuleS
@@ -275,7 +275,7 @@ ModuleS
 
 <a id="module-M"></a>
 ###### &nbsp; module M : sig
-end
+###### &nbsp; end
 
 
 ModuleSM
@@ -307,7 +307,7 @@ ModuleS3
 
 <a id="module-M"></a>
 ###### &nbsp; module M : sig
-end
+###### &nbsp; end
 
 
 ModuleS3M
@@ -334,7 +334,7 @@ ModuleS4
 
 <a id="module-M"></a>
 ###### &nbsp; module M : sig
-end
+###### &nbsp; end
 
 
 ModuleS4M
@@ -361,7 +361,7 @@ ModuleS5
 
 <a id="module-M"></a>
 ###### &nbsp; module M : sig
-end
+###### &nbsp; end
 
 
 ModuleS5M
@@ -388,7 +388,7 @@ ModuleS6
 
 <a id="module-M"></a>
 ###### &nbsp; module M : sig
-end
+###### &nbsp; end
 
 
 ModuleS6M

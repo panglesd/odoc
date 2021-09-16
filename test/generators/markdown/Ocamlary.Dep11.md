@@ -11,10 +11,10 @@ OcamlaryDep11
 ###### &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;method m : int
 
 
-end
+###### &nbsp; end
 
 
-end
+###### &nbsp; end
 
 
 OcamlaryDep11S
@@ -27,7 +27,7 @@ OcamlaryDep11S
 ###### &nbsp; &nbsp; &nbsp; &nbsp;method m : int
 
 
-end
+###### &nbsp; end
 
 
 OcamlaryDep11Sc
