@@ -114,7 +114,10 @@ and inline (l : Inline.t) =
       | Text _ ->
           let l, _, rest =
             Doctree.Take.until l ~classify:(function
-              | { Inline.desc = Text s; _ } -> Accum [ s ]
+              | { Inline.desc = Text s; _ } -> (
+                  match s with
+                  | "end" -> Accum [ "###### &nbsp; " ^ s ]
+                  | _ -> Accum [ s ])
               | _ -> Stop_and_keep)
           in
           str {|%s|} (String.concat "" l) ++ inline rest
