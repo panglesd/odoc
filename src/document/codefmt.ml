@@ -170,6 +170,8 @@ let cut = break 0 0
 
 let sp = break 1 0
 
+let fnl ppf = Format.pp_force_newline ppf ()
+
 let ( ! ) (pp : _ Fmt.t) x ppf = pp ppf x
 
 let rec list ?sep ~f = function
@@ -180,7 +182,11 @@ let rec list ?sep ~f = function
       let tl = list ?sep ~f xs in
       match sep with None -> hd ++ tl | Some sep -> hd ++ sep ++ tl)
 
+let indent ~indent_lvl = txt @@ String.init indent_lvl (fun _ -> ' ')
+
 let render f = spf "@[%t@]" (span f)
+
+let compute_length_text t = Utils.compute_length_source @@ render t
 
 let code ?attr f = [ inline ?attr @@ Inline.Source (render f) ]
 

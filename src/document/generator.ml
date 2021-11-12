@@ -102,6 +102,8 @@ let make_expansion_page title kind url ?(header_title = make_name_from_path url)
 include Generator_signatures
 
 module Make (Syntax : SYNTAX) = struct
+  let char_rule = 80
+
   module Link : sig
     val from_path : Paths.Path.t -> text
 
@@ -206,13 +208,19 @@ module Make (Syntax : SYNTAX) = struct
   end
 
   module Type_expression : sig
-    val type_expr : ?needs_parentheses:bool -> Lang.TypeExpr.t -> text
+    val type_expr :
+      ?needs_parentheses:bool ->
+      ?force_multiline:bool ->
+      ?indent_lvl:int ->
+      Lang.TypeExpr.t ->
+      text
 
     val format_type_path :
       delim:[ `parens | `brackets ] -> Lang.TypeExpr.t list -> text -> text
   end = struct
-    let rec te_variant (t : Odoc_model.Lang.TypeExpr.Polymorphic_variant.t) =
-      let style_arguments ~constant arguments =
+    let rec te_variant ?(indent_lvl = 2)
+        (t : Odoc_model.Lang.TypeExpr.Polymorphic_variant.t) =
+      let style_arguments ~constant arguments ~indent_lvl =
         (* Multiple arguments in a polymorphic variant constructor correspond
            to a conjunction of types, not a product: [`Lbl int&float].
            If constant is [true], the conjunction starts with an empty type,
@@ -221,44 +229,69 @@ module Make (Syntax : SYNTAX) = struct
         let wrapped_type_expr =
           (* type conjunction in Reason is printed as `Lbl (t1)&(t2)` *)
           if Syntax.Type.Variant.parenthesize_params then fun x ->
-            enclose ~l:"(" ~r:")" (type_expr x)
-          else fun x -> type_expr x
+            enclose ~l:"(" ~r:")" (type_expr ~indent_lvl x)
+          else fun x -> type_expr ~indent_lvl x
         in
         let arguments =
           O.list arguments ~sep:(O.txt " & ") ~f:wrapped_type_expr
         in
         if constant then O.txt "& " ++ arguments else arguments
       in
-      let rec style_elements ~add_pipe = function
-        | [] -> O.noop
-        | first :: rest ->
-            let first =
-              match first with
-              | Odoc_model.Lang.TypeExpr.Polymorphic_variant.Type te ->
-                  let res = type_expr te in
-                  if add_pipe then O.txt " " ++ O.span (O.txt "| " ++ res)
-                  else res
-              | Constructor { constant; name; arguments; _ } ->
-                  let constr =
-                    let name = "`" ^ name in
-                    if add_pipe then O.span (O.txt ("| " ^ name))
-                    else O.txt name
-                  in
-                  let res =
-                    match arguments with
-                    | [] -> constr
-                    | _ ->
-                        let arguments = style_arguments ~constant arguments in
-                        O.span
-                          (if Syntax.Type.Variant.parenthesize_params then
-                           constr ++ arguments
-                          else constr ++ O.txt " of " ++ arguments)
-                  in
-                  if add_pipe then O.txt " " ++ res else res
+      let style_element ~add_pipe first =
+        match first with
+        | Odoc_model.Lang.TypeExpr.Polymorphic_variant.Type te ->
+            let res = type_expr te in
+            if add_pipe then O.span (O.txt "| " ++ res) else res
+        | Constructor { constant; name; arguments; _ } -> (
+            let constr =
+              let name = "`" ^ name in
+              if add_pipe then O.span (O.txt ("| " ^ name)) else O.txt name
             in
-            first ++ style_elements ~add_pipe:true rest
+            match arguments with
+            | [] -> constr
+            | _ ->
+                let arguments_txt =
+                  style_arguments ~constant ~indent_lvl arguments
+                in
+                let res =
+                  O.span
+                    (if Syntax.Type.Variant.parenthesize_params then
+                     constr ++ arguments_txt
+                    else constr ++ O.txt " of " ++ arguments_txt)
+                in
+                if O.compute_length_text res < char_rule then res
+                else
+                  let indent_lvl = indent_lvl + 2 in
+                  let arguments_txt =
+                    style_arguments ~constant ~indent_lvl arguments
+                  in
+                  O.span
+                    (if Syntax.Type.Variant.parenthesize_params then
+                     constr ++ O.fnl ++ O.indent ~indent_lvl ++ arguments_txt
+                    else
+                      constr ++ O.txt " of " ++ O.fnl
+                      ++ O.indent ~indent_lvl:(indent_lvl - 2)
+                      ++ arguments_txt))
       in
-      let elements = style_elements ~add_pipe:false t.elements in
+      let elements_list =
+        List.mapi (fun n -> style_element ~add_pipe:(n > 0)) t.elements
+      in
+      let elements = O.list ~sep:(O.txt " ") ~f:(fun i -> i) elements_list in
+      let elements =
+        if O.compute_length_text elements + indent_lvl < char_rule then elements
+        else
+          O.list
+            ~sep:(O.fnl ++ O.indent ~indent_lvl:(indent_lvl - 2))
+            ~f:(fun i -> i)
+            elements_list
+      in
+      (* let rec style_elements ~add_pipe = function *)
+      (*   | [] -> O.noop *)
+      (*   | first :: rest -> *)
+      (*       let first = style_element ~add_pipe first in *)
+      (*       first ++ style_elements ~add_pipe:true rest *)
+      (* in *)
+      (* let elements = style_elements ~add_pipe:false t.elements in *)
       O.span
         (match t.kind with
         | Fixed -> O.txt "[ " ++ elements ++ O.txt " ]"
@@ -308,8 +341,8 @@ module Make (Syntax : SYNTAX) = struct
           in
           Syntax.Type.handle_constructor_params path params
 
-    and type_expr ?(needs_parentheses = false) (t : Odoc_model.Lang.TypeExpr.t)
-        =
+    and type_expr ?(needs_parentheses = false) ?(force_multiline = false)
+        ?(indent_lvl = 2) (t : Odoc_model.Lang.TypeExpr.t) =
       match t with
       | Var s -> type_var (Syntax.Type.var_prefix ^ s)
       | Any -> type_var Syntax.Type.any
@@ -317,22 +350,59 @@ module Make (Syntax : SYNTAX) = struct
           type_expr ~needs_parentheses:true te
           ++ O.txt " " ++ O.keyword "as" ++ O.txt " '" ++ O.txt alias
       | Arrow (None, src, dst) ->
-          let res =
-            O.span
-              (type_expr ~needs_parentheses:true src
-              ++ O.txt " " ++ Syntax.Type.arrow)
-            ++ O.txt " " ++ type_expr dst
+          let src =
+            type_expr ~needs_parentheses:true ~indent_lvl:(indent_lvl + 2) src
+          and dst ~force_multiline =
+            type_expr ~force_multiline ~indent_lvl dst
           in
-          if not needs_parentheses then res else enclose ~l:"(" res ~r:")"
+          let res_gen ~force_multiline =
+            let res =
+              if force_multiline then
+                O.span (src ++ O.txt " " ++ Syntax.Type.arrow)
+                ++ O.fnl ++ O.indent ~indent_lvl ++ dst ~force_multiline
+              else
+                O.span (src ++ O.txt " " ++ Syntax.Type.arrow)
+                ++ O.txt " " ++ dst ~force_multiline
+            in
+            if not needs_parentheses then res
+            else if force_multiline then enclose ~l:"( " res ~r:" )"
+            else enclose ~l:"(" res ~r:")"
+          in
+          let res = res_gen ~force_multiline in
+          if
+            force_multiline
+            || indent_lvl + O.compute_length_text res < char_rule
+          then res
+          else res_gen ~force_multiline:true
       | Arrow (Some lbl, src, dst) ->
-          let res =
-            O.span
-              (label lbl ++ O.txt ":"
-              ++ type_expr ~needs_parentheses:true src
-              ++ O.sp ++ Syntax.Type.arrow)
-            ++ O.sp ++ type_expr dst
+          let src =
+            type_expr ~needs_parentheses:true ~indent_lvl:(indent_lvl + 2) src
+          and dst ~force_multiline =
+            type_expr ~force_multiline ~indent_lvl dst
           in
-          if not needs_parentheses then res else enclose ~l:"(" res ~r:")"
+          let res_gen ~force_multiline =
+            let res =
+              if force_multiline then
+                O.span
+                  (label lbl ++ O.txt ":" ++ src ++ O.txt " "
+                 ++ Syntax.Type.arrow)
+                ++ O.fnl ++ O.indent ~indent_lvl ++ dst ~force_multiline
+              else
+                O.span
+                  (label lbl ++ O.txt ":" ++ src ++ O.txt " "
+                 ++ Syntax.Type.arrow)
+                ++ O.txt " " ++ dst ~force_multiline
+            in
+            if not needs_parentheses then res
+            else if force_multiline then enclose ~l:"( " res ~r:" )"
+            else enclose ~l:"(" res ~r:")"
+          in
+          let res = res_gen ~force_multiline in
+          if
+            force_multiline
+            || indent_lvl + O.compute_length_text res < char_rule
+          then res
+          else res_gen ~force_multiline:true
       | Tuple lst ->
           let res =
             O.list lst
@@ -345,7 +415,7 @@ module Make (Syntax : SYNTAX) = struct
       | Constr (path, args) ->
           let link = Link.from_path (path :> Paths.Path.t) in
           format_type_path ~delim:`parens args link
-      | Polymorphic_variant v -> te_variant v
+      | Polymorphic_variant v -> te_variant ~indent_lvl v
       | Object o -> te_object o
       | Class (path, args) ->
           format_type_path ~delim:`brackets args
@@ -797,14 +867,19 @@ module Make (Syntax : SYNTAX) = struct
         | External _ -> ([ "external" ], Syntax.Type.External.semicolon)
       in
       let name = Paths.Identifier.name t.id in
-      let content =
-        O.documentedSrc
-          (O.keyword Syntax.Value.variable_keyword
-          ++ O.txt " " ++ O.txt name
-          ++ O.txt Syntax.Type.annotation_separator
-          ++ type_expr t.type_
-          ++ if semicolon then O.txt ";" else O.noop)
+      let intro =
+        O.keyword Syntax.Value.variable_keyword
+        ++ O.txt " " ++ O.txt name
+        ++ O.txt Syntax.Type.annotation_separator
+      and te = type_expr t.type_ in
+      let txt = intro ++ te ++ if semicolon then O.txt ";" else O.noop in
+      let txt =
+        if O.compute_length_text txt < char_rule then txt
+        else
+          intro ++ O.fnl ++ O.indent ~indent_lvl:2 ++ te
+          ++ if semicolon then O.txt ";" else O.noop
       in
+      let content = O.documentedSrc txt in
       let attr = [ "value" ] @ extra_attr in
       let anchor = path_to_id t.id in
       let doc = Comment.to_ir t.doc in

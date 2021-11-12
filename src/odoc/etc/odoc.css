@@ -403,6 +403,10 @@ p a > code {
   color: var(--link-color);
 }
 
+code {
+  white-space: pre-wrap
+}
+
 /* Code blocks (e.g. Examples) */
 
 pre code {
