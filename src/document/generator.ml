@@ -216,7 +216,11 @@ module Make (Syntax : SYNTAX) = struct
       text
 
     val format_type_path :
-      delim:[ `parens | `brackets ] -> Lang.TypeExpr.t list -> text -> text
+      ?indent_lvl:int ->
+      delim:[ `parens | `brackets ] ->
+      Lang.TypeExpr.t list ->
+      text ->
+      text
   end = struct
     let rec te_variant ?(indent_lvl = 2)
         (t : Odoc_model.Lang.TypeExpr.Polymorphic_variant.t) =
@@ -320,12 +324,12 @@ module Make (Syntax : SYNTAX) = struct
       in
       O.span (open_tag ++ fields ++ close_tag)
 
-    and format_type_path ~delim (params : Odoc_model.Lang.TypeExpr.t list)
-        (path : text) : text =
+    and format_type_path ?(indent_lvl = 2) ~delim
+        (params : Odoc_model.Lang.TypeExpr.t list) (path : text) : text =
       match params with
       | [] -> path
       | [ param ] ->
-          let param = type_expr ~needs_parentheses:true param in
+          let param = type_expr ~indent_lvl ~needs_parentheses:true param in
           let args =
             if Syntax.Type.parenthesize_constructor then
               O.txt "(" ++ param ++ O.txt ")"
@@ -333,7 +337,9 @@ module Make (Syntax : SYNTAX) = struct
           in
           Syntax.Type.handle_constructor_params path args
       | params ->
-          let params = O.list params ~sep:(O.txt ",\194\160") ~f:type_expr in
+          let params =
+            O.list params ~sep:(O.txt ",\194\160") ~f:(type_expr ~indent_lvl)
+          in
           let params =
             match delim with
             | `parens -> enclose ~l:"(" params ~r:")"
@@ -414,7 +420,7 @@ module Make (Syntax : SYNTAX) = struct
           else res
       | Constr (path, args) ->
           let link = Link.from_path (path :> Paths.Path.t) in
-          format_type_path ~delim:`parens args link
+          format_type_path ~indent_lvl ~delim:`parens args link
       | Polymorphic_variant v -> te_variant ~indent_lvl v
       | Object o -> te_object o
       | Class (path, args) ->
@@ -1275,7 +1281,9 @@ module Make (Syntax : SYNTAX) = struct
       let modname = Paths.Identifier.name t.id in
       let modname, expansion_doc, mty =
         module_type_manifest ~subst:true modname t.id t.doc (Some t.manifest)
+        (* TODO *)
       in
+      let modname = O.documentedSrc modname in
       let content =
         O.documentedSrc
           (O.keyword "module" ++ O.txt " " ++ O.keyword "type" ++ O.txt " ")
@@ -1373,7 +1381,7 @@ module Make (Syntax : SYNTAX) = struct
       in
       let modname, status, expansion, expansion_doc =
         match expansion with
-        | None -> (O.documentedSrc (O.txt modname), `Default, None, None)
+        | None -> (O.txt modname, `Default, None, None)
         | Some (expansion_doc, items) ->
             let status =
               match t.type_ with
@@ -1386,9 +1394,11 @@ module Make (Syntax : SYNTAX) = struct
               make_expansion_page modname `Mod url [ t.doc; expansion_doc ]
                 items
             in
-            (O.documentedSrc link, status, Some page, Some expansion_doc)
+            (link, status, Some page, Some expansion_doc)
       in
-      let summary = mdexpr_in_decl t.id t.type_ in
+      let offset = O.compute_length_text (O.keyword "module" ++ O.txt " ") in
+      let summary = mdexpr_in_decl ~offset t.id t.type_ in
+
       let modexpr =
         attach_expansion ~status
           (Syntax.Type.annotation_separator, "sig", "end")
@@ -1396,7 +1406,7 @@ module Make (Syntax : SYNTAX) = struct
       in
       let content =
         O.documentedSrc (O.keyword "module" ++ O.txt " ")
-        @ modname @ modexpr
+        @ O.documentedSrc modname @ modexpr
         @ O.documentedSrc
             (if Syntax.Mod.close_tag_semicolon then O.txt ";" else O.noop)
       in
@@ -1405,31 +1415,40 @@ module Make (Syntax : SYNTAX) = struct
       let doc = Comment.synopsis ~decl_doc:t.doc ~expansion_doc in
       Item.Declaration { attr; anchor; doc; content }
 
-    and simple_expansion_in_decl (base : Paths.Identifier.Module.t) se =
+    and simple_expansion_in_decl ~offset (base : Paths.Identifier.Module.t) se =
       let rec ty_of_se :
           Lang.ModuleType.simple_expansion -> Lang.ModuleType.expr = function
         | Signature sg -> Signature sg
         | Functor (arg, sg) -> Functor (arg, ty_of_se sg)
       in
-      mty_in_decl (base :> Paths.Identifier.Signature.t) (ty_of_se se)
+      mty_in_decl ~offset (base :> Paths.Identifier.Signature.t) (ty_of_se se)
 
-    and mdexpr_in_decl (base : Paths.Identifier.Module.t) md =
+    and mdexpr_in_decl ?(offset = 0) (base : Paths.Identifier.Module.t) md =
       let sig_dotdotdot =
         O.txt Syntax.Type.annotation_separator
         ++ Syntax.Mod.open_tag ++ O.txt " ... " ++ Syntax.Mod.close_tag
       in
       match md with
-      | Alias (_, Some se) -> simple_expansion_in_decl base se
+      | Alias (_, Some se) -> simple_expansion_in_decl ~offset base se
       | Alias (p, _) when not Paths.Path.(is_hidden (p :> t)) ->
-          O.txt " = " ++ mdexpr md
-      | Alias _ -> sig_dotdotdot
-      | ModuleType mt -> mty_in_decl (base :> Paths.Identifier.Signature.t) mt
+          let txt = O.txt " = " ++ mdexpr md in
+          if O.compute_length_text txt + offset < char_rule then txt
+          else O.txt " = " ++ O.fnl ++ O.indent ~indent_lvl:2 ++ mdexpr md
+      | Alias _ ->
+          if offset + O.compute_length_text sig_dotdotdot < char_rule then
+            sig_dotdotdot
+          else
+            O.txt Syntax.Type.annotation_separator
+            ++ O.fnl ++ O.indent ~indent_lvl:2 ++ Syntax.Mod.open_tag
+            ++ O.txt " ... " ++ Syntax.Mod.close_tag
+      | ModuleType mt ->
+          mty_in_decl ~offset (base :> Paths.Identifier.Signature.t) mt
 
     and mdexpr : Odoc_model.Lang.Module.decl -> text = function
       | Alias (mod_path, _) -> Link.from_path (mod_path :> Paths.Path.t)
       | ModuleType mt -> mty mt
 
-    and module_type_manifest ~subst modname id doc manifest =
+    and module_type_manifest ?(offset = 0) ~subst modname id doc manifest =
       let expansion =
         match manifest with
         | None -> None
@@ -1437,19 +1456,24 @@ module Make (Syntax : SYNTAX) = struct
       in
       let modname, expansion, expansion_doc =
         match expansion with
-        | None -> (O.documentedSrc @@ O.txt modname, None, None)
+        | None -> (O.txt modname, None, None)
         | Some (expansion_doc, items) ->
             let url = Url.Path.from_identifier id in
             let link = path url [ inline @@ Text modname ] in
             let page =
               make_expansion_page modname `Mty url [ doc; expansion_doc ] items
             in
-            (O.documentedSrc link, Some page, Some expansion_doc)
+            (link, Some page, Some expansion_doc)
       in
       let summary =
         match manifest with
         | None -> O.noop
-        | Some expr -> (if subst then O.txt " := " else O.txt " = ") ++ mty expr
+        | Some expr -> (if subst then O.txt " := " else O.txt "") ++ mty expr
+      in
+      let summary =
+        if O.compute_length_text (summary ++ modname) + offset < char_rule then
+          summary
+        else O.fnl ++ O.indent ~indent_lvl:2 ++ summary
       in
       ( modname,
         expansion_doc,
@@ -1457,13 +1481,18 @@ module Make (Syntax : SYNTAX) = struct
 
     and module_type (t : Odoc_model.Lang.ModuleType.t) =
       let modname = Paths.Identifier.name t.id in
+      let prefix modname =
+        O.keyword "module" ++ O.txt " " ++ O.keyword "type" ++ O.txt " "
+        ++ modname
+        ++ O.txt (if Option.is_some t.expr then " = " else " ")
+      in
+      let offset = O.compute_length_text @@ prefix O.noop in
       let modname, expansion_doc, mty =
-        module_type_manifest ~subst:false modname t.id t.doc t.expr
+        module_type_manifest ~offset ~subst:false modname t.id t.doc t.expr
       in
       let content =
-        O.documentedSrc
-          (O.keyword "module" ++ O.txt " " ++ O.keyword "type" ++ O.txt " ")
-        @ modname @ mty
+        O.documentedSrc (prefix modname)
+        @ mty
         @ O.documentedSrc
             (if Syntax.Mod.close_tag_semicolon then O.txt ";" else O.noop)
       in
@@ -1488,12 +1517,25 @@ module Make (Syntax : SYNTAX) = struct
           Paths.Path.(is_hidden (m :> t))
       | _ -> false
 
-    and mty_with subs expr =
-      umty expr ++ O.txt " " ++ O.keyword "with" ++ O.txt " "
-      ++ O.list
-           ~sep:(O.txt " " ++ O.keyword "and" ++ O.txt " ")
-           ~f:(fun x -> O.span (substitution x))
-           subs
+    and mty_with ?(indent_lvl = 2) subs expr =
+      let umty_expr = umty expr in
+      let subs_list = List.map (fun x -> O.span (substitution x)) subs in
+      let txt =
+        umty_expr ++ O.txt " " ++ O.keyword "with" ++ O.txt " "
+        ++ O.list
+             ~sep:(O.txt " " ++ O.keyword "and" ++ O.txt " ")
+             ~f:(fun x -> x)
+             subs_list
+      in
+      if O.compute_length_text txt < char_rule then txt
+      else
+        umty_expr ++ O.fnl ++ O.indent ~indent_lvl ++ O.keyword "with"
+        ++ O.txt " "
+        ++ O.list
+             ~sep:
+               (O.fnl ++ O.indent ~indent_lvl ++ O.keyword " and" ++ O.txt " ")
+             ~f:(fun x -> x)
+             subs_list
 
     and mty_typeof t_desc =
       match t_desc with
@@ -1526,8 +1568,8 @@ module Make (Syntax : SYNTAX) = struct
       | With (subs, expr) -> mty_with subs expr
       | TypeOf { t_desc; _ } -> mty_typeof t_desc
 
-    and mty : Odoc_model.Lang.ModuleType.expr -> text =
-     fun m ->
+    and mty : ?indent_lvl:int -> Odoc_model.Lang.ModuleType.expr -> text =
+     fun ?(indent_lvl = 2) m ->
       if mty_hidden m then
         Syntax.Mod.open_tag ++ O.txt " ... " ++ Syntax.Mod.close_tag
       else
@@ -1535,9 +1577,19 @@ module Make (Syntax : SYNTAX) = struct
         | Path { p_path = mty_path; _ } ->
             Link.from_path (mty_path :> Paths.Path.t)
         | Functor (Unit, expr) ->
-            (if Syntax.Mod.functor_keyword then O.keyword "functor" else O.noop)
-            ++ O.span (O.txt " () " ++ Syntax.Type.arrow)
-            ++ O.txt " " ++ mty expr
+            let mty_expr = mty expr in
+            let txt =
+              (if Syntax.Mod.functor_keyword then O.keyword "functor"
+              else O.noop)
+              ++ O.span (O.txt " () " ++ Syntax.Type.arrow)
+              ++ O.txt " " ++ mty_expr
+            in
+            if O.compute_length_text txt + indent_lvl < char_rule then txt
+            else
+              (if Syntax.Mod.functor_keyword then O.keyword "functor"
+              else O.noop)
+              ++ O.span (O.txt " () " ++ Syntax.Type.arrow)
+              ++ O.fnl ++ O.indent ~indent_lvl ++ mty_expr
         | Functor (Named arg, expr) ->
             let arg_expr = arg.expr in
             let stop_before = expansion_of_module_type_expr arg_expr = None in
@@ -1550,13 +1602,28 @@ module Make (Syntax : SYNTAX) = struct
               | Error _ -> O.txt name
               | Ok href -> resolved href [ inline @@ Text name ]
             in
-            (if Syntax.Mod.functor_keyword then O.keyword "functor" else O.noop)
-            ++ O.span
-                 (O.txt " (" ++ name
-                 ++ O.txt Syntax.Type.annotation_separator
-                 ++ mty arg_expr ++ O.txt ")" ++ O.txt " " ++ Syntax.Type.arrow
-                 )
-            ++ O.txt " " ++ mty expr
+            let mty_arg_expr = mty arg_expr and mty_expr = mty expr in
+            let txt =
+              (if Syntax.Mod.functor_keyword then O.keyword "functor"
+              else O.noop)
+              ++ O.span
+                   (O.txt " (" ++ name
+                   ++ O.txt Syntax.Type.annotation_separator
+                   ++ mty_arg_expr ++ O.txt ")" ++ O.txt " "
+                   ++ Syntax.Type.arrow)
+              ++ O.txt " " ++ mty_expr
+            in
+            if indent_lvl + O.compute_length_text txt < char_rule then txt
+            else
+              O.fnl ++ O.indent ~indent_lvl
+              ++ (if Syntax.Mod.functor_keyword then O.keyword "functor"
+                 else O.noop)
+              ++ O.span
+                   (O.txt " (" ++ name
+                   ++ O.txt Syntax.Type.annotation_separator
+                   ++ mty_arg_expr ++ O.txt ")" ++ O.txt " "
+                   ++ Syntax.Type.arrow)
+              ++ O.txt " " ++ mty_expr
         | With { w_expr; _ } when is_elidable_with_u w_expr ->
             Syntax.Mod.open_tag ++ O.txt " ... " ++ Syntax.Mod.close_tag
         | With { w_substitutions; w_expr; _ } -> mty_with w_substitutions w_expr
@@ -1565,13 +1632,25 @@ module Make (Syntax : SYNTAX) = struct
             Syntax.Mod.open_tag ++ O.txt " ... " ++ Syntax.Mod.close_tag
 
     and mty_in_decl :
-        Paths.Identifier.Signature.t -> Odoc_model.Lang.ModuleType.expr -> text
-        =
-     fun base -> function
+        ?offset:int ->
+        Paths.Identifier.Signature.t ->
+        Odoc_model.Lang.ModuleType.expr ->
+        text =
+     fun ?(offset = 0) base -> function
       | (Path _ | Signature _ | With _ | TypeOf _) as m ->
-          O.txt Syntax.Type.annotation_separator ++ mty m
+          let m = mty m in
+          if offset + O.compute_length_text m < char_rule then
+            O.txt Syntax.Type.annotation_separator ++ m
+          else
+            O.txt Syntax.Type.annotation_separator
+            ++ O.fnl ++ O.indent ~indent_lvl:2 ++ m
       | Functor _ as m when not Syntax.Mod.functor_contraction ->
-          O.txt Syntax.Type.annotation_separator ++ mty m
+          let m = mty m in
+          if offset + O.compute_length_text m < char_rule then
+            O.txt Syntax.Type.annotation_separator ++ m
+          else
+            O.txt Syntax.Type.annotation_separator
+            ++ O.fnl ++ O.indent ~indent_lvl:2 ++ m
       | Functor (arg, expr) ->
           let text_arg =
             match arg with
@@ -1593,9 +1672,13 @@ module Make (Syntax : SYNTAX) = struct
                 in
                 O.txt "(" ++ name
                 ++ O.txt Syntax.Type.annotation_separator
-                ++ mty arg.expr ++ O.txt ")"
+                ++ mty ~indent_lvl:2 arg.expr ++ O.txt ")"
           in
-          O.txt " " ++ text_arg ++ mty_in_decl base expr
+          let txt = O.txt " " ++ text_arg ++ mty_in_decl base expr in
+          if offset + O.compute_length_text txt < char_rule then txt
+          else
+            O.fnl ++ O.indent ~indent_lvl:2 ++ text_arg
+            ++ mty_in_decl ~offset:char_rule base expr
 
     (* TODO : Centralize the list juggling for type parameters *)
     and type_expr_in_subst td typath =
