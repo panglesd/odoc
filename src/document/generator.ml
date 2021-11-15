@@ -1615,15 +1615,14 @@ module Make (Syntax : SYNTAX) = struct
             in
             if indent_lvl + O.compute_length_text txt < char_rule then txt
             else
-              O.fnl ++ O.indent ~indent_lvl
-              ++ (if Syntax.Mod.functor_keyword then O.keyword "functor"
-                 else O.noop)
+              (if Syntax.Mod.functor_keyword then O.keyword "functor"
+              else O.noop)
               ++ O.span
                    (O.txt " (" ++ name
                    ++ O.txt Syntax.Type.annotation_separator
                    ++ mty_arg_expr ++ O.txt ")" ++ O.txt " "
                    ++ Syntax.Type.arrow)
-              ++ O.txt " " ++ mty_expr
+              ++ O.fnl ++ O.indent ~indent_lvl ++ mty_expr
         | With { w_expr; _ } when is_elidable_with_u w_expr ->
             Syntax.Mod.open_tag ++ O.txt " ... " ++ Syntax.Mod.close_tag
         | With { w_substitutions; w_expr; _ } -> mty_with w_substitutions w_expr
