@@ -1193,46 +1193,41 @@ module Make (Syntax : SYNTAX) = struct
       let modtyp =
         mty_in_decl (arg.id :> Paths.Identifier.Signature.t) render_ty
       in
-      let modname, mod_decl =
-        match expansion_of_module_type_expr arg.expr with
-        | None ->
-            let modname = O.txt (Paths.Identifier.name arg.id) in
-            (modname, O.documentedSrc modtyp)
-        | Some (expansion_doc, items) ->
-            let url = Url.Path.from_identifier arg.id in
-            let modname = path url [ inline @@ Text name ] in
-            let type_with_expansion =
-              let content =
-                make_expansion_page name `Arg url [ expansion_doc ] items
-              in
-              let summary = O.render modtyp in
-              let status = `Default in
-              let expansion =
-                O.documentedSrc
-                  (O.txt Syntax.Type.annotation_separator ++ O.keyword "sig")
-                @ DocumentedSrc.[ Subpage { content; status } ]
-                @ O.documentedSrc (O.keyword "end")
-              in
-              DocumentedSrc.
-                [
-                  Alternative
-                    (Expansion
-                       {
-                         status = `Default;
-                         summary;
-                         url;
-                         expansion;
-                         prefix = O.render O.noop;
-                         suffix = O.render O.noop;
-                         id = "";
-                       });
-                ]
-              (* TODO *)
-            in
-            (modname, type_with_expansion)
-      in
-      O.documentedSrc (O.keyword "module" ++ O.txt " ")
-      @ O.documentedSrc modname @ mod_decl
+      match expansion_of_module_type_expr arg.expr with
+      | None ->
+          let modname = O.txt (Paths.Identifier.name arg.id) in
+          (* (modname, O.documentedSrc modtyp) *)
+          O.documentedSrc
+          @@ (O.keyword "module" ++ O.txt " " ++ modname ++ modtyp)
+      | Some (expansion_doc, items) ->
+          let url = Url.Path.from_identifier arg.id in
+          let modname = path url [ inline @@ Text name ] in
+          let content =
+            make_expansion_page name `Arg url [ expansion_doc ] items
+          in
+          let summary =
+            O.render @@ (O.keyword "module" ++ O.txt " " ++ modname ++ modtyp)
+          in
+          let status = `Default in
+          let expansion = DocumentedSrc.[ Subpage { content; status } ] in
+          DocumentedSrc.
+            [
+              Alternative
+                (Expansion
+                   {
+                     status = `Default;
+                     summary;
+                     url;
+                     expansion;
+                     prefix =
+                       O.render
+                       @@ O.keyword "module" ++ O.txt " " ++ modname
+                          ++ O.txt Syntax.Type.annotation_separator
+                          ++ O.keyword "sig";
+                     suffix = O.render @@ O.keyword "end";
+                     id = "functor-parameter-" ^ name;
+                   });
+            ]
 
     and module_substitution (t : Odoc_model.Lang.ModuleSubstitution.t) =
       let name = Paths.Identifier.name t.id in
@@ -1253,7 +1248,6 @@ module Make (Syntax : SYNTAX) = struct
       let expansion_doc, mty =
         module_type_manifest ~subst:true modname t.id t.doc (Some t.manifest)
       in
-      (* TODO *)
       let content = mty in
       let attr = [ "module-type" ] in
       let anchor = path_to_id t.id in
