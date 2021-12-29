@@ -1055,25 +1055,30 @@ module Make (Syntax : SYNTAX) = struct
       in
       let cname, expansion, expansion_doc =
         match t.expansion with
-        | None -> (O.documentedSrc @@ O.txt name, None, None)
+        | None -> (O.txt name, None, None)
         | Some csig ->
             let url = Url.Path.from_identifier t.id in
             let expansion_doc, items = class_signature csig in
             let page =
               make_expansion_page name `Cty url [ t.doc; expansion_doc ] items
             in
-            ( O.documentedSrc @@ path url [ inline @@ Text name ],
-              Some page,
-              Some expansion_doc )
+            (path url [ inline @@ Text name ], Some page, Some expansion_doc)
       in
-      let summary = O.txt " = " ++ class_type_expr t.expr in
-      let expr = attach_expansion expansion summary in
-      let content =
-        O.documentedSrc
-          (O.keyword "class" ++ O.txt " " ++ O.keyword "type" ++ O.txt " "
-         ++ virtual_ ++ params ++ O.txt " ")
-        @ cname @ expr
+      let prefix =
+        O.keyword "class" ++ O.txt " " ++ O.keyword "type" ++ O.txt " "
+        ++ virtual_ ++ params ++ O.txt " " ++ cname ++ O.txt " = "
+        ++ O.keyword "object"
+      and suffix = O.keyword "end" in
+      let summary =
+        O.keyword "class" ++ O.txt " " ++ O.keyword "type" ++ O.txt " "
+        ++ virtual_ ++ params ++ O.txt " " ++ cname ++ O.txt " = "
+        ++ class_type_expr t.expr
       in
+      let expr =
+        attach_expansion expansion summary ~prefix ~suffix
+          ~id:("classtype-" ^ name)
+      in
+      let content = expr in
       let attr = [ "class-type" ] in
       let anchor = path_to_id t.id in
       let doc = Comment.synopsis ~decl_doc:t.doc ~expansion_doc in
