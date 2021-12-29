@@ -67,8 +67,8 @@ let path_to_id path =
   | Error _ -> None
   | Ok url -> Some url
 
-let attach_expansion ?(prefix = O.noop) ?(suffix = O.noop) ?(status = `Default)
-    page text =
+let attach_expansion ?(id = "") ?(prefix = O.noop) ?(suffix = O.noop)
+    ?(status = `Default) page text =
   match page with
   | None -> O.documentedSrc text
   | Some (page : Page.t) ->
@@ -79,7 +79,7 @@ let attach_expansion ?(prefix = O.noop) ?(suffix = O.noop) ?(status = `Default)
       DocumentedSrc.
         [
           Alternative
-            (Expansion { summary; url; status; expansion; prefix; suffix });
+            (Expansion { summary; url; status; expansion; prefix; suffix; id });
         ]
 
 (** Returns the preamble as an item. Stop the preamble at the first heading. The
@@ -1207,6 +1207,7 @@ module Make (Syntax : SYNTAX) = struct
                          expansion;
                          prefix = O.render O.noop;
                          suffix = O.render O.noop;
+                         id = "";
                        });
                 ]
               (* TODO *)
@@ -1231,20 +1232,12 @@ module Make (Syntax : SYNTAX) = struct
 
     and module_type_substitution (t : Odoc_model.Lang.ModuleTypeSubstitution.t)
         =
-      let prefix =
-        O.keyword "module" ++ O.txt " " ++ O.keyword "type" ++ O.txt " "
-      in
       let modname = Paths.Identifier.name t.id in
-      let modname, expansion_doc, mty =
+      let expansion_doc, mty =
         module_type_manifest ~subst:true modname t.id t.doc (Some t.manifest)
-          prefix
       in
-      let content =
-        O.documentedSrc (prefix ++ modname)
-        @ mty
-        @ O.documentedSrc
-            (if Syntax.Mod.close_tag_semicolon then O.txt ";" else O.noop)
-      in
+      (* TODO *)
+      let content = mty in
       let attr = [ "module-type" ] in
       let anchor = path_to_id t.id in
       let doc = Comment.synopsis ~decl_doc:t.doc ~expansion_doc in
@@ -1326,7 +1319,7 @@ module Make (Syntax : SYNTAX) = struct
 
     and module_ : Odoc_model.Lang.Module.t -> Item.t =
      fun t ->
-      let modname = Paths.Identifier.name t.id in
+      let modname_s = Paths.Identifier.name t.id in
       let expansion =
         match t.type_ with
         | Alias (_, Some e) -> Some (simple_expansion e)
@@ -1335,7 +1328,7 @@ module Make (Syntax : SYNTAX) = struct
       in
       let modname, status, expansion, expansion_doc =
         match expansion with
-        | None -> (O.txt modname, `Default, None, None)
+        | None -> (O.txt modname_s, `Default, None, None)
         | Some (expansion_doc, items) ->
             let status =
               match t.type_ with
@@ -1343,9 +1336,9 @@ module Make (Syntax : SYNTAX) = struct
               | _ -> `Default
             in
             let url = Url.Path.from_identifier t.id in
-            let link = path url [ inline @@ Text modname ] in
+            let link = path url [ inline @@ Text modname_s ] in
             let page =
-              make_expansion_page modname `Mod url [ t.doc; expansion_doc ]
+              make_expansion_page modname_s `Mod url [ t.doc; expansion_doc ]
                 items
             in
             (link, status, Some page, Some expansion_doc)
@@ -1364,10 +1357,10 @@ module Make (Syntax : SYNTAX) = struct
         ++ if Syntax.Mod.close_tag_semicolon then O.txt ";" else O.noop
       in
       let modexpr =
-        attach_expansion ~prefix ~suffix ~status expansion summary
+        attach_expansion ~id:("module-" ^ modname_s) ~prefix ~suffix ~status
+          expansion summary
       in
       let content = modexpr in
-
       let attr = [ "module" ] in
       let anchor = path_to_id t.id in
       let doc = Comment.synopsis ~decl_doc:t.doc ~expansion_doc in
@@ -1397,7 +1390,7 @@ module Make (Syntax : SYNTAX) = struct
       | Alias (mod_path, _) -> Link.from_path (mod_path :> Paths.Path.t)
       | ModuleType mt -> mty mt
 
-    and module_type_manifest ~subst modname id doc manifest prefix =
+    and module_type_manifest ~subst modname id doc manifest =
       let expansion =
         match manifest with
         | None -> None
@@ -1414,30 +1407,30 @@ module Make (Syntax : SYNTAX) = struct
             in
             (link, Some page, Some expansion_doc)
       in
+      let suffix =
+        if Syntax.Mod.close_tag_semicolon then O.txt ";" else O.noop
+      in
+      let prefix =
+        O.keyword "module" ++ O.txt " " ++ O.keyword "type" ++ O.txt " "
+        ++ modname
+        ++ if subst then O.txt " :=" ++ O.sp else O.txt " =" ++ O.sp
+      in
       let summary =
         match manifest with
         | None -> O.noop
-        | Some expr ->
-            O.ignore (prefix ++ modname)
-            ++ (if subst then O.txt " :=" ++ O.sp else O.txt " =" ++ O.sp)
-            ++ mty expr
+        | Some expr -> prefix ++ mty expr ++ suffix
       in
-      (modname, expansion_doc, attach_expansion expansion summary)
+      ( expansion_doc,
+        attach_expansion
+          ~id:("moduletype-" ^ Paths.Identifier.name id)
+          ~prefix ~suffix expansion summary )
 
     and module_type (t : Odoc_model.Lang.ModuleType.t) =
-      let prefix =
-        O.keyword "module" ++ O.txt " " ++ O.keyword "type" ++ O.txt " "
-      in
       let modname = Paths.Identifier.name t.id in
-      let modname, expansion_doc, mty =
-        module_type_manifest ~subst:false modname t.id t.doc t.expr prefix
+      let expansion_doc, mty =
+        module_type_manifest ~subst:false modname t.id t.doc t.expr
       in
-      let content =
-        O.documentedSrc (prefix ++ modname)
-        @ mty
-        @ O.documentedSrc
-            (if Syntax.Mod.close_tag_semicolon then O.txt ";" else O.noop)
-      in
+      let content = mty in
       let attr = [ "module-type" ] in
       let anchor = path_to_id t.id in
       let doc = Comment.synopsis ~decl_doc:t.doc ~expansion_doc in

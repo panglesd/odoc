@@ -517,12 +517,30 @@ div.def-doc>*:first-child {
 .module.closed .inlined_expansion {
     display: none;
 }
-
 .inlined_expansion {
   padding-top: 1em;
-  margin-left: 10px;
-  padding-left: 10px;
+  padding-bottom: 1px;
+  padding-left: 20px;
   background-color: var(--main-background);
+}
+details[open] {
+  position:relative;
+  margin-right: calc(-0.5em - 4px);
+}
+details[open]::after {
+  z-index: -100;
+  display: block;
+  content: " ";
+  position: absolute;
+  border-radius: 0 1ex 1ex 0;
+  margin-top: -0.35em;
+  margin-bottom: -0.35em;
+  right: -20px;
+  top: 1px;
+  bottom: 1px;
+  width: 15px;
+  background: var(--spec-details-after-background, rgba(0, 4, 15, 0.05));
+  box-shadow: 0 0px 0 1px var(--spec-details-after-shadow, rgba(204, 204, 204, 0.53));
 }
 
 details[open] > summary > .opt1 {

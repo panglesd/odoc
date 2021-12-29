@@ -109,6 +109,7 @@ and Alternative : sig
     suffix : Source.t;
     expansion : DocumentedSrc.t;
     url : Url.Path.t;
+    id : string;
   }
 
   type t = Expansion of expansion

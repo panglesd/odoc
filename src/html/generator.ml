@@ -28,15 +28,28 @@ type phrasing = Html_types.phrasing
 
 type non_link_phrasing = Html_types.phrasing_without_interactive
 
-let mk_anchor_link id =
-  [ Html.a ~a:[ Html.a_href ("#" ^ id); Html.a_class [ "anchor" ] ] [] ]
+let mk_anchor_link ~nesting id =
+  [
+    Html.a
+      ~a:
+        [
+          Html.a_href ("#" ^ String.concat "." (List.rev @@ (id :: nesting)));
+          Html.a_class [ "anchor" ];
+        ]
+      [];
+  ]
 
-let mk_anchor anchor =
+let mk_anchor ~nesting anchor =
   match anchor with
   | None -> ([], [])
   | Some { Odoc_document.Url.Anchor.anchor; _ } ->
-      let link = mk_anchor_link anchor in
-      let attrib = [ Html.a_id anchor; Html.a_class [ "anchored" ] ] in
+      let link = mk_anchor_link ~nesting anchor in
+      let attrib =
+        [
+          Html.a_id (String.concat "." (List.rev @@ (anchor :: nesting)));
+          Html.a_class [ "anchored" ];
+        ]
+      in
       (attrib, link)
 
 let class_ (l : Class.t) = if l = [] then [] else [ Html.a_class l ]
@@ -143,10 +156,12 @@ and inline_nolink ?(emph_level = 0) (l : Inline.t) :
   in
   Utils.list_concat_map ~f:one l
 
-let heading ~resolve (h : Heading.t) =
+let heading ~nesting ~resolve (h : Heading.t) =
   let a, anchor =
     match h.label with
-    | Some id -> ([ Html.a_id id ], mk_anchor_link id)
+    | Some id ->
+        ( [ Html.a_id (String.concat "." (List.rev @@ (id :: nesting))) ],
+          mk_anchor_link ~nesting id )
     | None -> ([], [])
   in
   let content = inline ~resolve h.title in
@@ -212,7 +227,8 @@ let spec_doc_div ~resolve = function
       let a = [ Html.a_class [ "spec-doc" ] ] in
       [ div ~a (flow_to_item @@ block ~resolve docs) ]
 
-let rec documentedSrc ~resolve (t : DocumentedSrc.t) : item Html.elt list =
+let rec documentedSrc ~nesting ~resolve (t : DocumentedSrc.t) :
+    item Html.elt list =
   let open DocumentedSrc in
   let take_code l =
     Doctree.Take.until l ~classify:(function
@@ -229,14 +245,14 @@ let rec documentedSrc ~resolve (t : DocumentedSrc.t) : item Html.elt list =
             [ { DocumentedSrc.attrs; anchor; code = `N code; doc; markers } ]
       | _ -> Stop_and_keep)
   in
-  let rec to_html t : item Html.elt list =
+  let rec to_html ~(nesting : string list) t : item Html.elt list =
     match t with
     | [] -> []
     | Code _ :: _ ->
         let code, _, rest = take_code t in
-        source (inline ~resolve) code @ to_html rest
-    | Alternative (Expansion { expansion; summary; prefix; suffix; _ }) :: rest
-      ->
+        source (inline ~resolve) code @ to_html ~nesting rest
+    | Alternative (Expansion { expansion; summary; prefix; suffix; id; _ })
+      :: rest ->
         let summary_html1 =
           Html.span
             ~a:[ Html.a_class [ "opt1" ] ]
@@ -249,20 +265,21 @@ let rec documentedSrc ~resolve (t : DocumentedSrc.t) : item Html.elt list =
         in
         let summary = Html.summary ~a:[] [ summary_html1; summary_html2 ] in
         let expansion_html =
-          (div ~a:[ Html.a_class [ "inlined_expansion" ] ] @@ to_html expansion
+          (div ~a:[ Html.a_class [ "inlined_expansion" ] ]
+           @@ to_html ~nesting:(id :: nesting) expansion
             :> any Html.elt)
         in
         let suffix = source (inline ~resolve) suffix in
         let details = Html.details ~a:[] summary (expansion_html :: suffix) in
-        details :: to_html rest
-    | Subpage subp :: _ -> subpage ~resolve subp
+        details :: to_html ~nesting rest
+    | Subpage subp :: _ -> subpage ~nesting ~resolve subp
     | (Documented _ | Nested _) :: _ ->
         let l, _, rest = take_descr t in
         let one { DocumentedSrc.attrs; anchor; code; doc; markers } =
           let content =
             match code with
             | `D code -> (inline ~resolve code :> item Html.elt list)
-            | `N n -> to_html n
+            | `N n -> to_html ~nesting n
           in
           let doc =
             match doc with
@@ -283,21 +300,21 @@ let rec documentedSrc ~resolve (t : DocumentedSrc.t) : item Html.elt list =
                       ]);
                 ]
           in
-          let a, link = mk_anchor anchor in
+          let a, link = mk_anchor ~nesting anchor in
           let content =
             let c = link @ content in
             Html.td ~a:(class_ attrs) (c :> any Html.elt list)
           in
           Html.tr ~a (content :: doc)
         in
-        Html.table (List.map one l) :: to_html rest
+        Html.table (List.map one l) :: to_html ~nesting rest
   in
-  to_html t
+  to_html ~nesting t
 
-and subpage ~resolve (subp : Subpage.t) : item Html.elt list =
-  items ~resolve subp.content.items
+and subpage ~nesting ~resolve (subp : Subpage.t) : item Html.elt list =
+  items ~nesting ~resolve subp.content.items
 
-and items ~resolve l : item Html.elt list =
+and items ~nesting ~resolve l : item Html.elt list =
   let rec walk_items acc (t : Item.t list) : item Html.elt list =
     let continue_with rest elts =
       (walk_items [@tailcall]) (List.rev_append elts acc) rest
@@ -313,7 +330,7 @@ and items ~resolve l : item Html.elt list =
         let content = flow_to_item @@ block ~resolve text in
         (continue_with [@tailcall]) rest content
     | Heading h :: rest ->
-        (continue_with [@tailcall]) rest [ heading ~resolve h ]
+        (continue_with [@tailcall]) rest [ heading ~nesting ~resolve h ]
     | Include { attr; anchor; doc; content = { summary; status; content } }
       :: rest ->
         let doc = spec_doc_div ~resolve doc in
@@ -326,7 +343,7 @@ and items ~resolve l : item Html.elt list =
           let details ~open' =
             let open' = if open' then [ Html.a_open () ] else [] in
             let summary =
-              let anchor_attrib, anchor_link = mk_anchor anchor in
+              let anchor_attrib, anchor_link = mk_anchor ~nesting anchor in
               let a = spec_class attr @ anchor_attrib in
               Html.summary ~a @@ anchor_link @ source (inline ~resolve) summary
             in
@@ -341,9 +358,9 @@ and items ~resolve l : item Html.elt list =
         let inc = [ Html.div ~a:[ Html.a_class a_class ] (doc @ content) ] in
         (continue_with [@tailcall]) rest inc
     | Declaration { Item.attr; anchor; content; doc } :: rest ->
-        let anchor_attrib, anchor_link = mk_anchor anchor in
+        let anchor_attrib, anchor_link = mk_anchor ~nesting anchor in
         let a = spec_class attr @ anchor_attrib in
-        let content = anchor_link @ documentedSrc ~resolve content in
+        let content = anchor_link @ documentedSrc ~nesting ~resolve content in
         let spec =
           let doc = spec_doc_div ~resolve doc in
           [ div ~a:[ Html.a_class [ "odoc-spec" ] ] (div ~a content :: doc) ]
@@ -408,8 +425,8 @@ module Page = struct
     let resolve = Link.Current url in
     let i = Doctree.Shift.compute ~on_sub i in
     let toc = Toc.from_items ~resolve ~path:url i in
-    let header = items ~resolve header in
-    let content = (items ~resolve i :> any Html.elt list) in
+    let header = items ~nesting:[] ~resolve header in
+    let content = (items ~nesting:[] ~resolve i :> any Html.elt list) in
     let page =
       Tree.make ?theme_uri ?support_uri ~indent ~header ~toc ~url title content
         subpages
