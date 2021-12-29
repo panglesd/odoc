@@ -999,19 +999,25 @@ module Make (Syntax : SYNTAX) = struct
 
     let rec class_decl (cd : Odoc_model.Lang.Class.decl) =
       match cd with
-      | ClassType expr -> class_type_expr expr
+      | ClassType expr -> (O.noop, class_type_expr expr)
       (* TODO: factorize the following with [type_expr] *)
       | Arrow (None, src, dst) ->
-          O.span
-            (type_expr ~needs_parentheses:true src
-            ++ O.txt " " ++ Syntax.Type.arrow)
-          ++ O.txt " " ++ class_decl dst
+          let arrow =
+            O.span
+              (type_expr ~needs_parentheses:true src
+              ++ O.txt " " ++ Syntax.Type.arrow)
+            ++ O.txt " "
+          and arrow2, tot = class_decl dst in
+          (arrow ++ arrow2, arrow ++ tot)
       | Arrow (Some lbl, src, dst) ->
-          O.span
-            (label lbl ++ O.txt ":"
-            ++ type_expr ~needs_parentheses:true src
-            ++ O.txt " " ++ Syntax.Type.arrow)
-          ++ O.txt " " ++ class_decl dst
+          let arrow =
+            O.span
+              (label lbl ++ O.txt ":"
+              ++ type_expr ~needs_parentheses:true src
+              ++ O.txt " " ++ Syntax.Type.arrow)
+            ++ O.txt " "
+          and arrow2, tot = class_decl dst in
+          (arrow ++ arrow2, arrow ++ tot)
 
     let class_ (t : Odoc_model.Lang.Class.t) =
       let name = Paths.Identifier.name t.id in
@@ -1022,26 +1028,32 @@ module Make (Syntax : SYNTAX) = struct
 
       let cname, expansion, expansion_doc =
         match t.expansion with
-        | None -> (O.documentedSrc @@ O.txt name, None, None)
+        | None -> (O.txt name, None, None)
         | Some csig ->
             let expansion_doc, items = class_signature csig in
             let url = Url.Path.from_identifier t.id in
             let page =
               make_expansion_page name `Class url [ t.doc; expansion_doc ] items
             in
-            ( O.documentedSrc @@ path url [ inline @@ Text name ],
-              Some page,
-              Some expansion_doc )
+            (path url [ inline @@ Text name ], Some page, Some expansion_doc)
       in
+      let arrow, class_decl = class_decl t.type_ in
+      let prefix =
+        O.keyword "class" ++ O.txt " " ++ virtual_ ++ params ++ O.txt " "
+        ++ cname
+        ++ O.txt Syntax.Type.annotation_separator
+        ++ arrow ++ O.keyword "object"
+      and suffix = O.keyword "end" in
       let summary =
-        O.txt Syntax.Type.annotation_separator ++ class_decl t.type_
+        O.keyword "class" ++ O.txt " " ++ virtual_ ++ params ++ O.txt " "
+        ++ cname
+        ++ O.txt Syntax.Type.annotation_separator
+        ++ class_decl
       in
-      let cd = attach_expansion expansion summary in
-      let content =
-        O.documentedSrc
-          (O.keyword "class" ++ O.txt " " ++ virtual_ ++ params ++ O.txt " ")
-        @ cname @ cd
+      let cd =
+        attach_expansion expansion summary ~prefix ~suffix ~id:("class-" ^ name)
       in
+      let content = cd in
       let attr = [ "class" ] in
       let anchor = path_to_id t.id in
       let doc = Comment.synopsis ~decl_doc:t.doc ~expansion_doc in
