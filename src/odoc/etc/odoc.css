@@ -23,7 +23,7 @@
   --target-background: rgba(187, 239, 253, 0.3);
   --target-shadow: rgba(187, 239, 253, 0.8);
   --pre-border-color: #eee;
-  --code-background: #f6f8fa;
+  --code-background: rgba(80,110, 150,0.05);  /* corresponds to #f6f8fa on white background */
 
   --li-code-background: #f6f8fa;
   --li-code-color: #0d2b3e;
@@ -41,7 +41,7 @@
 
 .dark:root {
   --main-background: #202020;
-  --code-background: #222;
+  --code-background: rgba(64,64,64,0.05); /* Appear as #222 on a #202020 background */
   --line-numbers-background: rgba(0, 0, 0, 0.125);
   --navbar-background: #202020;
 
@@ -77,7 +77,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --main-background: #202020;
-    --code-background: #333;
+    --code-background: rgba(220,220,220,0.1); /* Appear as #333 in a #202020 background */
     --line-numbers-background: rgba(0, 0, 0, 0.125);
     --navbar-background: #202020;
 
@@ -522,7 +522,7 @@ div.def-doc>*:first-child {
   padding-top: 1em;
   padding-bottom: 1px;
   padding-left: 20px;
-  background-color: var(--main-background);
+  /* background-color: var(--main-background); */
 }
 
 .spec > details[open] {
