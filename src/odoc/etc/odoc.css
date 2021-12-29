@@ -517,16 +517,19 @@ div.def-doc>*:first-child {
 .module.closed .inlined_expansion {
     display: none;
 }
+
 .inlined_expansion {
   padding-top: 1em;
   padding-bottom: 1px;
   padding-left: 20px;
   background-color: var(--main-background);
 }
-details[open] {
+
+.spec > details[open] {
   position:relative;
   margin-right: calc(-0.5em - 4px);
 }
+
 details[open]::after {
   z-index: -100;
   display: block;
