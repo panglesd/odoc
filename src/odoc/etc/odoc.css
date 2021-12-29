@@ -510,6 +510,29 @@ div.def-doc>*:first-child {
   right: -29px;
 }
 
+.module.open .summary {
+    display: none;
+}
+
+.module.closed .inlined_expansion {
+    display: none;
+}
+
+.inlined_expansion {
+  padding-top: 1em;
+  margin-left: 10px;
+  padding-left: 10px;
+  background-color: var(--main-background);
+}
+
+details[open] > summary > .opt1 {
+  display:none;
+}
+
+details:not([open]) > summary > .opt2 {
+  display:none;
+}
+
 /* Records and variants FIXME */
 
 div.def table {

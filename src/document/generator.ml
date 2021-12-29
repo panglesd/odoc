@@ -67,19 +67,20 @@ let path_to_id path =
   | Error _ -> None
   | Ok url -> Some url
 
-let attach_expansion ?(status = `Default) (eq, o, e) page text =
+let attach_expansion ?(prefix = O.noop) ?(suffix = O.noop) ?(status = `Default)
+    page text =
   match page with
   | None -> O.documentedSrc text
   | Some (page : Page.t) ->
+      let prefix = O.render prefix and suffix = O.render suffix in
       let url = page.url in
       let summary = O.render text in
-      let expansion =
-        O.documentedSrc (O.txt eq ++ O.keyword o)
-        @ DocumentedSrc.[ Subpage { status; content = page } ]
-        @ O.documentedSrc (O.keyword e)
-      in
+      let expansion = DocumentedSrc.[ Subpage { status; content = page } ] in
       DocumentedSrc.
-        [ Alternative (Expansion { summary; url; status; expansion }) ]
+        [
+          Alternative
+            (Expansion { summary; url; status; expansion; prefix; suffix });
+        ]
 
 (** Returns the preamble as an item. Stop the preamble at the first heading. The
     rest is inserted into [items]. *)
@@ -1035,11 +1036,7 @@ module Make (Syntax : SYNTAX) = struct
       let summary =
         O.txt Syntax.Type.annotation_separator ++ class_decl t.type_
       in
-      let cd =
-        attach_expansion
-          (Syntax.Type.annotation_separator, "object", "end")
-          expansion summary
-      in
+      let cd = attach_expansion expansion summary in
       let content =
         O.documentedSrc
           (O.keyword "class" ++ O.txt " " ++ virtual_ ++ params ++ O.txt " ")
@@ -1070,7 +1067,7 @@ module Make (Syntax : SYNTAX) = struct
               Some expansion_doc )
       in
       let summary = O.txt " = " ++ class_type_expr t.expr in
-      let expr = attach_expansion (" = ", "object", "end") expansion summary in
+      let expr = attach_expansion expansion summary in
       let content =
         O.documentedSrc
           (O.keyword "class" ++ O.txt " " ++ O.keyword "type" ++ O.txt " "
@@ -1202,8 +1199,17 @@ module Make (Syntax : SYNTAX) = struct
               DocumentedSrc.
                 [
                   Alternative
-                    (Expansion { status = `Default; summary; url; expansion });
+                    (Expansion
+                       {
+                         status = `Default;
+                         summary;
+                         url;
+                         expansion;
+                         prefix = O.render O.noop;
+                         suffix = O.render O.noop;
+                       });
                 ]
+              (* TODO *)
             in
             (modname, type_with_expansion)
       in
@@ -1344,18 +1350,24 @@ module Make (Syntax : SYNTAX) = struct
             in
             (link, status, Some page, Some expansion_doc)
       in
-      let intro = O.keyword "module" ++ O.txt " " ++ modname in
-      let summary = O.ignore intro ++ mdexpr_in_decl t.id t.type_ in
+      let prefix =
+        O.keyword "module" ++ O.txt " " ++ modname
+        ++ O.txt Syntax.Type.annotation_separator
+        ++ O.keyword "sig"
+      and suffix =
+        O.keyword "end"
+        ++ if Syntax.Mod.close_tag_semicolon then O.txt ";" else O.noop
+      in
+      let summary =
+        O.keyword "module" ++ O.txt " " ++ modname
+        ++ mdexpr_in_decl t.id t.type_
+        ++ if Syntax.Mod.close_tag_semicolon then O.txt ";" else O.noop
+      in
       let modexpr =
-        attach_expansion ~status
-          (Syntax.Type.annotation_separator, "sig", "end")
-          expansion summary
+        attach_expansion ~prefix ~suffix ~status expansion summary
       in
-      let content =
-        O.documentedSrc intro @ modexpr
-        @ O.documentedSrc
-            (if Syntax.Mod.close_tag_semicolon then O.txt ";" else O.noop)
-      in
+      let content = modexpr in
+
       let attr = [ "module" ] in
       let anchor = path_to_id t.id in
       let doc = Comment.synopsis ~decl_doc:t.doc ~expansion_doc in
@@ -1410,9 +1422,7 @@ module Make (Syntax : SYNTAX) = struct
             ++ (if subst then O.txt " :=" ++ O.sp else O.txt " =" ++ O.sp)
             ++ mty expr
       in
-      ( modname,
-        expansion_doc,
-        attach_expansion (" = ", "sig", "end") expansion summary )
+      (modname, expansion_doc, attach_expansion expansion summary)
 
     and module_type (t : Odoc_model.Lang.ModuleType.t) =
       let prefix =

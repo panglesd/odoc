@@ -105,6 +105,8 @@ and Alternative : sig
   type expansion = {
     status : [ `Inline | `Open | `Closed | `Default ];
     summary : Source.t;
+    prefix : Source.t;
+    suffix : Source.t;
     expansion : DocumentedSrc.t;
     url : Url.Path.t;
   }

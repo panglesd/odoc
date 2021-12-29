@@ -217,7 +217,6 @@ let rec documentedSrc ~resolve (t : DocumentedSrc.t) : item Html.elt list =
   let take_code l =
     Doctree.Take.until l ~classify:(function
       | Code code -> Accum code
-      | Alternative (Expansion { summary; _ }) -> Accum summary
       | _ -> Stop_and_keep)
   in
   let take_descr l =
@@ -233,9 +232,29 @@ let rec documentedSrc ~resolve (t : DocumentedSrc.t) : item Html.elt list =
   let rec to_html t : item Html.elt list =
     match t with
     | [] -> []
-    | (Code _ | Alternative _) :: _ ->
+    | Code _ :: _ ->
         let code, _, rest = take_code t in
         source (inline ~resolve) code @ to_html rest
+    | Alternative (Expansion { expansion; summary; prefix; suffix; _ }) :: rest
+      ->
+        let summary_html1 =
+          Html.span
+            ~a:[ Html.a_class [ "opt1" ] ]
+            (source (inline ~resolve) @@ summary)
+        in
+        let summary_html2 =
+          Html.span
+            ~a:[ Html.a_class [ "opt2" ] ]
+            (source (inline ~resolve) prefix)
+        in
+        let summary = Html.summary ~a:[] [ summary_html1; summary_html2 ] in
+        let expansion_html =
+          (div ~a:[ Html.a_class [ "inlined_expansion" ] ] @@ to_html expansion
+            :> any Html.elt)
+        in
+        let suffix = source (inline ~resolve) suffix in
+        let details = Html.details ~a:[] summary (expansion_html :: suffix) in
+        details :: to_html rest
     | Subpage subp :: _ -> subpage ~resolve subp
     | (Documented _ | Nested _) :: _ ->
         let l, _, rest = take_descr t in
