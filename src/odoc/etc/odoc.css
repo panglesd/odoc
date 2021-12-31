@@ -489,7 +489,7 @@ div.def-doc>*:first-child {
   box-shadow: 0 0px 0 1px var(--spec-details-after-shadow, rgba(204, 204, 204, 0.53));
 }
 
-.odoc-include summary {
+.odoc-include summary.include {
   position: relative;
   margin-bottom: 20px;
   cursor: pointer;
@@ -510,18 +510,15 @@ div.def-doc>*:first-child {
   right: -29px;
 }
 
-.module.open .summary {
-    display: none;
-}
-
-.module.closed .inlined_expansion {
-    display: none;
-}
-
 .inlined_expansion {
   padding-top: 1em;
   padding-bottom: 1px;
   padding-left: 20px;
+  /* background-color: var(--main-background); */
+}
+
+.inlined-expansion h2 {
+  font-size: 0.8em;
   /* background-color: var(--main-background); */
 }
 
@@ -546,11 +543,11 @@ details[open]::after {
   box-shadow: 0 0px 0 1px var(--spec-details-after-shadow, rgba(204, 204, 204, 0.53));
 }
 
-details[open] > summary > .opt1 {
+details[open] > summary > .closed-summary {
   display:none;
 }
 
-details:not([open]) > summary > .opt2 {
+details:not([open]) > summary > .opened-summary {
   display:none;
 }
 

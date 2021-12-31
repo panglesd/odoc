@@ -255,17 +255,17 @@ let rec documentedSrc ~nesting ~resolve (t : DocumentedSrc.t) :
       :: rest ->
         let summary_html1 =
           Html.span
-            ~a:[ Html.a_class [ "opt1" ] ]
+            ~a:[ Html.a_class [ "closed-summary" ] ]
             (source (inline ~resolve) @@ summary)
         in
         let summary_html2 =
           Html.span
-            ~a:[ Html.a_class [ "opt2" ] ]
+            ~a:[ Html.a_class [ "opened-summary" ] ]
             (source (inline ~resolve) prefix)
         in
         let summary = Html.summary ~a:[] [ summary_html1; summary_html2 ] in
         let expansion_html =
-          (div ~a:[ Html.a_class [ "inlined_expansion" ] ]
+          (div ~a:[ Html.a_class [ "inlined-expansion" ] ]
            @@ to_html ~nesting:(id :: nesting) expansion
             :> any Html.elt)
         in
