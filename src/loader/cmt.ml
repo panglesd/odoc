@@ -323,7 +323,7 @@ let read_class_declaration env parent cld =
   let open Class in
   let id = Env.find_class_identifier env cld.ci_id_class in
   let container = (parent : Identifier.Signature.t :> Identifier.LabelParent.t) in
-  let doc = Doc_attr.attached_no_tag container cld.ci_attributes in
+  let doc, status = Doc_attr.attached Odoc_model.Semantics.Expect_status container cld.ci_attributes in
     Cmi.mark_class_declaration cld.ci_decl;
     let virtual_ = (cld.ci_virt = Virtual) in
     let clparams =
@@ -335,7 +335,7 @@ let read_class_declaration env parent cld =
         clparams
     in
     let type_ = read_class_expr env (id :> Identifier.ClassSignature.t) clparams cld.ci_expr in
-      { id; doc; virtual_; params; type_; expansion = None }
+      { id; doc; virtual_; params; type_; expansion = None; status }
 
 let read_class_declarations env parent clds =
   let container = (parent : Identifier.Signature.t :> Identifier.LabelParent.t) in
@@ -409,7 +409,7 @@ and read_module_expr_maybe_canonical env parent container ~canonical mexpr =
   let open ModuleType in
   match (canonical, mexpr.mod_desc) with
   | None, Tmod_structure str ->
-      let sg, canonical =
+      let sg, (canonical, _status) =
         read_structure Odoc_model.Semantics.Expect_canonical env parent str
       in
       (Signature sg, canonical)
@@ -427,7 +427,7 @@ and read_module_binding env parent mb =
 #endif
   let id = (id :> Identifier.Module.t) in
   let container = (parent : Identifier.Signature.t :> Identifier.LabelParent.t) in
-  let doc, canonical = Doc_attr.attached Odoc_model.Semantics.Expect_canonical container mb.mb_attributes in
+  let doc, (canonical, status) = Doc_attr.attached Odoc_model.Semantics.Expect_canonical container mb.mb_attributes in
   let type_, canonical =
     match unwrap_module_expr_desc mb.mb_expr.mod_desc with
     | Tmod_ident (p, _) -> (Alias (Env.Path.read_module env p, None), canonical)
@@ -450,7 +450,7 @@ and read_module_binding env parent mb =
     | _ -> false
 #endif
   in
-  Some {id; doc; type_; canonical; hidden; }
+  Some {id; doc; type_; canonical; hidden; status}
 
 and read_module_bindings env parent mbs =
   let container = (parent : Identifier.Signature.t :> Identifier.LabelParent.t)
@@ -602,7 +602,7 @@ and read_structure :
 
 let read_implementation root name impl =
   let id = `Root (root, Odoc_model.Names.ModuleName.make_std name) in
-  let sg, canonical =
+  let sg, (canonical, _status) =
     read_structure Odoc_model.Semantics.Expect_canonical Env.empty id impl
   in
   (id, sg, (canonical :> Odoc_model.Paths.Path.Module.t option))

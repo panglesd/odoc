@@ -391,6 +391,7 @@ let module_of_unit : Odoc_model.Lang.Compilation_unit.t -> Component.Module.t =
             type_ = ModuleType (Signature s);
             canonical = unit.canonical;
             hidden = unit.hidden;
+            status = `Inline;
           }
       in
       let ty = Component.Of_Lang.(module_ (empty ()) m) in
@@ -405,6 +406,7 @@ let module_of_unit : Odoc_model.Lang.Compilation_unit.t -> Component.Module.t =
               ModuleType (Signature { items = []; compiled = true; doc = [] });
             canonical = unit.canonical;
             hidden = unit.hidden;
+            status = `Inline;
           }
       in
       let ty = Component.Of_Lang.(module_ (empty ()) m) in
@@ -625,6 +627,7 @@ let add_functor_parameter : Odoc_model.Lang.FunctorParameter.t -> t -> t =
               ModuleType Component.Of_Lang.(module_type_expr (empty ()) n.expr);
             canonical = None;
             hidden = false;
+            status = `Inline;
           }
       in
       add_module
@@ -652,6 +655,7 @@ let add_functor_args' :
               type_ = ModuleType arg.expr;
               canonical = None;
               hidden = false;
+              status = `Inline;
             } )
           :: find_args (`Result parent) res
       | ModuleType.Functor (Unit, res) -> find_args (`Result parent) res
@@ -732,6 +736,7 @@ let rec open_signature : Odoc_model.Lang.Signature.t -> t -> t =
                   doc = t.doc;
                   expr = Some t.manifest;
                   canonical = None;
+                  status = `Inline;
                 }
             in
             add_module_type t.L.ModuleTypeSubstitution.id ty env

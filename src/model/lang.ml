@@ -28,6 +28,7 @@ module rec Module : sig
     doc : Comment.docs;
     type_ : decl;
     canonical : Path.Module.t option;
+    status : [ `Inline | `Closed | `Open | `Default ];
     hidden : bool;
   }
 
@@ -103,6 +104,7 @@ and ModuleType : sig
     id : Identifier.ModuleType.t;
     doc : Comment.docs;
     canonical : Path.ModuleType.t option;
+    status : [ `Inline | `Closed | `Open | `Default ];
     expr : expr option;
   }
 end =
@@ -310,6 +312,7 @@ and Class : sig
     params : TypeDecl.param list;
     type_ : decl;
     expansion : ClassSignature.t option;
+    status : [ `Inline | `Closed | `Open | `Default ];
   }
 end =
   Class
@@ -328,6 +331,7 @@ and ClassType : sig
     params : TypeDecl.param list;
     expr : expr;
     expansion : ClassSignature.t option;
+    status : [ `Inline | `Closed | `Open | `Default ];
   }
 end =
   ClassType

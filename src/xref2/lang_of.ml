@@ -493,6 +493,7 @@ and class_ map parent id c =
     type_ =
       class_decl map (identifier :> Paths.Identifier.Path.ClassType.t) c.type_;
     expansion;
+    status = c.status;
   }
 
 and class_decl map parent c =
@@ -531,6 +532,7 @@ and class_type map parent id c =
         (identifier :> Paths.Identifier.Path.ClassType.t)
         c.expr;
     expansion;
+    status = c.status;
   }
 
 and class_signature map parent sg =
@@ -702,6 +704,7 @@ and module_ map parent id m =
       type_ = module_decl map identifier m.type_;
       canonical = canonical m.canonical;
       hidden = m.hidden;
+      status = m.status;
     }
   with e ->
     let bt = Printexc.get_backtrace () in
@@ -839,6 +842,7 @@ and module_type :
     doc = docs (parent :> Identifier.LabelParent.t) mty.doc;
     canonical = Opt.map (Path.module_type map) mty.canonical;
     expr = Opt.map (module_type_expr map sig_id) mty.expr;
+    status = mty.status;
   }
 
 and module_type_substitution :

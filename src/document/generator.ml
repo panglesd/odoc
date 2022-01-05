@@ -1051,7 +1051,8 @@ module Make (Syntax : SYNTAX) = struct
         ++ class_decl
       in
       let cd =
-        attach_expansion expansion summary ~prefix ~suffix ~id:("class-" ^ name)
+        attach_expansion expansion summary ~prefix ~suffix ~status:t.status
+          ~id:("class-" ^ name)
       in
       let content = cd in
       let attr = [ "class" ] in
@@ -1087,7 +1088,7 @@ module Make (Syntax : SYNTAX) = struct
         ++ class_type_expr t.expr
       in
       let expr =
-        attach_expansion expansion summary ~prefix ~suffix
+        attach_expansion expansion summary ~prefix ~suffix ~status:t.status
           ~id:("classtype-" ^ name)
       in
       let content = expr in
@@ -1215,7 +1216,7 @@ module Make (Syntax : SYNTAX) = struct
               Alternative
                 (Expansion
                    {
-                     status = `Default;
+                     status = `Inline;
                      summary;
                      url;
                      expansion;
@@ -1247,6 +1248,7 @@ module Make (Syntax : SYNTAX) = struct
       let modname = Paths.Identifier.name t.id in
       let expansion_doc, mty =
         module_type_manifest ~subst:true modname t.id t.doc (Some t.manifest)
+          `Inline
       in
       let content = mty in
       let attr = [ "module-type" ] in
@@ -1337,22 +1339,17 @@ module Make (Syntax : SYNTAX) = struct
         | Alias (_, None) -> None
         | ModuleType e -> expansion_of_module_type_expr e
       in
-      let modname, status, expansion, expansion_doc =
+      let modname, expansion, expansion_doc =
         match expansion with
-        | None -> (O.txt modname_s, `Default, None, None)
+        | None -> (O.txt modname_s, None, None)
         | Some (expansion_doc, items) ->
-            let status =
-              match t.type_ with
-              | ModuleType (Signature _) -> `Inline
-              | _ -> `Default
-            in
             let url = Url.Path.from_identifier t.id in
             let link = path url [ inline @@ Text modname_s ] in
             let page =
               make_expansion_page modname_s `Mod url [ t.doc; expansion_doc ]
                 items
             in
-            (link, status, Some page, Some expansion_doc)
+            (link, Some page, Some expansion_doc)
       in
       let prefix =
         O.keyword "module" ++ O.txt " " ++ modname
@@ -1368,8 +1365,8 @@ module Make (Syntax : SYNTAX) = struct
         ++ if Syntax.Mod.close_tag_semicolon then O.txt ";" else O.noop
       in
       let modexpr =
-        attach_expansion ~id:("module-" ^ modname_s) ~prefix ~suffix ~status
-          expansion summary
+        attach_expansion ~id:("module-" ^ modname_s) ~prefix ~suffix
+          ~status:t.status expansion summary
       in
       let content = modexpr in
       let attr = [ "module" ] in
@@ -1401,7 +1398,7 @@ module Make (Syntax : SYNTAX) = struct
       | Alias (mod_path, _) -> Link.from_path (mod_path :> Paths.Path.t)
       | ModuleType mt -> mty mt
 
-    and module_type_manifest ~subst modname id doc manifest =
+    and module_type_manifest ~subst modname id doc manifest status =
       let expansion =
         match manifest with
         | None -> None
@@ -1434,12 +1431,12 @@ module Make (Syntax : SYNTAX) = struct
       ( expansion_doc,
         attach_expansion
           ~id:("moduletype-" ^ Paths.Identifier.name id)
-          ~prefix ~suffix expansion summary )
+          ~prefix ~suffix ~status expansion summary )
 
     and module_type (t : Odoc_model.Lang.ModuleType.t) =
       let modname = Paths.Identifier.name t.id in
       let expansion_doc, mty =
-        module_type_manifest ~subst:false modname t.id t.doc t.expr
+        module_type_manifest ~subst:false modname t.id t.doc t.expr t.status
       in
       let content = mty in
       let attr = [ "module-type" ] in

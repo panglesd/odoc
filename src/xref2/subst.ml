@@ -630,7 +630,12 @@ and module_type s t =
     | Replaced (Path p) -> Some p.p_path
     | Replaced _ -> None
   in
-  { expr; doc = t.doc; canonical = option_bind maybe_path s t.canonical }
+  {
+    expr;
+    doc = t.doc;
+    canonical = option_bind maybe_path s t.canonical;
+    status = t.status;
+  }
 
 and module_type_substitution s t =
   let open Component.ModuleTypeSubstitution in

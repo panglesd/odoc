@@ -69,6 +69,7 @@ module rec Module : sig
     doc : CComment.docs;
     type_ : decl;
     canonical : Cpath.module_ option;
+    status : [ `Inline | `Closed | `Open | `Default ];
     hidden : bool;
   }
 end
@@ -214,6 +215,7 @@ and ModuleType : sig
     doc : CComment.docs;
     canonical : Cpath.module_type option;
     expr : expr option;
+    status : [ `Inline | `Closed | `Open | `Default ];
   }
 end
 
@@ -334,6 +336,7 @@ and Class : sig
     params : TypeDecl.param list;
     type_ : decl;
     expansion : ClassSignature.t option;
+    status : [ `Inline | `Closed | `Open | `Default ];
   }
 end
 
@@ -348,6 +351,7 @@ and ClassType : sig
     params : TypeDecl.param list;
     expr : expr;
     expansion : ClassSignature.t option;
+    status : [ `Inline | `Closed | `Open | `Default ];
   }
 end
 

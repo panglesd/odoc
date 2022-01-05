@@ -233,6 +233,8 @@ let rec documentedSrc ~nesting ~resolve (t : DocumentedSrc.t) :
   let take_code l =
     Doctree.Take.until l ~classify:(function
       | Code code -> Accum code
+      | Alternative (Expansion { summary; status = `Default; _ }) ->
+          Accum summary
       | _ -> Stop_and_keep)
   in
   let take_descr l =
@@ -251,27 +253,37 @@ let rec documentedSrc ~nesting ~resolve (t : DocumentedSrc.t) :
     | Code _ :: _ ->
         let code, _, rest = take_code t in
         source (inline ~resolve) code @ to_html ~nesting rest
-    | Alternative (Expansion { expansion; summary; prefix; suffix; id; _ })
-      :: rest ->
-        let summary_html1 =
-          Html.span
-            ~a:[ Html.a_class [ "closed-summary" ] ]
-            (source (inline ~resolve) @@ summary)
-        in
-        let summary_html2 =
-          Html.span
-            ~a:[ Html.a_class [ "opened-summary" ] ]
-            (source (inline ~resolve) prefix)
-        in
-        let summary = Html.summary ~a:[] [ summary_html1; summary_html2 ] in
-        let expansion_html =
-          (div ~a:[ Html.a_class [ "inlined-expansion" ] ]
-           @@ to_html ~nesting:(id :: nesting) expansion
-            :> any Html.elt)
-        in
-        let suffix = source (inline ~resolve) suffix in
-        let details = Html.details ~a:[] summary (expansion_html :: suffix) in
-        details :: to_html ~nesting rest
+    | Alternative
+        (Expansion { expansion; summary; prefix; suffix; id; status; _ })
+      :: rest -> (
+        match status with
+        | `Default ->
+            let code, _, rest = take_code t in
+            source (inline ~resolve) code @ to_html ~nesting rest
+        | `Inline | `Closed | `Open ->
+            let summary_html1 =
+              Html.span
+                ~a:[ Html.a_class [ "closed-summary" ] ]
+                (source (inline ~resolve) @@ summary)
+            in
+            let summary_html2 =
+              Html.span
+                ~a:[ Html.a_class [ "opened-summary" ] ]
+                (source (inline ~resolve) prefix)
+            in
+            let summary = Html.summary ~a:[] [ summary_html1; summary_html2 ] in
+            let expansion_html =
+              (div ~a:[ Html.a_class [ "inlined-expansion" ] ]
+               @@ to_html ~nesting:(id :: nesting) expansion
+                :> any Html.elt)
+            in
+            let suffix = source (inline ~resolve) suffix in
+            let details =
+              Html.details
+                ~a:(if status = `Open then [ Html.a_open () ] else [])
+                summary (expansion_html :: suffix)
+            in
+            details :: to_html ~nesting rest)
     | Subpage subp :: _ -> subpage ~nesting ~resolve subp
     | (Documented _ | Nested _) :: _ ->
         let l, _, rest = take_descr t in

@@ -11,7 +11,9 @@ type _ handle_internal_tags =
   | Expect_status
       : [ `Default | `Inline | `Open | `Closed ] handle_internal_tags
   | Expect_canonical
-      : [ `Dot of Paths.Path.Module.t * string ] option handle_internal_tags
+      : ([ `Dot of Paths.Path.Module.t * string ] option
+        * [ `Default | `Inline | `Open | `Closed ])
+        handle_internal_tags
   | Expect_none : unit handle_internal_tags
 
 let describe_internal_tag = function
@@ -30,34 +32,53 @@ let warn_root_canonical location =
   Error.raise_warning
   @@ Error.make "Canonical paths must contain a dot, eg. X.Y." location
 
-let rec find_tag f = function
+let rec find_tag f allowed = function
   | [] -> None
   | hd :: tl -> (
       match f hd.Location.value with
       | Some x -> Some (x, hd.location)
       | None ->
-          warn_unexpected_tag hd;
-          find_tag f tl)
+          if not (allowed hd.value) then warn_unexpected_tag hd;
+          find_tag f allowed tl)
 
 let handle_internal_tags (type a) tags : a handle_internal_tags -> a = function
   | Expect_status -> (
       match
         find_tag
           (function (`Inline | `Open | `Closed) as t -> Some t | _ -> None)
+          (function `Inline | `Open | `Closed -> true | _ -> false)
           tags
       with
       | Some (status, _) -> status
       | None -> `Default)
-  | Expect_canonical -> (
-      match find_tag (function `Canonical p -> Some p | _ -> None) tags with
-      | Some (`Root _, location) ->
-          warn_root_canonical location;
-          None
-      | Some ((`Dot _ as p), _) -> Some p
-      | None -> None)
+  | Expect_canonical ->
+      let allowed = function
+        | `Inline | `Open | `Closed | `Canonical _ -> true
+        | _ -> false
+      in
+      let canonical =
+        match
+          find_tag (function `Canonical p -> Some p | _ -> None) allowed tags
+        with
+        | Some (`Root _, location) ->
+            warn_root_canonical location;
+            None
+        | Some ((`Dot _ as p), _) -> Some p
+        | None -> None
+      in
+      let status =
+        match
+          find_tag
+            (function (`Inline | `Open | `Closed) as t -> Some t | _ -> None)
+            allowed tags
+        with
+        | Some (status, _) -> status
+        | None -> `Default
+      in
+      (canonical, status)
   | Expect_none ->
       (* Will raise warnings. *)
-      ignore (find_tag (fun _ -> None) tags);
+      ignore (find_tag (fun _ -> None) (fun _ -> false) tags);
       ()
 
 (* Errors *)

@@ -3,7 +3,9 @@ type _ handle_internal_tags =
   | Expect_status
       : [ `Default | `Inline | `Open | `Closed ] handle_internal_tags
   | Expect_canonical
-      : [ `Dot of Paths.Path.Module.t * string ] option handle_internal_tags
+      : ([ `Dot of Paths.Path.Module.t * string ] option
+        * [ `Default | `Inline | `Open | `Closed ])
+        handle_internal_tags
   | Expect_none : unit handle_internal_tags
 
 type sections_allowed = [ `All | `No_titles | `None ]

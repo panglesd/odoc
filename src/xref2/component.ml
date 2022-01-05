@@ -79,6 +79,7 @@ module rec Module : sig
     doc : CComment.docs;
     type_ : decl;
     canonical : Cpath.module_ option;
+    status : [ `Inline | `Closed | `Open | `Default ];
     hidden : bool;
   }
 end =
@@ -231,6 +232,7 @@ and ModuleType : sig
     doc : CComment.docs;
     canonical : Cpath.module_type option;
     expr : expr option;
+    status : [ `Inline | `Closed | `Open | `Default ];
   }
 end =
   ModuleType
@@ -358,6 +360,7 @@ and Class : sig
     params : TypeDecl.param list;
     type_ : decl;
     expansion : ClassSignature.t option;
+    status : [ `Inline | `Closed | `Open | `Default ];
   }
 end =
   Class
@@ -373,6 +376,7 @@ and ClassType : sig
     params : TypeDecl.param list;
     expr : expr;
     expansion : ClassSignature.t option;
+    status : [ `Inline | `Closed | `Open | `Default ];
   }
 end =
   ClassType
@@ -2067,7 +2071,13 @@ module Of_Lang = struct
   and module_ ident_map m =
     let type_ = module_decl ident_map m.Odoc_model.Lang.Module.type_ in
     let canonical = canonical ident_map m.Odoc_model.Lang.Module.canonical in
-    { Module.doc = docs ident_map m.doc; type_; canonical; hidden = m.hidden }
+    {
+      Module.doc = docs ident_map m.doc;
+      type_;
+      canonical;
+      hidden = m.hidden;
+      status = m.status;
+    }
 
   and with_module_type_substitution ident_map m =
     let open Odoc_model.Lang.ModuleType in
@@ -2212,6 +2222,7 @@ module Of_Lang = struct
       ModuleType.doc = docs ident_map m.doc;
       canonical = option module_type_path ident_map m.canonical;
       expr;
+      status = m.status;
     }
 
   and value ident_map v =
@@ -2241,6 +2252,7 @@ module Of_Lang = struct
       params = c.params;
       type_ = class_decl ident_map c.type_;
       expansion;
+      status = c.status;
     }
 
   and class_decl ident_map c =
@@ -2267,6 +2279,7 @@ module Of_Lang = struct
       params = t.params;
       expr = class_type_expr ident_map t.expr;
       expansion;
+      status = t.status;
     }
 
   and class_signature ident_map sg =
@@ -2334,6 +2347,7 @@ module Of_Lang = struct
       type_ = Alias (manifest, None);
       canonical;
       hidden = true;
+      status = `Inline;
     }
 
   and signature : _ -> Odoc_model.Lang.Signature.t -> Signature.t =
@@ -2440,6 +2454,7 @@ let module_of_functor_argument (arg : FunctorParameter.parameter) =
     type_ = ModuleType arg.expr;
     canonical = None;
     hidden = false;
+    status = `Inline;
   }
 
 (** This is equivalent to {!Lang.extract_signature_doc}. *)
