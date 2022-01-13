@@ -233,6 +233,11 @@ let rec documentedSrc ~nesting ~resolve (t : DocumentedSrc.t) :
   let take_code l =
     Doctree.Take.until l ~classify:(function
       | Code code -> Accum code
+      | _ -> Stop_and_keep)
+  in
+  let take_code_and_summary l =
+    Doctree.Take.until l ~classify:(function
+      | Code code -> Accum code
       | Alternative (Expansion { summary; status = `Default; _ }) ->
           Accum summary
       | _ -> Stop_and_keep)
@@ -254,13 +259,17 @@ let rec documentedSrc ~nesting ~resolve (t : DocumentedSrc.t) :
         let code, _, rest = take_code t in
         source (inline ~resolve) code @ to_html ~nesting rest
     | Alternative
-        (Expansion { expansion; summary; prefix; suffix; id; status; _ })
+        (Expansion { expansion; summary; prefix; suffix; id; status; url })
       :: rest -> (
         match status with
-        | `Default ->
-            let code, _, rest = take_code t in
+        | _ when List.length nesting > 0 ->
+            let code, _, _rest = take_code_and_summary t in
             source (inline ~resolve) code @ to_html ~nesting rest
-        | `Inline | `Closed | `Open ->
+        (* | `Default -> *)
+        (*     let code, _, rest = take_code t in *)
+        (*     source (inline ~resolve) code @ to_html ~nesting rest *)
+        (* | `Inline | `Closed | `Open -> *)
+        | _ ->
             let summary_html1 =
               Html.span
                 ~a:[ Html.a_class [ "closed-summary" ] ]
@@ -272,9 +281,16 @@ let rec documentedSrc ~nesting ~resolve (t : DocumentedSrc.t) :
                 (source (inline ~resolve) prefix)
             in
             let summary = Html.summary ~a:[] [ summary_html1; summary_html2 ] in
+            let href = Link.href ~resolve @@ Link.Url.from_path url in
+            let plus =
+              Html.a
+                ~a:[ Html.a_class [ "plus" ]; Html.a_href href ]
+                [ Html.txt "+" ]
+            in
             let expansion_html =
               (div ~a:[ Html.a_class [ "inlined-expansion" ] ]
                @@ to_html ~nesting:(id :: nesting) expansion
+               @ [ plus ]
                 :> any Html.elt)
             in
             let suffix = source (inline ~resolve) suffix in

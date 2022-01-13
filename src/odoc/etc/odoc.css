@@ -510,15 +510,30 @@ div.def-doc>*:first-child {
   right: -29px;
 }
 
-.inlined_expansion {
+.inlined-expansion {
   padding-top: 1em;
   padding-bottom: 1px;
   padding-left: 20px;
   /* background-color: var(--main-background); */
+  max-height: 400px;
+  overflow:hidden;
+  position:relative;
 }
 
+.inlined-expansion > .plus {
+    display: block;
+    position: absolute;
+    background-image: linear-gradient(transparent, #f6f8fa, #f6f8fa);
+    height:65px;
+    top:335px;
+    font-size: 3em;
+    text-align: center;
+    width:100%;
+    left: 0;
+    color:black;
+}
 .inlined-expansion h2 {
-  font-size: 0.8em;
+  font-size: 1.2em;
   /* background-color: var(--main-background); */
 }
 
