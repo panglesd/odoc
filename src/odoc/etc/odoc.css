@@ -532,6 +532,12 @@ div.def-doc>*:first-child {
     left: 0;
     color:black;
 }
+
+.inlined-expansion h1 {
+  font-size: 1.3em;
+  /* background-color: var(--main-background); */
+}
+
 .inlined-expansion h2 {
   font-size: 1.2em;
   /* background-color: var(--main-background); */
