@@ -33,6 +33,18 @@
     (cat %{js})
     (echo "|js}")))))
 
+(rule
+ (targets odoc_js.ml)
+ (deps
+  (:js etc/odoc.js))
+ (action
+  (with-stdout-to
+   %{targets}
+   (progn
+    (echo "let content = {js|")
+    (cat %{js})
+    (echo "|js}")))))
+
 ; Install theme files for odig.
 
 (install
@@ -40,4 +52,5 @@
  (section share)
  (files
   (etc/odoc.css as odoc-theme/default/odoc.css)
+  (etc/odoc.js as odoc-theme/default/odoc.js)
   (../vendor/highlight.pack.js as odoc-theme/default/highlight.pack.js)))

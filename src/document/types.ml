@@ -108,6 +108,7 @@ and Alternative : sig
     prefix : Source.t;
     suffix : Source.t;
     expansion : DocumentedSrc.t;
+    header : Item.t list;
     url : Url.Path.t;
     id : string;
   }

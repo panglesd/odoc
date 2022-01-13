@@ -7,6 +7,7 @@ let iter_files f ?(without_theme = false) output_directory =
   in
 
   if not without_theme then file "odoc.css" Css_file.content;
+  file "odoc.js" Odoc_js.content;
   file "highlight.pack.js" Highlight_js.content
 
 let write =

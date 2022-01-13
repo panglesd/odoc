@@ -511,12 +511,12 @@ div.def-doc>*:first-child {
 }
 
 .inlined-expansion {
-  padding-top: 1em;
+  /* padding-top: 1em; */
   padding-bottom: 1px;
   padding-left: 20px;
   /* background-color: var(--main-background); */
-  max-height: 400px;
-  overflow:hidden;
+  /* max-height: 400px; */
+  /* overflow:hidden; */
   position:relative;
 }
 
@@ -534,13 +534,25 @@ div.def-doc>*:first-child {
 }
 
 .inlined-expansion h1 {
-  font-size: 1.3em;
+  font-size: 1.5em;
   /* background-color: var(--main-background); */
 }
 
 .inlined-expansion h2 {
   font-size: 1.2em;
   /* background-color: var(--main-background); */
+}
+
+.expansion-details .expansion-details > summary {
+  list-style: none;
+}
+
+.expansion-details .expansion-details > summary > .opened-summary {
+  display: none;
+}
+
+.expansion-details .expansion-details > summary::-webkit-details-marker {
+  display: none;
 }
 
 .spec > details[open] {

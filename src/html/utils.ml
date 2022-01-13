@@ -12,3 +12,11 @@ let rec list_concat_map ?sep ~f = function
       match sep with None -> hd @ tl | Some sep -> hd @ (sep :: tl))
 
 let optional_elt f ?a = function [] -> [] | l -> [ f ?a l ]
+
+let filteri ~f l =
+  let rec aux l i =
+    match l with
+    | [] -> []
+    | t :: q -> if f i t then t :: aux q (i + 1) else aux q (i + 1)
+  in
+  aux l 0

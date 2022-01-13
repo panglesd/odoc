@@ -76,10 +76,12 @@ let attach_expansion ?(id = "") ?(prefix = O.noop) ?(suffix = O.noop)
       let url = page.url in
       let summary = O.render text in
       let expansion = DocumentedSrc.[ Subpage { status; content = page } ] in
+      let header = page.header in
       DocumentedSrc.
         [
           Alternative
-            (Expansion { summary; url; status; expansion; prefix; suffix; id });
+            (Expansion
+               { summary; url; status; expansion; prefix; suffix; id; header });
         ]
 
 (** Returns the preamble as an item. Stop the preamble at the first heading. The
@@ -1220,6 +1222,7 @@ module Make (Syntax : SYNTAX) = struct
                      summary;
                      url;
                      expansion;
+                     header = [];
                      prefix =
                        O.render
                        @@ O.keyword "module" ++ O.txt " " ++ modname

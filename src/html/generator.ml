@@ -259,7 +259,17 @@ let rec documentedSrc ~nesting ~resolve (t : DocumentedSrc.t) :
         let code, _, rest = take_code t in
         source (inline ~resolve) code @ to_html ~nesting rest
     | Alternative
-        (Expansion { expansion; summary; prefix; suffix; id; status; url })
+        (Expansion
+          {
+            expansion = _;
+            summary;
+            prefix;
+            suffix;
+            id = _;
+            status;
+            url;
+            header = _;
+          })
       :: rest -> (
         match status with
         | _ when List.length nesting > 0 ->
@@ -282,21 +292,31 @@ let rec documentedSrc ~nesting ~resolve (t : DocumentedSrc.t) :
             in
             let summary = Html.summary ~a:[] [ summary_html1; summary_html2 ] in
             let href = Link.href ~resolve @@ Link.Url.from_path url in
-            let plus =
-              Html.a
-                ~a:[ Html.a_class [ "plus" ]; Html.a_href href ]
-                [ Html.txt "+" ]
-            in
+            (* let plus = *)
+            (*   Html.a *)
+            (*     ~a:[ Html.a_class [ "plus" ]; Html.a_href href ] *)
+            (*     [ Html.txt "+" ] *)
+            (* in *)
             let expansion_html =
-              (div ~a:[ Html.a_class [ "inlined-expansion" ] ]
-               @@ to_html ~nesting:(id :: nesting) expansion
-               @ [ plus ]
+              (div
+                 ~a:
+                   [
+                     Html.a_class [ "inlined-expansion" ];
+                     Html.a_user_data "src" href;
+                   ]
+                 []
+               (* @@ items ~nesting ~resolve header *)
+               (* @ to_html ~nesting:(id :: nesting) *)
+               (*     (Utils.filteri ~f:(fun i _ -> i < 10) (expansion : t)) *)
+               (* @ [ plus ] *)
                 :> any Html.elt)
             in
             let suffix = source (inline ~resolve) suffix in
             let details =
               Html.details
-                ~a:(if status = `Open then [ Html.a_open () ] else [])
+                ~a:
+                  ((if status = `Open then [ Html.a_open () ] else [])
+                  @ [ Html.a_class [ "expansion-details" ] ])
                 summary (expansion_html :: suffix)
             in
             details :: to_html ~nesting rest)

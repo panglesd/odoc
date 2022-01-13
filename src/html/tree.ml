@@ -19,7 +19,7 @@ module Html = Tyxml.Html
 type uri = Absolute of string | Relative of Odoc_document.Url.Path.t option
 
 let page_creator ?(theme_uri = Relative None) ?(support_uri = Relative None)
-    ~url name header toc content =
+    ?(js_uri = Relative None) ~url name header toc content =
   let path = Link.Path.for_printing url in
 
   let head : Html_types.head Html.elt =
@@ -37,6 +37,7 @@ let page_creator ?(theme_uri = Relative None) ?(support_uri = Relative None)
 
     let odoc_css_uri = file_uri theme_uri "odoc.css" in
     let highlight_js_uri = file_uri support_uri "highlight.pack.js" in
+    let odoc_js_uri = file_uri js_uri "odoc.js" in
 
     Html.head
       (Html.title (Html.txt title_string))
@@ -54,6 +55,7 @@ let page_creator ?(theme_uri = Relative None) ?(support_uri = Relative None)
             ]
           ();
         Html.script ~a:[ Html.a_src highlight_js_uri ] (Html.txt "");
+        Html.script ~a:[ Html.a_src odoc_js_uri; Html.a_defer () ] (Html.txt "");
         Html.script (Html.txt "hljs.initHighlightingOnLoad();");
       ]
   in
