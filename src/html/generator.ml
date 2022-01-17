@@ -280,46 +280,64 @@ let rec documentedSrc ~nesting ~resolve (t : DocumentedSrc.t) :
         (*     source (inline ~resolve) code @ to_html ~nesting rest *)
         (* | `Inline | `Closed | `Open -> *)
         | _ ->
-            let summary_html1 =
+            let summary_closed =
               Html.span
                 ~a:[ Html.a_class [ "closed-summary" ] ]
                 (source (inline ~resolve) @@ summary)
             in
-            let summary_html2 =
+            let summary_open =
               Html.span
                 ~a:[ Html.a_class [ "opened-summary" ] ]
                 (source (inline ~resolve) prefix)
             in
-            let summary = Html.summary ~a:[] [ summary_html1; summary_html2 ] in
+            let summary_source =
+              Format.asprintf "%a" (Tyxml.Html.pp_elt ()) summary_open
+            in
+            (* let summary = Html.summary ~a:[] [ summary_closed; summary_open ] in *)
             let href = Link.href ~resolve @@ Link.Url.from_path url in
             (* let plus = *)
             (*   Html.a *)
             (*     ~a:[ Html.a_class [ "plus" ]; Html.a_href href ] *)
             (*     [ Html.txt "+" ] *)
             (* in *)
+            let suffix =
+              Html.span ~a:[ Html.a_class [ "suffix" ] ]
+              @@ source (inline ~resolve) suffix
+            in
+            let suffix_source =
+              Format.asprintf "%a" (Tyxml.Html.pp_elt ()) suffix
+            in
             let expansion_html =
-              (div
-                 ~a:
-                   [
-                     Html.a_class [ "inlined-expansion" ];
-                     Html.a_user_data "src" href;
-                   ]
-                 []
-               (* @@ items ~nesting ~resolve header *)
-               (* @ to_html ~nesting:(id :: nesting) *)
-               (*     (Utils.filteri ~f:(fun i _ -> i < 10) (expansion : t)) *)
-               (* @ [ plus ] *)
-                :> any Html.elt)
-            in
-            let suffix = source (inline ~resolve) suffix in
-            let details =
-              Html.details
+              Html.span
                 ~a:
-                  ((if status = `Open then [ Html.a_open () ] else [])
-                  @ [ Html.a_class [ "expansion-details" ] ])
-                summary (expansion_html :: suffix)
+                  [
+                    Html.a_class [ "inlined-expansion-information" ];
+                    Html.a_user_data "src" href;
+                    Html.a_user_data "summary" summary_source;
+                    Html.a_user_data "suffix" suffix_source;
+                    Html.a_user_data "openness"
+                      (if status = `Open then "open" else "closed");
+                  ]
+                []
+              (* @@ items ~nesting ~resolve header *)
+              (* @ to_html ~nesting:(id :: nesting) *)
+              (*     (Utils.filteri ~f:(fun i _ -> i < 10) (expansion : t)) *)
+              (* @ [ plus ] *)
             in
-            details :: to_html ~nesting rest)
+            let unfetch_expansion =
+              div
+                ~a:[ Html.a_class [ "unfetched-expansion" ] ]
+                [ summary_closed; expansion_html ]
+            in
+            (* let details = *)
+            (*   Html.details *)
+            (*     ~a: *)
+            (*       ((if status = `Open then [ Html.a_open () ] else []) *)
+            (*       @ [ Html.a_class [ "expansion-details" ] ]) *)
+            (*     summary (expansion_html :: suffix) *)
+            (* in *)
+            (* details :: to_html ~nesting rest) *)
+            unfetch_expansion :: to_html ~nesting rest)
     | Subpage subp :: _ -> subpage ~nesting ~resolve subp
     | (Documented _ | Nested _) :: _ ->
         let l, _, rest = take_descr t in
