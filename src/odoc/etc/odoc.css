@@ -777,41 +777,33 @@ td.def-doc *:first-child {
   text-decoration: underline;
 }
 
-.TYPE, .LET, .IN {
+.VAL, .TYPE, .LET, .REC, .IN, .OPEN, .NONREC, .MODULE, .METHOD, .LETOP, .INHERIT, .INCLUDE, .FUNCTOR, .EXTERNAL, .CONSTRAINT, .ASSERT, .AND {
   font-weight: bold;
-  color:#C8AD7F
+  color:#C8AD7F;
 }
 
-.MATCH, .WHEN, .IF, .ELSE, .THEN, .WITH {
+.WITH, .WHILE, .WHEN, .VIRTUAL, .TRY, .TO, .THEN, .STRUCT, .SIG, .PRIVATE, .OF, .NEW, .MUTABLE, .MATCH, .LAZY, .IF, .FUNCTION, .FUN, .FOR, .EXCEPTION, .ELSE, .TO, .DOWNTO, .DO, .DONE, .BEGIN, .AS {
   color: blue;
 }
 
-.AMPERAMPER {
-  color: brown;
+.TRUE, .FALSE {
+  color: green;
 }
 
-.OF {
-  color: purple;
-}
-
-.failwith {
+.failwith, .INT, .SEMISEMI {
   color: red;
 }
 
-.STRING {
-  color:orange;
+.STRING, .CHAR {
+  color: darkgoldenrod;
 }
+
+.DOCSTRING {
+  color: orange;
+}
+
 .COMMENT {
   color: grey;
-}
-.str_item:hover {
-  background-color: lightyellow
-}
-.INT {
-  color: darkred;
-}
-.SEMISEMI {
-  color: maroon;
 }
 
 .source_link {
