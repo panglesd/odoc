@@ -43,6 +43,7 @@ let rec project_id :
         proj shape parent Kind.Class_type (ClassTypeName.to_string name)
     | `Page _ | `LeafPage _ | `Label _ | `CoreType _ | `CoreException _
     | `Constructor _ | `Field _ | `Method _ | `InstanceVariable _ | `Parameter _
+    | `SourceParent _
     | `Result _ ->
         (* Not represented in shapes. *)
         None

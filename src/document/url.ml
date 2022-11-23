@@ -8,7 +8,8 @@ let functor_arg_pos : Odoc_model.Paths.Identifier.FunctorParameter.t -> int =
   fun { iv = `Parameter (p, _); _ } ->
     let rec inner_sig = function
       | `Result { iv = p; _ } -> 1 + inner_sig p
-      | `Module _ | `ModuleType _ | `Root _ | `Parameter _ -> 1
+      | `SourceParent _ | `Module _ | `ModuleType _ | `Root _ | `Parameter _ ->
+          1
     in
     inner_sig p.iv
 
@@ -180,6 +181,7 @@ module Path = struct
         let page = ClassTypeName.to_string name in
         mk ~parent kind page
     | { iv = `Result p; _ } -> from_identifier (p :> source)
+    | { iv = `SourceParent p; _ } -> from_identifier (p :> source)
 
   let from_identifier p =
     from_identifier
@@ -287,7 +289,9 @@ module Anchor = struct
         Ok { page; kind = `LeafPage; anchor = "" }
     (* For all these identifiers, page names and anchors are the same *)
     | {
-        iv = `Parameter _ | `Result _ | `ModuleType _ | `Class _ | `ClassType _;
+        iv =
+          ( `Parameter _ | `Result _ | `ModuleType _ | `Class _ | `ClassType _
+          | `SourceParent _ );
         _;
       } as p ->
         Ok (anchorify_path @@ Path.from_identifier p)
@@ -374,10 +378,10 @@ module Anchor = struct
 
   let source_file_from_identifier ~ext id (loc : Odoc_model.Location_.span) =
     let kind = `SourceLine in
-    match Identifier.root id with
+    match Identifier.source_parent id with
     | None -> None
-    | Some root ->
-        let page = Path.source_file_from_identifier ~ext root in
+    | Some source_parent ->
+        let page = Path.source_file_from_identifier ~ext source_parent in
         let anchor = Printf.sprintf "L%d" loc.start.line in
         Some { page; anchor; kind }
 

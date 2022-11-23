@@ -29,6 +29,8 @@ module Identifier = struct
     | `Module of signature * ModuleName.t
     | `Parameter of signature * ModuleName.t
     | `Result of signature
+    | `SourceParent of signature
+      (** Used to signify that it contains sources *)
     | `ModuleType of signature * ModuleTypeName.t ]
   (** @canonical Odoc_model.Paths.Identifier.Signature.t_pv *)
 
@@ -76,6 +78,10 @@ module Identifier = struct
 
   and module_ = module_pv id
   (** @canonical Odoc_model.Paths.Identifier.Module.t *)
+
+  type source_parent_pv = [ root_module_pv | `SourceParent of signature ]
+
+  and source_parent = source_parent_pv id
 
   type functor_parameter_pv = [ `Parameter of signature * ModuleName.t ]
   (** @canonical Odoc_model.Paths.Identifier.FunctorParameter.t_pv *)
@@ -170,6 +176,7 @@ module Identifier = struct
     | datatype_pv
     | parent_pv
     | label_parent_pv
+    | source_parent_pv
     | module_pv
     | functor_parameter_pv
     | functor_result_pv

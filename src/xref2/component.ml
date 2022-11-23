@@ -1195,6 +1195,9 @@ module Fmt = struct
     | `Result parent ->
         Format.fprintf ppf "%a.result" model_identifier
           (parent :> Odoc_model.Paths.Identifier.t)
+    | `SourceParent parent ->
+        Format.fprintf ppf "%a.SourceParent" model_identifier
+          (parent :> Odoc_model.Paths.Identifier.t)
     | `CoreType name ->
         Format.fprintf ppf "%s" (Odoc_model.Names.TypeName.to_string name)
     | `Constructor (ty, x) ->

@@ -119,6 +119,7 @@ module Of_Identifier = struct
     | `Parameter (_, n) -> `LParameter (n, i)
     | `ModuleType (_, n) -> `LModuleType (n, i)
     | `Result s -> `LResult (signature s, i)
+    | `SourceParent s -> signature s
 
   let class_signature : ClassSignature.t -> class_signature =
    fun sg ->

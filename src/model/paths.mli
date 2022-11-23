@@ -383,6 +383,8 @@ module Identifier : sig
 
   val root : [< t_pv ] id -> RootModule.t_pv id option
 
+  val source_parent : [< t_pv ] id -> Paths_types.Identifier.source_parent_pv id option
+
   val compare : t -> t -> int
 
   val equal : ([< t_pv ] id as 'a) -> 'a -> bool
@@ -437,6 +439,8 @@ module Identifier : sig
       [> `Parameter of Signature.t * ModuleName.t ] id
 
     val result : Signature.t -> [> `Result of Signature.t ] id
+
+    val source_parent : Signature.t -> [> `SourceParent of Signature.t ] id
 
     val module_type :
       Signature.t * ModuleTypeName.t ->

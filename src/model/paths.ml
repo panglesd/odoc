@@ -36,6 +36,7 @@ module Identifier = struct
     | `Module (_, name) -> ModuleName.to_string name
     | `Parameter (_, name) -> ModuleName.to_string name
     | `Result x -> name_aux (x :> t)
+    | `SourceParent x -> name_aux (x :> t)
     | `ModuleType (_, name) -> ModuleTypeName.to_string name
     | `Type (_, name) -> TypeName.to_string name
     | `CoreType name -> TypeName.to_string name
@@ -53,12 +54,35 @@ module Identifier = struct
 
   let name : [< t_pv ] id -> string = fun n -> name_aux (n :> t)
 
+  let rec source_parent id =
+    match id.iv with
+    | (`Root _ | `SourceParent _) as iv -> Some { id with iv }
+    | `Module (parent, _) -> source_parent (parent :> t)
+    | `Parameter (parent, _) -> source_parent (parent :> t)
+    | `Result x -> source_parent (x :> t)
+    | `ModuleType (parent, _) -> source_parent (parent :> t)
+    | `Type (parent, _) -> source_parent (parent :> t)
+    | `Constructor (parent, _) -> source_parent (parent :> t)
+    | `Field (parent, _) -> source_parent (parent :> t)
+    | `Extension (parent, _) -> source_parent (parent :> t)
+    | `Exception (parent, _) -> source_parent (parent :> t)
+    | `Value (parent, _) -> source_parent (parent :> t)
+    | `Class (parent, _) -> source_parent (parent :> t)
+    | `ClassType (parent, _) -> source_parent (parent :> t)
+    | `Method (parent, _) -> source_parent (parent :> t)
+    | `InstanceVariable (parent, _) -> source_parent (parent :> t)
+    | `Label (parent, _) -> source_parent (parent :> t)
+    | `Page _ | `LeafPage _ | `CoreType _ | `CoreException _ -> None
+
+  let source_parent id = source_parent (id :> t)
+
   let rec root id =
     match id.iv with
     | `Root _ as root -> Some { id with iv = root }
     | `Module (parent, _) -> root (parent :> t)
     | `Parameter (parent, _) -> root (parent :> t)
     | `Result x -> root (x :> t)
+    | `SourceParent x -> root (x :> t)
     | `ModuleType (parent, _) -> root (parent :> t)
     | `Type (parent, _) -> root (parent :> t)
     | `Constructor (parent, _) -> root (parent :> t)
@@ -80,6 +104,7 @@ module Identifier = struct
     fun (n : any) ->
       match n with
       | { iv = `Result i; _ } -> label_parent_aux (i :> any)
+      | { iv = `SourceParent i; _ } -> label_parent_aux (i :> any)
       | { iv = `CoreType _; _ } | { iv = `CoreException _; _ } -> assert false
       | { iv = `Root _; _ } as p -> (p :> label_parent)
       | { iv = `Page _; _ } as p -> (p :> label_parent)
@@ -525,6 +550,14 @@ module Identifier = struct
     let result : Signature.t -> [> `Result of Signature.t ] id =
      fun s ->
       mk_parent (fun () -> "__result__") "" (fun (s, ()) -> `Result s) (s, ())
+
+    let source_parent : Signature.t -> [> `SourceParent of Signature.t ] id =
+     fun s ->
+      mk_parent
+        (fun () -> "__source_parent__")
+        ""
+        (fun (s, ()) -> `SourceParent s)
+        (s, ())
 
     let module_type :
         Signature.t * ModuleTypeName.t ->

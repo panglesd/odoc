@@ -534,6 +534,7 @@ and module_ : Env.t -> Module.t -> Module.t =
               >>= Expand_tools.handle_expansion env (m.id :> Id.Signature.t)
             with
             | Ok (_, e) ->
+                let sg_id = Id.Mk.source_parent sg_id in
                 let le = Lang_of.(simple_expansion (empty ()) sg_id e) in
                 Alias (`Resolved p, Some (simple_expansion env sg_id le))
             | Error _ -> type_

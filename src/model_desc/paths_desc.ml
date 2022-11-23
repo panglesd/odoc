@@ -88,6 +88,7 @@ module General_paths = struct
                 ((parent :> id_t), name),
                 Pair (identifier, Names.parametername) )
         | `Result r -> C ("`Result", (r :> id_t), identifier)
+        | `SourceParent r -> C ("`SourceParent", (r :> id_t), identifier)
         | `ModuleType (parent, name) ->
             C
               ( "`ModuleType",
