@@ -192,9 +192,9 @@ let support_files () =
 ```
 
 We'll now make some library lists. We have not only external dependency
-libraries, but [odoc] itself is also separated into libraries too. These two
+libraries, but `odoc` itself is also separated into libraries too. These two
 sets of libraries will be documented in different sections, so we'll keep them
-in separate lists. Moreover, [odoc] libraries will include the source code, via
+in separate lists. Moreover, `odoc` libraries will include the source code, via
 a hardcoded path.
 
 Additionally we'll also construct a list containing the extra documentation pages. Finally let's create a list mapping the section to its parent, which matches
@@ -260,7 +260,7 @@ let parents =
 
 ```
 
-[odoc] operates on the compiler outputs. We need to find them for both the files compiled by Dune within this project and those in libraries we compile against.
+`odoc` operates on the compiler outputs. We need to find them for both the files compiled by Dune within this project and those in libraries we compile against.
 The following uses `ocamlfind` to locate the library paths for our dependencies:
 
 ```ocaml env=e1
@@ -341,7 +341,7 @@ let compile_deps f =
 
 Let's now put together a list of all possible modules. We'll keep track of
 which library they're in, and whether that library is a part of `odoc` or a dependency
-library. For [odoc] libraries, we infer the implementation and interface source file
+library. For `odoc` libraries, we infer the implementation and interface source file
 path from the library name.
 
 ```ocaml env=e1
