@@ -345,7 +345,7 @@ library. For `odoc` libraries, we infer the implementation and interface source 
 path from the library name.
 
 ```ocaml env=e1
-let odoc_all_unit_paths = find_units ".." |> get_ok ;;
+let odoc_all_unit_paths = find_units ".." |> get_ok
 
 let source_files_of_odoc_module lib module_ =
   let filename =
