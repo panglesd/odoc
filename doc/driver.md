@@ -675,3 +675,11 @@ Let's see if there was any output from the `odoc` invocations:
  "'../src/odoc/bin/main.exe' 'html-generate' 'odoc_examples.odocl' '-o' 'html' '--theme-uri' 'odoc' '--support-uri' 'odoc'";
  "odoc_examples.odocl: Warning, resolved hidden path: Odoc_examples__.Unexposed.t"]
 ```
+
+We can have a look at the produced hierarchy of files, which matches the desired output. Note that source files with a `.ml.html` extension are generated for modules compiled with the `--impl` option.
+```sh
+$ ls html/odoc
+$ ls html/odoc/deps
+$ find html/odoc/deps | tail -n 20
+$ find html/odoc/odoc_html
+```
