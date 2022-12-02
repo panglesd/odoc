@@ -1,61 +1,61 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Labels.mli (Labels)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span id="L1"></span>(** {1:L1 Attached to unit} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L2"></span>
-</span><span id="L3"></span>(** {1:L2 Attached to nothing} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L4"></span>
-</span><span class="MODULE"><span id="L5"></span>module</span> <span class="UIDENT">A</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span id="L6"></span>(** {1:L3 Attached to module} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L7"></span>
-</span><span class="TYPE"><span id="L8"></span>type</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L9"></span>(** {1:L4 Attached to type} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L10"></span>
-</span><span class="VAL"><span id="L11"></span>val</span> <span class="LIDENT">f</span> <span class="COLON">:</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L12"></span>(** {1:L5 Attached to value} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L13"></span>
-</span><span class="EXTERNAL"><span id="L14"></span>external</span> <span class="LIDENT">e</span> <span class="COLON">:</span> <span class="LIDENT">unit</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="STRING">&quot;t&quot;</span><span class="EOL">
-</span><span id="L15"></span>(** {1:L5bis Attached to external} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L16"></span>
-</span><span class="MODULE"><span id="L17"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span id="L18"></span>(** {1:L6 Attached to module type} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L19"></span>
-</span><span class="CLASS"><span id="L20"></span>class</span> <span class="LIDENT">c</span> <span class="COLON">:</span> <span class="OBJECT">object</span> <span class="END">end</span><span class="EOL">
-</span><span id="L21"></span>(** {1:L7 Attached to class} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L22"></span>
-</span><span class="CLASS"><span id="L23"></span>class</span> <span class="TYPE">type</span> <span class="LIDENT">cs</span> <span class="EQUAL">=</span> <span class="OBJECT">object</span> <span class="END">end</span><span class="EOL">
-</span><span id="L24"></span>(** {1:L8 Attached to class type} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L25"></span>
-</span><span class="EXCEPTION"><span id="L26"></span>exception</span> <span class="UIDENT">E</span><span class="EOL">
-</span><span id="L27"></span>(** {1:L9 Attached to exception} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L28"></span>
-</span><span class="TYPE"><span id="L29"></span>type</span> <span class="LIDENT">x</span> <span class="EQUAL">=</span> <span class="DOTDOT">..</span><span class="EOL">
-</span><span class="EOL"><span id="L30"></span>
-</span><span id="L31"></span>(** {1:L10 Attached to extension} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="TYPE"><span id="L32"></span>type</span> <span class="LIDENT">x</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">X</span><span class="EOL">
-</span><span class="EOL"><span id="L33"></span>
-</span><span class="MODULE"><span id="L34"></span>module</span> <span class="UIDENT">S</span> <span class="COLONEQUAL">:=</span> <span class="UIDENT">A</span><span class="EOL">
-</span><span id="L35"></span>(** {1:L11 Attached to module subst} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L36"></span>
-</span><span class="TYPE"><span id="L37"></span>type</span> <span class="LIDENT">s</span> <span class="COLONEQUAL">:=</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L38"></span>(** {1:L12 Attached to type subst} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L39"></span>
-</span><span class="TYPE"><span id="L40"></span>type</span> <span class="LIDENT">u</span> <span class="EQUAL">=</span> <span class="UIDENT">A'</span>  (** {1:L13 Attached to constructor} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L41"></span>
-</span><span class="TYPE"><span id="L42"></span>type</span> <span class="LIDENT">v</span> <span class="EQUAL">=</span> <span class="LBRACE">{</span> <span class="LIDENT">f</span> <span class="COLON">:</span> <span class="LIDENT">t</span>  (** {1:L14 Attached to field} <span class="DOCSTRING">*)</span> <span class="RBRACE">}</span><span class="EOL">
-</span><span class="EOL"><span id="L43"></span>
-</span><span id="L44"></span>(** Testing that labels can be referenced
-<span id="L45"></span>    - {!L1}
-<span id="L46"></span>    - {!L2}
-<span id="L47"></span>    - {!L3}
-<span id="L48"></span>    - {!L4}
-<span id="L49"></span>    - {!L5}
-<span id="L50"></span>    - {!L6}
-<span id="L51"></span>    - {!L7}
-<span id="L52"></span>    - {!L8}
-<span id="L53"></span>    - {!L9}
-<span id="L54"></span>    - {!L10}
-<span id="L55"></span>    - {!L11}
-<span id="L56"></span>    - {!L12}
-<span id="L57"></span>    - {!L13}
-<span id="L58"></span>    - {!L14}
-<span id="L59"></span>  <span class="DOCSTRING">*)</span><span class="EOL">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Labels.mli (Labels)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span id="L1" class="source_line"></span>(** {1:L1 Attached to unit} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L2" class="source_line"></span>
+</span><span id="L3" class="source_line"></span>(** {1:L2 Attached to nothing} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L4" class="source_line"></span>
+</span><span class="MODULE"><span id="L5" class="source_line"></span>module</span> <span class="UIDENT">A</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span id="L6" class="source_line"></span>(** {1:L3 Attached to module} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L7" class="source_line"></span>
+</span><span class="TYPE"><span id="L8" class="source_line"></span>type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L9" class="source_line"></span>(** {1:L4 Attached to type} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L10" class="source_line"></span>
+</span><span class="VAL"><span id="L11" class="source_line"></span>val</span> <span class="LIDENT">f</span> <span class="COLON">:</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L12" class="source_line"></span>(** {1:L5 Attached to value} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L13" class="source_line"></span>
+</span><span class="EXTERNAL"><span id="L14" class="source_line"></span>external</span> <span class="LIDENT">e</span> <span class="COLON">:</span> <span class="LIDENT">unit</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="STRING">&quot;t&quot;</span><span class="EOL">
+</span><span id="L15" class="source_line"></span>(** {1:L5bis Attached to external} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L16" class="source_line"></span>
+</span><span class="MODULE"><span id="L17" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span id="L18" class="source_line"></span>(** {1:L6 Attached to module type} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L19" class="source_line"></span>
+</span><span class="CLASS"><span id="L20" class="source_line"></span>class</span> <span class="LIDENT">c</span> <span class="COLON">:</span> <span class="OBJECT">object</span> <span class="END">end</span><span class="EOL">
+</span><span id="L21" class="source_line"></span>(** {1:L7 Attached to class} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L22" class="source_line"></span>
+</span><span class="CLASS"><span id="L23" class="source_line"></span>class</span> <span class="TYPE">type</span> <span class="LIDENT">cs</span> <span class="EQUAL">=</span> <span class="OBJECT">object</span> <span class="END">end</span><span class="EOL">
+</span><span id="L24" class="source_line"></span>(** {1:L8 Attached to class type} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L25" class="source_line"></span>
+</span><span class="EXCEPTION"><span id="L26" class="source_line"></span>exception</span> <span class="UIDENT">E</span><span class="EOL">
+</span><span id="L27" class="source_line"></span>(** {1:L9 Attached to exception} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L28" class="source_line"></span>
+</span><span class="TYPE"><span id="L29" class="source_line"></span>type</span> <span class="LIDENT">x</span> <span class="EQUAL">=</span> <span class="DOTDOT">..</span><span class="EOL">
+</span><span class="EOL"><span id="L30" class="source_line"></span>
+</span><span id="L31" class="source_line"></span>(** {1:L10 Attached to extension} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L32" class="source_line"></span>type</span> <span class="LIDENT">x</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">X</span><span class="EOL">
+</span><span class="EOL"><span id="L33" class="source_line"></span>
+</span><span class="MODULE"><span id="L34" class="source_line"></span>module</span> <span class="UIDENT">S</span> <span class="COLONEQUAL">:=</span> <span class="UIDENT">A</span><span class="EOL">
+</span><span id="L35" class="source_line"></span>(** {1:L11 Attached to module subst} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L36" class="source_line"></span>
+</span><span class="TYPE"><span id="L37" class="source_line"></span>type</span> <span class="LIDENT">s</span> <span class="COLONEQUAL">:=</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L38" class="source_line"></span>(** {1:L12 Attached to type subst} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L39" class="source_line"></span>
+</span><span class="TYPE"><span id="L40" class="source_line"></span>type</span> <span class="LIDENT">u</span> <span class="EQUAL">=</span> <span class="UIDENT">A'</span>  (** {1:L13 Attached to constructor} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L41" class="source_line"></span>
+</span><span class="TYPE"><span id="L42" class="source_line"></span>type</span> <span class="LIDENT">v</span> <span class="EQUAL">=</span> <span class="LBRACE">{</span> <span class="LIDENT">f</span> <span class="COLON">:</span> <span class="LIDENT">t</span>  (** {1:L14 Attached to field} <span class="DOCSTRING">*)</span> <span class="RBRACE">}</span><span class="EOL">
+</span><span class="EOL"><span id="L43" class="source_line"></span>
+</span><span id="L44" class="source_line"></span>(** Testing that labels can be referenced
+<span id="L45" class="source_line"></span>    - {!L1}
+<span id="L46" class="source_line"></span>    - {!L2}
+<span id="L47" class="source_line"></span>    - {!L3}
+<span id="L48" class="source_line"></span>    - {!L4}
+<span id="L49" class="source_line"></span>    - {!L5}
+<span id="L50" class="source_line"></span>    - {!L6}
+<span id="L51" class="source_line"></span>    - {!L7}
+<span id="L52" class="source_line"></span>    - {!L8}
+<span id="L53" class="source_line"></span>    - {!L9}
+<span id="L54" class="source_line"></span>    - {!L10}
+<span id="L55" class="source_line"></span>    - {!L11}
+<span id="L56" class="source_line"></span>    - {!L12}
+<span id="L57" class="source_line"></span>    - {!L13}
+<span id="L58" class="source_line"></span>    - {!L14}
+<span id="L59" class="source_line"></span>  <span class="DOCSTRING">*)</span><span class="EOL">
 </span></span></code></pre></body></html>

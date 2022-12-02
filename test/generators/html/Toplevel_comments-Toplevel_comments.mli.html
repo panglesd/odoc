@@ -1,96 +1,96 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Toplevel_comments.mli (Toplevel_comments)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span id="L1"></span>(** A doc comment at the beginning of a module is considered to be that
-<span id="L2"></span>    module's doc. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L3"></span>
-</span><span id="L4"></span>(** Doc of [T], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="MODULE"><span id="L5"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L6"></span>  (** Doc of [T], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L7"></span>
-</span><span id="L8"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span class="END"><span id="L9"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L10"></span>
-</span><span class="MODULE"><span id="L11"></span>module</span> <span class="UIDENT">Include_inline</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L12"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">T</span><span class="EOL">
-</span><span id="L13"></span>  (** @inline <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L14"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L15"></span>
-</span><span id="L16"></span>(** Doc of [Include_inline], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="MODULE"><span id="L17"></span>module</span> <span class="UIDENT">Include_inline'</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L18"></span>  (** Doc of [Include_inline], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L19"></span>
-</span><span id="L20"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">T</span><span class="EOL">
-</span><span id="L21"></span>  (** part 3
-<span id="L22"></span>      @inline <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L23"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L24"></span>
-</span><span class="MODULE"><span id="L25"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">Include_inline_T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L26"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">T</span><span class="EOL">
-</span><span id="L27"></span>  (** @inline <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L28"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L29"></span>
-</span><span id="L30"></span>(** Doc of [Include_inline_T'], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="MODULE"><span id="L31"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">Include_inline_T'</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L32"></span>  (** Doc of [Include_inline_T'], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L33"></span>
-</span><span id="L34"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">T</span><span class="EOL">
-</span><span id="L35"></span>  (** part 3
-<span id="L36"></span>      @inline <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L37"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L38"></span>
-</span><span class="MODULE"><span id="L39"></span>module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span class="EOL"><span id="L40"></span>
-</span><span id="L41"></span>  (** Doc of [M] <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L42"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L43"></span>
-</span><span class="MODULE"><span id="L44"></span>module</span> <span class="UIDENT">M'</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span id="L45"></span>(** Doc of [M'] from outside <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L46"></span>
-</span><span id="L47"></span>(** Doc of [M''], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="MODULE"><span id="L48"></span>module</span> <span class="UIDENT">M''</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span class="EOL"><span id="L49"></span>
-</span><span id="L50"></span>  (** Doc of [M''], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L51"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L52"></span>
-</span><span class="MODULE"><span id="L53"></span>module</span> <span class="UIDENT">Alias</span> <span class="COLON">:</span> <span class="UIDENT">T</span><span class="EOL">
-</span><span id="L54"></span>(** Doc of [Alias]. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L55"></span>
-</span><span id="L56"></span>(** Doc of [c1], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="CLASS"><span id="L57"></span>class</span> <span class="LIDENT">c1</span> <span class="COLON">:</span><span class="EOL">
-</span><span id="L58"></span>  <span class="LIDENT">int</span><span class="EOL">
-</span><span id="L59"></span>  <span class="MINUSGREATER">-&gt;</span> <span class="OBJECT">object</span><span class="EOL">
-</span><span class="EOL"><span id="L60"></span>
-</span><span id="L61"></span>       (** Doc of [c1], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span id="L62"></span>     <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L63"></span>
-</span><span id="L64"></span>(** Doc of [ct], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="CLASS"><span id="L65"></span>class</span> <span class="TYPE">type</span> <span class="LIDENT">ct</span> <span class="EQUAL">=</span><span class="EOL">
-</span><span id="L66"></span>  <span class="OBJECT">object</span><span class="EOL">
-</span><span class="EOL"><span id="L67"></span>
-</span><span id="L68"></span>    (** Doc of [ct], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span id="L69"></span>  <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L70"></span>
-</span><span class="CLASS"><span id="L71"></span>class</span> <span class="LIDENT">c2</span> <span class="COLON">:</span> <span class="LIDENT">ct</span><span class="EOL">
-</span><span id="L72"></span>(** Doc of [c2]. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L73"></span>
-</span><span class="MODULE"><span id="L74"></span>module</span> <span class="UIDENT">Ref_in_synopsis</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L75"></span>  (** {!t}.
-<span id="L76"></span>
-<span id="L77"></span>      This reference should resolve in the context of this module, even when
-<span id="L78"></span>      used as a synopsis. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L79"></span>
-</span><span id="L80"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span class="END"><span id="L81"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L82"></span>
-</span><span class="MODULE"><span id="L83"></span>module</span> <span class="UIDENT">Comments_on_open</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L84"></span>  <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L85"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L86"></span>  <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L87"></span>
-</span><span id="L88"></span>  <span class="OPEN">open</span> <span class="UIDENT">M</span><span class="EOL">
-</span><span id="L89"></span>      (** 
-<span id="L90"></span>          {2:sec Section}
-<span id="L91"></span>
-<span id="L92"></span>          Comments attached to open are treated as floating comments.
-<span id="L93"></span>         Referencing {!section-sec} {!M.t} works <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L94"></span>end</span><span class="EOL">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Toplevel_comments.mli (Toplevel_comments)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span id="L1" class="source_line"></span>(** A doc comment at the beginning of a module is considered to be that
+<span id="L2" class="source_line"></span>    module's doc. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L3" class="source_line"></span>
+</span><span id="L4" class="source_line"></span>(** Doc of [T], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L5" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L6" class="source_line"></span>  (** Doc of [T], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L7" class="source_line"></span>
+</span><span id="L8" class="source_line"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L9" class="source_line"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L10" class="source_line"></span>
+</span><span class="MODULE"><span id="L11" class="source_line"></span>module</span> <span class="UIDENT">Include_inline</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L12" class="source_line"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span id="L13" class="source_line"></span>  (** @inline <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L14" class="source_line"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L15" class="source_line"></span>
+</span><span id="L16" class="source_line"></span>(** Doc of [Include_inline], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L17" class="source_line"></span>module</span> <span class="UIDENT">Include_inline'</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L18" class="source_line"></span>  (** Doc of [Include_inline], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L19" class="source_line"></span>
+</span><span id="L20" class="source_line"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span id="L21" class="source_line"></span>  (** part 3
+<span id="L22" class="source_line"></span>      @inline <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L23" class="source_line"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L24" class="source_line"></span>
+</span><span class="MODULE"><span id="L25" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">Include_inline_T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L26" class="source_line"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span id="L27" class="source_line"></span>  (** @inline <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L28" class="source_line"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L29" class="source_line"></span>
+</span><span id="L30" class="source_line"></span>(** Doc of [Include_inline_T'], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L31" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">Include_inline_T'</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L32" class="source_line"></span>  (** Doc of [Include_inline_T'], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L33" class="source_line"></span>
+</span><span id="L34" class="source_line"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span id="L35" class="source_line"></span>  (** part 3
+<span id="L36" class="source_line"></span>      @inline <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L37" class="source_line"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L38" class="source_line"></span>
+</span><span class="MODULE"><span id="L39" class="source_line"></span>module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span class="EOL"><span id="L40" class="source_line"></span>
+</span><span id="L41" class="source_line"></span>  (** Doc of [M] <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L42" class="source_line"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L43" class="source_line"></span>
+</span><span class="MODULE"><span id="L44" class="source_line"></span>module</span> <span class="UIDENT">M'</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span id="L45" class="source_line"></span>(** Doc of [M'] from outside <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L46" class="source_line"></span>
+</span><span id="L47" class="source_line"></span>(** Doc of [M''], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L48" class="source_line"></span>module</span> <span class="UIDENT">M''</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span class="EOL"><span id="L49" class="source_line"></span>
+</span><span id="L50" class="source_line"></span>  (** Doc of [M''], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L51" class="source_line"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L52" class="source_line"></span>
+</span><span class="MODULE"><span id="L53" class="source_line"></span>module</span> <span class="UIDENT">Alias</span> <span class="COLON">:</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span id="L54" class="source_line"></span>(** Doc of [Alias]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L55" class="source_line"></span>
+</span><span id="L56" class="source_line"></span>(** Doc of [c1], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="CLASS"><span id="L57" class="source_line"></span>class</span> <span class="LIDENT">c1</span> <span class="COLON">:</span><span class="EOL">
+</span><span id="L58" class="source_line"></span>  <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L59" class="source_line"></span>  <span class="MINUSGREATER">-&gt;</span> <span class="OBJECT">object</span><span class="EOL">
+</span><span class="EOL"><span id="L60" class="source_line"></span>
+</span><span id="L61" class="source_line"></span>       (** Doc of [c1], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L62" class="source_line"></span>     <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L63" class="source_line"></span>
+</span><span id="L64" class="source_line"></span>(** Doc of [ct], part 1. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="CLASS"><span id="L65" class="source_line"></span>class</span> <span class="TYPE">type</span> <span class="LIDENT">ct</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L66" class="source_line"></span>  <span class="OBJECT">object</span><span class="EOL">
+</span><span class="EOL"><span id="L67" class="source_line"></span>
+</span><span id="L68" class="source_line"></span>    (** Doc of [ct], part 2. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L69" class="source_line"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L70" class="source_line"></span>
+</span><span class="CLASS"><span id="L71" class="source_line"></span>class</span> <span class="LIDENT">c2</span> <span class="COLON">:</span> <span class="LIDENT">ct</span><span class="EOL">
+</span><span id="L72" class="source_line"></span>(** Doc of [c2]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L73" class="source_line"></span>
+</span><span class="MODULE"><span id="L74" class="source_line"></span>module</span> <span class="UIDENT">Ref_in_synopsis</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L75" class="source_line"></span>  (** {!t}.
+<span id="L76" class="source_line"></span>
+<span id="L77" class="source_line"></span>      This reference should resolve in the context of this module, even when
+<span id="L78" class="source_line"></span>      used as a synopsis. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L79" class="source_line"></span>
+</span><span id="L80" class="source_line"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L81" class="source_line"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L82" class="source_line"></span>
+</span><span class="MODULE"><span id="L83" class="source_line"></span>module</span> <span class="UIDENT">Comments_on_open</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L84" class="source_line"></span>  <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L85" class="source_line"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L86" class="source_line"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L87" class="source_line"></span>
+</span><span id="L88" class="source_line"></span>  <span class="OPEN">open</span> <span class="UIDENT">M</span><span class="EOL">
+</span><span id="L89" class="source_line"></span>      (** 
+<span id="L90" class="source_line"></span>          {2:sec Section}
+<span id="L91" class="source_line"></span>
+<span id="L92" class="source_line"></span>          Comments attached to open are treated as floating comments.
+<span id="L93" class="source_line"></span>         Referencing {!section-sec} {!M.t} works <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L94" class="source_line"></span>end</span><span class="EOL">
 </span></span></code></pre></body></html>

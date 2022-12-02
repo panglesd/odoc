@@ -1,46 +1,46 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Module.mli (Module)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span id="L1"></span>(** Foo. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L2"></span>
-</span><span class="VAL"><span id="L3"></span>val</span> <span class="LIDENT">foo</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
-</span><span id="L4"></span>(** The module needs at least one signature item, otherwise a bug causes the
-<span id="L5"></span>    compiler to drop the module comment (above). See
-<span id="L6"></span>    {{:https://caml.inria.fr/mantis/view.php?id=7701}}. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L7"></span>
-</span><span class="MODULE"><span id="L8"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span><span class="EOL">
-</span><span class="SIG"><span id="L9"></span>sig</span><span class="EOL">
-</span><span id="L10"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L11"></span>  <span class="TYPE">type</span> <span class="LIDENT">u</span><span class="EOL">
-</span><span id="L12"></span>  <span class="TYPE">type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">v</span><span class="EOL">
-</span><span id="L13"></span>  <span class="TYPE">type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">w</span><span class="EOL">
-</span><span id="L14"></span>  <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span class="END"><span id="L15"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L16"></span>
-</span><span class="MODULE"><span id="L17"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S1</span><span class="EOL">
-</span><span class="EOL"><span id="L18"></span>
-</span><span class="MODULE"><span id="L19"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S2</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span><span class="EOL">
-</span><span class="EOL"><span id="L20"></span>
-</span><span class="MODULE"><span id="L21"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S3</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span> <span class="AND">and</span> <span class="TYPE">type</span> <span class="LIDENT">u</span> <span class="EQUAL">=</span> <span class="LIDENT">string</span><span class="EOL">
-</span><span class="EOL"><span id="L22"></span>
-</span><span class="MODULE"><span id="L23"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S4</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="COLONEQUAL">:=</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="EOL"><span id="L24"></span>
-</span><span class="MODULE"><span id="L25"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S5</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">v</span> <span class="COLONEQUAL">:=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">list</span><span class="EOL">
-</span><span class="EOL"><span id="L26"></span>
-</span><span class="TYPE"><span id="L27"></span>type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">result</span><span class="EOL">
-</span><span class="EOL"><span id="L28"></span>
-</span><span class="MODULE"><span id="L29"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S6</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">w</span> <span class="COLONEQUAL">:=</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">result</span><span class="EOL">
-</span><span class="EOL"><span id="L30"></span>
-</span><span class="MODULE"><span id="L31"></span>module</span> <span class="UIDENT">M'</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L32"></span>
-</span><span class="MODULE"><span id="L33"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S7</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="EQUAL">=</span> <span class="UIDENT">M'</span><span class="EOL">
-</span><span class="EOL"><span id="L34"></span>
-</span><span class="MODULE"><span id="L35"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S8</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLONEQUAL">:=</span> <span class="UIDENT">M'</span><span class="EOL">
-</span><span class="EOL"><span id="L36"></span>
-</span><span class="MODULE"><span id="L37"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S9</span> <span class="EQUAL">=</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">M'</span><span class="EOL">
-</span><span class="EOL"><span id="L38"></span>
-</span><span class="OPEN"><span id="L39"></span>open</span> <span class="UIDENT">M'</span><span class="EOL">
-</span><span class="EOL"><span id="L40"></span>
-</span><span class="OPEN"><span id="L41"></span>open</span><span class="BANG">!</span> <span class="UIDENT">M'</span><span class="EOL">
-</span><span class="EOL"><span id="L42"></span>
-</span><span class="MODULE"><span id="L43"></span>module</span> <span class="REC">rec</span> <span class="UIDENT">Mutually</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span class="AND"><span id="L44"></span>and</span> <span class="UIDENT">Recursive</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Module.mli (Module)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span id="L1" class="source_line"></span>(** Foo. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L2" class="source_line"></span>
+</span><span class="VAL"><span id="L3" class="source_line"></span>val</span> <span class="LIDENT">foo</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L4" class="source_line"></span>(** The module needs at least one signature item, otherwise a bug causes the
+<span id="L5" class="source_line"></span>    compiler to drop the module comment (above). See
+<span id="L6" class="source_line"></span>    {{:https://caml.inria.fr/mantis/view.php?id=7701}}. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L7" class="source_line"></span>
+</span><span class="MODULE"><span id="L8" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span class="SIG"><span id="L9" class="source_line"></span>sig</span><span class="EOL">
+</span><span id="L10" class="source_line"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L11" class="source_line"></span>  <span class="TYPE">type</span> <span class="LIDENT">u</span><span class="EOL">
+</span><span id="L12" class="source_line"></span>  <span class="TYPE">type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">v</span><span class="EOL">
+</span><span id="L13" class="source_line"></span>  <span class="TYPE">type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">w</span><span class="EOL">
+</span><span id="L14" class="source_line"></span>  <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L15" class="source_line"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L16" class="source_line"></span>
+</span><span class="MODULE"><span id="L17" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S1</span><span class="EOL">
+</span><span class="EOL"><span id="L18" class="source_line"></span>
+</span><span class="MODULE"><span id="L19" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S2</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span class="EOL"><span id="L20" class="source_line"></span>
+</span><span class="MODULE"><span id="L21" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S3</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span> <span class="AND">and</span> <span class="TYPE">type</span> <span class="LIDENT">u</span> <span class="EQUAL">=</span> <span class="LIDENT">string</span><span class="EOL">
+</span><span class="EOL"><span id="L22" class="source_line"></span>
+</span><span class="MODULE"><span id="L23" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S4</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="COLONEQUAL">:=</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L24" class="source_line"></span>
+</span><span class="MODULE"><span id="L25" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S5</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">v</span> <span class="COLONEQUAL">:=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">list</span><span class="EOL">
+</span><span class="EOL"><span id="L26" class="source_line"></span>
+</span><span class="TYPE"><span id="L27" class="source_line"></span>type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">result</span><span class="EOL">
+</span><span class="EOL"><span id="L28" class="source_line"></span>
+</span><span class="MODULE"><span id="L29" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S6</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">w</span> <span class="COLONEQUAL">:=</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">result</span><span class="EOL">
+</span><span class="EOL"><span id="L30" class="source_line"></span>
+</span><span class="MODULE"><span id="L31" class="source_line"></span>module</span> <span class="UIDENT">M'</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L32" class="source_line"></span>
+</span><span class="MODULE"><span id="L33" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S7</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="EQUAL">=</span> <span class="UIDENT">M'</span><span class="EOL">
+</span><span class="EOL"><span id="L34" class="source_line"></span>
+</span><span class="MODULE"><span id="L35" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S8</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLONEQUAL">:=</span> <span class="UIDENT">M'</span><span class="EOL">
+</span><span class="EOL"><span id="L36" class="source_line"></span>
+</span><span class="MODULE"><span id="L37" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">S9</span> <span class="EQUAL">=</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">M'</span><span class="EOL">
+</span><span class="EOL"><span id="L38" class="source_line"></span>
+</span><span class="OPEN"><span id="L39" class="source_line"></span>open</span> <span class="UIDENT">M'</span><span class="EOL">
+</span><span class="EOL"><span id="L40" class="source_line"></span>
+</span><span class="OPEN"><span id="L41" class="source_line"></span>open</span><span class="BANG">!</span> <span class="UIDENT">M'</span><span class="EOL">
+</span><span class="EOL"><span id="L42" class="source_line"></span>
+</span><span class="MODULE"><span id="L43" class="source_line"></span>module</span> <span class="REC">rec</span> <span class="UIDENT">Mutually</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span class="AND"><span id="L44" class="source_line"></span>and</span> <span class="UIDENT">Recursive</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
 </span></span></code></pre></body></html>
