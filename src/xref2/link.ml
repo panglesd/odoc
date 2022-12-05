@@ -76,19 +76,62 @@ let expansion_needed self target =
   self_canonical || hidden_alias
 
 module Lookup_expansions : sig
-  val in_sig : Signature.t -> (Id.Module.t * Id.Path.Module.t) list
+  val in_sig : Env.t -> Signature.t -> Id.Module.t list
   (** Lookup module aliases that have an expansion and returns their ID and the
       target path. *)
 end = struct
-  let rec in_sig_item = function
+  let get_module_type env path =
+    let open Utils.ResultMonad in
+    let cp = Component.Of_Lang.(resolved_module_path (empty ()) path) in
+    Tools.lookup_module env ~mark_substituted:false cp >>= fun module_ ->
+    let module_ = Component.Delayed.get module_ in
+    Ok module_.type_
+
+  let get_cmodule_type env cp =
+    let open Utils.ResultMonad in
+    Tools.lookup_module env ~mark_substituted:false cp >>= fun module_ ->
+    let module_ = Component.Delayed.get module_ in
+    Ok module_.type_
+
+  let rec parent_of_cmodule_type env = function
+    | Component.Module.Alias (`Resolved p, Some _) -> (
+        let open Utils.ResultMonad in
+        match get_cmodule_type env p with
+        | Error _ -> None
+        | Ok module_type -> (
+            match parent_of_cmodule_type env module_type with
+            | None -> Some p
+            | Some _ as x -> x))
+    (* | Alias (_, Some { ModuleType.e_id; _ }) -> [ (m.id, e_id) ] *)
+    | Alias (_, _) | ModuleType _ -> None
+
+  let parent_of_path env path =
+    match get_module_type env path with
+    | Error _ -> None
+    | Ok decl -> (
+        match parent_of_cmodule_type env decl with
+        | None -> None
+        | Some cp -> (
+            let path = Lang_of.(Path.resolved_module (empty ())) cp in
+            match Paths.Path.Resolved.Module.identifier path with
+            | { iv = #Id.Module.t_pv; _ } as id -> Some id
+            | _ -> None))
+
+  let rec in_sig_item env = function
     | Signature.Module (_, m) -> (
         match m.Module.type_ with
-        | Alias (_, Some { ModuleType.e_id; _ }) -> [ (m.id, e_id) ]
-        | Alias (_, None) | ModuleType _ -> [])
-    | Include inc -> in_sig inc.Include.expansion.content
+        | Alias (`Resolved p, Some _) -> (
+            match parent_of_path env p with
+            | None -> (
+                match Paths.Path.Resolved.Module.identifier p with
+                | { iv = #Id.Module.t_pv; _ } as id -> [ id ]
+                | _ -> [])
+            | Some id -> [ id ])
+        | Alias (_, _) | ModuleType _ -> [])
+    | Include inc -> in_sig env inc.Include.expansion.content
     | _ -> []
 
-  and in_sig sg = Utils.concat_map [] in_sig_item sg.Signature.items
+  and in_sig env sg = Utils.concat_map [] (in_sig_item env) sg.Signature.items
 end
 
 exception Loop
@@ -341,7 +384,7 @@ let rec unit env t =
     match t.content with
     | Module sg ->
         let sg = signature env (t.id :> Id.Signature.t) sg in
-        (Lookup_expansions.in_sig sg, Module sg)
+        (Lookup_expansions.in_sig env sg, Module sg)
     | Pack _ as p -> ([], p)
   in
   let module M = Id.Maps.Module in
@@ -354,10 +397,10 @@ let rec unit env t =
       List.fold_left (fun acc src -> M.add src.parent src acc)
     in
     List.fold_left
-      (fun acc (id, target) ->
+      (fun acc id ->
         if M.mem id acc then acc
         else
-          let root = Id.RootModule.name (Id.Path.Module.root target) in
+          let root = Id.RootModule.name (Id.Module.root id) in
           match Env.lookup_root_module root env with
           | Some (Env.Resolved unit) ->
               add_sources acc

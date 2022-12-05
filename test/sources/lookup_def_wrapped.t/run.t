@@ -20,13 +20,15 @@ Look if all the source files are generated:
   html
   html/Main
   html/Main/A
-  html/Main/A/A.ml.html
   html/Main/A/index.html
   html/Main/B
-  html/Main/B/B.ml.html
   html/Main/B/index.html
   html/Main/Main.ml.html
   html/Main/index.html
+  html/Main__A
+  html/Main__A/Main__A.ml.html
+  html/Main__B
+  html/Main__B/Main__B.ml.html
 
   $ cat html/Main/A/index.html
   <!DOCTYPE html>
