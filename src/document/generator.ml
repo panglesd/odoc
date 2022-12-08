@@ -1643,9 +1643,9 @@ module Make (Syntax : SYNTAX) = struct
   end
 
   module Impl = struct
-    let doc_of_poses src posl =
+    let impl ~infos src =
       let l =
-        posl
+        infos
         |> List.sort (fun (_, (l1, e1)) (_, (l2, e2)) ->
                if l1 = l2 then Int.compare e2 e1
                  (* If two intervals open at the same time, we open
@@ -1678,13 +1678,6 @@ module Make (Syntax : SYNTAX) = struct
       in
       let doc, _ = extract 0 (String.length src) l [] in
       List.rev doc
-
-    let impl ~infos src =
-      let syntax_locs = Source_info.Syntax.highlight src in
-      let lines_locs = Source_info.Lines.split src in
-      let infos = List.rev_append infos syntax_locs in
-      let infos = List.rev_append infos lines_locs in
-      doc_of_poses src infos
   end
 
   open Module
@@ -1694,7 +1687,7 @@ module Make (Syntax : SYNTAX) = struct
       parent:Paths.Identifier.Module.t ->
       ext:string ->
       contents:string ->
-      infos:Source_info.Types.infos ->
+      infos:Odoc_model.Lang.Source_code.Info.infos ->
       Source_page.t
   end = struct
     let source ~parent ~ext ~contents ~infos =

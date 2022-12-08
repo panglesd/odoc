@@ -1,3 +1,5 @@
+open Odoc_model.Lang.Source_code.Info
+
 let lines_locs src =
   let lines = String.split_on_char '\n' src in
   let is_line_directive line =
@@ -10,7 +12,7 @@ let lines_locs src =
         let new_i, new_pos =
           (* Ignore line directives *)
           if is_line_directive line then (i, poses)
-          else (i + 1, [(Types.Line i, (count, count))])
+          else (i + 1, [ (Line i, (count, count)) ])
         in
         (new_i, new_pos @ poses, count + l + 1))
       (1, [], 0) lines

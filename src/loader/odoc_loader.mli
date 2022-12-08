@@ -15,7 +15,9 @@ val read_string :
 
 val read_cmt_infos :
   filename:string ->
-  ((Compatshape.impl_shape * Source_info.Types.infos) option, Error.t) result
+  ( (Source_info.Compatshape.impl_shape * Lang.Source_code.Info.infos) option,
+    Error.t )
+  result
   Error.with_warnings
 (** Read the shape from a .cmt file. *)
 
@@ -30,7 +32,7 @@ val read_cmt :
   parent:Identifier.ContainerPage.t option ->
   filename:string ->
   ( Lang.Compilation_unit.t
-    * (Compatshape.impl_shape * Source_info.Types.infos) option,
+    * (Source_info.Compatshape.impl_shape * Lang.Source_code.Info.infos) option,
     Error.t )
   result
   Error.with_warnings

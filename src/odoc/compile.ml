@@ -136,6 +136,12 @@ let resolve_and_substitute ~resolver ~make_root ~impl_source ~intf_source
     | None, _, _ | _, None, None -> []
     | Some (_, impl_info), impl_source, intf_source ->
         let parent = (unit.id :> Paths.Identifier.Module.t) in
+        let impl_info =
+          match impl_source with
+          | Some impl ->
+              List.rev_append (Source_info.Syntax.highlight impl) impl_info
+          | None -> impl_info
+        in
         [ { Lang.Source_code.parent; intf_source; impl_source; impl_info } ]
   in
   if not unit.Lang.Compilation_unit.interface then

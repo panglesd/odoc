@@ -245,14 +245,19 @@ a:hover {
 /* Linked highlight */
 *:target {
   background-color: var(--target-background) !important;
-  box-shadow: 0 0px 0 1px var(--target-shadow) !important;
   border-radius: 1px;
+}
+.odoc *:target {
+  box-shadow: 0 0px 0 1px var(--target-shadow) !important;
 }
 .source_line:target {
   position: absolute;
   height: 22.5px;
   width: 100ex;
   pointer-events: none;
+}
+.odoc-src *:target {
+  padding: 0.15em;
 }
 html {
   scroll-behavior: smooth;
@@ -785,32 +790,32 @@ td.def-doc *:first-child {
   text-decoration: underline;
 }
 
-.VAL, .TYPE, .LET, .REC, .IN, .OPEN, .NONREC, .MODULE, .METHOD, .LETOP, .INHERIT, .INCLUDE, .FUNCTOR, .EXTERNAL, .CONSTRAINT, .ASSERT, .AND, .END {
+.keyword {
   font-weight: bold;
   color:#C8AD7F;
 }
 
-.WITH, .WHILE, .WHEN, .VIRTUAL, .TRY, .TO, .THEN, .STRUCT, .SIG, .PRIVATE, .OF, .NEW, .MUTABLE, .MATCH, .LAZY, .IF, .FUNCTION, .FUN, .FOR, .EXCEPTION, .ELSE, .TO, .DOWNTO, .DO, .DONE, .BEGIN, .AS {
+.keyword-other {
   color: blue;
 }
 
-.TRUE, .FALSE {
+.boolean-constant {
   color: green;
 }
 
-.failwith, .INT, .SEMISEMI {
+.alert, .numeric-constant {
   color: red;
 }
 
-.STRING, .CHAR {
+.string-constant {
   color: darkgoldenrod;
 }
 
-.DOCSTRING {
+.docstring {
   color: orange;
 }
 
-.COMMENT {
+.comment {
   color: grey;
 }
 
