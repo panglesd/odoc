@@ -25,13 +25,13 @@ open Odoc_model.Lang
 
 module Env = Ident_env
 
-let read_locations_impl parent loc =
+let read_locations_impl parent _loc =
   let source_parent =
     match Identifier.root parent with
     | Some sp -> (sp :> Identifier.Module.t)
     | None -> assert false
-  and impl = Some (Doc_attr.read_location loc) in
-  { Locations.source_parent; impl; intf = None }
+ in
+  { Locations.source_parent; impl = None; intf = None }
 
 let read_core_type env ctyp =
   Cmi.read_type_expr env ctyp.ctyp_type

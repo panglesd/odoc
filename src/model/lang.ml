@@ -20,7 +20,7 @@ module Locations = struct
   type t = {
     source_parent : Identifier.Module.t;
         (** Correspond to where the source code is stored. Might be different from the root component of the identifier inside expansions. *)
-    impl : Location_.span option;
+    impl : string option;
         (** Location of the definition in the implementation file. *)
     intf : Location_.span option;
         (** Location of the declaration in the interface file. *)

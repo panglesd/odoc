@@ -1,9 +1,9 @@
 let string_of_uid uid =
   match uid with
-  | Shape.Uid.Compilation_unit s -> s
-  | Item { comp_unit; id } -> comp_unit ^ string_of_int id
-  | Predef s -> s
-  | _ -> "rien"
+  | Shape.Uid.Compilation_unit s -> "compunit-" ^ s
+  | Item { comp_unit; id } -> "def-" ^ comp_unit ^ string_of_int id
+  | Predef s -> "predef-" ^ s
+  | Internal -> "internal"
 
 let pos_of_loc loc = (loc.Location.loc_start.pos_cnum, loc.loc_end.pos_cnum)
 

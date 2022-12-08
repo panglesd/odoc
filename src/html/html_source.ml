@@ -150,8 +150,8 @@ let html_of_doc docs =
             span
               ~a:[ a_id (Printf.sprintf "L%d" l); a_class [ "source_line" ] ]
               children
-        | Local_jmp (Occurence lbl) -> a ~a:[ a_href ("#def-" ^ lbl) ] children
-        | Local_jmp (Def lbl) -> span ~a:[ a_id ("def-" ^ lbl) ] children)
+        | Local_jmp (Occurence lbl) -> a ~a:[ a_href ("#" ^ lbl) ] children
+        | Local_jmp (Def lbl) -> span ~a:[ a_id (lbl) ] children)
   in
   span ~a:[] @@ List.map doc_to_html docs
 
