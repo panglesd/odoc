@@ -1,70 +1,70 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Module_type_subst.mli (Module_type_subst)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span class="EOL"><span id="L1" class="source_line"></span>
-</span><span class="EOL"><span id="L2" class="source_line"></span>
-</span><span class="MODULE"><span id="L3" class="source_line"></span>module</span> <span class="UIDENT">Local</span><span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L4" class="source_line"></span>  <span class="TYPE">type</span> <span class="LIDENT">local</span> <span class="COLONEQUAL">:=</span> <span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span id="L5" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">local</span> <span class="COLONEQUAL">:=</span> <span class="SIG">sig</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="LIDENT">local</span> <span class="END">end</span><span class="EOL">
-</span><span id="L6" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">w</span> <span class="EQUAL">=</span> <span class="LIDENT">local</span><span class="EOL">
-</span><span id="L7" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">s</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span class="END"><span id="L8" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L9" class="source_line"></span>
-</span><span class="EOL"><span id="L10" class="source_line"></span>
-</span><span class="MODULE"><span id="L11" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="LIDENT">s</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L12" class="source_line"></span>
-</span><span class="MODULE"><span id="L13" class="source_line"></span>module</span> <span class="UIDENT">Basic</span><span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span class="EOL"><span id="L14" class="source_line"></span>
-</span><span id="L15" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">u</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L16" class="source_line"></span>    <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span id="L17" class="source_line"></span>  <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L18" class="source_line"></span>
-</span><span id="L19" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">with_</span> <span class="EQUAL">=</span> <span class="LIDENT">u</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="LIDENT">s</span><span class="EOL">
-</span><span class="EOL"><span id="L20" class="source_line"></span>
-</span><span id="L21" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">u2</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L22" class="source_line"></span>    <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span id="L23" class="source_line"></span>    <span class="MODULE">module</span> <span class="UIDENT">M</span><span class="COLON">:</span><span class="UIDENT">T</span><span class="EOL">
-</span><span id="L24" class="source_line"></span>  <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L25" class="source_line"></span>
-</span><span id="L26" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">with_2</span> <span class="EQUAL">=</span> <span class="LIDENT">u2</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L27" class="source_line"></span>
-</span><span id="L28" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L29" class="source_line"></span>    <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">b</span> <span class="EQUAL">=</span> <span class="LIDENT">s</span><span class="EOL">
-</span><span id="L30" class="source_line"></span>    <span class="MODULE">module</span> <span class="UIDENT">M</span><span class="COLON">:</span> <span class="LIDENT">b</span><span class="EOL">
-</span><span id="L31" class="source_line"></span>  <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L32" class="source_line"></span>
-</span><span id="L33" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">c</span> <span class="EQUAL">=</span> <span class="LIDENT">a</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">b</span> <span class="COLONEQUAL">:=</span> <span class="LIDENT">s</span><span class="EOL">
-</span><span class="END"><span id="L34" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L35" class="source_line"></span>
-</span><span class="MODULE"><span id="L36" class="source_line"></span>module</span> <span class="UIDENT">Nested</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span class="EOL"><span id="L37" class="source_line"></span>
-</span><span id="L38" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">nested</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L39" class="source_line"></span>    <span class="MODULE">module</span> <span class="UIDENT">N</span><span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L40" class="source_line"></span>      <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
-</span><span id="L41" class="source_line"></span>    <span class="END">end</span><span class="EOL">
-</span><span id="L42" class="source_line"></span>  <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L43" class="source_line"></span>
-</span><span id="L44" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">with_</span> <span class="EQUAL">=</span> <span class="LIDENT">nested</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">N</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="LIDENT">s</span><span class="EOL">
-</span><span id="L45" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">with_subst</span> <span class="EQUAL">=</span> <span class="LIDENT">nested</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">N</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="COLONEQUAL">:=</span> <span class="LIDENT">s</span><span class="EOL">
-</span><span class="END"><span id="L46" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L47" class="source_line"></span>
-</span><span class="MODULE"><span id="L48" class="source_line"></span>module</span> <span class="UIDENT">Structural</span><span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L49" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">u</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L50" class="source_line"></span>    <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L51" class="source_line"></span>      <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">b</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L52" class="source_line"></span>        <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">c</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L53" class="source_line"></span>          <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="UIDENT">A</span> <span class="OF">of</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L54" class="source_line"></span>        <span class="END">end</span><span class="EOL">
-</span><span id="L55" class="source_line"></span>      <span class="END">end</span><span class="EOL">
-</span><span id="L56" class="source_line"></span>    <span class="END">end</span><span class="EOL">
-</span><span id="L57" class="source_line"></span>  <span class="END">end</span><span class="EOL">
-</span><span class="EOL"><span id="L58" class="source_line"></span>
-</span><span id="L59" class="source_line"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">w</span> <span class="EQUAL">=</span> <span class="LIDENT">u</span><span class="EOL">
-</span><span id="L60" class="source_line"></span>    <span class="WITH">with</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">a</span> <span class="EQUAL">=</span><span class="EOL">
-</span><span id="L61" class="source_line"></span>         <span class="SIG">sig</span><span class="EOL">
-</span><span id="L62" class="source_line"></span>           <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">b</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L63" class="source_line"></span>             <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="LIDENT">c</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L64" class="source_line"></span>               <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="UIDENT">A</span> <span class="OF">of</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L65" class="source_line"></span>             <span class="END">end</span><span class="EOL">
-</span><span id="L66" class="source_line"></span>           <span class="END">end</span><span class="EOL">
-</span><span id="L67" class="source_line"></span>         <span class="END">end</span><span class="EOL">
-</span><span class="END"><span id="L68" class="source_line"></span>end</span><span class="EOL">
-</span></span></code></pre></body></html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Module_type_subst.mli (Module_type_subst)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span>
+
+module Local: sig
+  type local := int * int
+  module type local := sig type t = local end
+  module type w = local
+  module type s = sig end
+end
+
+
+module type s = sig end
+
+module Basic: sig
+
+  module type u = sig
+    module type T = sig end
+  end
+
+  module type with_ = u with module type T = s
+
+  module type u2 = sig
+    module type T = sig end
+    module M:T
+  end
+
+  module type with_2 = u2 with module type T = sig end
+
+  module type a = sig
+    module type b = s
+    module M: b
+  end
+
+  module type c = a with module type b := s
+end
+
+module Nested : sig
+
+  module type nested = sig
+    module N: sig
+      module type t = sig end
+    end
+  end
+
+  module type with_ = nested with module type N.t = s
+  module type with_subst = nested with module type N.t := s
+end
+
+module Structural: sig
+  module type u = sig
+    module type a = sig
+      module type b = sig
+        module type c = sig
+          type t = A of t
+        end
+      end
+    end
+  end
+
+  module type w = u
+    with module type a =
+         sig
+           module type b = sig
+             module type c = sig
+               type t = A of t
+             end
+           end
+         end
+end
+</span></code></pre></body></html>

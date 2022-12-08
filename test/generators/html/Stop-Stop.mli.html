@@ -1,74 +1,74 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Stop.mli (Stop)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span id="L1" class="source_line"></span>(** This test cases exercises stop comments. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L2" class="source_line"></span>
-</span><span class="VAL"><span id="L3" class="source_line"></span>val</span> <span class="LIDENT">foo</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span id="L4" class="source_line"></span>(** This is normal commented text. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L5" class="source_line"></span>
-</span><span id="L6" class="source_line"></span>(** The next value is [bar], and it should be missing from the documentation.
-<span id="L7" class="source_line"></span>    There is also an entire module, [M], which should also be hidden. It
-<span id="L8" class="source_line"></span>    contains a nested stop comment, but that stop comment should not turn
-<span id="L9" class="source_line"></span>    documentation back on in this outer module, because stop comments respect
-<span id="L10" class="source_line"></span>    scope. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L11" class="source_line"></span>
-</span><span id="L12" class="source_line"></span>(**/*<span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L13" class="source_line"></span>
-</span><span class="VAL"><span id="L14" class="source_line"></span>val</span> <span class="LIDENT">bar</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span id="L15" class="source_line"></span>(** OMG! <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L16" class="source_line"></span>
-</span><span class="MODULE"><span id="L17" class="source_line"></span>module</span> <span class="UIDENT">M</span> <span class="COLON">:</span><span class="EOL">
-</span><span class="SIG"><span id="L18" class="source_line"></span>sig</span><span class="EOL">
-</span><span id="L19" class="source_line"></span>  <span class="VAL">val</span> <span class="LIDENT">baz</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="EOL"><span id="L20" class="source_line"></span>
-</span><span id="L21" class="source_line"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L22" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L23" class="source_line"></span>
-</span><span id="L24" class="source_line"></span>(**/*<span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L25" class="source_line"></span>
-</span><span id="L26" class="source_line"></span>(** Documentation is on again.
-<span id="L27" class="source_line"></span>
-<span id="L28" class="source_line"></span>    Now, we have a nested module, and it has a stop comment between its two
-<span id="L29" class="source_line"></span>    items. We want to see that the first item is displayed, but the second is
-<span id="L30" class="source_line"></span>    missing, and the stop comment disables documenation only in that module, and
-<span id="L31" class="source_line"></span>    not in this outer module. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L32" class="source_line"></span>
-</span><span class="MODULE"><span id="L33" class="source_line"></span>module</span> <span class="UIDENT">N</span> <span class="COLON">:</span><span class="EOL">
-</span><span class="SIG"><span id="L34" class="source_line"></span>sig</span><span class="EOL">
-</span><span id="L35" class="source_line"></span>  <span class="VAL">val</span> <span class="LIDENT">quux</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="EOL"><span id="L36" class="source_line"></span>
-</span><span id="L37" class="source_line"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L38" class="source_line"></span>
-</span><span id="L39" class="source_line"></span>  <span class="VAL">val</span> <span class="LIDENT">omg</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="END"><span id="L40" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L41" class="source_line"></span>
-</span><span class="VAL"><span id="L42" class="source_line"></span>val</span> <span class="LIDENT">lol</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="EOL"><span id="L43" class="source_line"></span>
-</span><span id="L44" class="source_line"></span>(** The first comment can also be a stop-comment. The test case
-<span id="L45" class="source_line"></span>    [stop_first_comment.mli] is testing the same thing but at the toplevel. We
-<span id="L46" class="source_line"></span>    should see [bar] inside {!O}. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L47" class="source_line"></span>
-</span><span class="MODULE"><span id="L48" class="source_line"></span>module</span> <span class="UIDENT">O</span> <span class="COLON">:</span><span class="EOL">
-</span><span class="SIG"><span id="L49" class="source_line"></span>sig</span><span class="EOL">
-</span><span id="L50" class="source_line"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L51" class="source_line"></span>
-</span><span id="L52" class="source_line"></span>  <span class="VAL">val</span> <span class="LIDENT">foo</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="EOL"><span id="L53" class="source_line"></span>
-</span><span id="L54" class="source_line"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L55" class="source_line"></span>
-</span><span id="L56" class="source_line"></span>  <span class="VAL">val</span> <span class="LIDENT">bar</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="END"><span id="L57" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L58" class="source_line"></span>
-</span><span id="L59" class="source_line"></span>(** The top-comment computation must not mess with stop comments. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L60" class="source_line"></span>
-</span><span class="MODULE"><span id="L61" class="source_line"></span>module</span> <span class="UIDENT">P</span> <span class="COLON">:</span><span class="EOL">
-</span><span class="SIG"><span id="L62" class="source_line"></span>sig</span><span class="EOL">
-</span><span id="L63" class="source_line"></span>  (** Doc. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L64" class="source_line"></span>
-</span><span id="L65" class="source_line"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L66" class="source_line"></span>
-</span><span id="L67" class="source_line"></span>  <span class="VAL">val</span> <span class="LIDENT">foo</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="EOL"><span id="L68" class="source_line"></span>
-</span><span id="L69" class="source_line"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L70" class="source_line"></span>
-</span><span id="L71" class="source_line"></span>  <span class="VAL">val</span> <span class="LIDENT">bar</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="END"><span id="L72" class="source_line"></span>end</span><span class="EOL">
-</span></span></code></pre></body></html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Stop.mli (Stop)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span>(** This test cases exercises stop comments. *)
+
+val foo : int
+(** This is normal commented text. *)
+
+(** The next value is [bar], and it should be missing from the documentation.
+    There is also an entire module, [M], which should also be hidden. It
+    contains a nested stop comment, but that stop comment should not turn
+    documentation back on in this outer module, because stop comments respect
+    scope. *)
+
+(**/**)
+
+val bar : int
+(** OMG! *)
+
+module M :
+sig
+  val baz : int
+
+  (**/**)
+end
+
+(**/**)
+
+(** Documentation is on again.
+
+    Now, we have a nested module, and it has a stop comment between its two
+    items. We want to see that the first item is displayed, but the second is
+    missing, and the stop comment disables documenation only in that module, and
+    not in this outer module. *)
+
+module N :
+sig
+  val quux : int
+
+  (**/**)
+
+  val omg : int
+end
+
+val lol : int
+
+(** The first comment can also be a stop-comment. The test case
+    [stop_first_comment.mli] is testing the same thing but at the toplevel. We
+    should see [bar] inside {!O}. *)
+
+module O :
+sig
+  (**/**)
+
+  val foo : int
+
+  (**/**)
+
+  val bar : int
+end
+
+(** The top-comment computation must not mess with stop comments. *)
+
+module P :
+sig
+  (** Doc. *)
+
+  (**/**)
+
+  val foo : int
+
+  (**/**)
+
+  val bar : int
+end
+</span></code></pre></body></html>

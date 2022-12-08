@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Module_type_alias.mli (Module_type_alias)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span id="L1" class="source_line"></span>(** Module Type Aliases <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L2" class="source_line"></span>
-</span><span class="EOL"><span id="L3" class="source_line"></span>
-</span><span class="MODULE"><span id="L4" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">A</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L5" class="source_line"></span>  <span class="TYPE">type</span> <span class="LIDENT">a</span><span class="EOL">
-</span><span class="END"><span id="L6" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L7" class="source_line"></span>
-</span><span class="EOL"><span id="L8" class="source_line"></span>
-</span><span class="MODULE"><span id="L9" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">B</span> <span class="EQUAL">=</span> <span class="FUNCTOR">functor</span> <span class="LPAREN">(</span> <span class="UIDENT">C</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="TYPE">type</span> <span class="LIDENT">c</span> <span class="END">end</span> <span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L10" class="source_line"></span>  <span class="TYPE">type</span> <span class="LIDENT">b</span><span class="EOL">
-</span><span class="END"><span id="L11" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L12" class="source_line"></span>
-</span><span class="MODULE"><span id="L13" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">D</span> <span class="EQUAL">=</span> <span class="UIDENT">A</span><span class="EOL">
-</span><span class="EOL"><span id="L14" class="source_line"></span>
-</span><span class="MODULE"><span id="L15" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">E</span> <span class="EQUAL">=</span> <span class="FUNCTOR">functor</span> <span class="LPAREN">(</span> <span class="UIDENT">F</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="TYPE">type</span> <span class="LIDENT">f</span> <span class="END">end</span> <span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="UIDENT">B</span><span class="EOL">
-</span><span class="EOL"><span id="L16" class="source_line"></span>
-</span><span class="MODULE"><span id="L17" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">G</span> <span class="EQUAL">=</span> <span class="FUNCTOR">functor</span> <span class="LPAREN">(</span> <span class="UIDENT">H</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="TYPE">type</span> <span class="LIDENT">h</span> <span class="END">end</span><span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="UIDENT">D</span><span class="EOL">
-</span><span class="EOL"><span id="L18" class="source_line"></span>
-</span><span class="MODULE"><span id="L19" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">I</span> <span class="EQUAL">=</span> <span class="UIDENT">B</span><span class="EOL">
-</span><span class="EOL"><span id="L20" class="source_line"></span>
-</span></span></code></pre></body></html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Module_type_alias.mli (Module_type_alias)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span>(** Module Type Aliases *)
+
+
+module type A = sig
+  type a
+end
+
+
+module type B = functor ( C : sig type c end ) -&gt; sig
+  type b
+end
+
+module type D = A
+
+module type E = functor ( F : sig type f end ) -&gt; B
+
+module type G = functor ( H : sig type h end) -&gt; D
+
+module type I = B
+
+</span></code></pre></body></html>

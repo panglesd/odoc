@@ -1,86 +1,86 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Nested.mli (Nested)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span class="EOL"><span id="L1" class="source_line"></span>
-</span><span id="L2" class="source_line"></span>(** This comment needs to be here before #235 is fixed. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L3" class="source_line"></span>
-</span><span id="L4" class="source_line"></span>(** {1 Module} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L5" class="source_line"></span>
-</span><span id="L6" class="source_line"></span>(** This is module X.
-<span id="L7" class="source_line"></span>
-<span id="L8" class="source_line"></span>    Some additional comments. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="MODULE"><span id="L9" class="source_line"></span>module</span> <span class="UIDENT">X</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span class="EOL"><span id="L10" class="source_line"></span>
-</span><span id="L11" class="source_line"></span>  (** {1 Type} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L12" class="source_line"></span>
-</span><span id="L13" class="source_line"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L14" class="source_line"></span>  (** Some type. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L15" class="source_line"></span>
-</span><span id="L16" class="source_line"></span>  (** {1 Values} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L17" class="source_line"></span>
-</span><span id="L18" class="source_line"></span>  <span class="VAL">val</span> <span class="LIDENT">x</span> <span class="COLON">:</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L19" class="source_line"></span>  (** The value of x. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L20" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L21" class="source_line"></span>
-</span><span class="EOL"><span id="L22" class="source_line"></span>
-</span><span id="L23" class="source_line"></span>(** {1 Module type} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L24" class="source_line"></span>
-</span><span id="L25" class="source_line"></span>(** This is module type Y.
-<span id="L26" class="source_line"></span>
-<span id="L27" class="source_line"></span>    Some additional comments. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="MODULE"><span id="L28" class="source_line"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">Y</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
-</span><span class="EOL"><span id="L29" class="source_line"></span>
-</span><span id="L30" class="source_line"></span>  (** {1 Type} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L31" class="source_line"></span>
-</span><span id="L32" class="source_line"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L33" class="source_line"></span>  (** Some type. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L34" class="source_line"></span>
-</span><span id="L35" class="source_line"></span>  (** {1 Values} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L36" class="source_line"></span>
-</span><span id="L37" class="source_line"></span>  <span class="VAL">val</span> <span class="LIDENT">y</span> <span class="COLON">:</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L38" class="source_line"></span>  (** The value of y. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L39" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L40" class="source_line"></span>
-</span><span class="EOL"><span id="L41" class="source_line"></span>
-</span><span id="L42" class="source_line"></span>(** {1 Functor} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L43" class="source_line"></span>
-</span><span id="L44" class="source_line"></span>(** This is a functor F.
-<span id="L45" class="source_line"></span>
-<span id="L46" class="source_line"></span>    Some additional comments. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="MODULE"><span id="L47" class="source_line"></span>module</span> <span class="UIDENT">F</span><span class="EOL">
-</span><span id="L48" class="source_line"></span>    <span class="LPAREN">(</span><span class="UIDENT">Arg1</span> <span class="COLON">:</span> <span class="UIDENT">Y</span><span class="RPAREN">)</span> <span class="LPAREN">(</span><span class="UIDENT">Arg2</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L49" class="source_line"></span>    (** {1 Type} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L50" class="source_line"></span>
-</span><span id="L51" class="source_line"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
-</span><span id="L52" class="source_line"></span>    (** Some type. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span id="L53" class="source_line"></span>  <span class="END">end</span><span class="RPAREN">)</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
-</span><span id="L54" class="source_line"></span>  (** {1 Type} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L55" class="source_line"></span>
-</span><span id="L56" class="source_line"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="UIDENT">Arg1</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="STAR">*</span> <span class="UIDENT">Arg2</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
-</span><span id="L57" class="source_line"></span>  (** Some type. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="END"><span id="L58" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L59" class="source_line"></span>
-</span><span class="EOL"><span id="L60" class="source_line"></span>
-</span><span id="L61" class="source_line"></span>(** {1 Class} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L62" class="source_line"></span>
-</span><span id="L63" class="source_line"></span>(** This is class z.
-<span id="L64" class="source_line"></span>
-<span id="L65" class="source_line"></span>    Some additional comments. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="CLASS"><span id="L66" class="source_line"></span>class</span> <span class="VIRTUAL">virtual</span> <span class="LIDENT">z</span> <span class="COLON">:</span> <span class="OBJECT">object</span><span class="EOL">
-</span><span class="EOL"><span id="L67" class="source_line"></span>
-</span><span id="L68" class="source_line"></span>  <span class="VAL">val</span> <span class="LIDENT">y</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span id="L69" class="source_line"></span>  (** Some value. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L70" class="source_line"></span>
-</span><span id="L71" class="source_line"></span>  <span class="VAL">val</span> <span class="MUTABLE">mutable</span> <span class="VIRTUAL">virtual</span> <span class="LIDENT">y'</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="EOL"><span id="L72" class="source_line"></span>
-</span><span id="L73" class="source_line"></span>  (** {1 Methods} <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L74" class="source_line"></span>
-</span><span id="L75" class="source_line"></span>  <span class="METHOD">method</span> <span class="LIDENT">z</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span id="L76" class="source_line"></span>  (** Some method. <span class="DOCSTRING">*)</span><span class="EOL">
-</span><span class="EOL"><span id="L77" class="source_line"></span>
-</span><span id="L78" class="source_line"></span>  <span class="METHOD">method</span> <span class="PRIVATE">private</span> <span class="VIRTUAL">virtual</span> <span class="LIDENT">z'</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
-</span><span class="END"><span id="L79" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L80" class="source_line"></span>
-</span><span class="EOL"><span id="L81" class="source_line"></span>
-</span><span class="CLASS"><span id="L82" class="source_line"></span>class</span> <span class="VIRTUAL">virtual</span> <span class="LIDENT">inherits</span> <span class="COLON">:</span> <span class="OBJECT">object</span><span class="EOL">
-</span><span id="L83" class="source_line"></span>  <span class="INHERIT">inherit</span> <span class="LIDENT">z</span><span class="EOL">
-</span><span class="END"><span id="L84" class="source_line"></span>end</span><span class="EOL">
-</span></span></code></pre></body></html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Nested.mli (Nested)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span>
+(** This comment needs to be here before #235 is fixed. *)
+
+(** {1 Module} *)
+
+(** This is module X.
+
+    Some additional comments. *)
+module X : sig
+
+  (** {1 Type} *)
+
+  type t
+  (** Some type. *)
+
+  (** {1 Values} *)
+
+  val x : t
+  (** The value of x. *)
+end
+
+
+(** {1 Module type} *)
+
+(** This is module type Y.
+
+    Some additional comments. *)
+module type Y = sig
+
+  (** {1 Type} *)
+
+  type t
+  (** Some type. *)
+
+  (** {1 Values} *)
+
+  val y : t
+  (** The value of y. *)
+end
+
+
+(** {1 Functor} *)
+
+(** This is a functor F.
+
+    Some additional comments. *)
+module F
+    (Arg1 : Y) (Arg2 : sig
+    (** {1 Type} *)
+
+    type t
+    (** Some type. *)
+  end) : sig
+  (** {1 Type} *)
+
+  type t = Arg1.t * Arg2.t
+  (** Some type. *)
+end
+
+
+(** {1 Class} *)
+
+(** This is class z.
+
+    Some additional comments. *)
+class virtual z : object
+
+  val y : int
+  (** Some value. *)
+
+  val mutable virtual y' : int
+
+  (** {1 Methods} *)
+
+  method z : int
+  (** Some method. *)
+
+  method private virtual z' : int
+end
+
+
+class virtual inherits : object
+  inherit z
+end
+</span></code></pre></body></html>

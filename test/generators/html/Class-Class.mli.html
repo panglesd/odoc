@@ -1,29 +1,29 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Class.mli (Class)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span class="CLASS"><span id="L1" class="source_line"></span>class</span> <span class="TYPE">type</span> <span class="LIDENT">empty</span> <span class="EQUAL">=</span><span class="EOL">
-</span><span class="OBJECT"><span id="L2" class="source_line"></span>object</span><span class="EOL">
-</span><span class="END"><span id="L3" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L4" class="source_line"></span>
-</span><span class="CLASS"><span id="L5" class="source_line"></span>class</span> <span class="TYPE">type</span> <span class="LIDENT">mutually</span> <span class="EQUAL">=</span><span class="EOL">
-</span><span class="OBJECT"><span id="L6" class="source_line"></span>object</span><span class="EOL">
-</span><span class="END"><span id="L7" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L8" class="source_line"></span>
-</span><span class="AND"><span id="L9" class="source_line"></span>and</span> <span class="LIDENT">recursive</span> <span class="EQUAL">=</span><span class="EOL">
-</span><span class="OBJECT"><span id="L10" class="source_line"></span>object</span><span class="EOL">
-</span><span class="END"><span id="L11" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L12" class="source_line"></span>
-</span><span class="CLASS"><span id="L13" class="source_line"></span>class</span> <span class="LIDENT">mutually'</span> <span class="COLON">:</span> <span class="LIDENT">mutually</span><span class="EOL">
-</span><span class="AND"><span id="L14" class="source_line"></span>and</span> <span class="LIDENT">recursive'</span> <span class="COLON">:</span> <span class="LIDENT">recursive</span><span class="EOL">
-</span><span class="EOL"><span id="L15" class="source_line"></span>
-</span><span class="CLASS"><span id="L16" class="source_line"></span>class</span> <span class="TYPE">type</span> <span class="VIRTUAL">virtual</span> <span class="LIDENT">empty_virtual</span> <span class="EQUAL">=</span><span class="EOL">
-</span><span class="OBJECT"><span id="L17" class="source_line"></span>object</span><span class="EOL">
-</span><span class="END"><span id="L18" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L19" class="source_line"></span>
-</span><span class="CLASS"><span id="L20" class="source_line"></span>class</span> <span class="VIRTUAL">virtual</span> <span class="LIDENT">empty_virtual'</span> <span class="COLON">:</span> <span class="LIDENT">empty</span><span class="EOL">
-</span><span class="EOL"><span id="L21" class="source_line"></span>
-</span><span class="CLASS"><span id="L22" class="source_line"></span>class</span> <span class="TYPE">type</span> <span class="LBRACKET">[</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="RBRACKET">]</span> <span class="LIDENT">polymorphic</span> <span class="EQUAL">=</span><span class="EOL">
-</span><span class="OBJECT"><span id="L23" class="source_line"></span>object</span><span class="EOL">
-</span><span class="END"><span id="L24" class="source_line"></span>end</span><span class="EOL">
-</span><span class="EOL"><span id="L25" class="source_line"></span>
-</span><span class="CLASS"><span id="L26" class="source_line"></span>class</span> <span class="LBRACKET">[</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="RBRACKET">]</span> <span class="LIDENT">polymorphic'</span> <span class="COLON">:</span> <span class="LBRACKET">[</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="RBRACKET">]</span> <span class="LIDENT">polymorphic</span><span class="EOL">
-</span><span class="EOL"><span id="L27" class="source_line"></span>
-</span></span></code></pre></body></html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Class.mli (Class)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span>class type empty =
+object
+end
+
+class type mutually =
+object
+end
+
+and recursive =
+object
+end
+
+class mutually' : mutually
+and recursive' : recursive
+
+class type virtual empty_virtual =
+object
+end
+
+class virtual empty_virtual' : empty
+
+class type ['a] polymorphic =
+object
+end
+
+class ['a] polymorphic' : ['a] polymorphic
+
+</span></code></pre></body></html>

@@ -194,9 +194,9 @@ module Make (Syntax : SYNTAX) = struct
   end
 
   module Impl = struct
-    let doc_of_poses src posl =
+    let impl ~infos src =
       let l =
-        posl
+        infos
         |> List.sort (fun (_, (l1, e1)) (_, (l2, e2)) ->
                if l1 = l2 then Int.compare e2 e1
                  (* If two intervals open at the same time, we open
@@ -229,13 +229,6 @@ module Make (Syntax : SYNTAX) = struct
       in
       let doc, _ = extract 0 (String.length src) l [] in
       List.rev doc
-
-    let impl ~infos src =
-      let syntax_locs = Source_info.Syntax.highlight src in
-      let lines_locs = Source_info.Lines.split src in
-      let infos = List.rev_append infos syntax_locs in
-      let infos = List.rev_append infos lines_locs in
-      doc_of_poses src infos
   end
 
   module Source_page : sig
@@ -251,7 +244,8 @@ module Make (Syntax : SYNTAX) = struct
           [ source ~parent ~ext ~contents ]
       | None -> []
 
-    let source { Lang.Source_code.parent; intf_source; impl_source; impl_info } =
+    let source { Lang.Source_code.parent; intf_source; impl_source; impl_info }
+        =
       source_opt parent ~infos:impl_info ~ext:".ml" impl_source
       @ source_opt parent ~infos:[] ~ext:".mli" intf_source
   end
