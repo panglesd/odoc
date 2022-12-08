@@ -54,16 +54,24 @@ let lookup_def impl_shape id =
       let result = Shape.local_reduce query in
       match result.uid with
       | None -> None
-      | Some uid -> Shape.Uid.Tbl.find_opt impl_shape.uid_to_loc uid)
+      | Some uid ->
+          if Shape.Uid.Tbl.mem impl_shape.uid_to_loc uid
+          then Some (Uid.string_of_uid uid)
+          else None)
 
 let of_cmt (cmt : Cmt_format.cmt_infos) =
   match cmt.cmt_impl_shape with
   | Some impl_shape ->
-      Some ({ uid_to_loc = cmt.cmt_uid_to_loc; impl_shape },
-         Source_info.Local_jmp.jmp_to_def cmt)
+      Some ({ uid_to_loc = cmt.cmt_uid_to_loc; impl_shape })
   | None -> None
 
 #else
+let of_value_description _ = None
+let of_type_declaration _ = None
+let of_extension_constructor _ = None
+let of_class_type_declaration _ = None
+let of_class_declaration _ = None
+let of_module_type_declaration _ = None
 
 type impl_shape = unit
 

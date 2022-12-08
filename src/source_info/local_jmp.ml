@@ -1,9 +1,4 @@
-let string_of_uid uid =
-  match uid with
-  | Shape.Uid.Compilation_unit s -> s
-  | Item { comp_unit; id } -> comp_unit ^ string_of_int id
-  | Predef s -> s
-  | _ -> "rien"
+open Odoc_model.Lang.Source_code.Info
 
 let pos_of_loc loc = (loc.Location.loc_start.pos_cnum, loc.loc_end.pos_cnum)
 
@@ -15,7 +10,7 @@ module Local_analysis = struct
           match id with
           | Path.Pident id ->
               let uniq = Ident.unique_name id in
-              poses := (Types.Occurence uniq, pos_of_loc exp_loc) :: !poses
+              poses := (Occurence uniq, pos_of_loc exp_loc) :: !poses
           | _ -> ()
         in
         extract_id id
@@ -29,7 +24,7 @@ module Local_analysis = struct
         _;
       } ->
         let uniq = Ident.unique_name id in
-        poses := (Types.Def uniq, pos_of_loc pat_loc) :: !poses
+        poses := (Def uniq, pos_of_loc pat_loc) :: !poses
     | _ -> ()
 end
 
@@ -37,8 +32,8 @@ module Global_analysis = struct
   let init poses uid_to_loc =
     Shape.Uid.Tbl.iter
       (fun uid t ->
-        let s = string_of_uid uid in
-        poses := (Types.Def s, pos_of_loc t) :: !poses)
+        let s = Uid.string_of_uid uid in
+        poses := (Def s, pos_of_loc t) :: !poses)
       uid_to_loc
   let expr poses uid_to_loc expr =
     match expr with
@@ -48,7 +43,7 @@ module Global_analysis = struct
         | None -> ()
         | Some _ ->
             poses :=
-              ( Types.Occurence (string_of_uid value_description.val_uid),
+              ( Occurence (Uid.string_of_uid value_description.val_uid),
                 pos_of_loc exp_loc )
               :: !poses)
     | _ -> ()
@@ -76,4 +71,4 @@ let jmp_to_def_locs (cmt : Cmt_format.cmt_infos) =
   | _ -> []
 
 let jmp_to_def cmt =
-  jmp_to_def_locs cmt |> List.map (fun (x, y) -> (Types.Local_jmp x, y))
+  jmp_to_def_locs cmt |> List.map (fun (x, y) -> (Local_jmp x, y))

@@ -47,7 +47,12 @@ let read_cmt_infos ~filename () =
   | exception Cmi_format.Error _ -> raise Corrupted
   | cmt_info -> (
       match cmt_info.cmt_annots with
-      | Implementation _ -> Compatshape.of_cmt cmt_info
+      | Implementation _ -> (
+          match Source_info.Compatshape.of_cmt cmt_info with
+          | None -> None
+          | Some shape ->
+              let jmp_infos = Source_info.Local_jmp.jmp_to_def cmt_info in
+              Some (shape, jmp_infos))
       | _ -> raise Not_an_implementation)
 
 let make_compilation_unit ~make_root ~imports ~interface ?sourcefile ~name ~id
@@ -156,11 +161,14 @@ let read_cmt ~make_root ~parent ~filename () =
           ( make_compilation_unit ~make_root ~imports ~interface ~sourcefile
               ~name ~id content,
             None )
-      | Implementation impl ->
+      | Implementation impl -> (
           let id, sg, canonical = Cmt.read_implementation parent name impl in
           ( compilation_unit_of_sig ~make_root ~imports ~interface ~sourcefile
               ~name ~id ?canonical sg,
-            Compatshape.of_cmt cmt_info )
+            Source_info.(
+              match Compatshape.of_cmt cmt_info with
+              | None -> None
+              | Some shape -> Some (shape, Local_jmp.jmp_to_def cmt_info)) ))
       | _ -> raise Not_an_implementation)
 
 let read_cmi ~make_root ~parent ~filename () =

@@ -14,7 +14,7 @@
   odoc_xref2
   tyxml
   unix
-  compatshape)
+  source_info)
  (flags
   (:standard -open Odoc_base))
  (instrumentation

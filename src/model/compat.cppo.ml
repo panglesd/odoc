@@ -59,6 +59,11 @@ and module_declaration =
     md_type: module_type;
     md_attributes: Parsetree.attributes;
     md_loc: Location.t;
+#if OCAML_VERSION >= (4,14,0)
+    md_uid: Shape.Uid.t option;
+#else
+    md_uid: unit option;
+#endif
   }
 
 and modtype_declaration =
@@ -66,6 +71,11 @@ and modtype_declaration =
     mtd_type: module_type option;  (* Note: abstract *)
     mtd_attributes: Parsetree.attributes;
     mtd_loc: Location.t;
+#if OCAML_VERSION >= (4,14,0)
+    mtd_uid: Shape.Uid.t option;
+#else
+    mtd_uid: unit option;
+#endif
   }
 
 
@@ -105,12 +115,24 @@ and module_presence : Types.module_presence -> module_presence = function
 and module_declaration : Types.module_declaration -> module_declaration = fun x ->
   { md_type = module_type x.Types.md_type;
     md_attributes = x.md_attributes;
-    md_loc = x.md_loc }
+    md_loc = x.md_loc;
+#if OCAML_VERSION >= (4,14,0)
+    md_uid = Some x.md_uid
+#else
+    md_uid = None
+#endif
+}
 
 and modtype_declaration : Types.modtype_declaration -> modtype_declaration = fun x ->
   { mtd_type = opt module_type x.Types.mtd_type;
     mtd_attributes = x.Types.mtd_attributes;
-    mtd_loc = x.Types.mtd_loc }
+    mtd_loc = x.Types.mtd_loc;
+#if OCAML_VERSION >= (4,14,0)
+    mtd_uid = Some x.Types.mtd_uid
+#else
+    mtd_uid = None
+#endif
+}
 
 #elif OCAML_VERSION >= (4,8,0)
 
@@ -146,12 +168,14 @@ and module_presence : Types.module_presence -> module_presence = function
 and module_declaration : Types.module_declaration -> module_declaration = fun x ->
   { md_type = module_type x.Types.md_type;
     md_attributes = x.md_attributes;
-    md_loc = x.md_loc }
+    md_loc = x.md_loc;
+    md_uid = None }
 
 and modtype_declaration : Types.modtype_declaration -> modtype_declaration = fun x ->
   { mtd_type = opt module_type x.Types.mtd_type;
     mtd_attributes = x.Types.mtd_attributes;
-    mtd_loc = x.Types.mtd_loc }
+    mtd_loc = x.Types.mtd_loc
+    mtd_uid = None }
 
 #elif OCAML_VERSION >= (4,4,0) && OCAML_VERSION < (4,8,0)
 
@@ -181,12 +205,14 @@ and modtype_declaration : Types.modtype_declaration -> modtype_declaration = fun
   and module_declaration : Types.module_declaration -> module_declaration = fun x ->
     { md_type = module_type x.Types.md_type;
       md_attributes = x.Types.md_attributes;
-      md_loc = x.Types.md_loc }
+      md_loc = x.Types.md_loc;
+      md_uid = None }
 
   and modtype_declaration : Types.modtype_declaration -> modtype_declaration = fun x ->
     { mtd_type = opt module_type x.Types.mtd_type;
       mtd_attributes = x.Types.mtd_attributes;
-      mtd_loc = x.Types.mtd_loc }
+      mtd_loc = x.Types.mtd_loc;
+      mtd_uid = None }
 
 #elif OCAML_VERSION >= (4,2,0) && OCAML_VERSION < (4,4,0)
 
@@ -214,12 +240,14 @@ and modtype_declaration : Types.modtype_declaration -> modtype_declaration = fun
   and module_declaration : Types.module_declaration -> module_declaration = fun x ->
     { md_type = module_type x.Types.md_type;
       md_attributes = x.Types.md_attributes;
-      md_loc = x.Types.md_loc }
+      md_loc = x.Types.md_loc;
+      md_uid = None }
 
   and modtype_declaration : Types.modtype_declaration -> modtype_declaration = fun x ->
     { mtd_type = opt module_type x.Types.mtd_type;
       mtd_attributes = x.Types.mtd_attributes;
-      mtd_loc = x.Types.mtd_loc }
+      mtd_loc = x.Types.mtd_loc;
+      mtd_uid = None }
 
 
 #endif

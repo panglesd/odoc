@@ -252,8 +252,10 @@ a:hover {
 /* Linked highlight */
 *:target {
   background-color: var(--target-background) !important;
-  box-shadow: 0 0px 0 1px var(--target-shadow) !important;
   border-radius: 1px;
+}
+.odoc *:target {
+  box-shadow: 0 0px 0 1px var(--target-shadow) !important;
 }
 .source_line:target {
   position: absolute;
@@ -264,8 +266,12 @@ a:hover {
 .source_line {
   display: absolute;
 }
+.odoc-src *:target {
+  padding: 0.15em;
+}
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 30%;
 }
 *:hover > a.anchor {
   visibility: visible;
@@ -795,39 +801,37 @@ td.def-doc *:first-child {
   text-decoration: underline;
 }
 
-.VAL, .TYPE, .LET, .REC, .IN, .OPEN, .NONREC, .MODULE, .METHOD, .LETOP, .INHERIT, .INCLUDE, .FUNCTOR, .EXTERNAL, .CONSTRAINT, .ASSERT, .AND, .END {
+.odoc-src .keyword {
   font-weight: bold;
   color:#C8AD7F;
 }
 
-.WITH, .WHILE, .WHEN, .VIRTUAL, .TRY, .TO, .THEN, .STRUCT, .SIG, .PRIVATE, .OF, .NEW, .MUTABLE, .MATCH, .LAZY, .IF, .FUNCTION, .FUN, .FOR, .EXCEPTION, .ELSE, .TO, .DOWNTO, .DO, .DONE, .BEGIN, .AS {
+.odoc-src .keyword-other {
   color: blue;
 }
 
-.TRUE, .FALSE {
+.odoc-src .boolean-constant {
   color: green;
 }
 
-.failwith, .INT, .SEMISEMI {
+.odoc-src .alert, .odoc-src .numeric-constant {
   color: red;
 }
 
-.STRING, .CHAR {
+.odoc-src .string-constant {
   color: darkgoldenrod;
 }
 
-.DOCSTRING {
+.odoc-src .docstring {
   color: orange;
 }
 
-.COMMENT {
+.odoc-src .comment {
   color: grey;
 }
 
 a.source_link {
-  position:  absolute;
-  top: 1px;
-  right: 1px;
+  float: right;
   color: var(--source-color);
 }
 
