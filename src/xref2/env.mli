@@ -97,7 +97,7 @@ val module_of_unit : Lang.Compilation_unit.t -> Component.Module.t
 val lookup_root_module : string -> t -> root option
 
 val lookup_def :
-  [< Identifier.t_pv ] Paths.Identifier.id -> t -> string option
+  [< Identifier.t_pv ] Paths.Identifier.id -> t -> Lang.Locations.uid option
 
 type 'a scope constraint 'a = [< Component.Element.any ]
 (** Target of a lookup *)

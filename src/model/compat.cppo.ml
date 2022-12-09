@@ -59,6 +59,7 @@ and module_declaration =
     md_type: module_type;
     md_attributes: Parsetree.attributes;
     md_loc: Location.t;
+    md_uid: Shape.Uid.t;
   }
 
 and modtype_declaration =
@@ -66,6 +67,7 @@ and modtype_declaration =
     mtd_type: module_type option;  (* Note: abstract *)
     mtd_attributes: Parsetree.attributes;
     mtd_loc: Location.t;
+    mtd_uid: Shape.Uid.t
   }
 
 
@@ -105,12 +107,14 @@ and module_presence : Types.module_presence -> module_presence = function
 and module_declaration : Types.module_declaration -> module_declaration = fun x ->
   { md_type = module_type x.Types.md_type;
     md_attributes = x.md_attributes;
-    md_loc = x.md_loc }
+    md_loc = x.md_loc;
+    md_uid = x.md_uid }
 
 and modtype_declaration : Types.modtype_declaration -> modtype_declaration = fun x ->
   { mtd_type = opt module_type x.Types.mtd_type;
     mtd_attributes = x.Types.mtd_attributes;
-    mtd_loc = x.Types.mtd_loc }
+    mtd_loc = x.Types.mtd_loc;
+    mtd_uid = x.Types.mtd_uid }
 
 #elif OCAML_VERSION >= (4,8,0)
 

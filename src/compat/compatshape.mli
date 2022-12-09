@@ -2,7 +2,8 @@ open Odoc_model.Paths
 
 type impl_shape
 
-val lookup_def : impl_shape -> Identifier.t -> string option
+val lookup_def :
+  impl_shape -> Identifier.t -> Odoc_model.Lang.Locations.uid option
 
 val of_cmt :
   Cmt_format.cmt_infos -> (impl_shape * Source_info.Types.infos) option
