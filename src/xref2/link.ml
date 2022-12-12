@@ -647,6 +647,7 @@ and functor_parameter_parameter :
     Env.t -> FunctorParameter.parameter -> FunctorParameter.parameter =
  fun env a ->
   let sg_id = (a.id :> Id.Signature.t) in
+  let env = Env.discard_source_parent env in
   let expr = module_type_expr env sg_id a.expr in
   { a with expr }
 

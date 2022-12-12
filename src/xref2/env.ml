@@ -210,6 +210,11 @@ let set_source_parent parent env =
   let id = unique_id () in
   { env with source_parent = Some parent; id }
 
+    let discard_source_parent env =
+  let id = unique_id () in
+  { env with source_parent = None; id }
+
+
 (** Implements most [add_*] functions. *)
 let add_to_elts kind identifier component env =
   if not env.linking then

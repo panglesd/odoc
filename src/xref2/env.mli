@@ -49,6 +49,9 @@ val add_fragment_root : Component.Signature.t -> t -> t
 val set_source_parent : Identifier.Module.t -> t -> t
 (** Looked up with {!lookup_source_parent}. *)
 
+val discard_source_parent : t -> t
+(** Looked up with {!lookup_source_parent}. *)
+
 val add_module :
   Identifier.Path.Module.t ->
   Component.Module.t Component.Delayed.t ->
