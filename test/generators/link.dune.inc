@@ -6,7 +6,14 @@
 (rule
  (target alerts.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:alerts.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/alerts.mli}
+   %{dep:alerts.cmti})))
 
 (rule
  (target alerts.odocl)
@@ -21,7 +28,14 @@
 (rule
  (target alias.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:alias.cmt})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --impl
+   %{dep:cases/alias.ml}
+   %{dep:alias.cmt})))
 
 (rule
  (target alias.odocl)
@@ -36,7 +50,7 @@
 (rule
  (target bugs.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:bugs.cmt})))
+  (run odoc compile -o %{target} --impl %{dep:cases/bugs.ml} %{dep:bugs.cmt})))
 
 (rule
  (target bugs.odocl)
@@ -53,7 +67,14 @@
 (rule
  (target bugs_post_406.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:bugs_post_406.cmti}))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/bugs_post_406.mli}
+   %{dep:bugs_post_406.cmti}))
  (enabled_if
   (>= %{ocaml_version} 4.06)))
 
@@ -74,7 +95,14 @@
 (rule
  (target bugs_pre_410.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:bugs_pre_410.cmt}))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --impl
+   %{dep:cases/bugs_pre_410.ml}
+   %{dep:bugs_pre_410.cmt}))
  (enabled_if
   (<= %{ocaml_version} 4.09)))
 
@@ -93,7 +121,14 @@
 (rule
  (target class.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:class.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/class.mli}
+   %{dep:class.cmti})))
 
 (rule
  (target class.odocl)
@@ -110,7 +145,14 @@
 (rule
  (target class_comments.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:class_comments.cmti}))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/class_comments.mli}
+   %{dep:class_comments.cmti}))
  (enabled_if
   (>= %{ocaml_version} 4.08)))
 
@@ -129,7 +171,14 @@
 (rule
  (target external.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:external.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/external.mli}
+   %{dep:external.cmti})))
 
 (rule
  (target external.odocl)
@@ -144,7 +193,14 @@
 (rule
  (target functor.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:functor.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/functor.mli}
+   %{dep:functor.cmti})))
 
 (rule
  (target functor.odocl)
@@ -159,7 +215,14 @@
 (rule
  (target functor2.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:functor2.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/functor2.mli}
+   %{dep:functor2.cmti})))
 
 (rule
  (target functor2.odocl)
@@ -174,7 +237,14 @@
 (rule
  (target include.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:include.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/include.mli}
+   %{dep:include.cmti})))
 
 (rule
  (target include.odocl)
@@ -189,7 +259,14 @@
 (rule
  (target include2.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:include2.cmt})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --impl
+   %{dep:cases/include2.ml}
+   %{dep:include2.cmt})))
 
 (rule
  (target include2.odocl)
@@ -204,7 +281,14 @@
 (rule
  (target include_sections.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:include_sections.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/include_sections.mli}
+   %{dep:include_sections.cmti})))
 
 (rule
  (target include_sections.odocl)
@@ -219,7 +303,14 @@
 (rule
  (target interlude.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:interlude.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/interlude.mli}
+   %{dep:interlude.cmti})))
 
 (rule
  (target interlude.odocl)
@@ -236,7 +327,14 @@
 (rule
  (target labels.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:labels.cmti}))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/labels.mli}
+   %{dep:labels.cmti}))
  (enabled_if
   (>= %{ocaml_version} 4.09)))
 
@@ -255,7 +353,14 @@
 (rule
  (target markup.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:markup.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/markup.mli}
+   %{dep:markup.cmti})))
 
 (rule
  (target markup.odocl)
@@ -280,7 +385,14 @@
 (rule
  (target module.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:module.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/module.mli}
+   %{dep:module.cmti})))
 
 (rule
  (target module.odocl)
@@ -295,7 +407,14 @@
 (rule
  (target module_type_alias.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:module_type_alias.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/module_type_alias.mli}
+   %{dep:module_type_alias.cmti})))
 
 (rule
  (target module_type_alias.odocl)
@@ -312,7 +431,14 @@
 (rule
  (target module_type_subst.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:module_type_subst.cmti}))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/module_type_subst.mli}
+   %{dep:module_type_subst.cmti}))
  (enabled_if
   (>= %{ocaml_version} 4.13)))
 
@@ -331,7 +457,14 @@
 (rule
  (target nested.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:nested.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/nested.mli}
+   %{dep:nested.cmti})))
 
 (rule
  (target nested.odocl)
@@ -348,7 +481,14 @@
 (rule
  (target ocamlary.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:ocamlary.cmti}))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/ocamlary.mli}
+   %{dep:ocamlary.cmti}))
  (enabled_if
   (>= %{ocaml_version} 4.07)))
 
@@ -369,7 +509,14 @@
 (rule
  (target recent.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:recent.cmti}))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/recent.mli}
+   %{dep:recent.cmti}))
  (enabled_if
   (>= %{ocaml_version} 4.09)))
 
@@ -390,7 +537,14 @@
 (rule
  (target recent_impl.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:recent_impl.cmt}))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --impl
+   %{dep:cases/recent_impl.ml}
+   %{dep:recent_impl.cmt}))
  (enabled_if
   (>= %{ocaml_version} 4.09)))
 
@@ -409,7 +563,14 @@
 (rule
  (target section.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:section.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/section.mli}
+   %{dep:section.cmti})))
 
 (rule
  (target section.odocl)
@@ -424,7 +585,14 @@
 (rule
  (target stop.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:stop.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/stop.mli}
+   %{dep:stop.cmti})))
 
 (rule
  (target stop.odocl)
@@ -441,7 +609,14 @@
 (rule
  (target stop_dead_link_doc.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:stop_dead_link_doc.cmti}))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/stop_dead_link_doc.mli}
+   %{dep:stop_dead_link_doc.cmti}))
  (enabled_if
   (>= %{ocaml_version} 4.04)))
 
@@ -460,7 +635,14 @@
 (rule
  (target stop_first_comment.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:stop_first_comment.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/stop_first_comment.mli}
+   %{dep:stop_first_comment.cmti})))
 
 (rule
  (target stop_first_comment.odocl)
@@ -475,7 +657,14 @@
 (rule
  (target tag_link.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:tag_link.cmt})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --impl
+   %{dep:cases/tag_link.ml}
+   %{dep:tag_link.cmt})))
 
 (rule
  (target tag_link.odocl)
@@ -490,7 +679,14 @@
 (rule
  (target toplevel_comments.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:toplevel_comments.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/toplevel_comments.mli}
+   %{dep:toplevel_comments.cmti})))
 
 (rule
  (target toplevel_comments.odocl)
@@ -505,7 +701,14 @@
 (rule
  (target type.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:type.cmti})))
+  (run
+   odoc
+   compile
+   -o
+   %{target}
+   --intf
+   %{dep:cases/type.mli}
+   %{dep:type.cmti})))
 
 (rule
  (target type.odocl)
@@ -520,7 +723,7 @@
 (rule
  (target val.odoc)
  (action
-  (run odoc compile -o %{target} %{dep:val.cmti})))
+  (run odoc compile -o %{target} --intf %{dep:cases/val.mli} %{dep:val.cmti})))
 
 (rule
  (target val.odocl)
@@ -530,7 +733,11 @@
 (subdir
  html
  (rule
-  (targets Alerts.html.gen Alerts-Top1.html.gen Alerts-Top2.html.gen)
+  (targets
+   Alerts.html.gen
+   Alerts-Top1.html.gen
+   Alerts-Top2.html.gen
+   Alerts-Alerts.mli.html.gen)
   (action
    (run
     odoc
@@ -553,7 +760,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Alerts-Top2.html Alerts-Top2.html.gen))))
+   (diff Alerts-Top2.html Alerts-Top2.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Alerts-Alerts.mli.html Alerts-Alerts.mli.html.gen))))
 
 (subdir
  html
@@ -624,7 +835,11 @@
 (subdir
  html
  (rule
-  (targets Alias.html.gen Alias-X.html.gen)
+  (targets
+   Alias.html.gen
+   Alias-X.html.gen
+   Alias-X-X.ml.html.gen
+   Alias-Alias.ml.html.gen)
   (action
    (run
     odoc
@@ -643,7 +858,15 @@
  (rule
   (alias runtest)
   (action
-   (diff Alias-X.html Alias-X.html.gen))))
+   (diff Alias-X.html Alias-X.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Alias-X-X.ml.html Alias-X-X.ml.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Alias-Alias.ml.html Alias-Alias.ml.html.gen))))
 
 (subdir
  html
@@ -714,7 +937,7 @@
 (subdir
  html
  (rule
-  (targets Bugs.html.gen)
+  (targets Bugs.html.gen Bugs-Bugs.ml.html.gen)
   (action
    (run
     odoc
@@ -729,7 +952,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Bugs.html Bugs.html.gen))))
+   (diff Bugs.html Bugs.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Bugs-Bugs.ml.html Bugs-Bugs.ml.html.gen))))
 
 (subdir
  html
@@ -795,7 +1022,8 @@
   (targets
    Bugs_post_406.html.gen
    Bugs_post_406-class-type-let_open.html.gen
-   Bugs_post_406-class-let_open'.html.gen)
+   Bugs_post_406-class-let_open'.html.gen
+   Bugs_post_406-Bugs_post_406.mli.html.gen)
   (action
    (run
     odoc
@@ -829,6 +1057,14 @@
    (diff
     Bugs_post_406-class-let_open'.html
     Bugs_post_406-class-let_open'.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.06)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Bugs_post_406-Bugs_post_406.mli.html
+    Bugs_post_406-Bugs_post_406.mli.html.gen))
   (enabled_if
    (>= %{ocaml_version} 4.06))))
 
@@ -1065,7 +1301,8 @@
    Class-class-type-empty_virtual.html.gen
    Class-class-empty_virtual'.html.gen
    Class-class-type-polymorphic.html.gen
-   Class-class-polymorphic'.html.gen)
+   Class-class-polymorphic'.html.gen
+   Class-Class.mli.html.gen)
   (action
    (run
     odoc
@@ -1120,7 +1357,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Class-class-polymorphic'.html Class-class-polymorphic'.html.gen))))
+   (diff Class-class-polymorphic'.html Class-class-polymorphic'.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Class-Class.mli.html Class-Class.mli.html.gen))))
 
 (subdir
  html
@@ -1228,7 +1469,8 @@
   (targets
    Class_comments.html.gen
    Class_comments-class-x.html.gen
-   Class_comments-class-c.html.gen)
+   Class_comments-class-c.html.gen
+   Class_comments-Class_comments.mli.html.gen)
   (action
    (run
     odoc
@@ -1258,6 +1500,14 @@
   (alias runtest)
   (action
    (diff Class_comments-class-c.html Class_comments-class-c.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.08)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Class_comments-Class_comments.mli.html
+    Class_comments-Class_comments.mli.html.gen))
   (enabled_if
    (>= %{ocaml_version} 4.08))))
 
@@ -1386,7 +1636,7 @@
 (subdir
  html
  (rule
-  (targets External.html.gen)
+  (targets External.html.gen External-External.mli.html.gen)
   (action
    (run
     odoc
@@ -1401,7 +1651,11 @@
  (rule
   (alias runtest)
   (action
-   (diff External.html External.html.gen))))
+   (diff External.html External.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff External-External.mli.html External-External.mli.html.gen))))
 
 (subdir
  html
@@ -1477,7 +1731,8 @@
    Functor-F3-argument-1-Arg.html.gen
    Functor-F4.html.gen
    Functor-F4-argument-1-Arg.html.gen
-   Functor-F5.html.gen)
+   Functor-F5.html.gen
+   Functor-Functor.mli.html.gen)
   (action
    (run
     odoc
@@ -1542,7 +1797,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Functor-F5.html Functor-F5.html.gen))))
+   (diff Functor-F5.html Functor-F5.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Functor-Functor.mli.html Functor-Functor.mli.html.gen))))
 
 (subdir
  html
@@ -1665,7 +1924,8 @@
    Functor2-X-argument-2-Z.html.gen
    Functor2-module-type-XF.html.gen
    Functor2-module-type-XF-argument-1-Y.html.gen
-   Functor2-module-type-XF-argument-2-Z.html.gen)
+   Functor2-module-type-XF-argument-2-Z.html.gen
+   Functor2-Functor2.mli.html.gen)
   (action
    (run
     odoc
@@ -1712,7 +1972,11 @@
   (action
    (diff
     Functor2-module-type-XF-argument-2-Z.html
-    Functor2-module-type-XF-argument-2-Z.html.gen))))
+    Functor2-module-type-XF-argument-2-Z.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Functor2-Functor2.mli.html Functor2-Functor2.mli.html.gen))))
 
 (subdir
  html
@@ -1790,7 +2054,8 @@
    Include-module-type-Not_inlined_and_closed.html.gen
    Include-module-type-Not_inlined_and_opened.html.gen
    Include-module-type-Inherent_Module.html.gen
-   Include-module-type-Dorminant_Module.html.gen)
+   Include-module-type-Dorminant_Module.html.gen
+   Include-Include.mli.html.gen)
   (action
    (run
     odoc
@@ -1841,7 +2106,11 @@
   (action
    (diff
     Include-module-type-Dorminant_Module.html
-    Include-module-type-Dorminant_Module.html.gen))))
+    Include-module-type-Dorminant_Module.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Include-Include.mli.html Include-Include.mli.html.gen))))
 
 (subdir
  html
@@ -1909,7 +2178,8 @@
    Include2-X.html.gen
    Include2-Y.html.gen
    Include2-Y_include_synopsis.html.gen
-   Include2-Y_include_doc.html.gen)
+   Include2-Y_include_doc.html.gen
+   Include2-Include2.ml.html.gen)
   (action
    (run
     odoc
@@ -1942,7 +2212,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Include2-Y_include_doc.html Include2-Y_include_doc.html.gen))))
+   (diff Include2-Y_include_doc.html Include2-Y_include_doc.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Include2-Include2.ml.html Include2-Include2.ml.html.gen))))
 
 (subdir
  html
@@ -2028,7 +2302,8 @@
  (rule
   (targets
    Include_sections.html.gen
-   Include_sections-module-type-Something.html.gen)
+   Include_sections-module-type-Something.html.gen
+   Include_sections-Include_sections.mli.html.gen)
   (action
    (run
     odoc
@@ -2049,7 +2324,13 @@
   (action
    (diff
     Include_sections-module-type-Something.html
-    Include_sections-module-type-Something.html.gen))))
+    Include_sections-module-type-Something.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Include_sections-Include_sections.mli.html
+    Include_sections-Include_sections.mli.html.gen))))
 
 (subdir
  html
@@ -2126,7 +2407,7 @@
 (subdir
  html
  (rule
-  (targets Interlude.html.gen)
+  (targets Interlude.html.gen Interlude-Interlude.mli.html.gen)
   (action
    (run
     odoc
@@ -2141,7 +2422,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Interlude.html Interlude.html.gen))))
+   (diff Interlude.html Interlude.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Interlude-Interlude.mli.html Interlude-Interlude.mli.html.gen))))
 
 (subdir
  html
@@ -2216,7 +2501,8 @@
    Labels-A.html.gen
    Labels-module-type-S.html.gen
    Labels-class-c.html.gen
-   Labels-class-type-cs.html.gen)
+   Labels-class-type-cs.html.gen
+   Labels-Labels.mli.html.gen)
   (action
    (run
     odoc
@@ -2258,6 +2544,12 @@
   (alias runtest)
   (action
    (diff Labels-class-type-cs.html Labels-class-type-cs.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.09)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Labels-Labels.mli.html Labels-Labels.mli.html.gen))
   (enabled_if
    (>= %{ocaml_version} 4.09))))
 
@@ -2360,7 +2652,11 @@
 (subdir
  html
  (rule
-  (targets Markup.html.gen Markup-X.html.gen Markup-Y.html.gen)
+  (targets
+   Markup.html.gen
+   Markup-X.html.gen
+   Markup-Y.html.gen
+   Markup-Markup.mli.html.gen)
   (action
    (run
     odoc
@@ -2383,7 +2679,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Markup-Y.html Markup-Y.html.gen))))
+   (diff Markup-Y.html Markup-Y.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-Markup.mli.html Markup-Markup.mli.html.gen))))
 
 (subdir
  html
@@ -2549,7 +2849,8 @@
    Module-module-type-S8.html.gen
    Module-module-type-S9.html.gen
    Module-Mutually.html.gen
-   Module-Recursive.html.gen)
+   Module-Recursive.html.gen
+   Module-Module.mli.html.gen)
   (action
    (run
     odoc
@@ -2628,7 +2929,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Module-Recursive.html Module-Recursive.html.gen))))
+   (diff Module-Recursive.html Module-Recursive.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Module-Module.mli.html Module-Module.mli.html.gen))))
 
 (subdir
  html
@@ -2716,7 +3021,8 @@
    Module_type_alias-module-type-E-argument-1-F.html.gen
    Module_type_alias-module-type-E-argument-2-C.html.gen
    Module_type_alias-module-type-G.html.gen
-   Module_type_alias-module-type-G-argument-1-H.html.gen)
+   Module_type_alias-module-type-G-argument-1-H.html.gen
+   Module_type_alias-Module_type_alias.mli.html.gen)
   (action
    (run
     odoc
@@ -2779,7 +3085,13 @@
   (action
    (diff
     Module_type_alias-module-type-G-argument-1-H.html
-    Module_type_alias-module-type-G-argument-1-H.html.gen))))
+    Module_type_alias-module-type-G-argument-1-H.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Module_type_alias-Module_type_alias.mli.html
+    Module_type_alias-Module_type_alias.mli.html.gen))))
 
 (subdir
  html
@@ -2892,7 +3204,8 @@
    Module_type_subst-Structural-module-type-w.html.gen
    Module_type_subst-Structural-module-type-w-module-type-a.html.gen
    Module_type_subst-Structural-module-type-w-module-type-a-module-type-b.html.gen
-   Module_type_subst-Structural-module-type-w-module-type-a-module-type-b-module-type-c.html.gen)
+   Module_type_subst-Structural-module-type-w-module-type-a-module-type-b-module-type-c.html.gen
+   Module_type_subst-Module_type_subst.mli.html.gen)
   (action
    (run
     odoc
@@ -3185,6 +3498,14 @@
     Module_type_subst-Structural-module-type-w-module-type-a-module-type-b-module-type-c.html
     Module_type_subst-Structural-module-type-w-module-type-a-module-type-b-module-type-c.html.gen))
   (enabled_if
+   (>= %{ocaml_version} 4.13)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Module_type_subst-Module_type_subst.mli.html
+    Module_type_subst-Module_type_subst.mli.html.gen))
+  (enabled_if
    (>= %{ocaml_version} 4.13))))
 
 (subdir
@@ -3319,7 +3640,8 @@
    Nested-F-argument-1-Arg1.html.gen
    Nested-F-argument-2-Arg2.html.gen
    Nested-class-z.html.gen
-   Nested-class-inherits.html.gen)
+   Nested-class-inherits.html.gen
+   Nested-Nested.mli.html.gen)
   (action
    (run
     odoc
@@ -3362,7 +3684,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Nested-class-inherits.html Nested-class-inherits.html.gen))))
+   (diff Nested-class-inherits.html Nested-class-inherits.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Nested-Nested.mli.html Nested-Nested.mli.html.gen))))
 
 (subdir
  html
@@ -3625,6 +3951,7 @@
    Ocamlary-CanonicalTest.html.gen
    Ocamlary-CanonicalTest-Base.html.gen
    Ocamlary-CanonicalTest-Base-List.html.gen
+   Ocamlary-CanonicalTest-Base-List-List.mli.html.gen
    Ocamlary-CanonicalTest-Base_Tests.html.gen
    Ocamlary-CanonicalTest-Base_Tests-C.html.gen
    Ocamlary-CanonicalTest-List_modif.html.gen
@@ -3635,17 +3962,25 @@
    Ocamlary-Aliases-Foo-C.html.gen
    Ocamlary-Aliases-Foo-D.html.gen
    Ocamlary-Aliases-Foo-E.html.gen
+   Ocamlary-Aliases-Foo-A-A.mli.html.gen
+   Ocamlary-Aliases-Foo-B-B.mli.html.gen
+   Ocamlary-Aliases-Foo-C-C.mli.html.gen
+   Ocamlary-Aliases-Foo-D-D.mli.html.gen
+   Ocamlary-Aliases-Foo-E-E.mli.html.gen
    Ocamlary-Aliases-Std.html.gen
    Ocamlary-Aliases-E.html.gen
    Ocamlary-Aliases-P1.html.gen
    Ocamlary-Aliases-P1-Y.html.gen
    Ocamlary-Aliases-P2.html.gen
    Ocamlary-Aliases-P2-Z.html.gen
+   Ocamlary-Aliases-P2-Z-Z.mli.html.gen
+   Ocamlary-Aliases-E-E.mli.html.gen
    Ocamlary-module-type-M.html.gen
    Ocamlary-M.html.gen
    Ocamlary-Only_a_module.html.gen
    Ocamlary-module-type-TypeExt.html.gen
-   Ocamlary-module-type-TypeExtPruned.html.gen)
+   Ocamlary-module-type-TypeExtPruned.html.gen
+   Ocamlary-Ocamlary.mli.html.gen)
   (action
    (run
     odoc
@@ -4835,6 +5170,14 @@
   (alias runtest)
   (action
    (diff
+    Ocamlary-CanonicalTest-Base-List-List.mli.html
+    Ocamlary-CanonicalTest-Base-List-List.mli.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.07)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
     Ocamlary-CanonicalTest-Base_Tests.html
     Ocamlary-CanonicalTest-Base_Tests.html.gen))
   (enabled_if
@@ -4900,6 +5243,46 @@
  (rule
   (alias runtest)
   (action
+   (diff
+    Ocamlary-Aliases-Foo-A-A.mli.html
+    Ocamlary-Aliases-Foo-A-A.mli.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.07)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Ocamlary-Aliases-Foo-B-B.mli.html
+    Ocamlary-Aliases-Foo-B-B.mli.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.07)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Ocamlary-Aliases-Foo-C-C.mli.html
+    Ocamlary-Aliases-Foo-C-C.mli.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.07)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Ocamlary-Aliases-Foo-D-D.mli.html
+    Ocamlary-Aliases-Foo-D-D.mli.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.07)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Ocamlary-Aliases-Foo-E-E.mli.html
+    Ocamlary-Aliases-Foo-E-E.mli.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.07)))
+ (rule
+  (alias runtest)
+  (action
    (diff Ocamlary-Aliases-Std.html Ocamlary-Aliases-Std.html.gen))
   (enabled_if
    (>= %{ocaml_version} 4.07)))
@@ -4936,6 +5319,20 @@
  (rule
   (alias runtest)
   (action
+   (diff
+    Ocamlary-Aliases-P2-Z-Z.mli.html
+    Ocamlary-Aliases-P2-Z-Z.mli.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.07)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Ocamlary-Aliases-E-E.mli.html Ocamlary-Aliases-E-E.mli.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.07)))
+ (rule
+  (alias runtest)
+  (action
    (diff Ocamlary-module-type-M.html Ocamlary-module-type-M.html.gen))
   (enabled_if
    (>= %{ocaml_version} 4.07)))
@@ -4965,6 +5362,12 @@
    (diff
     Ocamlary-module-type-TypeExtPruned.html
     Ocamlary-module-type-TypeExtPruned.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.07)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Ocamlary-Ocamlary.mli.html Ocamlary-Ocamlary.mli.html.gen))
   (enabled_if
    (>= %{ocaml_version} 4.07))))
 
@@ -5795,7 +6198,8 @@
    Recent-Z-Y.html.gen
    Recent-Z-Y-X.html.gen
    Recent-X.html.gen
-   Recent-module-type-PolyS.html.gen)
+   Recent-module-type-PolyS.html.gen
+   Recent-Recent.mli.html.gen)
   (action
    (run
     odoc
@@ -5863,6 +6267,12 @@
   (alias runtest)
   (action
    (diff Recent-module-type-PolyS.html Recent-module-type-PolyS.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.09)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Recent-Recent.mli.html Recent-Recent.mli.html.gen))
   (enabled_if
    (>= %{ocaml_version} 4.09))))
 
@@ -5985,7 +6395,9 @@
    Recent_impl-module-type-S.html.gen
    Recent_impl-module-type-S-F.html.gen
    Recent_impl-module-type-S-F-argument-1-_.html.gen
-   Recent_impl-module-type-S-X.html.gen)
+   Recent_impl-module-type-S-X.html.gen
+   Recent_impl-B-B.ml.html.gen
+   Recent_impl-Recent_impl.ml.html.gen)
   (action
    (run
     odoc
@@ -6057,6 +6469,18 @@
    (diff
     Recent_impl-module-type-S-X.html
     Recent_impl-module-type-S-X.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.09)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Recent_impl-B-B.ml.html Recent_impl-B-B.ml.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.09)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Recent_impl-Recent_impl.ml.html Recent_impl-Recent_impl.ml.html.gen))
   (enabled_if
    (>= %{ocaml_version} 4.09))))
 
@@ -6190,7 +6614,7 @@
 (subdir
  html
  (rule
-  (targets Section.html.gen)
+  (targets Section.html.gen Section-Section.mli.html.gen)
   (action
    (run
     odoc
@@ -6205,7 +6629,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Section.html Section.html.gen))))
+   (diff Section.html Section.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Section-Section.mli.html Section-Section.mli.html.gen))))
 
 (subdir
  html
@@ -6268,7 +6696,12 @@
 (subdir
  html
  (rule
-  (targets Stop.html.gen Stop-N.html.gen Stop-O.html.gen Stop-P.html.gen)
+  (targets
+   Stop.html.gen
+   Stop-N.html.gen
+   Stop-O.html.gen
+   Stop-P.html.gen
+   Stop-Stop.mli.html.gen)
   (action
    (run
     odoc
@@ -6295,7 +6728,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Stop-P.html Stop-P.html.gen))))
+   (diff Stop-P.html Stop-P.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Stop-Stop.mli.html Stop-Stop.mli.html.gen))))
 
 (subdir
  html
@@ -6370,7 +6807,10 @@
 (subdir
  html
  (rule
-  (targets Stop_dead_link_doc.html.gen Stop_dead_link_doc-Foo.html.gen)
+  (targets
+   Stop_dead_link_doc.html.gen
+   Stop_dead_link_doc-Foo.html.gen
+   Stop_dead_link_doc-Stop_dead_link_doc.mli.html.gen)
   (action
    (run
     odoc
@@ -6394,6 +6834,14 @@
   (alias runtest)
   (action
    (diff Stop_dead_link_doc-Foo.html Stop_dead_link_doc-Foo.html.gen))
+  (enabled_if
+   (>= %{ocaml_version} 4.04)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Stop_dead_link_doc-Stop_dead_link_doc.mli.html
+    Stop_dead_link_doc-Stop_dead_link_doc.mli.html.gen))
   (enabled_if
    (>= %{ocaml_version} 4.04))))
 
@@ -6498,7 +6946,9 @@
 (subdir
  html
  (rule
-  (targets Stop_first_comment.html.gen)
+  (targets
+   Stop_first_comment.html.gen
+   Stop_first_comment-Stop_first_comment.mli.html.gen)
   (action
    (run
     odoc
@@ -6513,7 +6963,13 @@
  (rule
   (alias runtest)
   (action
-   (diff Stop_first_comment.html Stop_first_comment.html.gen))))
+   (diff Stop_first_comment.html Stop_first_comment.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Stop_first_comment-Stop_first_comment.mli.html
+    Stop_first_comment-Stop_first_comment.mli.html.gen))))
 
 (subdir
  html
@@ -6590,7 +7046,7 @@
 (subdir
  html
  (rule
-  (targets Tag_link.html.gen)
+  (targets Tag_link.html.gen Tag_link-Tag_link.ml.html.gen)
   (action
    (run
     odoc
@@ -6605,7 +7061,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Tag_link.html Tag_link.html.gen))))
+   (diff Tag_link.html Tag_link.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Tag_link-Tag_link.ml.html Tag_link-Tag_link.ml.html.gen))))
 
 (subdir
  html
@@ -6684,7 +7144,8 @@
    Toplevel_comments-class-c2.html.gen
    Toplevel_comments-Ref_in_synopsis.html.gen
    Toplevel_comments-Comments_on_open.html.gen
-   Toplevel_comments-Comments_on_open-M.html.gen)
+   Toplevel_comments-Comments_on_open-M.html.gen
+   Toplevel_comments-Toplevel_comments.mli.html.gen)
   (action
    (run
     odoc
@@ -6777,7 +7238,13 @@
   (action
    (diff
     Toplevel_comments-Comments_on_open-M.html
-    Toplevel_comments-Comments_on_open-M.html.gen))))
+    Toplevel_comments-Comments_on_open-M.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff
+    Toplevel_comments-Toplevel_comments.mli.html
+    Toplevel_comments-Toplevel_comments.mli.html.gen))))
 
 (subdir
  html
@@ -6936,7 +7403,7 @@
 (subdir
  html
  (rule
-  (targets Type.html.gen Type-module-type-X.html.gen)
+  (targets Type.html.gen Type-module-type-X.html.gen Type-Type.mli.html.gen)
   (action
    (run
     odoc
@@ -6955,7 +7422,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Type-module-type-X.html Type-module-type-X.html.gen))))
+   (diff Type-module-type-X.html Type-module-type-X.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Type-Type.mli.html Type-Type.mli.html.gen))))
 
 (subdir
  html
@@ -7018,7 +7489,7 @@
 (subdir
  html
  (rule
-  (targets Val.html.gen)
+  (targets Val.html.gen Val-Val.mli.html.gen)
   (action
    (run
     odoc
@@ -7033,7 +7504,11 @@
  (rule
   (alias runtest)
   (action
-   (diff Val.html Val.html.gen))))
+   (diff Val.html Val.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Val-Val.mli.html Val-Val.mli.html.gen))))
 
 (subdir
  html

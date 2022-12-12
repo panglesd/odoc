@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Stop_dead_link_doc.mli (Stop_dead_link_doc)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span class="COMMENT"><span id="L1"></span>(* This tests that references to hidden items (items in no documentation mode) don't get rendered *)</span><span class="EOL">
+</span><span class="EOL"><span id="L2"></span>
+</span><span class="MODULE"><span id="L3"></span>module</span> <span class="UIDENT">Foo</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L4"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L5"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L6"></span>
+</span><span class="TYPE"><span id="L7"></span>type</span> <span class="LIDENT">foo</span> <span class="EQUAL">=</span> <span class="BAR">|</span> <span class="UIDENT">Bar</span> <span class="OF">of</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L8"></span>
+</span><span class="TYPE"><span id="L9"></span>type</span> <span class="LIDENT">bar</span> <span class="EQUAL">=</span> <span class="BAR">|</span> <span class="UIDENT">Bar</span> <span class="OF">of</span> <span class="LBRACE">{</span> <span class="LIDENT">field</span> <span class="COLON">:</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="RBRACE">}</span><span class="EOL">
+</span><span class="EOL"><span id="L10"></span>
+</span><span class="TYPE"><span id="L11"></span>type</span> <span class="LIDENT">foo_</span> <span class="EQUAL">=</span> <span class="UIDENT">Bar_</span> <span class="OF">of</span> <span class="LPAREN">(</span><span class="LIDENT">int</span> <span class="STAR">*</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="RPAREN">)</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="TYPE"><span id="L12"></span>type</span> <span class="LIDENT">bar_</span> <span class="EQUAL">=</span> <span class="UIDENT">Bar__</span> <span class="OF">of</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="LIDENT">option</span><span class="EOL">
+</span><span class="EOL"><span id="L13"></span>
+</span><span id="L14"></span>(**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L15"></span>module</span> <span class="UIDENT">Another_Foo</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L16"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L17"></span>end</span><span class="EOL">
+</span><span id="L18"></span>(**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L19"></span>
+</span><span class="COMMENT"><span id="L20"></span>(* this should be rendered as `type another_foo` because it contains a reference to a hidden module*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L21"></span>type</span> <span class="LIDENT">another_foo</span> <span class="EQUAL">=</span> <span class="BAR">|</span> <span class="UIDENT">Bar</span> <span class="OF">of</span> <span class="UIDENT">Another_Foo</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L22"></span>
+</span><span class="COMMENT"><span id="L23"></span>(* this should be rendered as `type another_bar` because it contains a reference to a hidden module*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L24"></span>type</span> <span class="LIDENT">another_bar</span> <span class="EQUAL">=</span> <span class="BAR">|</span> <span class="UIDENT">Bar</span> <span class="OF">of</span> <span class="LBRACE">{</span> <span class="LIDENT">field</span> <span class="COLON">:</span> <span class="UIDENT">Another_Foo</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="RBRACE">}</span><span class="EOL">
+</span><span class="EOL"><span id="L25"></span>
+</span><span class="TYPE"><span id="L26"></span>type</span> <span class="LIDENT">another_foo_</span> <span class="EQUAL">=</span> <span class="UIDENT">Bar_</span> <span class="OF">of</span> <span class="LPAREN">(</span><span class="LIDENT">int</span> <span class="STAR">*</span> <span class="UIDENT">Another_Foo</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="RPAREN">)</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="TYPE"><span id="L27"></span>type</span> <span class="LIDENT">another_bar_</span> <span class="EQUAL">=</span> <span class="UIDENT">Bar__</span> <span class="OF">of</span> <span class="UIDENT">Another_Foo</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="LIDENT">option</span><span class="EOL">
+</span></span></code></pre></body></html>

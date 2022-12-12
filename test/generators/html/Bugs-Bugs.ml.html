@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Bugs.ml (Bugs)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span class="TYPE"><span id="L1"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">opt</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">option</span><span class="EOL">
+</span><span class="LET"><span id="L2"></span>let</span> <span class="LIDENT">foo</span> <span class="LPAREN">(</span><span class="TYPE">type</span> <span class="LIDENT">a</span><span class="RPAREN">)</span> <span class="QUESTION">?</span><span class="LPAREN">(</span><span class="LIDENT">bar</span> <span class="COLON">:</span> <span class="LIDENT">a</span> <span class="LIDENT">opt</span><span class="RPAREN">)</span> <span class="LPAREN">(</span><span class="RPAREN">)</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L3"></span>(** Triggers an assertion failure when
+<span id="L4"></span>    {:https://github.com/ocaml/odoc/issues/101} is not fixed. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L5"></span>
+</span></span></code></pre></body></html>

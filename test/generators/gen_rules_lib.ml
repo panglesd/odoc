@@ -15,7 +15,8 @@ module Dune = struct
 
   let arg_dep f = "%{dep:" ^ Fpath.to_string f ^ "}"
 
-  let arg_list args = List.map (fun x -> Atom x) args
+  let render_list args = List.map (fun x -> Atom x) args
+  let render_path_list args = List.map (fun d -> Atom (Fpath.to_string d)) args
 
   let render_enabledif = function
     | Some (Min v) ->
@@ -49,15 +50,20 @@ module Dune = struct
         ]
     | None -> []
 
-  let run cmd = List (Atom "run" :: arg_list cmd)
+  let render_deps = function
+    | [] -> []
+    | deps -> [ List (Atom "deps" :: render_list deps) ]
+
+  let run cmd = List (Atom "run" :: render_list cmd)
 
   let action x = List [ Atom "action"; x ]
 
-  let rule ?enabledif fields =
-    List ((Atom "rule" :: fields) @ render_enabledif enabledif)
+  let rule ?enabledif ?(deps = []) fields =
+    List
+      (((Atom "rule" :: render_deps deps) @ fields) @ render_enabledif enabledif)
 
-  let simple_rule ?enabledif target cmd =
-    rule ?enabledif
+  let simple_rule ?enabledif ?deps target cmd =
+    rule ?enabledif ?deps
       [ List [ Atom "target"; Atom (arg_fpath target) ]; action (run cmd) ]
 
   let rule_with_output_to ?enabledif target cmd =
@@ -83,23 +89,31 @@ let cu_target_rule enabledif dep target =
   Dune.simple_rule ?enabledif target
     [ "ocamlc"; "-c"; "-bin-annot"; "-o"; "%{target}"; Dune.arg_dep dep ]
 
-let odoc_target_rule enabledif dep target =
+let odoc_target_rule enabledif source dep target =
+  let source_args =
+    match source with
+    | Some f when Fpath.has_ext ".mli" f -> [ "--intf"; Dune.arg_dep f ]
+    | Some f when Fpath.has_ext ".ml" f -> [ "--impl"; Dune.arg_dep f ]
+    | _ -> []
+  in
   Dune.simple_rule ?enabledif target
-    [ "odoc"; "compile"; "-o"; "%{target}"; Dune.arg_dep dep ]
+    ([ "odoc"; "compile"; "-o"; "%{target}" ]
+    @ source_args
+    @ [ Dune.arg_dep dep ])
 
 let odocl_target_rule enabledif dep target =
   Dune.simple_rule ?enabledif target
     [ "odoc"; "link"; "-o"; "%{target}"; Dune.arg_dep dep ]
 
 let gen_rule_for_source_file { input; cmt; odoc; odocl; enabledif } =
-  let cmt_rule, input =
+  let cmt_rule, compile_input, source =
     match cmt with
-    | Some cmt -> ([ cu_target_rule enabledif input cmt ], cmt)
-    | None -> ([], input)
+    | Some cmt -> ([ cu_target_rule enabledif input cmt ], cmt, Some input)
+    | None -> ([], input, None)
   in
   cmt_rule
   @ [
-      odoc_target_rule enabledif input odoc;
+      odoc_target_rule enabledif source compile_input odoc;
       odocl_target_rule enabledif odoc odocl;
     ]
 

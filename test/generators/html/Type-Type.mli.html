@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Type.mli (Type)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span class="TYPE"><span id="L1"></span>type</span> <span class="LIDENT">abstract</span><span class="EOL">
+</span><span id="L2"></span>(** Some {e documentation}. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L3"></span>
+</span><span class="TYPE"><span id="L4"></span>type</span> <span class="LIDENT">alias</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L5"></span>
+</span><span class="TYPE"><span id="L6"></span>type</span> <span class="LIDENT">private_</span> <span class="EQUAL">=</span> <span class="PRIVATE">private</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L7"></span>
+</span><span class="TYPE"><span id="L8"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">constructor</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L9"></span>
+</span><span class="TYPE"><span id="L10"></span>type</span> <span class="LIDENT">arrow</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L11"></span>
+</span><span class="TYPE"><span id="L12"></span>type</span> <span class="LIDENT">higher_order</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="LIDENT">int</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L13"></span>
+</span><span class="TYPE"><span id="L14"></span>type</span> <span class="LIDENT">labeled</span> <span class="EQUAL">=</span> <span class="LIDENT">l</span><span class="COLON">:</span><span class="LIDENT">int</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L15"></span>
+</span><span class="TYPE"><span id="L16"></span>type</span> <span class="LIDENT">optional</span> <span class="EQUAL">=</span> <span class="OPTLABEL">?l:</span><span class="LIDENT">int</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L17"></span>
+</span><span class="TYPE"><span id="L18"></span>type</span> <span class="LIDENT">labeled_higher_order</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="LIDENT">l</span><span class="COLON">:</span><span class="LIDENT">int</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="LPAREN">(</span><span class="OPTLABEL">?l:</span><span class="LIDENT">int</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L19"></span>
+</span><span class="TYPE"><span id="L20"></span>type</span> <span class="LIDENT">pair</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L21"></span>
+</span><span class="TYPE"><span id="L22"></span>type</span> <span class="LIDENT">parens_dropped</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="RPAREN">)</span><span class="EOL">
+</span><span class="EOL"><span id="L23"></span>
+</span><span class="TYPE"><span id="L24"></span>type</span> <span class="LIDENT">triple</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L25"></span>
+</span><span class="TYPE"><span id="L26"></span>type</span> <span class="LIDENT">nested_pair</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="RPAREN">)</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L27"></span>
+</span><span class="TYPE"><span id="L28"></span>type</span> <span class="LIDENT">instance</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span> <span class="LIDENT">constructor</span><span class="EOL">
+</span><span class="EOL"><span id="L29"></span>
+</span><span class="TYPE"><span id="L30"></span>type</span> <span class="LIDENT">long</span> <span class="EQUAL">=</span> <span class="LIDENT">labeled_higher_order</span> <span class="MINUSGREATER">-&gt;</span> <span class="LBRACKET">[</span> <span class="BACKQUOTE">`</span><span class="UIDENT">Bar</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">Baz</span> <span class="OF">of</span> <span class="LIDENT">triple</span><span class="RBRACKET">]</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">pair</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">labeled</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">higher_order</span> <span class="MINUSGREATER">-&gt;</span> <span class="LPAREN">(</span><span class="LIDENT">string</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="LPAREN">(</span><span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">float</span> <span class="STAR">*</span> <span class="LIDENT">char</span> <span class="STAR">*</span> <span class="LIDENT">string</span> <span class="STAR">*</span> <span class="LIDENT">char</span> <span class="STAR">*</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span> <span class="LIDENT">option</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">nested_pair</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">arrow</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">string</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">nested_pair</span> <span class="LIDENT">array</span><span class="EOL">
+</span><span class="EOL"><span id="L31"></span>
+</span><span class="TYPE"><span id="L32"></span>type</span> <span class="LIDENT">variant_e</span> <span class="EQUAL">=</span> <span class="LBRACE">{</span><span class="LIDENT">a</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="RBRACE">}</span><span class="EOL">
+</span><span class="TYPE"><span id="L33"></span>type</span> <span class="LIDENT">variant</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L34"></span>  <span class="BAR">|</span> <span class="UIDENT">A</span><span class="EOL">
+</span><span id="L35"></span>  <span class="BAR">|</span> <span class="UIDENT">B</span> <span class="OF">of</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L36"></span>  <span class="BAR">|</span> <span class="UIDENT">C</span> (** foo <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L37"></span>  <span class="BAR">|</span> <span class="UIDENT">D</span> (** {e bar} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L38"></span>  <span class="BAR">|</span> <span class="UIDENT">E</span> <span class="OF">of</span> <span class="LIDENT">variant_e</span><span class="EOL">
+</span><span class="EOL"><span id="L39"></span>
+</span><span class="TYPE"><span id="L40"></span>type</span> <span class="LIDENT">variant_c</span> <span class="EQUAL">=</span> <span class="LBRACE">{</span><span class="LIDENT">a</span><span class="COLON">:</span> <span class="LIDENT">int</span><span class="RBRACE">}</span><span class="EOL">
+</span><span class="TYPE"><span id="L41"></span>type</span> <span class="UNDERSCORE">_</span> <span class="LIDENT">gadt</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L42"></span>  <span class="BAR">|</span> <span class="UIDENT">A</span> <span class="COLON">:</span> <span class="LIDENT">int</span> <span class="LIDENT">gadt</span><span class="EOL">
+</span><span id="L43"></span>  <span class="BAR">|</span> <span class="UIDENT">B</span> <span class="COLON">:</span> <span class="LIDENT">int</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">string</span> <span class="LIDENT">gadt</span><span class="EOL">
+</span><span id="L44"></span>  <span class="BAR">|</span> <span class="UIDENT">C</span> <span class="COLON">:</span> <span class="LIDENT">variant_c</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">unit</span> <span class="LIDENT">gadt</span><span class="EOL">
+</span><span class="EOL"><span id="L45"></span>
+</span><span class="TYPE"><span id="L46"></span>type</span> <span class="LIDENT">degenerate_gadt</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L47"></span>  <span class="BAR">|</span> <span class="UIDENT">A</span> <span class="COLON">:</span> <span class="LIDENT">degenerate_gadt</span><span class="EOL">
+</span><span class="EOL"><span id="L48"></span>
+</span><span class="TYPE"><span id="L49"></span>type</span> <span class="LIDENT">private_variant</span> <span class="EQUAL">=</span> <span class="PRIVATE">private</span> <span class="UIDENT">A</span><span class="EOL">
+</span><span class="EOL"><span id="L50"></span>
+</span><span class="TYPE"><span id="L51"></span>type</span> <span class="LIDENT">record</span> <span class="EQUAL">=</span> <span class="LBRACE">{</span><span class="EOL">
+</span><span id="L52"></span>  <span class="LIDENT">a</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span><span class="EOL">
+</span><span id="L53"></span>  <span class="MUTABLE">mutable</span> <span class="LIDENT">b</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span><span class="EOL">
+</span><span id="L54"></span>  <span class="LIDENT">c</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span> (** foo <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L55"></span>  <span class="LIDENT">d</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span> (** {e bar} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L56"></span>  <span class="LIDENT">e</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="DOT">.</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="SEMI">;</span><span class="EOL">
+</span><span class="RBRACE"><span id="L57"></span>}</span><span class="EOL">
+</span><span class="EOL"><span id="L58"></span>
+</span><span class="COMMENT"><span id="L59"></span>(* 4.02 doesn't preserve doc comments on polymorphic variant constructors, but
+<span id="L60"></span>   they should be restored if 4.02 support is dropped, or if creating a test
+<span id="L61"></span>   that won't run on 4.02. *)</span><span class="EOL">
+</span><span class="TYPE"><span id="L62"></span>type</span> <span class="LIDENT">polymorphic_variant</span> <span class="EQUAL">=</span> <span class="LBRACKET">[</span><span class="EOL">
+</span><span id="L63"></span>  <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">A</span><span class="EOL">
+</span><span id="L64"></span>  <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">B</span> <span class="OF">of</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L65"></span>  <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">C</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L66"></span>  <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">D</span><span class="EOL">
+</span><span class="RBRACKET"><span id="L67"></span>]</span><span class="EOL">
+</span><span class="EOL"><span id="L68"></span>
+</span><span class="TYPE"><span id="L69"></span>type</span> <span class="LIDENT">polymorphic_variant_extension</span> <span class="EQUAL">=</span> <span class="LBRACKET">[</span><span class="EOL">
+</span><span id="L70"></span>  <span class="BAR">|</span> <span class="LIDENT">polymorphic_variant</span> (** {not e} shown <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L71"></span>  <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">E</span><span class="EOL">
+</span><span class="RBRACKET"><span id="L72"></span>]</span><span class="EOL">
+</span><span class="EOL"><span id="L73"></span>
+</span><span class="TYPE"><span id="L74"></span>type</span> <span class="LIDENT">nested_polymorphic_variant</span> <span class="EQUAL">=</span> <span class="LBRACKET">[</span><span class="EOL">
+</span><span id="L75"></span>  <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">A</span> <span class="OF">of</span> <span class="LBRACKET">[</span> <span class="BACKQUOTE">`</span><span class="UIDENT">B</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">C</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="RBRACKET"><span id="L76"></span>]</span><span class="EOL">
+</span><span class="EOL"><span id="L77"></span>
+</span><span class="TYPE"><span id="L78"></span>type</span> <span class="LIDENT">private_extenion</span> <span class="EQUAL">=</span> <span class="PRIVATE">private</span> <span class="LBRACKETGREATER">[&gt;</span> <span class="LIDENT">polymorphic_variant</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="EOL"><span id="L79"></span>
+</span><span class="TYPE"><span id="L80"></span>type</span> <span class="LIDENT">object_</span> <span class="EQUAL">=</span> <span class="LESS">&lt;</span><span class="EOL">
+</span><span id="L81"></span>  <span class="LIDENT">a</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span><span class="EOL">
+</span><span id="L82"></span>  <span class="LIDENT">b</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span> (** foo <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L83"></span>  <span class="LIDENT">c</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span> (** {e bar} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="GREATER"><span id="L84"></span>&gt;</span><span class="EOL">
+</span><span class="EOL"><span id="L85"></span>
+</span><span class="MODULE"><span id="L86"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">X</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="TYPE">type</span> <span class="LIDENT">u</span> <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L87"></span>
+</span><span class="TYPE"><span id="L88"></span>type</span> <span class="LIDENT">module_</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="MODULE">module</span> <span class="UIDENT">X</span><span class="RPAREN">)</span><span class="EOL">
+</span><span class="EOL"><span id="L89"></span>
+</span><span class="TYPE"><span id="L90"></span>type</span> <span class="LIDENT">module_substitution</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="MODULE">module</span> <span class="UIDENT">X</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span> <span class="AND">and</span> <span class="TYPE">type</span> <span class="LIDENT">u</span> <span class="EQUAL">=</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span><span class="EOL">
+</span><span class="EOL"><span id="L91"></span>
+</span><span class="TYPE"><span id="L92"></span>type</span> <span class="PLUS">+</span><span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">covariant</span><span class="EOL">
+</span><span class="EOL"><span id="L93"></span>
+</span><span class="TYPE"><span id="L94"></span>type</span> <span class="MINUS">-</span><span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">contravariant</span><span class="EOL">
+</span><span class="EOL"><span id="L95"></span>
+</span><span class="TYPE"><span id="L96"></span>type</span> <span class="UNDERSCORE">_</span> <span class="LIDENT">bivariant</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L97"></span>
+</span><span class="TYPE"><span id="L98"></span>type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">binary</span><span class="EOL">
+</span><span class="EOL"><span id="L99"></span>
+</span><span class="TYPE"><span id="L100"></span>type</span> <span class="LIDENT">using_binary</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="LIDENT">int</span><span class="COMMA">,</span> <span class="LIDENT">int</span><span class="RPAREN">)</span> <span class="LIDENT">binary</span><span class="EOL">
+</span><span class="EOL"><span id="L101"></span>
+</span><span class="TYPE"><span id="L102"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">custom</span> <span class="LIDENT">name</span><span class="EOL">
+</span><span class="EOL"><span id="L103"></span>
+</span><span class="TYPE"><span id="L104"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">constrained</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L105"></span>
+</span><span class="TYPE"><span id="L106"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">exact_variant</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LBRACKET">[</span> <span class="BACKQUOTE">`</span><span class="UIDENT">A</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">B</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="EOL"><span id="L107"></span>
+</span><span class="TYPE"><span id="L108"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">lower_variant</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LBRACKETGREATER">[&gt;</span> <span class="BACKQUOTE">`</span><span class="UIDENT">A</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">B</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="EOL"><span id="L109"></span>
+</span><span class="TYPE"><span id="L110"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">any_variant</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LBRACKETGREATER">[&gt;</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="EOL"><span id="L111"></span>
+</span><span class="TYPE"><span id="L112"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">upper_variant</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LBRACKETLESS">[&lt;</span> <span class="BACKQUOTE">`</span><span class="UIDENT">A</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">B</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="EOL"><span id="L113"></span>
+</span><span class="TYPE"><span id="L114"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">named_variant</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LBRACKETLESS">[&lt;</span> <span class="LIDENT">polymorphic_variant</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="EOL"><span id="L115"></span>
+</span><span class="TYPE"><span id="L116"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">exact_object</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LESS">&lt;</span><span class="LIDENT">a</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span> <span class="LIDENT">b</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="GREATER">&gt;</span><span class="EOL">
+</span><span class="EOL"><span id="L117"></span>
+</span><span class="TYPE"><span id="L118"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">lower_object</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LESS">&lt;</span><span class="LIDENT">a</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span> <span class="LIDENT">b</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span> <span class="DOTDOT">..</span><span class="GREATER">&gt;</span><span class="EOL">
+</span><span class="EOL"><span id="L119"></span>
+</span><span class="TYPE"><span id="L120"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">poly_object</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LESS">&lt;</span><span class="LIDENT">a</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="DOT">.</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="GREATER">&gt;</span><span class="EOL">
+</span><span class="EOL"><span id="L121"></span>
+</span><span class="TYPE"><span id="L122"></span>type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">double_constrained</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="STAR">*</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="EOL">
+</span><span id="L123"></span>  <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L124"></span>  <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">b</span> <span class="EQUAL">=</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L125"></span>
+</span><span class="TYPE"><span id="L126"></span>type</span> <span class="LIDENT">as_</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="LIDENT">int</span> <span class="AS">as</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="RPAREN">)</span> <span class="STAR">*</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L127"></span>
+</span><span class="TYPE"><span id="L128"></span>type</span> <span class="LIDENT">extensible</span> <span class="EQUAL">=</span> <span class="DOTDOT">..</span><span class="EOL">
+</span><span class="EOL"><span id="L129"></span>
+</span><span class="TYPE"><span id="L130"></span>type</span> <span class="LIDENT">extensible</span> <span class="PLUSEQ">+=</span><span class="EOL">
+</span><span id="L131"></span>   <span class="BAR">|</span> <span class="UIDENT">Extension</span> (** Documentation for {!Extension}. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L132"></span>   <span class="BAR">|</span> <span class="UIDENT">Another_extension</span> (** Documentation for {!Another_extension}. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L133"></span>
+</span><span class="TYPE"><span id="L134"></span>type</span> <span class="LIDENT">mutually</span> <span class="EQUAL">=</span> <span class="UIDENT">A</span> <span class="OF">of</span> <span class="LIDENT">recursive</span><span class="EOL">
+</span><span class="AND"><span id="L135"></span>and</span> <span class="LIDENT">recursive</span> <span class="EQUAL">=</span> <span class="UIDENT">B</span> <span class="OF">of</span> <span class="LIDENT">mutually</span><span class="EOL">
+</span><span class="EOL"><span id="L136"></span>
+</span><span class="COMMENT"><span id="L137"></span>(* Not a type, but analogous to extensions. *)</span><span class="EOL">
+</span><span class="EXCEPTION"><span id="L138"></span>exception</span> <span class="UIDENT">Foo</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="EOL">
+</span></span></code></pre></body></html>

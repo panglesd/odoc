@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Stop.mli (Stop)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span id="L1"></span>(** This test cases exercises stop comments. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L2"></span>
+</span><span class="VAL"><span id="L3"></span>val</span> <span class="LIDENT">foo</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L4"></span>(** This is normal commented text. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L5"></span>
+</span><span id="L6"></span>(** The next value is [bar], and it should be missing from the documentation.
+<span id="L7"></span>    There is also an entire module, [M], which should also be hidden. It
+<span id="L8"></span>    contains a nested stop comment, but that stop comment should not turn
+<span id="L9"></span>    documentation back on in this outer module, because stop comments respect
+<span id="L10"></span>    scope. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L11"></span>
+</span><span id="L12"></span>(**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L13"></span>
+</span><span class="VAL"><span id="L14"></span>val</span> <span class="LIDENT">bar</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L15"></span>(** OMG! <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L16"></span>
+</span><span class="MODULE"><span id="L17"></span>module</span> <span class="UIDENT">M</span> <span class="COLON">:</span><span class="EOL">
+</span><span class="SIG"><span id="L18"></span>sig</span><span class="EOL">
+</span><span id="L19"></span>  <span class="VAL">val</span> <span class="LIDENT">baz</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L20"></span>
+</span><span id="L21"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L22"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L23"></span>
+</span><span id="L24"></span>(**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L25"></span>
+</span><span id="L26"></span>(** Documentation is on again.
+<span id="L27"></span>
+<span id="L28"></span>    Now, we have a nested module, and it has a stop comment between its two
+<span id="L29"></span>    items. We want to see that the first item is displayed, but the second is
+<span id="L30"></span>    missing, and the stop comment disables documenation only in that module, and
+<span id="L31"></span>    not in this outer module. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L32"></span>
+</span><span class="MODULE"><span id="L33"></span>module</span> <span class="UIDENT">N</span> <span class="COLON">:</span><span class="EOL">
+</span><span class="SIG"><span id="L34"></span>sig</span><span class="EOL">
+</span><span id="L35"></span>  <span class="VAL">val</span> <span class="LIDENT">quux</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L36"></span>
+</span><span id="L37"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L38"></span>
+</span><span id="L39"></span>  <span class="VAL">val</span> <span class="LIDENT">omg</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="END"><span id="L40"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L41"></span>
+</span><span class="VAL"><span id="L42"></span>val</span> <span class="LIDENT">lol</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L43"></span>
+</span><span id="L44"></span>(** The first comment can also be a stop-comment. The test case
+<span id="L45"></span>    [stop_first_comment.mli] is testing the same thing but at the toplevel. We
+<span id="L46"></span>    should see [bar] inside {!O}. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L47"></span>
+</span><span class="MODULE"><span id="L48"></span>module</span> <span class="UIDENT">O</span> <span class="COLON">:</span><span class="EOL">
+</span><span class="SIG"><span id="L49"></span>sig</span><span class="EOL">
+</span><span id="L50"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L51"></span>
+</span><span id="L52"></span>  <span class="VAL">val</span> <span class="LIDENT">foo</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L53"></span>
+</span><span id="L54"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L55"></span>
+</span><span id="L56"></span>  <span class="VAL">val</span> <span class="LIDENT">bar</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="END"><span id="L57"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L58"></span>
+</span><span id="L59"></span>(** The top-comment computation must not mess with stop comments. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L60"></span>
+</span><span class="MODULE"><span id="L61"></span>module</span> <span class="UIDENT">P</span> <span class="COLON">:</span><span class="EOL">
+</span><span class="SIG"><span id="L62"></span>sig</span><span class="EOL">
+</span><span id="L63"></span>  (** Doc. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L64"></span>
+</span><span id="L65"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L66"></span>
+</span><span id="L67"></span>  <span class="VAL">val</span> <span class="LIDENT">foo</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L68"></span>
+</span><span id="L69"></span>  (**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L70"></span>
+</span><span id="L71"></span>  <span class="VAL">val</span> <span class="LIDENT">bar</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="END"><span id="L72"></span>end</span><span class="EOL">
+</span></span></code></pre></body></html>

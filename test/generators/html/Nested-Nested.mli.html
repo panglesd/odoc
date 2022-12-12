@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Nested.mli (Nested)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span class="EOL"><span id="L1"></span>
+</span><span id="L2"></span>(** This comment needs to be here before #235 is fixed. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L3"></span>
+</span><span id="L4"></span>(** {1 Module} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L5"></span>
+</span><span id="L6"></span>(** This is module X.
+<span id="L7"></span>
+<span id="L8"></span>    Some additional comments. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L9"></span>module</span> <span class="UIDENT">X</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span class="EOL"><span id="L10"></span>
+</span><span id="L11"></span>  (** {1 Type} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L12"></span>
+</span><span id="L13"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L14"></span>  (** Some type. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L15"></span>
+</span><span id="L16"></span>  (** {1 Values} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L17"></span>
+</span><span id="L18"></span>  <span class="VAL">val</span> <span class="LIDENT">x</span> <span class="COLON">:</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L19"></span>  (** The value of x. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L20"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L21"></span>
+</span><span class="EOL"><span id="L22"></span>
+</span><span id="L23"></span>(** {1 Module type} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L24"></span>
+</span><span id="L25"></span>(** This is module type Y.
+<span id="L26"></span>
+<span id="L27"></span>    Some additional comments. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L28"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">Y</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span class="EOL"><span id="L29"></span>
+</span><span id="L30"></span>  (** {1 Type} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L31"></span>
+</span><span id="L32"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L33"></span>  (** Some type. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L34"></span>
+</span><span id="L35"></span>  (** {1 Values} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L36"></span>
+</span><span id="L37"></span>  <span class="VAL">val</span> <span class="LIDENT">y</span> <span class="COLON">:</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L38"></span>  (** The value of y. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L39"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L40"></span>
+</span><span class="EOL"><span id="L41"></span>
+</span><span id="L42"></span>(** {1 Functor} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L43"></span>
+</span><span id="L44"></span>(** This is a functor F.
+<span id="L45"></span>
+<span id="L46"></span>    Some additional comments. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L47"></span>module</span> <span class="UIDENT">F</span><span class="EOL">
+</span><span id="L48"></span>    <span class="LPAREN">(</span><span class="UIDENT">Arg1</span> <span class="COLON">:</span> <span class="UIDENT">Y</span><span class="RPAREN">)</span> <span class="LPAREN">(</span><span class="UIDENT">Arg2</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L49"></span>    (** {1 Type} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L50"></span>
+</span><span id="L51"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L52"></span>    (** Some type. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L53"></span>  <span class="END">end</span><span class="RPAREN">)</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L54"></span>  (** {1 Type} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L55"></span>
+</span><span id="L56"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="UIDENT">Arg1</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="STAR">*</span> <span class="UIDENT">Arg2</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span id="L57"></span>  (** Some type. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L58"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L59"></span>
+</span><span class="EOL"><span id="L60"></span>
+</span><span id="L61"></span>(** {1 Class} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L62"></span>
+</span><span id="L63"></span>(** This is class z.
+<span id="L64"></span>
+<span id="L65"></span>    Some additional comments. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="CLASS"><span id="L66"></span>class</span> <span class="VIRTUAL">virtual</span> <span class="LIDENT">z</span> <span class="COLON">:</span> <span class="OBJECT">object</span><span class="EOL">
+</span><span class="EOL"><span id="L67"></span>
+</span><span id="L68"></span>  <span class="VAL">val</span> <span class="LIDENT">y</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L69"></span>  (** Some value. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L70"></span>
+</span><span id="L71"></span>  <span class="VAL">val</span> <span class="MUTABLE">mutable</span> <span class="VIRTUAL">virtual</span> <span class="LIDENT">y'</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L72"></span>
+</span><span id="L73"></span>  (** {1 Methods} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L74"></span>
+</span><span id="L75"></span>  <span class="METHOD">method</span> <span class="LIDENT">z</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L76"></span>  (** Some method. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L77"></span>
+</span><span id="L78"></span>  <span class="METHOD">method</span> <span class="PRIVATE">private</span> <span class="VIRTUAL">virtual</span> <span class="LIDENT">z'</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="END"><span id="L79"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L80"></span>
+</span><span class="EOL"><span id="L81"></span>
+</span><span class="CLASS"><span id="L82"></span>class</span> <span class="VIRTUAL">virtual</span> <span class="LIDENT">inherits</span> <span class="COLON">:</span> <span class="OBJECT">object</span><span class="EOL">
+</span><span id="L83"></span>  <span class="INHERIT">inherit</span> <span class="LIDENT">z</span><span class="EOL">
+</span><span class="END"><span id="L84"></span>end</span><span class="EOL">
+</span></span></code></pre></body></html>

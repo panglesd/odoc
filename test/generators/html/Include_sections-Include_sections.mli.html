@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Include_sections.mli (Include_sections)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span id="L1"></span>(** A module type. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L2"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">Something</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span class="EOL"><span id="L3"></span>
+</span><span id="L4"></span>  <span class="VAL">val</span> <span class="LIDENT">something</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L5"></span>
+</span><span id="L6"></span>  (** {1 Something 1}
+<span id="L7"></span>
+<span id="L8"></span>      foo <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L9"></span>
+</span><span id="L10"></span>  <span class="VAL">val</span> <span class="LIDENT">foo</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L11"></span>
+</span><span id="L12"></span>  (** {2 Something 2} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L13"></span>
+</span><span id="L14"></span>  <span class="VAL">val</span> <span class="LIDENT">bar</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L15"></span>  (** foo bar <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L16"></span>
+</span><span id="L17"></span>  (** {1 Something 1-bis}
+<span id="L18"></span>
+<span id="L19"></span>      Some text. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L20"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L21"></span>
+</span><span id="L22"></span>(** Let's include {!Something} once <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L23"></span>
+</span><span class="INCLUDE"><span id="L24"></span>include</span> <span class="UIDENT">Something</span> (** @inline <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L25"></span>
+</span><span id="L26"></span>(** {1 Second include}
+<span id="L27"></span>
+<span id="L28"></span>    Let's include {!Something} a second time: the heading level should be shift here.  <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L29"></span>
+</span><span class="INCLUDE"><span id="L30"></span>include</span> <span class="UIDENT">Something</span> (** @inline <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L31"></span>
+</span><span id="L32"></span>(** {2 Third include}
+<span id="L33"></span>
+<span id="L34"></span>    Shifted some more.  <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L35"></span>
+</span><span class="INCLUDE"><span id="L36"></span>include</span> <span class="UIDENT">Something</span> (** @inline <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L37"></span>
+</span><span id="L38"></span>(** And let's include it again, but without inlining it this time: the ToC
+<span id="L39"></span>    shouldn't grow. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L40"></span>
+</span><span class="INCLUDE"><span id="L41"></span>include</span> <span class="UIDENT">Something</span><span class="EOL">
+</span></span></code></pre></body></html>

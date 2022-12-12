@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: B.mli (Ocamlary.Aliases.Foo.B)</title><link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre><code><span><span class="COMMENT"><span id="L1"></span>(*
+<span id="L2"></span> * Copyright (c) 2014 David Sheets &lt;sheets@alum.mit.edu&gt;
+<span id="L3"></span> *                    Leo White &lt;lpw25@cl.cam.ac.uk&gt;
+<span id="L4"></span> *
+<span id="L5"></span> * Permission to use, copy, modify, and distribute this software for any
+<span id="L6"></span> * purpose with or without fee is hereby granted, provided that the above
+<span id="L7"></span> * copyright notice and this permission notice appear in all copies.
+<span id="L8"></span> *
+<span id="L9"></span> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot; AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+<span id="L10"></span> * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+<span id="L11"></span> * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+<span id="L12"></span> * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+<span id="L13"></span> * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+<span id="L14"></span> * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+<span id="L15"></span> * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+<span id="L16"></span> *)</span><span class="EOL">
+</span><span class="EOL"><span id="L17"></span>
+</span><span id="L18"></span>(** This is an {i interface} with {b all} of the {e module system} features.
+<span id="L19"></span>    This documentation demonstrates:
+<span id="L20"></span>- comment formatting
+<span id="L21"></span>- unassociated comments
+<span id="L22"></span>- documentation sections
+<span id="L23"></span>- module system documentation including
+<span id="L24"></span> {ol
+<span id="L25"></span> {- submodules}
+<span id="L26"></span> {- module aliases}
+<span id="L27"></span> {- module types}
+<span id="L28"></span> {- module type aliases}
+<span id="L29"></span> {- modules with signatures}
+<span id="L30"></span> {- modules with aliased signatures}
+<span id="L31"></span>}
+<span id="L32"></span>
+<span id="L33"></span>A numbered list:
+<span id="L34"></span>+ 3
+<span id="L35"></span>+ 2
+<span id="L36"></span>+ 1
+<span id="L37"></span>
+<span id="L38"></span>    David Sheets is the author.
+<span id="L39"></span>    @author David Sheets
+<span class="DOCSTRING"><span id="L40"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L41"></span>
+</span><span id="L42"></span>(**
+<span id="L43"></span>    You may find more information about this HTML documentation renderer
+<span id="L44"></span>    at {{:https://github.com/dsheets/ocamlary} github.com/dsheets/ocamlary }.
+<span class="DOCSTRING"><span id="L45"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L46"></span>
+</span><span id="L47"></span>(**
+<span id="L48"></span>   This is some verbatim text:
+<span id="L49"></span>   {v verbatim v}
+<span class="DOCSTRING"><span id="L50"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L51"></span>
+</span><span id="L52"></span>(**
+<span id="L53"></span>    This is some verbatim text:
+<span id="L54"></span>    {v [][df[]]}} v}
+<span class="DOCSTRING"><span id="L55"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L56"></span>
+</span><span id="L57"></span>(**
+<span id="L58"></span>    Here is some raw LaTeX:
+<span id="L59"></span>    {%latex: $e^{i\pi} = -1$ %}
+<span class="DOCSTRING"><span id="L60"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L61"></span>
+</span><span id="L62"></span>(**
+<span id="L63"></span>    Here is an index table of [Empty] modules:
+<span id="L64"></span>    {!modules: Empty EmptyAlias}
+<span class="DOCSTRING"><span id="L65"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L66"></span>
+</span><span id="L67"></span>(**
+<span id="L68"></span>    Odoc doesn't support [{!indexlist}].
+<span class="DOCSTRING"><span id="L69"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L70"></span>
+</span><span id="L71"></span>(**
+<span id="L72"></span>    Here is some superscript: x{^2}
+<span class="DOCSTRING"><span id="L73"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L74"></span>
+</span><span id="L75"></span>(**
+<span id="L76"></span>    Here is some subscript: x{_0}
+<span class="DOCSTRING"><span id="L77"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L78"></span>
+</span><span id="L79"></span>(**
+<span id="L80"></span>    Here are some escaped brackets: \{ \[ \@ \] \}
+<span class="DOCSTRING"><span id="L81"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L82"></span>
+</span><span id="L83"></span>(** Here is some {e emphasis} [followed by code]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L84"></span>
+</span><span id="L85"></span>(** An unassociated comment <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L86"></span>
+</span><span class="COMMENT"><span id="L87"></span>(******************************************************************************)</span><span class="EOL">
+</span><span class="EOL"><span id="L88"></span>
+</span><span id="L89"></span>(** {1 Level 1 } <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L90"></span>
+</span><span id="L91"></span>(** {2 Level 2 } <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L92"></span>
+</span><span id="L93"></span>(** {3 Level 3 } <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L94"></span>
+</span><span id="L95"></span>(** {4 Level 4 } <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L96"></span>
+</span><span id="L97"></span>(** {3 Basic module stuff} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L98"></span>
+</span><span id="L99"></span>(** A plain, empty module <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L100"></span>module</span> <span class="UIDENT">Empty</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span id="L101"></span>(** This module has a signature without any members. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L102"></span>
+</span><span id="L103"></span>(** An ambiguous, misnamed module type <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L104"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">Empty</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L105"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L106"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L107"></span>
+</span><span id="L108"></span>(** An ambiguous, misnamed module type <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L109"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">MissingComment</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L110"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L111"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L112"></span>
+</span><span id="L113"></span>(** {1:s9000 Section 9000 } <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L114"></span>
+</span><span class="MODULE"><span id="L115"></span>module</span> <span class="UIDENT">EmptyAlias</span> <span class="EQUAL">=</span> <span class="UIDENT">Empty</span><span class="EOL">
+</span><span id="L116"></span>(** A plain module alias of [Empty] <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L117"></span>
+</span><span id="L118"></span>(** {3:emptySig EmptySig} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L119"></span>
+</span><span class="MODULE"><span id="L120"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">EmptySig</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span id="L121"></span>(** A plain, empty module signature <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L122"></span>
+</span><span class="MODULE"><span id="L123"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">EmptySigAlias</span> <span class="EQUAL">=</span> <span class="UIDENT">EmptySig</span><span class="EOL">
+</span><span id="L124"></span>(** A plain, empty module signature alias of
+<span id="L125"></span>    {[EmptySig]}
+<span id="L126"></span>    (preformatted). <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L127"></span>
+</span><span class="MODULE"><span id="L128"></span>module</span> <span class="UIDENT">ModuleWithSignature</span> <span class="COLON">:</span> <span class="UIDENT">EmptySig</span><span class="EOL">
+</span><span id="L129"></span>(** A plain module of a signature of {!module-type:EmptySig} (reference) <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L130"></span>
+</span><span class="MODULE"><span id="L131"></span>module</span> <span class="UIDENT">ModuleWithSignatureAlias</span> <span class="COLON">:</span> <span class="UIDENT">EmptySigAlias</span><span class="EOL">
+</span><span id="L132"></span>(** A plain module with an alias signature
+<span id="L133"></span>    @deprecated I don't like this element any more.
+<span class="DOCSTRING"><span id="L134"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L135"></span>
+</span><span class="MODULE"><span id="L136"></span>module</span> <span class="UIDENT">One</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L137"></span>  <span class="TYPE">type</span> <span class="LIDENT">one</span><span class="EOL">
+</span><span class="END"><span id="L138"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L139"></span>
+</span><span id="L140"></span>(** There's a signature in a module in this signature. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L141"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">SigForMod</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L142"></span>  <span class="MODULE">module</span> <span class="UIDENT">Inner</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L143"></span>    <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">Empty</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span id="L144"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L145"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L146"></span>
+</span><span class="MODULE"><span id="L147"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">SuperSig</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L148"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">SubSigA</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L149"></span>    (** {3:subSig A Labeled Section Header Inside of a Signature} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L150"></span>
+</span><span id="L151"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L152"></span>
+</span><span id="L153"></span>    <span class="MODULE">module</span> <span class="UIDENT">SubSigAMod</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L154"></span>      <span class="TYPE">type</span> <span class="LIDENT">sub_sig_a_mod</span><span class="EOL">
+</span><span id="L155"></span>    <span class="END">end</span><span class="EOL">
+</span><span id="L156"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L157"></span>
+</span><span id="L158"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">SubSigB</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L159"></span>    (** {3:subSig Another Labeled Section Header Inside of a Signature} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L160"></span>
+</span><span id="L161"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L162"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L163"></span>
+</span><span id="L164"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">EmptySig</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L165"></span>    <span class="TYPE">type</span> <span class="LIDENT">not_actually_empty</span><span class="EOL">
+</span><span id="L166"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L167"></span>
+</span><span id="L168"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">One</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L169"></span>    <span class="TYPE">type</span> <span class="LIDENT">two</span><span class="EOL">
+</span><span id="L170"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L171"></span>
+</span><span id="L172"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">SuperSig</span> <span class="EQUAL">=</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L173"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L174"></span>
+</span><span id="L175"></span>(** For a good time, see
+<span id="L176"></span>    {!SuperSig.SubSigA.subSig} or {!SuperSig.SubSigB.subSig} or
+<span id="L177"></span>    {!SuperSig.EmptySig}. Section {!s9000} is also
+<span id="L178"></span>    interesting.
+<span id="L179"></span>    {!section:emptySig} is the section and {!module-type:EmptySig} is the
+<span id="L180"></span>    module signature. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L181"></span>
+</span><span id="L182"></span>(** References are resolved after everything, so [{!Buffer.t}] won't resolve. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L183"></span>module</span> <span class="UIDENT">Buffer</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L184"></span>  <span class="VAL">val</span> <span class="LIDENT">f</span> <span class="COLON">:</span> <span class="LIDENT">int</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="END"><span id="L185"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L186"></span>
+</span><span id="L187"></span>(** Some text before exception title.
+<span id="L188"></span>
+<span id="L189"></span> {3 Basic exception stuff}
+<span id="L190"></span>
+<span id="L191"></span> After exception title. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L192"></span>
+</span><span class="EXCEPTION"><span id="L193"></span>exception</span> <span class="UIDENT">Kaboom</span> <span class="OF">of</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L194"></span>(** Unary exception constructor <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L195"></span>
+</span><span class="EXCEPTION"><span id="L196"></span>exception</span> <span class="UIDENT">Kablam</span> <span class="OF">of</span> <span class="LIDENT">unit</span> <span class="STAR">*</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L197"></span>(** Binary exception constructor <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L198"></span>
+</span><span class="EXCEPTION"><span id="L199"></span>exception</span> <span class="UIDENT">Kapow</span> <span class="OF">of</span> <span class="LPAREN">(</span><span class="LIDENT">unit</span> <span class="STAR">*</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L200"></span>(** Unary exception constructor over binary tuple <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L201"></span>
+</span><span class="EXCEPTION"><span id="L202"></span>exception</span> <span class="UIDENT">EmptySig</span><span class="EOL">
+</span><span id="L203"></span>(** {!module-type:EmptySig} is a module and
+<span id="L204"></span>    {!exception:EmptySig} is this exception. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L205"></span>
+</span><span class="EXCEPTION"><span id="L206"></span>exception</span> <span class="UIDENT">EmptySigAlias</span><span class="EOL">
+</span><span id="L207"></span>(** {!exception:EmptySigAlias} is this exception. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L208"></span>
+</span><span id="L209"></span>(** {3 Basic type and value stuff with advanced doc comments } <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L210"></span>
+</span><span class="TYPE"><span id="L211"></span>type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">a_function</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="MINUSGREATER">-&gt;</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="EOL">
+</span><span id="L212"></span>(** {!type:a_function} is this type and
+<span id="L213"></span>    {!val:a_function} is the value below. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L214"></span>
+</span><span class="VAL"><span id="L215"></span>val</span> <span class="LIDENT">a_function</span> <span class="COLON">:</span> <span class="LIDENT">x</span><span class="COLON">:</span><span class="LIDENT">int</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L216"></span>(**
+<span id="L217"></span>   This is [a_function] with param and return type.
+<span id="L218"></span>   @param x the [x] coordinate
+<span id="L219"></span>   @return the [y] coordinate
+<span class="DOCSTRING"><span id="L220"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L221"></span>
+</span><span class="VAL"><span id="L222"></span>val</span> <span class="LIDENT">fun_fun_fun</span> <span class="COLON">:</span> <span class="LPAREN">(</span><span class="LPAREN">(</span><span class="LIDENT">int</span><span class="COMMA">,</span> <span class="LIDENT">int</span><span class="RPAREN">)</span> <span class="LIDENT">a_function</span><span class="COMMA">,</span> <span class="LPAREN">(</span><span class="LIDENT">unit</span><span class="COMMA">,</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span> <span class="LIDENT">a_function</span><span class="RPAREN">)</span> <span class="LIDENT">a_function</span><span class="EOL">
+</span><span class="EOL"><span id="L223"></span>
+</span><span class="VAL"><span id="L224"></span>val</span> <span class="LIDENT">fun_maybe</span> <span class="COLON">:</span> <span class="OPTLABEL">?yes:</span><span class="LIDENT">unit</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">unit</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L225"></span>
+</span><span class="VAL"><span id="L226"></span>val</span> <span class="LIDENT">not_found</span> <span class="COLON">:</span> <span class="LIDENT">unit</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L227"></span>(** @raise Not_found That's all it does <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L228"></span>
+</span><span class="VAL"><span id="L229"></span>val</span> <span class="LIDENT">ocaml_org</span> <span class="COLON">:</span> <span class="LIDENT">string</span><span class="EOL">
+</span><span id="L230"></span>(** @see &lt;http://ocaml.org/&gt; The OCaml Web site <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L231"></span>
+</span><span class="VAL"><span id="L232"></span>val</span> <span class="LIDENT">some_file</span> <span class="COLON">:</span> <span class="LIDENT">string</span><span class="EOL">
+</span><span id="L233"></span>(** @see 'some_file' The file called [some_file] <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L234"></span>
+</span><span class="VAL"><span id="L235"></span>val</span> <span class="LIDENT">some_doc</span> <span class="COLON">:</span> <span class="LIDENT">string</span><span class="EOL">
+</span><span id="L236"></span>(** @see &quot;some_doc&quot; The document called [some_doc] <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L237"></span>
+</span><span class="VAL"><span id="L238"></span>val</span> <span class="LIDENT">since_mesozoic</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L239"></span>(**
+<span id="L240"></span>   This value was introduced in the Mesozoic era.
+<span id="L241"></span>   @since mesozoic
+<span class="DOCSTRING"><span id="L242"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L243"></span>
+</span><span class="VAL"><span id="L244"></span>val</span> <span class="LIDENT">changing</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L245"></span>(**
+<span id="L246"></span>   This value has had changes in 1.0.0, 1.1.0, and 1.2.0.
+<span id="L247"></span>   @before 1.0.0 before 1.0.0
+<span id="L248"></span>   @before 1.1.0 before 1.1.0
+<span id="L249"></span>   @version 1.2.0
+<span class="DOCSTRING"><span id="L250"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L251"></span>
+</span><span id="L252"></span>(** {3 Some Operators } <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L253"></span>
+</span><span class="VAL"><span id="L254"></span>val</span> <span class="LPAREN">(</span> <span class="PREFIXOP">~-</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L255"></span>
+</span><span class="VAL"><span id="L256"></span>val</span> <span class="LPAREN">(</span> <span class="BANG">!</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L257"></span>
+</span><span class="VAL"><span id="L258"></span>val</span> <span class="LPAREN">(</span> <span class="INFIXOP1">@</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L259"></span>
+</span><span class="VAL"><span id="L260"></span>val</span> <span class="LPAREN">(</span> <span class="INFIXOP0">$</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L261"></span>
+</span><span class="VAL"><span id="L262"></span>val</span> <span class="LPAREN">(</span> <span class="PERCENT">%</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L263"></span>
+</span><span class="COMMENT"><span id="L264"></span>(* Disabling the following four until we figure out what to do about
+<span id="L265"></span>   https://github.com/ocsigen/tyxml/issues/264
+<span id="L266"></span>
+<span id="L267"></span>   val ( ^ ) : unit
+<span id="L268"></span>
+<span id="L269"></span>   val ( &lt; ) : unit
+<span id="L270"></span>
+<span id="L271"></span>   val ( &gt; ) : unit
+<span id="L272"></span>
+<span id="L273"></span>   val ( -| ) : unit *)</span><span class="EOL">
+</span><span class="EOL"><span id="L274"></span>
+</span><span class="VAL"><span id="L275"></span>val</span> <span class="LPAREN">(</span> <span class="AMPERSAND">&amp;</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L276"></span>
+</span><span class="VAL"><span id="L277"></span>val</span> <span class="LPAREN">(</span> <span class="STAR">*</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L278"></span>
+</span><span class="VAL"><span id="L279"></span>val</span> <span class="LPAREN">(</span> <span class="MINUS">-</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L280"></span>
+</span><span class="VAL"><span id="L281"></span>val</span> <span class="LPAREN">(</span> <span class="PLUS">+</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L282"></span>
+</span><span class="VAL"><span id="L283"></span>val</span> <span class="LPAREN">(</span> <span class="INFIXOP2">-?</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L284"></span>
+</span><span class="VAL"><span id="L285"></span>val</span> <span class="LPAREN">(</span> <span class="INFIXOP3">/</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L286"></span>
+</span><span class="VAL"><span id="L287"></span>val</span> <span class="LPAREN">(</span> <span class="COLONEQUAL">:=</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L288"></span>
+</span><span class="VAL"><span id="L289"></span>val</span> <span class="LPAREN">(</span> <span class="EQUAL">=</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L290"></span>
+</span><span class="VAL"><span id="L291"></span>val</span> <span class="LPAREN">(</span> <span class="INFIXOP3">land</span> <span class="RPAREN">)</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="EOL"><span id="L292"></span>
+</span><span id="L293"></span>(**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L294"></span>
+</span><span id="L295"></span>(** I'm hidden <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L296"></span>
+</span><span id="L297"></span>(**/*<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L298"></span>
+</span><span id="L299"></span>(** {3 Advanced Module Stuff} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L300"></span>
+</span><span id="L301"></span>(** This comment is for [CollectionModule]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L302"></span>module</span> <span class="UIDENT">CollectionModule</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L303"></span>  <span class="TYPE">type</span> <span class="LIDENT">collection</span><span class="EOL">
+</span><span id="L304"></span>  (** This comment is for [collection]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L305"></span>
+</span><span id="L306"></span>  <span class="TYPE">type</span> <span class="LIDENT">element</span><span class="EOL">
+</span><span class="EOL"><span id="L307"></span>
+</span><span id="L308"></span>  (** This comment is for [InnerModuleA]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L309"></span>  <span class="MODULE">module</span> <span class="UIDENT">InnerModuleA</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L310"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="LIDENT">collection</span><span class="EOL">
+</span><span id="L311"></span>    (** This comment is for [t]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L312"></span>
+</span><span id="L313"></span>    (** This comment is for [InnerModuleA']. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L314"></span>    <span class="MODULE">module</span> <span class="UIDENT">InnerModuleA'</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L315"></span>      <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="LIDENT">unit</span><span class="COMMA">,</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span> <span class="LIDENT">a_function</span><span class="EOL">
+</span><span id="L316"></span>      (** This comment is for [t]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L317"></span>    <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L318"></span>
+</span><span id="L319"></span>    (** This comment is for [InnerModuleTypeA']. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L320"></span>    <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">InnerModuleTypeA'</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L321"></span>      <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="UIDENT">InnerModuleA'</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span id="L322"></span>      (** This comment is for [t]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L323"></span>    <span class="END">end</span><span class="EOL">
+</span><span id="L324"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L325"></span>
+</span><span id="L326"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">InnerModuleTypeA</span> <span class="EQUAL">=</span> <span class="UIDENT">InnerModuleA</span><span class="DOT">.</span><span class="UIDENT">InnerModuleTypeA'</span><span class="EOL">
+</span><span id="L327"></span>  (** This comment is for [InnerModuleTypeA]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L328"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L329"></span>
+</span><span class="MODULE"><span id="L330"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">COLLECTION</span> <span class="EQUAL">=</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">CollectionModule</span><span class="EOL">
+</span><span id="L331"></span>(** module type of <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L332"></span>
+</span><span class="MODULE"><span id="L333"></span>module</span> <span class="UIDENT">Recollection</span> <span class="COLON">:</span> <span class="FUNCTOR">functor</span> <span class="LPAREN">(</span><span class="UIDENT">C</span> <span class="COLON">:</span> <span class="UIDENT">COLLECTION</span><span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span><span class="EOL">
+</span><span id="L334"></span>  <span class="UIDENT">COLLECTION</span><span class="EOL">
+</span><span id="L335"></span>    <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LIDENT">collection</span> <span class="EQUAL">=</span> <span class="UIDENT">C</span><span class="DOT">.</span><span class="LIDENT">element</span> <span class="LIDENT">list</span><span class="EOL">
+</span><span id="L336"></span>     <span class="AND">and</span> <span class="TYPE">type</span> <span class="LIDENT">element</span> <span class="EQUAL">=</span> <span class="UIDENT">C</span><span class="DOT">.</span><span class="LIDENT">collection</span><span class="EOL">
+</span><span class="EOL"><span id="L337"></span>
+</span><span class="MODULE"><span id="L338"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">MMM</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L339"></span>  <span class="MODULE">module</span> <span class="UIDENT">C</span> <span class="COLON">:</span> <span class="UIDENT">COLLECTION</span><span class="EOL">
+</span><span class="END"><span id="L340"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L341"></span>
+</span><span class="MODULE"><span id="L342"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">RECOLLECTION</span> <span class="EQUAL">=</span> <span class="UIDENT">MMM</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="UIDENT">C</span> <span class="EQUAL">=</span> <span class="UIDENT">Recollection</span><span class="LPAREN">(</span><span class="UIDENT">CollectionModule</span><span class="RPAREN">)</span><span class="EOL">
+</span><span class="EOL"><span id="L343"></span>
+</span><span class="MODULE"><span id="L344"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">RecollectionModule</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L345"></span>  <span class="INCLUDE">include</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">Recollection</span> <span class="LPAREN">(</span><span class="UIDENT">CollectionModule</span><span class="RPAREN">)</span><span class="EOL">
+</span><span class="END"><span id="L346"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L347"></span>
+</span><span class="MODULE"><span id="L348"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">A</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L349"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L350"></span>
+</span><span id="L351"></span>  <span class="MODULE">module</span> <span class="UIDENT">Q</span> <span class="COLON">:</span> <span class="UIDENT">COLLECTION</span><span class="EOL">
+</span><span class="END"><span id="L352"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L353"></span>
+</span><span class="MODULE"><span id="L354"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">B</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L355"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L356"></span>
+</span><span id="L357"></span>  <span class="MODULE">module</span> <span class="UIDENT">Q</span> <span class="COLON">:</span> <span class="UIDENT">COLLECTION</span><span class="EOL">
+</span><span class="END"><span id="L358"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L359"></span>
+</span><span id="L360"></span>(** This module type includes two signatures.
+<span id="L361"></span>   {ul
+<span id="L362"></span>   {- it includes {!module-type:A}}
+<span id="L363"></span>   {- it includes {!module-type:B} with some substitution}} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L364"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">C</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L365"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">A</span><span class="EOL">
+</span><span class="EOL"><span id="L366"></span>
+</span><span id="L367"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">B</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="COLONEQUAL">:=</span> <span class="LIDENT">t</span> <span class="AND">and</span> <span class="MODULE">module</span> <span class="UIDENT">Q</span> <span class="COLONEQUAL">:=</span> <span class="UIDENT">Q</span><span class="EOL">
+</span><span class="END"><span id="L368"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L369"></span>
+</span><span class="COMMENT"><span id="L370"></span>(* TODO: figure out why this doesn't work
+<span id="L371"></span>
+<span id="L372"></span>   (** This comment is for [Functor]. *)
+<span id="L373"></span>   module Functor(EmptyAlias : EmptySigAlias) : sig
+<span id="L374"></span>     (** This comment is for [FunctorInner]. *)
+<span id="L375"></span>     module FunctorInner = EmptyAlias
+<span id="L376"></span>   end
+<span id="L377"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L378"></span>
+</span><span id="L379"></span>(** This comment is for [FunctorTypeOf]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L380"></span>module</span> <span class="UIDENT">FunctorTypeOf</span> <span class="LPAREN">(</span><span class="UIDENT">Collection</span> <span class="COLON">:</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">CollectionModule</span><span class="RPAREN">)</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L381"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="UIDENT">Collection</span><span class="DOT">.</span><span class="LIDENT">collection</span><span class="EOL">
+</span><span id="L382"></span>  (** This comment is for [t]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L383"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L384"></span>
+</span><span id="L385"></span>(** This comment is for [IncludeModuleType]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="MODULE"><span id="L386"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">IncludeModuleType</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L387"></span>  <span class="INCLUDE">include</span> <span class="UIDENT">EmptySigAlias</span><span class="EOL">
+</span><span id="L388"></span>  (** This comment is for [include EmptySigAlias]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="END"><span id="L389"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L390"></span>
+</span><span class="MODULE"><span id="L391"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">ToInclude</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L392"></span>  <span class="MODULE">module</span> <span class="UIDENT">IncludedA</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L393"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L394"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L395"></span>
+</span><span id="L396"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">IncludedB</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L397"></span>    <span class="TYPE">type</span> <span class="LIDENT">s</span><span class="EOL">
+</span><span id="L398"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L399"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L400"></span>
+</span><span class="INCLUDE"><span id="L401"></span>include</span> <span class="UIDENT">ToInclude</span><span class="EOL">
+</span><span class="EOL"><span id="L402"></span>
+</span><span id="L403"></span>(** {3 Advanced Type Stuff} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L404"></span>
+</span><span id="L405"></span>(** This comment is for [record]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L406"></span>type</span> <span class="LIDENT">record</span> <span class="EQUAL">=</span> <span class="LBRACE">{</span><span class="EOL">
+</span><span id="L407"></span>  <span class="LIDENT">field1</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span>  (** This comment is for [field1]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L408"></span>  <span class="LIDENT">field2</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span>  (** This comment is for [field2]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="RBRACE"><span id="L409"></span>}</span><span class="EOL">
+</span><span id="L410"></span>(** This comment is also for [record]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L411"></span>
+</span><span class="TYPE"><span id="L412"></span>type</span> <span class="LIDENT">mutable_record</span> <span class="EQUAL">=</span> <span class="LBRACE">{</span><span class="EOL">
+</span><span id="L413"></span>  <span class="MUTABLE">mutable</span> <span class="LIDENT">a</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span>  (** [a] is first and mutable <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L414"></span>  <span class="LIDENT">b</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="SEMI">;</span>  (** [b] is second and immutable <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L415"></span>  <span class="MUTABLE">mutable</span> <span class="LIDENT">c</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span>  (** [c] is third and mutable <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="RBRACE"><span id="L416"></span>}</span><span class="EOL">
+</span><span class="EOL"><span id="L417"></span>
+</span><span class="TYPE"><span id="L418"></span>type</span> <span class="LIDENT">universe_record</span> <span class="EQUAL">=</span> <span class="LBRACE">{</span> <span class="LIDENT">nihilate</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="DOT">.</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">unit</span> <span class="RBRACE">}</span><span class="EOL">
+</span><span class="EOL"><span id="L419"></span>
+</span><span id="L420"></span>(** This comment is for [variant]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L421"></span>type</span> <span class="LIDENT">variant</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L422"></span>  <span class="BAR">|</span> <span class="UIDENT">TagA</span>  (** This comment is for [TagA]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L423"></span>  <span class="BAR">|</span> <span class="UIDENT">ConstrB</span> <span class="OF">of</span> <span class="LIDENT">int</span>  (** This comment is for [ConstrB]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L424"></span>  <span class="BAR">|</span> <span class="UIDENT">ConstrC</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span>  (** This comment is for binary [ConstrC]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L425"></span>  <span class="BAR">|</span> <span class="UIDENT">ConstrD</span> <span class="OF">of</span> <span class="LPAREN">(</span><span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L426"></span>      (** This comment is for unary [ConstrD] of binary tuple. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L427"></span>(** This comment is also for [variant]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L428"></span>
+</span><span id="L429"></span>(** This comment is for [poly_variant]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L430"></span>type</span> <span class="LIDENT">poly_variant</span> <span class="EQUAL">=</span> <span class="LBRACKET">[</span> <span class="BACKQUOTE">`</span><span class="UIDENT">TagA</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">ConstrB</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span id="L431"></span>(** Wow! It was a polymorphic variant! <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L432"></span>
+</span><span id="L433"></span>(** This comment is for [full_gadt]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L434"></span>type</span> <span class="LPAREN">(</span><span class="UNDERSCORE">_</span><span class="COMMA">,</span> <span class="UNDERSCORE">_</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L435"></span>  <span class="BAR">|</span> <span class="UIDENT">Tag</span> <span class="COLON">:</span> <span class="LPAREN">(</span><span class="LIDENT">unit</span><span class="COMMA">,</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt</span><span class="EOL">
+</span><span id="L436"></span>  <span class="BAR">|</span> <span class="UIDENT">First</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="MINUSGREATER">-&gt;</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt</span><span class="EOL">
+</span><span id="L437"></span>  <span class="BAR">|</span> <span class="UIDENT">Second</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="MINUSGREATER">-&gt;</span> <span class="LPAREN">(</span><span class="LIDENT">unit</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt</span><span class="EOL">
+</span><span id="L438"></span>  <span class="BAR">|</span> <span class="UIDENT">Exist</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="STAR">*</span> <span class="QUOTE">'</span><span class="LIDENT">b</span> <span class="MINUSGREATER">-&gt;</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">b</span><span class="COMMA">,</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt</span>  (** <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L439"></span>(** Wow! It was a GADT! <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L440"></span>
+</span><span id="L441"></span>(** This comment is for [partial_gadt]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L442"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">partial_gadt</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L443"></span>  <span class="BAR">|</span> <span class="UIDENT">AscribeTag</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">partial_gadt</span><span class="EOL">
+</span><span id="L444"></span>  <span class="BAR">|</span> <span class="UIDENT">OfTag</span> <span class="OF">of</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">partial_gadt</span><span class="EOL">
+</span><span id="L445"></span>  <span class="BAR">|</span> <span class="UIDENT">ExistGadtTag</span> <span class="COLON">:</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="MINUSGREATER">-&gt;</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">partial_gadt</span>  (** <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L446"></span>(** Wow! It was a mixed GADT! <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L447"></span>
+</span><span class="TYPE"><span id="L448"></span>type</span> <span class="LIDENT">alias</span> <span class="EQUAL">=</span> <span class="LIDENT">variant</span><span class="EOL">
+</span><span id="L449"></span>(** This comment is for [alias]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L450"></span>
+</span><span class="TYPE"><span id="L451"></span>type</span> <span class="LIDENT">tuple</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="LIDENT">alias</span> <span class="STAR">*</span> <span class="LIDENT">alias</span><span class="RPAREN">)</span> <span class="STAR">*</span> <span class="LIDENT">alias</span> <span class="STAR">*</span> <span class="LPAREN">(</span><span class="LIDENT">alias</span> <span class="STAR">*</span> <span class="LIDENT">alias</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L452"></span>(** This comment is for [tuple]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L453"></span>
+</span><span id="L454"></span>(** This comment is for [variant_alias]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L455"></span>type</span> <span class="LIDENT">variant_alias</span> <span class="EQUAL">=</span> <span class="LIDENT">variant</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L456"></span>  <span class="BAR">|</span> <span class="UIDENT">TagA</span><span class="EOL">
+</span><span id="L457"></span>  <span class="BAR">|</span> <span class="UIDENT">ConstrB</span> <span class="OF">of</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L458"></span>  <span class="BAR">|</span> <span class="UIDENT">ConstrC</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L459"></span>  <span class="BAR">|</span> <span class="UIDENT">ConstrD</span> <span class="OF">of</span> <span class="LPAREN">(</span><span class="LIDENT">int</span> <span class="STAR">*</span> <span class="LIDENT">int</span><span class="RPAREN">)</span><span class="EOL">
+</span><span class="EOL"><span id="L460"></span>
+</span><span class="TYPE"><span id="L461"></span>type</span> <span class="LIDENT">record_alias</span> <span class="EQUAL">=</span> <span class="LIDENT">record</span> <span class="EQUAL">=</span> <span class="LBRACE">{</span> <span class="LIDENT">field1</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="SEMI">;</span> <span class="LIDENT">field2</span> <span class="COLON">:</span> <span class="LIDENT">int</span> <span class="RBRACE">}</span><span class="EOL">
+</span><span id="L462"></span>(** This comment is for [record_alias]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L463"></span>
+</span><span class="TYPE"><span id="L464"></span>type</span> <span class="LIDENT">poly_variant_union</span> <span class="EQUAL">=</span> <span class="LBRACKET">[</span> <span class="LIDENT">poly_variant</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">TagC</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span id="L465"></span>(** This comment is for [poly_variant_union]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L466"></span>
+</span><span class="TYPE"><span id="L467"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">poly_poly_variant</span> <span class="EQUAL">=</span> <span class="LBRACKET">[</span> <span class="BACKQUOTE">`</span><span class="UIDENT">TagA</span> <span class="OF">of</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="EOL"><span id="L468"></span>
+</span><span class="TYPE"><span id="L469"></span>type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">bin_poly_poly_variant</span> <span class="EQUAL">=</span> <span class="LBRACKET">[</span> <span class="BACKQUOTE">`</span><span class="UIDENT">TagA</span> <span class="OF">of</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">ConstrB</span> <span class="OF">of</span> <span class="QUOTE">'</span><span class="LIDENT">b</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="EOL"><span id="L470"></span>
+</span><span class="COMMENT"><span id="L471"></span>(* TODO: figure out how to spec a conjunctive type
+<span id="L472"></span>   type amb_poly_variant = [
+<span id="L473"></span>   | unit poly_poly_variant
+<span id="L474"></span>   | (int,unit) bin_poly_poly_variant
+<span id="L475"></span>   | `TagC
+<span id="L476"></span>   ]
+<span id="L477"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L478"></span>
+</span><span class="TYPE"><span id="L479"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">open_poly_variant</span> <span class="EQUAL">=</span> <span class="LBRACKETGREATER">[&gt;</span> <span class="BACKQUOTE">`</span><span class="UIDENT">TagA</span> <span class="RBRACKET">]</span> <span class="AS">as</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L480"></span>
+</span><span class="TYPE"><span id="L481"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">open_poly_variant2</span> <span class="EQUAL">=</span> <span class="LBRACKETGREATER">[&gt;</span> <span class="BACKQUOTE">`</span><span class="UIDENT">ConstrB</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="RBRACKET">]</span> <span class="AS">as</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L482"></span>
+</span><span class="TYPE"><span id="L483"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">open_poly_variant_alias</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">open_poly_variant</span> <span class="LIDENT">open_poly_variant2</span><span class="EOL">
+</span><span class="EOL"><span id="L484"></span>
+</span><span class="TYPE"><span id="L485"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">poly_fun</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="LBRACKETGREATER">[&gt;</span> <span class="BACKQUOTE">`</span><span class="UIDENT">ConstrB</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="RBRACKET">]</span> <span class="AS">as</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L486"></span>
+</span><span class="TYPE"><span id="L487"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">poly_fun_constraint</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="MINUSGREATER">-&gt;</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="CONSTRAINT">constraint</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="EQUAL">=</span> <span class="LBRACKETGREATER">[&gt;</span> <span class="BACKQUOTE">`</span><span class="UIDENT">TagA</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="EOL"><span id="L488"></span>
+</span><span class="TYPE"><span id="L489"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">closed_poly_variant</span> <span class="EQUAL">=</span> <span class="LBRACKETLESS">[&lt;</span> <span class="BACKQUOTE">`</span><span class="UIDENT">One</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">Two</span> <span class="RBRACKET">]</span> <span class="AS">as</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L490"></span>
+</span><span class="TYPE"><span id="L491"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">clopen_poly_variant</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L492"></span>  <span class="LBRACKETLESS">[&lt;</span> <span class="BACKQUOTE">`</span><span class="UIDENT">One</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">Two</span> <span class="OF">of</span> <span class="LIDENT">int</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">Three</span> <span class="GREATER">&gt;</span> <span class="BACKQUOTE">`</span><span class="UIDENT">Two</span> <span class="BACKQUOTE">`</span><span class="UIDENT">Three</span> <span class="RBRACKET">]</span> <span class="AS">as</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L493"></span>
+</span><span class="TYPE"><span id="L494"></span>type</span> <span class="LIDENT">nested_poly_variant</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L495"></span>  <span class="LBRACKET">[</span> <span class="BACKQUOTE">`</span><span class="UIDENT">A</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">B</span> <span class="OF">of</span> <span class="LBRACKET">[</span> <span class="BACKQUOTE">`</span><span class="UIDENT">B1</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">B2</span> <span class="RBRACKET">]</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">C</span> <span class="BAR">|</span> <span class="BACKQUOTE">`</span><span class="UIDENT">D</span> <span class="OF">of</span> <span class="LBRACKET">[</span> <span class="BACKQUOTE">`</span><span class="UIDENT">D1</span> <span class="OF">of</span> <span class="LBRACKET">[</span> <span class="BACKQUOTE">`</span><span class="UIDENT">D1a</span> <span class="RBRACKET">]</span> <span class="RBRACKET">]</span> <span class="RBRACKET">]</span><span class="EOL">
+</span><span class="EOL"><span id="L496"></span>
+</span><span id="L497"></span>(** This comment is for [full_gadt_alias]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L498"></span>type</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt_alias</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L499"></span>  <span class="BAR">|</span> <span class="UIDENT">Tag</span> <span class="COLON">:</span> <span class="LPAREN">(</span><span class="LIDENT">unit</span><span class="COMMA">,</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt_alias</span><span class="EOL">
+</span><span id="L500"></span>  <span class="BAR">|</span> <span class="UIDENT">First</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="MINUSGREATER">-&gt;</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="COMMA">,</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt_alias</span><span class="EOL">
+</span><span id="L501"></span>  <span class="BAR">|</span> <span class="UIDENT">Second</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="MINUSGREATER">-&gt;</span> <span class="LPAREN">(</span><span class="LIDENT">unit</span><span class="COMMA">,</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt_alias</span><span class="EOL">
+</span><span id="L502"></span>  <span class="BAR">|</span> <span class="UIDENT">Exist</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="STAR">*</span> <span class="QUOTE">'</span><span class="LIDENT">b</span> <span class="MINUSGREATER">-&gt;</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">b</span><span class="COMMA">,</span> <span class="LIDENT">unit</span><span class="RPAREN">)</span> <span class="LIDENT">full_gadt_alias</span><span class="EOL">
+</span><span class="EOL"><span id="L503"></span>
+</span><span id="L504"></span>(** This comment is for [partial_gadt_alias]. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L505"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">partial_gadt_alias</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">partial_gadt</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L506"></span>  <span class="BAR">|</span> <span class="UIDENT">AscribeTag</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">partial_gadt_alias</span><span class="EOL">
+</span><span id="L507"></span>  <span class="BAR">|</span> <span class="UIDENT">OfTag</span> <span class="OF">of</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">partial_gadt_alias</span><span class="EOL">
+</span><span id="L508"></span>  <span class="BAR">|</span> <span class="UIDENT">ExistGadtTag</span> <span class="COLON">:</span> <span class="LPAREN">(</span><span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="MINUSGREATER">-&gt;</span> <span class="QUOTE">'</span><span class="LIDENT">b</span><span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">partial_gadt_alias</span><span class="EOL">
+</span><span class="EOL"><span id="L509"></span>
+</span><span class="EXCEPTION"><span id="L510"></span>exception</span> <span class="UIDENT">Exn_arrow</span> <span class="COLON">:</span> <span class="LIDENT">unit</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">exn</span><span class="EOL">
+</span><span id="L511"></span>(** This comment is for {!Exn_arrow}. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L512"></span>
+</span><span id="L513"></span>(** This comment is for {!mutual_constr_a} then {!mutual_constr_b}. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="TYPE"><span id="L514"></span>type</span> <span class="LIDENT">mutual_constr_a</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L515"></span>  <span class="BAR">|</span> <span class="UIDENT">A</span><span class="EOL">
+</span><span id="L516"></span>  <span class="BAR">|</span> <span class="UIDENT">B_ish</span> <span class="OF">of</span> <span class="LIDENT">mutual_constr_b</span><span class="EOL">
+</span><span id="L517"></span>      (** This comment is between {!mutual_constr_a} and {!mutual_constr_b}. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L518"></span>
+</span><span id="L519"></span>(** This comment is for {!mutual_constr_b} then {!mutual_constr_a}. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="AND"><span id="L520"></span>and</span> <span class="LIDENT">mutual_constr_b</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L521"></span>  <span class="BAR">|</span> <span class="UIDENT">B</span><span class="EOL">
+</span><span id="L522"></span>  <span class="BAR">|</span> <span class="UIDENT">A_ish</span> <span class="OF">of</span> <span class="LIDENT">mutual_constr_a</span><span class="EOL">
+</span><span id="L523"></span>      (** This comment must be here for the next to associate correctly. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L524"></span>
+</span><span class="TYPE"><span id="L525"></span>type</span> <span class="LIDENT">rec_obj</span> <span class="EQUAL">=</span> <span class="LESS">&lt;</span> <span class="LIDENT">f</span> <span class="COLON">:</span> <span class="LIDENT">int</span> <span class="SEMI">;</span> <span class="LIDENT">g</span> <span class="COLON">:</span> <span class="LIDENT">unit</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">unit</span> <span class="SEMI">;</span> <span class="LIDENT">h</span> <span class="COLON">:</span> <span class="LIDENT">rec_obj</span> <span class="GREATER">&gt;</span><span class="EOL">
+</span><span class="EOL"><span id="L526"></span>
+</span><span class="TYPE"><span id="L527"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">open_obj</span> <span class="EQUAL">=</span> <span class="LESS">&lt;</span> <span class="LIDENT">f</span> <span class="COLON">:</span> <span class="LIDENT">int</span> <span class="SEMI">;</span> <span class="LIDENT">g</span> <span class="COLON">:</span> <span class="LIDENT">unit</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">unit</span> <span class="SEMI">;</span> <span class="DOTDOT">..</span> <span class="GREATER">&gt;</span> <span class="AS">as</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L528"></span>
+</span><span class="TYPE"><span id="L529"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">oof</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="LESS">&lt;</span> <span class="LIDENT">a</span> <span class="COLON">:</span> <span class="LIDENT">unit</span> <span class="SEMI">;</span> <span class="DOTDOT">..</span> <span class="GREATER">&gt;</span> <span class="AS">as</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="RPAREN">)</span> <span class="MINUSGREATER">-&gt;</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L530"></span>
+</span><span class="TYPE"><span id="L531"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">any_obj</span> <span class="EQUAL">=</span> <span class="LESS">&lt;</span> <span class="DOTDOT">..</span> <span class="GREATER">&gt;</span> <span class="AS">as</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L532"></span>
+</span><span class="TYPE"><span id="L533"></span>type</span> <span class="LIDENT">empty_obj</span> <span class="EQUAL">=</span> <span class="LESS">&lt;</span> <span class="GREATER">&gt;</span><span class="EOL">
+</span><span class="EOL"><span id="L534"></span>
+</span><span class="TYPE"><span id="L535"></span>type</span> <span class="LIDENT">one_meth</span> <span class="EQUAL">=</span> <span class="LESS">&lt;</span> <span class="LIDENT">meth</span> <span class="COLON">:</span> <span class="LIDENT">unit</span> <span class="GREATER">&gt;</span><span class="EOL">
+</span><span class="EOL"><span id="L536"></span>
+</span><span class="TYPE"><span id="L537"></span>type</span> <span class="LIDENT">ext</span> <span class="EQUAL">=</span> <span class="DOTDOT">..</span><span class="EOL">
+</span><span id="L538"></span>(** A mystery wrapped in an ellipsis <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L539"></span>
+</span><span class="TYPE"><span id="L540"></span>type</span> <span class="LIDENT">ext</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">ExtA</span><span class="EOL">
+</span><span class="EOL"><span id="L541"></span>
+</span><span class="TYPE"><span id="L542"></span>type</span> <span class="LIDENT">ext</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">ExtB</span><span class="EOL">
+</span><span class="EOL"><span id="L543"></span>
+</span><span class="TYPE"><span id="L544"></span>type</span> <span class="LIDENT">ext</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">ExtC</span> <span class="OF">of</span> <span class="LIDENT">unit</span> <span class="BAR">|</span> <span class="UIDENT">ExtD</span> <span class="OF">of</span> <span class="LIDENT">ext</span><span class="EOL">
+</span><span class="EOL"><span id="L545"></span>
+</span><span class="TYPE"><span id="L546"></span>type</span> <span class="LIDENT">ext</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">ExtE</span><span class="EOL">
+</span><span class="EOL"><span id="L547"></span>
+</span><span class="TYPE"><span id="L548"></span>type</span> <span class="LIDENT">ext</span> <span class="PLUSEQ">+=</span> <span class="PRIVATE">private</span> <span class="UIDENT">ExtF</span><span class="EOL">
+</span><span class="EOL"><span id="L549"></span>
+</span><span class="TYPE"><span id="L550"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">poly_ext</span> <span class="EQUAL">=</span> <span class="DOTDOT">..</span><span class="EOL">
+</span><span id="L551"></span>(** 'a poly_ext <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L552"></span>
+</span><span class="TYPE"><span id="L553"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">b</span> <span class="LIDENT">poly_ext</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">Foo</span> <span class="OF">of</span> <span class="QUOTE">'</span><span class="LIDENT">b</span> <span class="BAR">|</span> <span class="UIDENT">Bar</span> <span class="OF">of</span> <span class="QUOTE">'</span><span class="LIDENT">b</span> <span class="STAR">*</span> <span class="QUOTE">'</span><span class="LIDENT">b</span>  (** 'b poly_ext <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L554"></span>
+</span><span class="TYPE"><span id="L555"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">c</span> <span class="LIDENT">poly_ext</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">Quux</span> <span class="OF">of</span> <span class="QUOTE">'</span><span class="LIDENT">c</span>  (** 'c poly_ext <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L556"></span>
+</span><span class="MODULE"><span id="L557"></span>module</span> <span class="UIDENT">ExtMod</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L558"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="DOTDOT">..</span><span class="EOL">
+</span><span class="EOL"><span id="L559"></span>
+</span><span id="L560"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">Leisureforce</span><span class="EOL">
+</span><span class="END"><span id="L561"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L562"></span>
+</span><span class="TYPE"><span id="L563"></span>type</span> <span class="UIDENT">ExtMod</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">ZzzTop0</span>  (** It's got the rock <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L564"></span>
+</span><span class="TYPE"><span id="L565"></span>type</span> <span class="UIDENT">ExtMod</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">ZzzTop</span> <span class="OF">of</span> <span class="LIDENT">unit</span>  (** and it packs a unit. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L566"></span>
+</span><span class="EXTERNAL"><span id="L567"></span>external</span> <span class="LIDENT">launch_missiles</span> <span class="COLON">:</span> <span class="LIDENT">unit</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">unit</span> <span class="EQUAL">=</span> <span class="STRING">&quot;tetris&quot;</span><span class="EOL">
+</span><span id="L568"></span>(** Rotate keys on my mark... <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L569"></span>
+</span><span class="TYPE"><span id="L570"></span>type</span> <span class="LIDENT">my_mod</span> <span class="EQUAL">=</span> <span class="LPAREN">(</span><span class="MODULE">module</span> <span class="UIDENT">COLLECTION</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L571"></span>(** A brown paper package tied up with string<span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L572"></span>
+</span><span class="CLASS"><span id="L573"></span>class</span> <span class="LIDENT">empty_class</span> <span class="COLON">:</span> <span class="OBJECT">object</span> <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L574"></span>
+</span><span class="CLASS"><span id="L575"></span>class</span> <span class="LIDENT">one_method_class</span> <span class="COLON">:</span><span class="EOL">
+</span><span id="L576"></span>  <span class="OBJECT">object</span><span class="EOL">
+</span><span id="L577"></span>    <span class="METHOD">method</span> <span class="LIDENT">go</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L578"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L579"></span>
+</span><span class="CLASS"><span id="L580"></span>class</span> <span class="LIDENT">two_method_class</span> <span class="COLON">:</span><span class="EOL">
+</span><span id="L581"></span>  <span class="OBJECT">object</span><span class="EOL">
+</span><span id="L582"></span>    <span class="METHOD">method</span> <span class="LIDENT">one</span> <span class="COLON">:</span> <span class="LIDENT">one_method_class</span><span class="EOL">
+</span><span class="EOL"><span id="L583"></span>
+</span><span id="L584"></span>    <span class="METHOD">method</span> <span class="LIDENT">undo</span> <span class="COLON">:</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L585"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L586"></span>
+</span><span class="CLASS"><span id="L587"></span>class</span> <span class="LBRACKET">[</span><span class="QUOTE">'</span><span class="LIDENT">a</span><span class="RBRACKET">]</span> <span class="LIDENT">param_class</span> <span class="COLON">:</span><span class="EOL">
+</span><span id="L588"></span>  <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span id="L589"></span>  <span class="MINUSGREATER">-&gt;</span> <span class="OBJECT">object</span><span class="EOL">
+</span><span id="L590"></span>       <span class="METHOD">method</span> <span class="LIDENT">v</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span id="L591"></span>     <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L592"></span>
+</span><span class="TYPE"><span id="L593"></span>type</span> <span class="LIDENT">my_unit_object</span> <span class="EQUAL">=</span> <span class="LIDENT">unit</span> <span class="LIDENT">param_class</span><span class="EOL">
+</span><span class="EOL"><span id="L594"></span>
+</span><span class="TYPE"><span id="L595"></span>type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">my_unit_class</span> <span class="EQUAL">=</span> <span class="LIDENT">unit</span> <span class="HASH">#</span><span class="LIDENT">param_class</span> <span class="AS">as</span> <span class="QUOTE">'</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L596"></span>
+</span><span class="COMMENT"><span id="L597"></span>(* Bug in compiler breaks this example on cmi's *)</span><span class="EOL">
+</span><span class="COMMENT"><span id="L598"></span>(* class type my_unit_class_type = [unit] param_class *)</span><span class="EOL">
+</span><span class="EOL"><span id="L599"></span>
+</span><span class="COMMENT"><span id="L600"></span>(* TODO: classes, class types, ...? *)</span><span class="EOL">
+</span><span class="EOL"><span id="L601"></span>
+</span><span class="COMMENT"><span id="L602"></span>(* Test resolution of dependently typed modules *)</span><span class="EOL">
+</span><span class="MODULE"><span id="L603"></span>module</span> <span class="UIDENT">Dep1</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L604"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L605"></span>    <span class="CLASS">class</span> <span class="LIDENT">c</span> <span class="COLON">:</span><span class="EOL">
+</span><span id="L606"></span>      <span class="OBJECT">object</span><span class="EOL">
+</span><span id="L607"></span>        <span class="METHOD">method</span> <span class="LIDENT">m</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L608"></span>      <span class="END">end</span><span class="EOL">
+</span><span id="L609"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L610"></span>
+</span><span id="L611"></span>  <span class="MODULE">module</span> <span class="UIDENT">X</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L612"></span>    <span class="MODULE">module</span> <span class="UIDENT">Y</span> <span class="COLON">:</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span id="L613"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L614"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L615"></span>
+</span><span class="MODULE"><span id="L616"></span>module</span> <span class="UIDENT">Dep2</span> <span class="COLON">:</span> <span class="FUNCTOR">functor</span><span class="EOL">
+</span><span id="L617"></span>  <span class="LPAREN">(</span><span class="UIDENT">Arg</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L618"></span>     <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span class="EOL"><span id="L619"></span>
+</span><span id="L620"></span>     <span class="MODULE">module</span> <span class="UIDENT">X</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L621"></span>       <span class="MODULE">module</span> <span class="UIDENT">Y</span> <span class="COLON">:</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span id="L622"></span>     <span class="END">end</span><span class="EOL">
+</span><span id="L623"></span>   <span class="END">end</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L624"></span>  <span class="MINUSGREATER">-&gt;</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L625"></span>  <span class="MODULE">module</span> <span class="UIDENT">A</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L626"></span>    <span class="MODULE">module</span> <span class="UIDENT">Y</span> <span class="COLON">:</span> <span class="UIDENT">Arg</span><span class="DOT">.</span><span class="UIDENT">S</span><span class="EOL">
+</span><span id="L627"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L628"></span>
+</span><span id="L629"></span>  <span class="MODULE">module</span> <span class="UIDENT">B</span> <span class="EQUAL">=</span> <span class="UIDENT">A</span><span class="DOT">.</span><span class="UIDENT">Y</span><span class="EOL">
+</span><span class="END"><span id="L630"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L631"></span>
+</span><span class="TYPE"><span id="L632"></span>type</span> <span class="LIDENT">dep1</span> <span class="EQUAL">=</span> <span class="UIDENT">Dep2</span><span class="LPAREN">(</span><span class="UIDENT">Dep1</span><span class="RPAREN">)</span><span class="DOT">.</span><span class="UIDENT">B</span><span class="DOT">.</span><span class="LIDENT">c</span><span class="EOL">
+</span><span class="EOL"><span id="L633"></span>
+</span><span class="MODULE"><span id="L634"></span>module</span> <span class="UIDENT">Dep3</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L635"></span>  <span class="TYPE">type</span> <span class="LIDENT">a</span><span class="EOL">
+</span><span class="END"><span id="L636"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L637"></span>
+</span><span class="MODULE"><span id="L638"></span>module</span> <span class="UIDENT">Dep4</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L639"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L640"></span>    <span class="TYPE">type</span> <span class="LIDENT">b</span><span class="EOL">
+</span><span id="L641"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L642"></span>
+</span><span id="L643"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L644"></span>    <span class="MODULE">module</span> <span class="UIDENT">X</span> <span class="COLON">:</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span class="EOL"><span id="L645"></span>
+</span><span id="L646"></span>    <span class="MODULE">module</span> <span class="UIDENT">Y</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span id="L647"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L648"></span>
+</span><span id="L649"></span>  <span class="MODULE">module</span> <span class="UIDENT">X</span> <span class="COLON">:</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span class="END"><span id="L650"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L651"></span>
+</span><span class="MODULE"><span id="L652"></span>module</span> <span class="UIDENT">Dep5</span> <span class="COLON">:</span> <span class="FUNCTOR">functor</span><span class="EOL">
+</span><span id="L653"></span>  <span class="LPAREN">(</span><span class="UIDENT">Arg</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L654"></span>     <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span class="EOL"><span id="L655"></span>
+</span><span id="L656"></span>     <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L657"></span>       <span class="MODULE">module</span> <span class="UIDENT">X</span> <span class="COLON">:</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span class="EOL"><span id="L658"></span>
+</span><span id="L659"></span>       <span class="MODULE">module</span> <span class="UIDENT">Y</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span id="L660"></span>     <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L661"></span>
+</span><span id="L662"></span>     <span class="MODULE">module</span> <span class="UIDENT">X</span> <span class="COLON">:</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span id="L663"></span>   <span class="END">end</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L664"></span>  <span class="MINUSGREATER">-&gt;</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L665"></span>  <span class="MODULE">module</span> <span class="UIDENT">Z</span> <span class="COLON">:</span> <span class="UIDENT">Arg</span><span class="DOT">.</span><span class="UIDENT">S</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="UIDENT">Y</span> <span class="EQUAL">=</span> <span class="UIDENT">Dep3</span><span class="EOL">
+</span><span class="END"><span id="L666"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L667"></span>
+</span><span class="TYPE"><span id="L668"></span>type</span> <span class="LIDENT">dep2</span> <span class="EQUAL">=</span> <span class="UIDENT">Dep5</span><span class="LPAREN">(</span><span class="UIDENT">Dep4</span><span class="RPAREN">)</span><span class="DOT">.</span><span class="UIDENT">Z</span><span class="DOT">.</span><span class="UIDENT">X</span><span class="DOT">.</span><span class="LIDENT">b</span><span class="EOL">
+</span><span class="EOL"><span id="L669"></span>
+</span><span class="TYPE"><span id="L670"></span>type</span> <span class="LIDENT">dep3</span> <span class="EQUAL">=</span> <span class="UIDENT">Dep5</span><span class="LPAREN">(</span><span class="UIDENT">Dep4</span><span class="RPAREN">)</span><span class="DOT">.</span><span class="UIDENT">Z</span><span class="DOT">.</span><span class="UIDENT">Y</span><span class="DOT">.</span><span class="LIDENT">a</span><span class="EOL">
+</span><span class="EOL"><span id="L671"></span>
+</span><span class="MODULE"><span id="L672"></span>module</span> <span class="UIDENT">Dep6</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L673"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L674"></span>    <span class="TYPE">type</span> <span class="LIDENT">d</span><span class="EOL">
+</span><span id="L675"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L676"></span>
+</span><span id="L677"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L678"></span>    <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">R</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span class="EOL"><span id="L679"></span>
+</span><span id="L680"></span>    <span class="MODULE">module</span> <span class="UIDENT">Y</span> <span class="COLON">:</span> <span class="UIDENT">R</span><span class="EOL">
+</span><span id="L681"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L682"></span>
+</span><span id="L683"></span>  <span class="MODULE">module</span> <span class="UIDENT">X</span> <span class="COLON">:</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span class="END"><span id="L684"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L685"></span>
+</span><span class="MODULE"><span id="L686"></span>module</span> <span class="UIDENT">Dep7</span> <span class="COLON">:</span> <span class="FUNCTOR">functor</span><span class="EOL">
+</span><span id="L687"></span>  <span class="LPAREN">(</span><span class="UIDENT">Arg</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L688"></span>     <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span class="EOL"><span id="L689"></span>
+</span><span id="L690"></span>     <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L691"></span>       <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">R</span> <span class="EQUAL">=</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span class="EOL"><span id="L692"></span>
+</span><span id="L693"></span>       <span class="MODULE">module</span> <span class="UIDENT">Y</span> <span class="COLON">:</span> <span class="UIDENT">R</span><span class="EOL">
+</span><span id="L694"></span>     <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L695"></span>
+</span><span id="L696"></span>     <span class="MODULE">module</span> <span class="UIDENT">X</span> <span class="COLON">:</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span id="L697"></span>   <span class="END">end</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L698"></span>  <span class="MINUSGREATER">-&gt;</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L699"></span>  <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="UIDENT">Arg</span><span class="DOT">.</span><span class="UIDENT">T</span><span class="EOL">
+</span><span class="END"><span id="L700"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L701"></span>
+</span><span class="TYPE"><span id="L702"></span>type</span> <span class="LIDENT">dep4</span> <span class="EQUAL">=</span> <span class="UIDENT">Dep7</span><span class="LPAREN">(</span><span class="UIDENT">Dep6</span><span class="RPAREN">)</span><span class="DOT">.</span><span class="UIDENT">M</span><span class="DOT">.</span><span class="UIDENT">Y</span><span class="DOT">.</span><span class="LIDENT">d</span><span class="EOL">
+</span><span class="EOL"><span id="L703"></span>
+</span><span class="MODULE"><span id="L704"></span>module</span> <span class="UIDENT">Dep8</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L705"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L706"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L707"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L708"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L709"></span>
+</span><span class="MODULE"><span id="L710"></span>module</span> <span class="UIDENT">Dep9</span> <span class="COLON">:</span> <span class="FUNCTOR">functor</span><span class="EOL">
+</span><span id="L711"></span>  <span class="LPAREN">(</span><span class="UIDENT">X</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L712"></span>     <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span id="L713"></span>   <span class="END">end</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L714"></span>  <span class="MINUSGREATER">-&gt;</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L715"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="UIDENT">X</span><span class="DOT">.</span><span class="UIDENT">T</span><span class="EOL">
+</span><span class="END"><span id="L716"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L717"></span>
+</span><span class="MODULE"><span id="L718"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">Dep10</span> <span class="EQUAL">=</span> <span class="UIDENT">Dep9</span><span class="LPAREN">(</span><span class="UIDENT">Dep8</span><span class="RPAREN">)</span><span class="DOT">.</span><span class="UIDENT">T</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L719"></span>
+</span><span class="MODULE"><span id="L720"></span>module</span> <span class="UIDENT">Dep11</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L721"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L722"></span>    <span class="CLASS">class</span> <span class="LIDENT">c</span> <span class="COLON">:</span><span class="EOL">
+</span><span id="L723"></span>      <span class="OBJECT">object</span><span class="EOL">
+</span><span id="L724"></span>        <span class="METHOD">method</span> <span class="LIDENT">m</span> <span class="COLON">:</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span id="L725"></span>      <span class="END">end</span><span class="EOL">
+</span><span id="L726"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L727"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L728"></span>
+</span><span class="MODULE"><span id="L729"></span>module</span> <span class="UIDENT">Dep12</span> <span class="COLON">:</span> <span class="FUNCTOR">functor</span><span class="EOL">
+</span><span id="L730"></span>  <span class="LPAREN">(</span><span class="UIDENT">Arg</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L731"></span>     <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span id="L732"></span>   <span class="END">end</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L733"></span>  <span class="MINUSGREATER">-&gt;</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L734"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="UIDENT">Arg</span><span class="DOT">.</span><span class="UIDENT">S</span><span class="EOL">
+</span><span class="END"><span id="L735"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L736"></span>
+</span><span class="MODULE"><span id="L737"></span>module</span> <span class="UIDENT">Dep13</span> <span class="COLON">:</span> <span class="UIDENT">Dep12</span><span class="LPAREN">(</span><span class="UIDENT">Dep11</span><span class="RPAREN">)</span><span class="DOT">.</span><span class="UIDENT">T</span><span class="EOL">
+</span><span class="EOL"><span id="L738"></span>
+</span><span class="TYPE"><span id="L739"></span>type</span> <span class="LIDENT">dep5</span> <span class="EQUAL">=</span> <span class="UIDENT">Dep13</span><span class="DOT">.</span><span class="LIDENT">c</span><span class="EOL">
+</span><span class="EOL"><span id="L740"></span>
+</span><span class="COMMENT"><span id="L741"></span>(* Test resolution of difficult with examples *)</span><span class="EOL">
+</span><span class="EOL"><span id="L742"></span>
+</span><span class="MODULE"><span id="L743"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">With1</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L744"></span>  <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L745"></span>    <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span id="L746"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L747"></span>
+</span><span id="L748"></span>  <span class="MODULE">module</span> <span class="UIDENT">N</span> <span class="COLON">:</span> <span class="UIDENT">M</span><span class="DOT">.</span><span class="UIDENT">S</span><span class="EOL">
+</span><span class="END"><span id="L749"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L750"></span>
+</span><span class="MODULE"><span id="L751"></span>module</span> <span class="UIDENT">With2</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L752"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L753"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L754"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L755"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L756"></span>
+</span><span class="MODULE"><span id="L757"></span>module</span> <span class="UIDENT">With3</span> <span class="COLON">:</span> <span class="UIDENT">With1</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="EQUAL">=</span> <span class="UIDENT">With2</span><span class="EOL">
+</span><span class="EOL"><span id="L758"></span>
+</span><span class="TYPE"><span id="L759"></span>type</span> <span class="LIDENT">with1</span> <span class="EQUAL">=</span> <span class="UIDENT">With3</span><span class="DOT">.</span><span class="UIDENT">N</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L760"></span>
+</span><span class="MODULE"><span id="L761"></span>module</span> <span class="UIDENT">With4</span> <span class="COLON">:</span> <span class="UIDENT">With1</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLONEQUAL">:=</span> <span class="UIDENT">With2</span><span class="EOL">
+</span><span class="EOL"><span id="L762"></span>
+</span><span class="TYPE"><span id="L763"></span>type</span> <span class="LIDENT">with2</span> <span class="EQUAL">=</span> <span class="UIDENT">With4</span><span class="DOT">.</span><span class="UIDENT">N</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L764"></span>
+</span><span class="MODULE"><span id="L765"></span>module</span> <span class="UIDENT">With5</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L766"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L767"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L768"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L769"></span>
+</span><span id="L770"></span>  <span class="MODULE">module</span> <span class="UIDENT">N</span> <span class="COLON">:</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span class="END"><span id="L771"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L772"></span>
+</span><span class="MODULE"><span id="L773"></span>module</span> <span class="UIDENT">With6</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L774"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L775"></span>    <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L776"></span>      <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span class="EOL"><span id="L777"></span>
+</span><span id="L778"></span>      <span class="MODULE">module</span> <span class="UIDENT">N</span> <span class="COLON">:</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span id="L779"></span>    <span class="END">end</span><span class="EOL">
+</span><span id="L780"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L781"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L782"></span>
+</span><span class="MODULE"><span id="L783"></span>module</span> <span class="UIDENT">With7</span> <span class="COLON">:</span> <span class="FUNCTOR">functor</span><span class="EOL">
+</span><span id="L784"></span>  <span class="LPAREN">(</span><span class="UIDENT">X</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L785"></span>     <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span><span class="EOL">
+</span><span id="L786"></span>   <span class="END">end</span><span class="RPAREN">)</span><span class="EOL">
+</span><span id="L787"></span>  <span class="MINUSGREATER">-&gt;</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L788"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="UIDENT">X</span><span class="DOT">.</span><span class="UIDENT">T</span><span class="EOL">
+</span><span class="END"><span id="L789"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L790"></span>
+</span><span class="MODULE"><span id="L791"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">With8</span> <span class="EQUAL">=</span><span class="EOL">
+</span><span id="L792"></span>  <span class="UIDENT">With7</span><span class="LPAREN">(</span><span class="UIDENT">With6</span><span class="RPAREN">)</span><span class="DOT">.</span><span class="UIDENT">T</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="EQUAL">=</span> <span class="UIDENT">With5</span> <span class="AND">and</span> <span class="TYPE">type</span> <span class="UIDENT">M</span><span class="DOT">.</span><span class="UIDENT">N</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="UIDENT">With5</span><span class="DOT">.</span><span class="UIDENT">N</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L793"></span>
+</span><span class="MODULE"><span id="L794"></span>module</span> <span class="UIDENT">With9</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L795"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L796"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L797"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L798"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L799"></span>
+</span><span class="MODULE"><span id="L800"></span>module</span> <span class="UIDENT">With10</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L801"></span>  (** {!With10.T} is a submodule type. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L802"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">T</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L803"></span>    <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L804"></span>      <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">S</span><span class="EOL">
+</span><span id="L805"></span>    <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L806"></span>
+</span><span id="L807"></span>    <span class="MODULE">module</span> <span class="UIDENT">N</span> <span class="COLON">:</span> <span class="UIDENT">M</span><span class="DOT">.</span><span class="UIDENT">S</span><span class="EOL">
+</span><span id="L808"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L809"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L810"></span>
+</span><span class="MODULE"><span id="L811"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">With11</span> <span class="EQUAL">=</span> <span class="UIDENT">With7</span><span class="LPAREN">(</span><span class="UIDENT">With10</span><span class="RPAREN">)</span><span class="DOT">.</span><span class="UIDENT">T</span> <span class="WITH">with</span> <span class="MODULE">module</span> <span class="UIDENT">M</span> <span class="EQUAL">=</span> <span class="UIDENT">With9</span> <span class="AND">and</span> <span class="TYPE">type</span> <span class="UIDENT">N</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L812"></span>
+</span><span class="MODULE"><span id="L813"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">NestedInclude1</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L814"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">NestedInclude2</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L815"></span>    <span class="TYPE">type</span> <span class="LIDENT">nested_include</span><span class="EOL">
+</span><span id="L816"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L817"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L818"></span>
+</span><span class="INCLUDE"><span id="L819"></span>include</span> <span class="UIDENT">NestedInclude1</span><span class="EOL">
+</span><span class="EOL"><span id="L820"></span>
+</span><span class="INCLUDE"><span id="L821"></span>include</span> <span class="UIDENT">NestedInclude2</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LIDENT">nested_include</span> <span class="EQUAL">=</span> <span class="LIDENT">int</span><span class="EOL">
+</span><span class="EOL"><span id="L822"></span>
+</span><span class="MODULE"><span id="L823"></span>module</span> <span class="UIDENT">DoubleInclude1</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L824"></span>  <span class="MODULE">module</span> <span class="UIDENT">DoubleInclude2</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L825"></span>    <span class="TYPE">type</span> <span class="LIDENT">double_include</span><span class="EOL">
+</span><span id="L826"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L827"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L828"></span>
+</span><span class="MODULE"><span id="L829"></span>module</span> <span class="UIDENT">DoubleInclude3</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L830"></span>  <span class="INCLUDE">include</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">DoubleInclude1</span><span class="EOL">
+</span><span class="END"><span id="L831"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L832"></span>
+</span><span class="INCLUDE"><span id="L833"></span>include</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">DoubleInclude3</span><span class="DOT">.</span><span class="UIDENT">DoubleInclude2</span><span class="EOL">
+</span><span class="EOL"><span id="L834"></span>
+</span><span class="MODULE"><span id="L835"></span>module</span> <span class="UIDENT">IncludeInclude1</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L836"></span>  <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="UIDENT">IncludeInclude2</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L837"></span>    <span class="TYPE">type</span> <span class="LIDENT">include_include</span><span class="EOL">
+</span><span id="L838"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L839"></span>
+</span><span id="L840"></span>  <span class="MODULE">module</span> <span class="UIDENT">IncludeInclude2_M</span> <span class="COLON">:</span> <span class="SIG">sig</span> <span class="END">end</span><span class="EOL">
+</span><span class="END"><span id="L841"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L842"></span>
+</span><span class="INCLUDE"><span id="L843"></span>include</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">IncludeInclude1</span><span class="EOL">
+</span><span class="EOL"><span id="L844"></span>
+</span><span class="INCLUDE"><span id="L845"></span>include</span> <span class="UIDENT">IncludeInclude2</span><span class="EOL">
+</span><span class="EOL"><span id="L846"></span>
+</span><span id="L847"></span>(** {1:indexmodules Trying the \{!modules: ...\} command.}
+<span id="L848"></span>
+<span id="L849"></span>    With ocamldoc, toplevel units will be linked and documented, while
+<span id="L850"></span>    submodules will behave as simple references.
+<span id="L851"></span>
+<span id="L852"></span>    With odoc, everything should be resolved (and linked) but only toplevel
+<span id="L853"></span>    units will be documented.
+<span id="L854"></span>
+<span id="L855"></span>    {!modules: Dep1.X Ocamlary.IncludeInclude1 Ocamlary}
+<span id="L856"></span>
+<span id="L857"></span>    {3 Weirder usages involving module types}
+<span id="L858"></span>
+<span id="L859"></span>    {!modules: IncludeInclude1.IncludeInclude2_M Dep4.X}
+<span class="DOCSTRING"><span id="L860"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L861"></span>
+</span><span id="L862"></span>(** {1 Playing with \@canonical paths} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L863"></span>
+</span><span class="MODULE"><span id="L864"></span>module</span> <span class="UIDENT">CanonicalTest</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L865"></span>  <span class="MODULE">module</span> <span class="UIDENT">Base__List</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L866"></span>    <span class="TYPE">type</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L867"></span>
+</span><span id="L868"></span>    <span class="VAL">val</span> <span class="LIDENT">id</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L869"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L870"></span>
+</span><span id="L871"></span>  <span class="MODULE">module</span> <span class="UIDENT">Base__</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L872"></span>    <span class="MODULE">module</span> <span class="UIDENT">List</span> <span class="EQUAL">=</span> <span class="UIDENT">Base__List</span><span class="EOL">
+</span><span id="L873"></span>    (** @canonical Ocamlary.CanonicalTest.Base.List <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L874"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L875"></span>
+</span><span id="L876"></span>  <span class="MODULE">module</span> <span class="UIDENT">Base</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L877"></span>    <span class="MODULE">module</span> <span class="UIDENT">List</span> <span class="EQUAL">=</span> <span class="UIDENT">Base__</span><span class="DOT">.</span><span class="UIDENT">List</span><span class="EOL">
+</span><span id="L878"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L879"></span>
+</span><span id="L880"></span>  <span class="MODULE">module</span> <span class="UIDENT">Base_Tests</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L881"></span>    <span class="MODULE">module</span> <span class="UIDENT">C</span> <span class="COLON">:</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">Base__</span><span class="DOT">.</span><span class="UIDENT">List</span><span class="EOL">
+</span><span class="EOL"><span id="L882"></span>
+</span><span id="L883"></span>    <span class="OPEN">open</span> <span class="UIDENT">Base__</span><span class="EOL">
+</span><span id="L884"></span>    <span class="MODULE">module</span> <span class="UIDENT">L</span> <span class="EQUAL">=</span> <span class="UIDENT">List</span><span class="EOL">
+</span><span class="EOL"><span id="L885"></span>
+</span><span id="L886"></span>    <span class="VAL">val</span> <span class="LIDENT">foo</span> <span class="COLON">:</span> <span class="LIDENT">int</span> <span class="UIDENT">L</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">float</span> <span class="UIDENT">L</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L887"></span>
+</span><span id="L888"></span>    <span class="VAL">val</span> <span class="LIDENT">bar</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="UIDENT">List</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="UIDENT">List</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span id="L889"></span>    <span class="COMMENT">(* This is just {!List.id}, or rather {!L.id} *)</span><span class="EOL">
+</span><span class="EOL"><span id="L890"></span>
+</span><span id="L891"></span>    <span class="VAL">val</span> <span class="LIDENT">baz</span> <span class="COLON">:</span> <span class="QUOTE">'</span><span class="LIDENT">a</span> <span class="UIDENT">Base__</span><span class="DOT">.</span><span class="UIDENT">List</span><span class="DOT">.</span><span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span id="L892"></span>    <span class="COMMENT">(* We can't reference [Base__] because it's hidden.
+<span id="L893"></span>        {!List.t} ([List.t]) should resolve. *)</span><span class="EOL">
+</span><span id="L894"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L895"></span>
+</span><span id="L896"></span>  <span class="MODULE">module</span> <span class="UIDENT">List_modif</span> <span class="COLON">:</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">Base</span><span class="DOT">.</span><span class="UIDENT">List</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="QUOTE">'</span><span class="LIDENT">c</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="QUOTE">'</span><span class="LIDENT">c</span> <span class="UIDENT">Base__</span><span class="DOT">.</span><span class="UIDENT">List</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L897"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L898"></span>
+</span><span class="COMMENT"><span id="L899"></span>(* val test : 'a CanonicalTest.Base__.List.t -&gt; unit *)</span><span class="EOL">
+</span><span id="L900"></span>(** Some ref to {!CanonicalTest.Base_Tests.C.t} and {!CanonicalTest.Base_Tests.L.id}.
+<span id="L901"></span>    But also to {!CanonicalTest.Base.List} and {!CanonicalTest.Base.List.t} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L902"></span>
+</span><span id="L903"></span>(** {1:aliases Aliases again} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L904"></span>
+</span><span class="MODULE"><span id="L905"></span>module</span> <span class="UIDENT">Aliases</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L906"></span>  (** Let's imitate jst's layout. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L907"></span>
+</span><span id="L908"></span>  <span class="MODULE">module</span> <span class="UIDENT">Foo__A</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L909"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L910"></span>
+</span><span id="L911"></span>    <span class="VAL">val</span> <span class="LIDENT">id</span> <span class="COLON">:</span> <span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L912"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L913"></span>
+</span><span id="L914"></span>  <span class="MODULE">module</span> <span class="UIDENT">Foo__B</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L915"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L916"></span>
+</span><span id="L917"></span>    <span class="VAL">val</span> <span class="LIDENT">id</span> <span class="COLON">:</span> <span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L918"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L919"></span>
+</span><span id="L920"></span>  <span class="MODULE">module</span> <span class="UIDENT">Foo__C</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L921"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L922"></span>
+</span><span id="L923"></span>    <span class="VAL">val</span> <span class="LIDENT">id</span> <span class="COLON">:</span> <span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L924"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L925"></span>
+</span><span id="L926"></span>  <span class="MODULE">module</span> <span class="UIDENT">Foo__D</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L927"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L928"></span>
+</span><span id="L929"></span>    <span class="VAL">val</span> <span class="LIDENT">id</span> <span class="COLON">:</span> <span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L930"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L931"></span>
+</span><span id="L932"></span>  <span class="MODULE">module</span> <span class="UIDENT">Foo__E</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L933"></span>    <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L934"></span>
+</span><span id="L935"></span>    <span class="VAL">val</span> <span class="LIDENT">id</span> <span class="COLON">:</span> <span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L936"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L937"></span>
+</span><span id="L938"></span>  <span class="MODULE">module</span> <span class="UIDENT">Foo__</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L939"></span>    <span class="MODULE">module</span> <span class="UIDENT">A</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo__A</span><span class="EOL">
+</span><span id="L940"></span>    (** @canonical Ocamlary.Aliases.Foo.A <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L941"></span>
+</span><span id="L942"></span>    <span class="MODULE">module</span> <span class="UIDENT">B</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo__B</span><span class="EOL">
+</span><span id="L943"></span>    (** @canonical Ocamlary.Aliases.Foo.B <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L944"></span>
+</span><span id="L945"></span>    <span class="MODULE">module</span> <span class="UIDENT">C</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo__C</span><span class="EOL">
+</span><span id="L946"></span>    (** @canonical Ocamlary.Aliases.Foo.C <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L947"></span>
+</span><span id="L948"></span>    <span class="MODULE">module</span> <span class="UIDENT">D</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo__D</span><span class="EOL">
+</span><span id="L949"></span>    (** @canonical Ocamlary.Aliases.Foo.D <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L950"></span>
+</span><span id="L951"></span>    <span class="MODULE">module</span> <span class="UIDENT">E</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo__E</span><span class="EOL">
+</span><span id="L952"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L953"></span>
+</span><span id="L954"></span>  <span class="MODULE">module</span> <span class="UIDENT">Foo</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L955"></span>    <span class="OPEN">open</span> <span class="UIDENT">Foo__</span><span class="EOL">
+</span><span id="L956"></span>    <span class="MODULE">module</span> <span class="UIDENT">A</span> <span class="EQUAL">=</span> <span class="UIDENT">A</span><span class="EOL">
+</span><span id="L957"></span>    <span class="MODULE">module</span> <span class="UIDENT">B</span> <span class="EQUAL">=</span> <span class="UIDENT">B</span><span class="EOL">
+</span><span id="L958"></span>    <span class="MODULE">module</span> <span class="UIDENT">C</span> <span class="EQUAL">=</span> <span class="UIDENT">C</span><span class="EOL">
+</span><span id="L959"></span>    <span class="MODULE">module</span> <span class="UIDENT">D</span> <span class="EQUAL">=</span> <span class="UIDENT">D</span><span class="EOL">
+</span><span id="L960"></span>    <span class="MODULE">module</span> <span class="UIDENT">E</span> <span class="EQUAL">=</span> <span class="UIDENT">E</span><span class="EOL">
+</span><span id="L961"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L962"></span>
+</span><span id="L963"></span>  <span class="MODULE">module</span> <span class="UIDENT">A'</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="UIDENT">A</span><span class="EOL">
+</span><span class="EOL"><span id="L964"></span>
+</span><span id="L965"></span>  <span class="TYPE">type</span> <span class="LIDENT">tata</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="UIDENT">A</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L966"></span>
+</span><span id="L967"></span>  <span class="TYPE">type</span> <span class="LIDENT">tbtb</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo__</span><span class="DOT">.</span><span class="UIDENT">B</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L968"></span>
+</span><span id="L969"></span>  <span class="TYPE">type</span> <span class="LIDENT">tete</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo__</span><span class="DOT">.</span><span class="UIDENT">E</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L970"></span>
+</span><span id="L971"></span>  <span class="TYPE">type</span> <span class="LIDENT">tata'</span> <span class="EQUAL">=</span> <span class="UIDENT">A'</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L972"></span>
+</span><span id="L973"></span>  <span class="TYPE">type</span> <span class="LIDENT">tete2</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="UIDENT">E</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L974"></span>
+</span><span id="L975"></span>  <span class="MODULE">module</span> <span class="UIDENT">Std</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L976"></span>    <span class="MODULE">module</span> <span class="UIDENT">A</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="UIDENT">A</span><span class="EOL">
+</span><span id="L977"></span>    <span class="MODULE">module</span> <span class="UIDENT">B</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="UIDENT">B</span><span class="EOL">
+</span><span id="L978"></span>    <span class="MODULE">module</span> <span class="UIDENT">C</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="UIDENT">C</span><span class="EOL">
+</span><span id="L979"></span>    <span class="MODULE">module</span> <span class="UIDENT">D</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="UIDENT">D</span><span class="EOL">
+</span><span id="L980"></span>    <span class="MODULE">module</span> <span class="UIDENT">E</span> <span class="EQUAL">=</span> <span class="UIDENT">Foo</span><span class="DOT">.</span><span class="UIDENT">E</span><span class="EOL">
+</span><span id="L981"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L982"></span>
+</span><span id="L983"></span>  <span class="TYPE">type</span> <span class="LIDENT">stde</span> <span class="EQUAL">=</span> <span class="UIDENT">Std</span><span class="DOT">.</span><span class="UIDENT">E</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L984"></span>
+</span><span id="L985"></span>  (** {3:incl include of Foo}
+<span id="L986"></span>
+<span id="L987"></span>      Just for giggle, let's see what happens when we include {!module-Foo}. <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L988"></span>
+</span><span id="L989"></span>  <span class="INCLUDE">include</span> <span class="MODULE">module</span> <span class="TYPE">type</span> <span class="OF">of</span> <span class="UIDENT">Foo</span><span class="EOL">
+</span><span class="EOL"><span id="L990"></span>
+</span><span id="L991"></span>  <span class="TYPE">type</span> <span class="LIDENT">testa</span> <span class="EQUAL">=</span> <span class="UIDENT">A</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L992"></span>
+</span><span id="L993"></span>  (** And also, let's refer to {!type:module-A.t} and {!Foo.B.id} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L994"></span>
+</span><span id="L995"></span>  <span class="MODULE">module</span> <span class="UIDENT">P1</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L996"></span>    (** @canonical Ocamlary.Aliases.P2.Z <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span id="L997"></span>    <span class="MODULE">module</span> <span class="UIDENT">Y</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L998"></span>      <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L999"></span>
+</span><span id="L1000"></span>      <span class="VAL">val</span> <span class="LIDENT">id</span> <span class="COLON">:</span> <span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span id="L1001"></span>    <span class="END">end</span><span class="EOL">
+</span><span id="L1002"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L1003"></span>
+</span><span id="L1004"></span>  <span class="MODULE">module</span> <span class="UIDENT">P2</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L1005"></span>    <span class="MODULE">module</span> <span class="UIDENT">Z</span> <span class="EQUAL">=</span> <span class="UIDENT">P1</span><span class="DOT">.</span><span class="UIDENT">Y</span><span class="EOL">
+</span><span id="L1006"></span>  <span class="END">end</span><span class="EOL">
+</span><span class="EOL"><span id="L1007"></span>
+</span><span id="L1008"></span>  <span class="MODULE">module</span> <span class="UIDENT">X1</span> <span class="EQUAL">=</span> <span class="UIDENT">P1</span><span class="DOT">.</span><span class="UIDENT">Y</span><span class="EOL">
+</span><span id="L1009"></span>  <span class="MODULE">module</span> <span class="UIDENT">X2</span> <span class="EQUAL">=</span> <span class="UIDENT">P2</span><span class="DOT">.</span><span class="UIDENT">Z</span><span class="EOL">
+</span><span class="EOL"><span id="L1010"></span>
+</span><span id="L1011"></span>  <span class="TYPE">type</span> <span class="LIDENT">p1</span> <span class="EQUAL">=</span> <span class="UIDENT">X1</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="EOL"><span id="L1012"></span>
+</span><span id="L1013"></span>  <span class="TYPE">type</span> <span class="LIDENT">p2</span> <span class="EQUAL">=</span> <span class="UIDENT">X2</span><span class="DOT">.</span><span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L1014"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L1015"></span>
+</span><span id="L1016"></span>(** {1 Section title splicing}
+<span id="L1017"></span>
+<span id="L1018"></span>    I can refer to
+<span id="L1019"></span>    - [{!section:indexmodules}] : {!section:indexmodules}
+<span id="L1020"></span>    - [{!aliases}] : {!aliases}
+<span id="L1021"></span>
+<span id="L1022"></span>    But also to things in submodules:
+<span id="L1023"></span>    - [{!section:SuperSig.SubSigA.subSig}] : {!section:SuperSig.SubSigA.subSig}
+<span id="L1024"></span>    - [{!Aliases.incl}] : {!Aliases.incl}
+<span id="L1025"></span>
+<span id="L1026"></span>    And just to make sure we do not mess up:
+<span id="L1027"></span>    - [{{!section:indexmodules}A}] : {{!section:indexmodules}A}
+<span id="L1028"></span>    - [{{!aliases}B}] : {{!aliases}B}
+<span id="L1029"></span>    - [{{!section:SuperSig.SubSigA.subSig}C}] :
+<span id="L1030"></span>    {{!section:SuperSig.SubSigA.subSig}C}
+<span id="L1031"></span>    - [{{!Aliases.incl}D}] : {{!Aliases.incl}D}
+<span class="DOCSTRING"><span id="L1032"></span>*)</span><span class="EOL">
+</span><span class="EOL"><span id="L1033"></span>
+</span><span id="L1034"></span>(** {1 New reference syntax} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L1035"></span>
+</span><span class="MODULE"><span id="L1036"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">M</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L1037"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L1038"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L1039"></span>
+</span><span class="MODULE"><span id="L1040"></span>module</span> <span class="UIDENT">M</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L1041"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L1042"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L1043"></span>
+</span><span id="L1044"></span>(** Here goes:
+<span id="L1045"></span>    - [{!module-M.t}] : {!module-M.t}
+<span id="L1046"></span>    - [{!module-type-M.t}] : {!module-type-M.t} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L1047"></span>
+</span><span class="MODULE"><span id="L1048"></span>module</span> <span class="UIDENT">Only_a_module</span> <span class="COLON">:</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L1049"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span><span class="EOL">
+</span><span class="END"><span id="L1050"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L1051"></span>
+</span><span id="L1052"></span>(** - [{!Only_a_module.t}] : {!Only_a_module.t}
+<span id="L1053"></span>    - [{!module-Only_a_module.t}] : {!module-Only_a_module.t}
+<span id="L1054"></span>    - [{!module-Only_a_module.type-t}] : {!module-Only_a_module.type-t}
+<span id="L1055"></span>    - [{!type:Only_a_module.t}] : {!type:Only_a_module.t} <span class="DOCSTRING">*)</span><span class="EOL">
+</span><span class="EOL"><span id="L1056"></span>
+</span><span class="MODULE"><span id="L1057"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">TypeExt</span> <span class="EQUAL">=</span> <span class="SIG">sig</span><span class="EOL">
+</span><span id="L1058"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="EQUAL">=</span> <span class="DOTDOT">..</span><span class="EOL">
+</span><span class="EOL"><span id="L1059"></span>
+</span><span id="L1060"></span>  <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">C</span><span class="EOL">
+</span><span class="EOL"><span id="L1061"></span>
+</span><span id="L1062"></span>  <span class="VAL">val</span> <span class="LIDENT">f</span> <span class="COLON">:</span> <span class="LIDENT">t</span> <span class="MINUSGREATER">-&gt;</span> <span class="LIDENT">unit</span><span class="EOL">
+</span><span class="END"><span id="L1063"></span>end</span><span class="EOL">
+</span><span class="EOL"><span id="L1064"></span>
+</span><span class="TYPE"><span id="L1065"></span>type</span> <span class="LIDENT">new_t</span> <span class="EQUAL">=</span> <span class="DOTDOT">..</span><span class="EOL">
+</span><span class="EOL"><span id="L1066"></span>
+</span><span class="TYPE"><span id="L1067"></span>type</span> <span class="LIDENT">new_t</span> <span class="PLUSEQ">+=</span> <span class="UIDENT">C</span><span class="EOL">
+</span><span class="EOL"><span id="L1068"></span>
+</span><span class="MODULE"><span id="L1069"></span>module</span> <span class="TYPE">type</span> <span class="UIDENT">TypeExtPruned</span> <span class="EQUAL">=</span> <span class="UIDENT">TypeExt</span> <span class="WITH">with</span> <span class="TYPE">type</span> <span class="LIDENT">t</span> <span class="COLONEQUAL">:=</span> <span class="LIDENT">new_t</span><span class="EOL">
+</span></span></code></pre></body></html>
