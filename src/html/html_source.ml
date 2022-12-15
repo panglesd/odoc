@@ -1,15 +1,15 @@
 open Odoc_document.Types
 
-let tag_of_token = function
-  | Odoc_model.Lang.Source_code.Info.Keyword -> "keyword"
-  | Comment -> "comment"
-  | Docstring -> "docstring"
-  | Keyword_other -> "keyword-other"
-  | Language_constant -> "language-constant"
-  | Numeric_constant -> "numeric-constant"
-  | Boolean_constant -> "boolean-constant"
-  | String_constant -> "string-constant"
-  | Alert -> "alert"
+let tag_of_token l = l
+(* | Odoc_model.Lang.Source_code.Info.Keyword -> "keyword" *)
+(* | Comment -> "comment" *)
+(* | Docstring -> "docstring" *)
+(* | Keyword_other -> "keyword-other" *)
+(* | Language_constant -> "language-constant" *)
+(* | Numeric_constant -> "numeric-constant" *)
+(* | Boolean_constant -> "boolean-constant" *)
+(* | String_constant -> "string-constant" *)
+(* | Alert -> "alert" *)
 
 let html_of_doc docs =
   let open Tyxml.Html in
@@ -30,7 +30,7 @@ let html_of_doc docs =
         let children = List.map doc_to_html docs in
         match info with
         | Odoc_model.Lang.Source_code.Info.Syntax tok ->
-            span ~a:[ a_class [ tag_of_token tok ] ] children
+            span ~a:[ a_class (tag_of_token tok) ] children
         | Line l ->
             span
               ~a:[ a_id (Printf.sprintf "L%d" l); a_class [ "source_line" ] ]

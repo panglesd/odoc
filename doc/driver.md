@@ -14,7 +14,7 @@ First we need to initialise MDX with some libraries and helpful values.
 (* Prelude *)
 #require "bos";;
 #install_printer Fpath.pp;;
-#print_length 100;;
+#print_length 1000;;
 #print_depth 10;;
 open Bos;;
 let (>>=) = Result.bind;;

@@ -427,9 +427,9 @@ p a > code {
 
 /* Code lexemes */
 
-.keyword {
-  font-weight: 500;
-}
+/* .keyword { */
+/*   font-weight: 500; */
+/* } */
 
 .arrow { white-space: nowrap }
 
@@ -801,10 +801,10 @@ td.def-doc *:first-child {
   text-decoration: underline;
 }
 
-.odoc-src .keyword {
-  font-weight: bold;
-  color:#C8AD7F;
-}
+/* .odoc-src .keyword:not(.other) { */
+/*   font-weight: bold; */
+/*   color:#C8AD7F; */
+/* } */
 
 .odoc-src .keyword-other {
   color: blue;
@@ -839,6 +839,46 @@ a.source_link {
   position: relative;
 }
 
+.keyword {
+  color: #0000ff;
+}
+.constant.numeric {
+  color: #098658;
+}
+.comment.block {
+  color: #008000;
+}
+.comment.doc {
+  color: #008000;
+}
+.constant.character,
+.constant.language {
+  color: #0000ff;
+}
+.constant.character.escape {
+  color: #EE0000;
+}
+.keyword.operator {
+  color: #000000;
+}
+.entity.name.function {
+  color: #795E26;
+}
+.variable {
+  color: #001080;
+}
+.support.type {
+  color: #267f99;
+}
+
+.invalid {
+  color: #cd3131
+}
+
+.string {
+  color: #A31515;
+}
+
 /*---------------------------------------------------------------------------
    Copyright (c) 2016 The odoc contributors
 
@@ -846,7 +886,7 @@ a.source_link {
    purpose with or without fee is hereby granted, provided that the above
    copyright notice and this permission notice appear in all copies.
 
-   THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+   THE SOFTWARE IS PROVIDED AS IS AND THE AUTHOR DISCLAIMS ALL WARRANTIES
    WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
    MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
    ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES

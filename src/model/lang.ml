@@ -33,16 +33,17 @@ module Source_code = struct
   module Info = struct
     type jmp_to_def = Occurence of Locations.uid | Def of string
 
-    type syntax =
-      | Keyword
-      | Keyword_other
-      | Comment
-      | Language_constant
-      | Numeric_constant
-      | Boolean_constant
-      | Docstring
-      | String_constant
-      | Alert
+    type syntax = string list
+    (* type syntax = *)
+    (*   | Keyword *)
+    (*   | Keyword_other *)
+    (*   | Comment *)
+    (*   | Language_constant *)
+    (*   | Numeric_constant *)
+    (*   | Boolean_constant *)
+    (*   | Docstring *)
+    (*   | String_constant *)
+    (*   | Alert *)
 
     type info = Syntax of syntax | Line of int | Local_jmp of jmp_to_def
 
