@@ -33,6 +33,55 @@ let ocaml =
           },
           "contentName": "comment.line.directive.ocaml"
         },
+            {
+              "comment": "general, loading codes",
+              "begin": "^[[:space:]]*(#)[[:space:]]*(help|quit|cd|directory|remove_directory|load_rec|load|use|mod_use)",
+              "end": "$",
+              "beginCaptures": {
+                "1": { "name": "keyword.other.ocaml" },
+                "2": { "name": "keyword.other.ocaml" }
+              },
+              "patterns": [{ "include": "#strings" }]
+            },
+            {
+              "comment": "environment queries",
+              "begin": "^[[:space:]]*(#)[[:space:]]*(show_class_type|show_class|show_exception|show_module_type|show_module|show_type|show_val|show)",
+              "end": "$",
+              "beginCaptures": {
+                "1": { "name": "keyword.other.ocaml" },
+                "2": { "name": "keyword.other.ocaml" }
+              },
+              "patterns": [
+                { "include": "#types" },
+                { "include": "#identifiers" }
+              ]
+            },
+            {
+              "comment": "pretty-printing, tracing",
+              "begin": "^[[:space:]]*(#)[[:space:]]*(install_printer|print_depth|print_length|remove_printer|trace|untrace_all|untrace)",
+              "end": "$",
+              "beginCaptures": {
+                "1": { "name": "keyword.other.ocaml" },
+                "2": { "name": "keyword.other.ocaml" }
+              },
+              "patterns": [
+                { "include": "#literals" },
+                { "include": "#identifiers" }
+              ]
+            },
+            {
+              "comment": "compiler options",
+              "begin": "^[[:space:]]*(#)[[:space:]]*(labels|ppx|principal|rectypes|warn_error|warnings)",
+              "end": "$",
+              "beginCaptures": {
+                "1": { "name": "keyword.other.ocaml" },
+                "2": { "name": "keyword.other.ocaml" }
+              },
+              "patterns": [
+                { "include": "#strings" },
+                { "include": "#literals" }
+              ]
+            },
         {
           "comment": "topfind directives",
           "begin": "^[[:space:]]*(#)[[:space:]]*(require|list|camlp4o|camlp4r|predicates|thread)",

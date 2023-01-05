@@ -839,43 +839,43 @@ a.source_link {
   position: relative;
 }
 
-.keyword {
+.odoc-src .keyword {
   color: #0000ff;
 }
-.constant.numeric {
+.odoc-src .constant.numeric {
   color: #098658;
 }
-.comment.block {
+.odoc-src .comment.block {
   color: #008000;
 }
-.comment.doc {
+.odoc-src .comment.doc {
   color: #008000;
 }
-.constant.character,
-.constant.language {
+.odoc-src .constant.character,
+.odoc-src .constant.language {
   color: #0000ff;
 }
-.constant.character.escape {
+.odoc-src .constant.character.escape {
   color: #EE0000;
 }
-.keyword.operator {
+.odoc-src .keyword.operator {
   color: #000000;
 }
-.entity.name.function {
+.odoc-src .entity.name.function {
   color: #795E26;
 }
-.variable {
+.odoc-src .variable {
   color: #001080;
 }
-.support.type {
+.odoc-src .support.type {
   color: #267f99;
 }
 
-.invalid {
+.odoc-src .invalid {
   color: #cd3131
 }
 
-.string {
+.odoc-src .string {
   color: #A31515;
 }
 
