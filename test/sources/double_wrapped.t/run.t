@@ -64,5 +64,5 @@ Look if all the source files are generated:
   $ cat html/Main__A/Main__A.ml.html
   <!DOCTYPE html>
   <html xmlns="http://www.w3.org/1999/xhtml"><head><title>Source: Main__A.ml (Main__A)</title><link rel="stylesheet" href="../odoc.css"/><meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head><body class="odoc-src"><pre class="source_container"><code class="source_line_column"><a id="L1" class="source_line" href="#L1">1</a>
-  </code><code class="source_code"><span><span class="LET">let</span> <span id="x_267"><span id="def-Main__A0"><span class="LIDENT">x</span></span></span> <span class="EQUAL">=</span> <span class="INT">1</span><span class="EOL">
+  </code><code class="source_code"><span><span class="keyword ocaml source ocaml">let</span><span class="source ocaml"> </span><span id="x_267"><span id="def-Main__A0"><span class="entity name function binding ocaml source ocaml">x</span></span></span><span class="source ocaml"> </span><span class="keyword operator ocaml source ocaml">=</span><span class="source ocaml"> </span><span class="constant numeric decimal integer ocaml source ocaml">1</span><span class="source ocaml">
   </span></span></code></pre></body></html>

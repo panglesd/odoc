@@ -21,10 +21,12 @@ let html_of_doc docs =
     match doc with
     | Source_page.Plain_code s -> [ txt s ]
     | Tagged_code (info, docs) -> (
+        (* To simplify, scopes do not depend on their order *)
         let children = List.concat @@ List.map (doc_to_html ~is_in_a) docs in
         match info with
         | Source_code.Info.Syntax tok ->
-            [ span ~a:[ a_class [ tok ] ] children ]
+            let tok = Utils.list_concat_map ~f:(Utils.split_on_char '.') tok in
+            [ span ~a:[ a_class tok ] children ]
         | Line _ -> children
         | Local_jmp (Occurence { anchor }) ->
             if is_in_a then children

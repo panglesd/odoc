@@ -33,7 +33,11 @@ module Source_code = struct
   module Info = struct
     type jmp_to_def = Occurence of Locations.anchor | Def of string
 
-    type info = Syntax of string | Line of int | Local_jmp of jmp_to_def
+    type info =
+      | Syntax of string list
+          (** The each item of the list corresponds to a textmate scope *)
+      | Line of int
+      | Local_jmp of jmp_to_def
 
     type 'a with_pos = 'a * (int * int)
 

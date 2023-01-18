@@ -13,6 +13,20 @@ let rec list_concat_map ?sep ~f = function
 
 let optional_elt f ?a = function [] -> [] | l -> [ f ?a l ]
 
+let split_on_char c s =
+  let rec loop i acc =
+    try
+      let index = String.index_from s i c in
+      let acc = String.sub s i (index - i) :: acc in
+      loop (index + 1) acc
+    with
+    | Not_found ->
+        let acc = String.sub s i (String.length s - i) :: acc in
+        List.rev acc
+    | Invalid_argument _ -> List.rev acc
+  in
+  loop 0 []
+
 module Json = struct
   type json =
     [ `Null

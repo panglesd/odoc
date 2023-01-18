@@ -1,145 +1,37 @@
-type token = Parser.token
+let ocaml_grammar = TmLanguage.of_yojson_exn Jsons.ocaml
+let ocaml_interface_grammar = TmLanguage.of_yojson_exn Jsons.ocaml_interface
 
-let tag_of_token (tok : Parser.token) =
-  match tok with
-  | WITH -> "WITH"
-  | WHILE -> "WHILE"
-  | WHEN -> "WHEN"
-  | VIRTUAL -> "VIRTUAL"
-  | VAL -> "VAL"
-  | UNDERSCORE -> "UNDERSCORE"
-  | UIDENT _ -> "UIDENT"
-  | TYPE -> "TYPE"
-  | TRY -> "TRY"
-  | TRUE -> "TRUE"
-  | TO -> "TO"
-  | TILDE -> "TILDE"
-  | THEN -> "THEN"
-  | STRUCT -> "STRUCT"
-  | STRING _ -> "STRING"
-  | STAR -> "STAR"
-  | SIG -> "SIG"
-  | SEMISEMI -> "SEMISEMI"
-  | SEMI -> "SEMI"
-  | RPAREN -> "RPAREN"
-  | REC -> "REC"
-  | RBRACKET -> "RBRACKET"
-  | RBRACE -> "RBRACE"
-  | QUOTED_STRING_ITEM _ -> "QUOTED_STRING_ITEM"
-  | QUOTED_STRING_EXPR _ -> "QUOTED_STRING_EXPR"
-  | QUOTE -> "QUOTE"
-  | QUESTION -> "QUESTION"
-  | PRIVATE -> "PRIVATE"
-  | PREFIXOP _ -> "PREFIXOP"
-  | PLUSEQ -> "PLUSEQ"
-  | PLUSDOT -> "PLUSDOT"
-  | PLUS -> "PLUS"
-  | PERCENT -> "PERCENT"
-  | OR -> "OR"
-  | OPTLABEL _ -> "OPTLABEL"
-  | OPEN -> "OPEN"
-  | OF -> "OF"
-  | OBJECT -> "OBJECT"
-  | NONREC -> "NONREC"
-  | NEW -> "NEW"
-  | MUTABLE -> "MUTABLE"
-  | MODULE -> "MODULE"
-  | MINUSGREATER -> "MINUSGREATER"
-  | MINUSDOT -> "MINUSDOT"
-  | MINUS -> "MINUS"
-  | METHOD -> "METHOD"
-  | MATCH -> "MATCH"
-  | LPAREN -> "LPAREN"
-  | LIDENT "failwith" -> "failwith"
-  | LIDENT _ -> "LIDENT"
-  | LETOP _ -> "LETOP"
-  | LET -> "LET"
-  | LESSMINUS -> "LESSMINUS"
-  | LESS -> "LESS"
-  | LBRACKETPERCENTPERCENT -> "LBRACKETPERCENTPERCENT"
-  | LBRACKETPERCENT -> "LBRACKETPERCENT"
-  | LBRACKETLESS -> "LBRACKETLESS"
-  | LBRACKETGREATER -> "LBRACKETGREATER"
-  | LBRACKETBAR -> "LBRACKETBAR"
-  | LBRACKETATATAT -> "LBRACKETATATAT"
-  | LBRACKETATAT -> "LBRACKETATAT"
-  | LBRACKETAT -> "LBRACKETAT"
-  | LBRACKET -> "LBRACKET"
-  | LBRACELESS -> "LBRACELESS"
-  | LBRACE -> "LBRACE"
-  | LAZY -> "LAZY"
-  | LABEL _ -> "LABEL"
-  | INT _ -> "INT"
-  | INITIALIZER -> "INITIALIZER"
-  | INHERIT -> "INHERIT"
-  | INFIXOP4 _ -> "INFIXOP4"
-  | INFIXOP3 _ -> "INFIXOP3"
-  | INFIXOP2 _ -> "INFIXOP2"
-  | INFIXOP1 _ -> "INFIXOP1"
-  | INFIXOP0 _ -> "INFIXOP0"
-  | INCLUDE -> "INCLUDE"
-  | IN -> "IN"
-  | IF -> "IF"
-  | HASHOP _ -> "HASHOP"
-  | HASH -> "HASH"
-  | GREATERRBRACKET -> "GREATERRBRACKET"
-  | GREATERRBRACE -> "GREATERRBRACE"
-  | GREATER -> "GREATER"
-  | FUNCTOR -> "FUNCTOR"
-  | FUNCTION -> "FUNCTION"
-  | FUN -> "FUN"
-  | FOR -> "FOR"
-  | FLOAT _ -> "FLOAT"
-  | FALSE -> "FALSE"
-  | EXTERNAL -> "EXTERNAL"
-  | EXCEPTION -> "EXCEPTION"
-  | EQUAL -> "EQUAL"
-  | EOL -> "EOL"
-  | EOF -> "EOF"
-  | END -> "END"
-  | ELSE -> "ELSE"
-  | DOWNTO -> "DOWNTO"
-  | DOTOP _ -> "DOTOP"
-  | DOTDOT -> "DOTDOT"
-  | DOT -> "DOT"
-  | DONE -> "DONE"
-  | DOCSTRING _ -> "DOCSTRING"
-  | DO -> "DO"
-  | CONSTRAINT -> "CONSTRAINT"
-  | COMMENT _ -> "COMMENT"
-  | COMMA -> "COMMA"
-  | COLONGREATER -> "COLONGREATER"
-  | COLONEQUAL -> "COLONEQUAL"
-  | COLONCOLON -> "COLONCOLON"
-  | COLON -> "COLON"
-  | CLASS -> "CLASS"
-  | CHAR _ -> "CHAR"
-  | BEGIN -> "BEGIN"
-  | BARRBRACKET -> "BARRBRACKET"
-  | BARBAR -> "BARBAR"
-  | BAR -> "BAR"
-  | BANG -> "BANG"
-  | BACKQUOTE -> "BACKQUOTE"
-  | ASSERT -> "ASSERT"
-  | AS -> "AS"
-  | ANDOP _ -> "ANDOP"
-  | AND -> "AND"
-  | AMPERSAND -> "AMPERSAND"
-  | AMPERAMPER -> "AMPERAMPER"
+let t =
+  let t = TmLanguage.create () in
+  TmLanguage.add_grammar t ocaml_interface_grammar;
+  TmLanguage.add_grammar t ocaml_grammar;
+  t
+
+let rec highlight_tokens start i spans = function
+  | [] -> (spans, start + i)
+  | tok :: toks -> (
+      let j = TmLanguage.ending tok in
+      assert (j > i);
+      match TmLanguage.scopes tok with
+      | [] -> highlight_tokens start j spans toks
+      | scopes ->
+          highlight_tokens start j
+            ((scopes, (start + i, start + j)) :: spans)
+            toks)
+
+let highlight_string t grammar stack str =
+  let lines = String.split_on_char '\n' str in
+  let rec loop i stack acc = function
+    | [] -> List.rev acc
+    | line :: lines ->
+        (* Some patterns don't work if there isn't a newline *)
+        let line = line ^ "\n" in
+        let tokens, stack = TmLanguage.tokenize_exn t grammar stack line in
+        let spans, tot = highlight_tokens i 0 [] tokens in
+        loop tot stack (spans :: acc) lines
+  in
+  List.concat @@ loop 0 stack [] lines
 
 let syntax_highlighting_locs src =
-  let lexbuf = Lexing.from_string ~with_positions:true src in
-  let rec collect lexbuf =
-    let tok = Lexer.token_with_comments lexbuf in
-    let loc_start, loc_end = (lexbuf.lex_start_p, lexbuf.lex_curr_p) in
-    let tag = tag_of_token tok in
-    match tok with
-    | EOF -> []
-    | COMMENT (_, loc) ->
-        (tag, (loc.loc_start.pos_cnum, loc.loc_end.pos_cnum)) :: collect lexbuf
-    | DOCSTRING doc ->
-        let loc = Docstrings.docstring_loc doc in
-        (tag, (loc.loc_start.pos_cnum, loc.loc_end.pos_cnum)) :: collect lexbuf
-    | _ -> (tag, (loc_start.pos_cnum, loc_end.pos_cnum)) :: collect lexbuf
-  in
-  collect lexbuf
+  try highlight_string t ocaml_grammar TmLanguage.empty src
+  with TmLanguage.Error _ -> (* TODO: propertly report the error *) []
