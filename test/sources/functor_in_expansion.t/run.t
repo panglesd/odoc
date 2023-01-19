@@ -4,11 +4,23 @@ Verify the behavior on functors.
   $ ocamlc -c -o main__R.cmo r.ml -bin-annot -I .
   $ ocamlc -c -o main.cmo main.ml -bin-annot -I .
   $ odoc compile --impl f.ml -I . main__F.cmt
+  List of collected shapes:
+  <<predef:int>>
+  
   $ odoc compile --impl r.ml -I . main__R.cmt
+  List of collected shapes:
   $ odoc compile --impl main.ml -I . main.cmt
+  List of collected shapes:
   $ odoc link -I . main__F.odoc
+  List of collected shapes:
+  <<predef:int>> 
+  Trying to reduce:
+  <<predef:int>>
+  
   $ odoc link -I . main__R.odoc
+  List of collected shapes:
   $ odoc link -I . main.odoc
+  List of collected shapes:
   $ odoc html-generate --indent -o html main__F.odocl
   $ odoc html-generate --indent -o html main__R.odocl
   $ odoc html-generate --indent -o html main.odocl

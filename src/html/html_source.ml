@@ -2,7 +2,7 @@ open Odoc_model.Lang
 open Odoc_document.Types
 open Tyxml
 
-let html_of_doc docs =
+let html_of_doc ~config ~resolve docs =
   let open Html in
   let a :
       ( [< Html_types.a_attrib ],
@@ -20,6 +20,10 @@ let html_of_doc docs =
   let rec doc_to_html ~is_in_a doc =
     match doc with
     | Source_page.Plain_code s -> [ txt s ]
+    | Link (url, docs) ->
+        let children = List.concat @@ List.map (doc_to_html ~is_in_a) docs in
+        let href = Link.href ~config ~resolve url in
+        [ a ~a:[ a_href href ] children ]
     | Tagged_code (info, docs) -> (
         (* To simplify, scopes do not depend on their order *)
         let children = List.concat @@ List.map (doc_to_html ~is_in_a) docs in
@@ -27,7 +31,6 @@ let html_of_doc docs =
         | Source_code.Info.Syntax tok ->
             let tok = Utils.list_concat_map ~f:(Utils.split_on_char '.') tok in
             [ span ~a:[ a_class tok ] children ]
-        | Line _ -> children
         | Local_jmp (Occurence { anchor }) ->
             if is_in_a then children
             else
@@ -35,7 +38,8 @@ let html_of_doc docs =
                 List.concat @@ List.map (doc_to_html ~is_in_a:true) docs
               in
               [ a ~a:[ a_href ("#" ^ anchor) ] children ]
-        | Local_jmp (Def lbl) -> [ span ~a:[ a_id lbl ] children ])
+        | Local_jmp (Def lbl) -> [ span ~a:[ a_id lbl ] children ]
+        | _ -> children)
   in
   span ~a:[] @@ List.concat @@ List.map (doc_to_html ~is_in_a:false) docs
 
@@ -44,6 +48,7 @@ let rec count_lines_in_span = function
   | Source_page.Plain_code _ -> 0
   | Tagged_code (Source_code.Info.Line l, docs) -> max (count_lines docs) l
   | Tagged_code (_, docs) -> count_lines docs
+  | Link (_, docs) -> count_lines docs
 
 and count_lines = function
   | [] -> 0
@@ -61,7 +66,7 @@ let rec line_numbers acc n =
     in
     line_numbers (anchor :: txt "\n" :: acc) (n - 1)
 
-let html_of_doc docs =
+let html_of_doc ~config ~resolve docs =
   let open Html in
   pre
     ~a:[ a_class [ "source_container" ] ]
@@ -69,5 +74,7 @@ let html_of_doc docs =
       code
         ~a:[ a_class [ "source_line_column" ] ]
         (line_numbers [] (count_lines docs));
-      code ~a:[ a_class [ "source_code" ] ] [ html_of_doc docs ];
+      code
+        ~a:[ a_class [ "source_code" ] ]
+        [ html_of_doc ~config ~resolve docs ];
     ]

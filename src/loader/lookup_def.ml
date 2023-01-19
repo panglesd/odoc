@@ -77,6 +77,41 @@ let lookup_def lookup_unit id =
       lookup_unit unit_name >>= fun (unit, _) ->
       Some (unit.Lang.Compilation_unit.id, anchor)
 
+let lookup_shape lookup_unit (shape, env, loadpath) =
+  List.iter Load_path.add_dir loadpath;
+  List.iter (fun x -> Load_path.add_dir ( "/home/user/panglesd-github/odoc/_build/default/"^x)) loadpath;
+  let module Reduce = Shape.Make_reduce (struct
+    type env = Env.t
+    let fuel = 10
+    let read_unit_shape ~unit_name =
+      match lookup_unit unit_name with
+      | Some (_, shape) -> Some shape
+      | None -> None
+    let find_shape env id =
+      let rebuild_env env =
+        try Envaux.env_of_only_summary env
+        with Envaux.Error e ->
+          Format.printf "Error while trying to rebuild env from summary and env %s: %a\n%!"
+            (String.concat " " loadpath)
+            Envaux.report_error e;
+          env
+      in
+      (* When partial reduction is performed only the summary of the env is stored
+         on the filesystem. We need to reconstitute the complete envoronment but we do it only if we need it. *)
+      let env = rebuild_env env in
+      Env.shape_of_path ~namespace:Shape.Sig_component_kind.Module env
+        (Pident id)
+  end) in
+  try 
+  let result = try Some (Reduce.reduce env shape) with Not_found -> None in
+  result >>= fun result ->
+  result.uid >>= fun uid ->
+  let anchor = Uid.string_of_uid (Uid.of_shape_uid uid) in
+  let anchor = { Odoc_model.Lang.Locations.anchor } in
+  comp_unit_of_uid uid >>= fun unit_name ->
+  lookup_unit unit_name >>= fun (unit, _) ->
+  Some (unit.Lang.Compilation_unit.id, anchor) with _ -> None
+
 let of_cmt (cmt : Cmt_format.cmt_infos) = cmt.cmt_impl_shape
 
 #else

@@ -7,12 +7,29 @@ It's a simpler case than Dune's wrapping.
   $ ocamlc -c main.ml -bin-annot -I .
 
   $ odoc compile --impl a.ml -I . main__A.cmt
+  List of collected shapes:
   $ odoc compile --impl b.ml -I . main__B.cmt
+  Found an expression: Main__A!.x
+  Shape is :
+  CU Main__A . "x"[value]
+  
+  List of collected shapes:
+  CU Main__A . "x"[value]
+  
   $ odoc compile --impl main.ml -I . main.cmt
+  List of collected shapes:
 
   $ odoc link -I . main__A.odoc
+  List of collected shapes:
   $ odoc link -I . main__B.odoc
+  List of collected shapes:
+  CU Main__A . "x"[value]
+  
+  Trying to reduce:
+  CU Main__A . "x"[value]
+  
   $ odoc link -I . main.odoc
+  List of collected shapes:
 
   $ odoc html-generate --indent -o html main.odocl
   $ odoc html-generate --hidden --indent -o html main__A.odocl

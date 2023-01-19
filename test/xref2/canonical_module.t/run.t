@@ -4,6 +4,11 @@ top-comment.
 The module Test_x is expected to be referenced as Test.X.
 
   $ compile test_x.mli test_y.ml test.ml
+  List of collected shapes:
+  List of collected shapes:
+  <Test.3> 
+  CU Test_x . "t"[type]
+  
 
 Test_x and Test_y have a 'canonical' field:
 

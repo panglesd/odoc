@@ -51,9 +51,7 @@ let source_anchor locs =
   match locs.Odoc_model.Lang.Locations.impl with
   | None -> None
   | Some impl ->
-      Url.Anchor.source_file_from_identifier ~ext:".ml"
-        (locs.source_parent :> Paths.Identifier.Module.t)
-        impl
+      Url.Anchor.source_file_from_identifier ~ext:".ml" locs.source_parent impl
 
 let opt_source_anchor = function
   | Some locs -> source_anchor locs
@@ -196,6 +194,22 @@ module Make (Syntax : SYNTAX) = struct
   end
 
   module Impl = struct
+    let tok_of_info info =
+      let ext = ".ml" in
+      match info with
+      | Lang.Source_code.Info.Local_jmp (Lang.Source_code.Info.Resolved loc) as
+        old -> (
+          match loc.impl with
+          | Some impl -> (
+              match
+                Url.Anchor.source_file_from_identifier ~ext loc.source_parent
+                  impl
+              with
+              | Some link -> Either.Left link
+              | None -> Either.Right old)
+          | None -> Either.Right old)
+      | i -> Right i
+
     let impl ~infos src =
       let l =
         infos
@@ -224,9 +238,12 @@ module Make (Syntax : SYNTAX) = struct
                we do                   [a  [b  b]a] *)
             let initial = plain_code (get_src from loc_start) in
             let next, q = extract loc_start loc_end q [] in
-            extract loc_end to_ q
-              ([ Types.Source_page.Tagged_code (k, List.rev next) ]
-              @ initial @ aux)
+            let tok =
+              match tok_of_info k with
+              | Either.Left url -> Types.Source_page.Link (url, List.rev next)
+              | Right _ -> Types.Source_page.Tagged_code (k, List.rev next)
+            in
+            extract loc_end to_ q ([ tok ] @ initial @ aux)
         | q -> (plain_code (get_src from to_) @ aux, q)
       in
       let doc, _ = extract 0 (String.length src) l [] in
@@ -239,8 +256,8 @@ module Make (Syntax : SYNTAX) = struct
     let source_opt parent ~infos ~ext = function
       | Some contents ->
           let source ~parent ~ext ~contents =
-            let url = Url.Path.source_file_from_identifier ~ext parent
-            and contents = Impl.impl ~infos contents in
+            let url = Url.Path.source_file_from_identifier ~ext parent in
+            let contents = Impl.impl ~infos contents in
             { Source_page.url; contents }
           in
           [ source ~parent ~ext ~contents ]

@@ -40,7 +40,7 @@ module Path : sig
 
   val source_file_from_identifier :
     ext:string ->
-    [< Identifier.Module.t_pv ] Odoc_model.Paths.Identifier.id ->
+    [< Identifier.RootModule.t_pv ] Odoc_model.Paths.Identifier.id ->
     t
   (** A path of kind [`File] based on an identifier. *)
 
@@ -94,7 +94,7 @@ module Anchor : sig
 
   val source_file_from_identifier :
     ext:string ->
-    Identifier.Module.t ->
+    Identifier.RootModule.t ->
     Odoc_model.Lang.Locations.anchor ->
     t option
 

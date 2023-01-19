@@ -458,7 +458,12 @@ module Page = struct
 
   and source_page ~config sp =
     let { Source_page.url; contents } = sp in
-    let name = url.Url.Path.name and doc = Html_source.html_of_doc contents in
+    let resolve = Link.Current url in
+    let name = url.Url.Path.name
+    and doc =
+      try Html_source.html_of_doc ~config ~resolve contents
+      with _ -> failwith "other failure"
+    in
     Html_page.make_src ~config ~url name [ doc ]
 end
 

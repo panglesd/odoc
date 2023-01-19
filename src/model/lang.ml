@@ -31,7 +31,13 @@ end
 
 module Source_code = struct
   module Info = struct
-    type jmp_to_def = Occurence of Locations.anchor | Def of string
+    type env = Env.t
+
+    type jmp_to_def =
+      | Occurence of Locations.anchor
+      | Def of string
+      | Unresolved of Shape.t * Env.t * string list
+      | Resolved of Locations.t
 
     type info =
       | Syntax of string list
@@ -45,7 +51,7 @@ module Source_code = struct
   end
 
   type t = {
-    parent : Identifier.Module.t;
+    parent : Identifier.RootModule.t;
     intf_source : string option;
     impl_source : string option;
     impl_info : Info.infos;

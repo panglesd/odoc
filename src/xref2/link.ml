@@ -334,7 +334,30 @@ let rec unit env t =
         Module sg
     | Pack _ as p -> p
   in
-  { t with content; linked = true }
+  let sources =
+    match t.sources with
+    | None -> None
+    | Some sources ->
+        let impl_info =
+          List.rev_map
+            (function
+              | ( Source_code.Info.Local_jmp
+                    (Source_code.Info.Unresolved (s, e, loadpath)),
+                  locs ) as old -> (
+                  match Env.resolve_shape (s, e, loadpath) env with
+                  | None -> old
+                  | Some (source_parent, impl) ->
+                      ( Source_code.Info.Local_jmp
+                          (Resolved
+                             Locations.
+                               { source_parent; impl = Some impl; intf = None }),
+                        locs ))
+              | i -> i)
+            sources.impl_info
+        in
+        Some { sources with impl_info }
+  in
+  { t with content; linked = true; sources }
 
 and value_ env parent t =
   let open Value in
@@ -1012,8 +1035,7 @@ and type_expression : Env.t -> Id.Signature.t -> _ -> _ =
   | Package p -> Package (type_expression_package env parent visited p)
 
 let link ~filename x y =
-  Lookup_failures.catch_failures ~filename (fun () ->
-      if y.Lang.Compilation_unit.linked || y.hidden then y else unit x y)
+  Lookup_failures.catch_failures ~filename (fun () -> unit x y)
 
 let page env page =
   let children =

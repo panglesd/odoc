@@ -164,6 +164,7 @@ and Source_page : sig
   type code = span list
   and span =
     | Tagged_code of Odoc_model.Lang.Source_code.Info.info * code
+    | Link of Url.Anchor.t * code
     | Plain_code of string
 
   type t = { url : Url.Path.t; contents : code }

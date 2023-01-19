@@ -21,6 +21,10 @@ be able to link anywhere because we don't render the inner signature anywhere.
   
 
   $ ./compile.sh
+  List of collected shapes:
+  <<predef:int>> 
+  <<predef:int>>
+  
 
 Let's check which module type `.content.Module.items[0].ModuleType` refers to:
 

@@ -1,4 +1,4 @@
-type t = string
+(* type t = string *)
 
 let x = 2
 let y = x + 1
@@ -18,3 +18,9 @@ exception Exn
 class cls = object end
 class cls' = cls
 class type ct = object end
+
+module XX = struct
+  let c = 1
+end
+
+let bli = XX.c

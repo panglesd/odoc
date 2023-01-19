@@ -9,7 +9,27 @@ resolve correctly. All of the 'Class' json objects should contain
   $ ocamlc -c -bin-annot f.mli
 
   $ odoc compile b.cmt
+  List of collected shapes:
   $ odoc compile c.cmt -I .
+  List of collected shapes:
+  <<predef:unit>> 
+  CU B . "u"[type] 
+  <<predef:unit>>
+  
+  CU B . "u"[type] 
+  <<predef:unit>> 
+  CU B . "u"[type] 
+  <<predef:unit>>
+  
+  CU B . "u"[type] 
+  <<predef:unit>> 
+  <<predef:unit>> 
+  CU B . "t"[type]
+  
+  CU B . "t"[type] 
+  <<predef:unit>> 
+  CU B . "t"[type]
+  
   $ odoc compile d.cmti -I .
   $ odoc compile e.cmti -I .
   $ odoc compile f.cmti -I .

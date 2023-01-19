@@ -3,7 +3,9 @@ Test the JSON output in the presence of expanded modules.
   $ ocamlc -c -bin-annot -o main__A.cmo a.ml -I .
   $ ocamlc -c -bin-annot main.ml -I .
   $ odoc compile -I . main__A.cmt
+  List of collected shapes:
   $ odoc compile -I . main.cmt
+  List of collected shapes:
   $ odoc link -I . main.odoc
 
   $ odoc html-targets -o html main.odocl

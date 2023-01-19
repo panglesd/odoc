@@ -5,11 +5,16 @@ Checking that source parents are kept, using include.
   $ ocamlc -c main.ml -bin-annot -I .
 
   $ odoc compile --impl b.ml -I . b.cmt
+  List of collected shapes:
   $ odoc compile --impl a.ml -I . main__A.cmt
+  List of collected shapes:
   $ odoc compile --impl main.ml -I . main.cmt
+  List of collected shapes:
 
   $ odoc link -I . main.odoc
+  List of collected shapes:
   $ odoc link -I . main__A.odoc
+  List of collected shapes:
 
   $ odoc html-generate --indent -o html main.odocl
   $ odoc html-generate --hidden --indent -o html main__A.odocl

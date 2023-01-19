@@ -168,6 +168,13 @@ Compiling a '.cmt' file.
 
   $ ocamlc -bin-annot -c impl_only.ml
   $ odoc compile --package foo impl_only.cmt
+  Found an expression: self-1/279
+  Shape is :
+  <Impl_only.4>
+  
+  List of collected shapes:
+  <Impl_only.4>
+  
 
 Check line numbers for errors in a '.mld' file.
 

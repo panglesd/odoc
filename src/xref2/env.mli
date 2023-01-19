@@ -23,6 +23,9 @@ type resolver = {
     Identifier.t -> (Identifier.RootModule.t * Lang.Locations.anchor) option;
       (** Lookup the source code location from an identifier. Returns
           [Some (source_parent, anchor)] when definition is found. *)
+  resolve_shape :
+    Shape.t * Lang.Source_code.Info.env * string list ->
+    (Identifier.RootModule.t * Lang.Locations.anchor) option;
 }
 
 type lookup_type =
@@ -99,6 +102,11 @@ val lookup_root_module : string -> t -> root option
 
 val lookup_def :
   [< Identifier.t_pv ] Paths.Identifier.id ->
+  t ->
+  (Identifier.RootModule.t * Lang.Locations.anchor) option
+
+val resolve_shape :
+  Shape.t * Lang.Source_code.Info.env * string list ->
   t ->
   (Identifier.RootModule.t * Lang.Locations.anchor) option
 

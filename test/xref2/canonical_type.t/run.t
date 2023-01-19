@@ -54,9 +54,23 @@ And finally the module we expose everything underneath.
 Now we can run odoc
 
   $ odoc compile --package x -I . foo__.cmt
+  List of collected shapes:
   $ odoc compile --package x -I . foo__type0.cmt
+  List of collected shapes:
+  <Foo__type0.2> 
+  <Foo__type0.1>
+  
   $ odoc compile --package x -I . foo__type.cmt
+  List of collected shapes:
+  CU Foo__ . "Type0"[module] .
+                            "Resolved_path"[module] . "module_"[type]
+  
+  CU Foo__ . "Type0"[module] . "Resolved_path"[module] . "module_"[type]
+  
+  CU Foo__ . "Type0"[module] . "Resolved_path"[module] . "module_"[type]
+  
   $ odoc compile --package x -I . foo.cmt
+  List of collected shapes:
 
 We only need to link `foo` as all the others are hidden
 

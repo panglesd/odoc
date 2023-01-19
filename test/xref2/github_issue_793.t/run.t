@@ -5,5 +5,8 @@ exception shows this working correctly.
 
   $ ocamlc -c irmin_layers_intf.ml -bin-annot -I .
   $ odoc compile -I . irmin_layers_intf.cmt
+  List of collected shapes:
+  <<predef:int>>
+  
 
 

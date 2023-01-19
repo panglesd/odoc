@@ -141,7 +141,7 @@ let resolve_and_substitute ~resolver ~make_root ~impl_source ~intf_source
               Odoc_loader.Source_info.of_source ~local_jmp impl_source
           | _ -> []
         in
-        let parent = (unit.id :> Paths.Identifier.Module.t) in
+        let parent = unit.id in
         Some { Lang.Source_code.parent; intf_source; impl_source; impl_info }
   in
   if not unit.Lang.Compilation_unit.interface then

@@ -4,11 +4,44 @@ Verify the behavior on functors.
   $ ocamlc -c -o a.cmo a.ml -bin-annot -I .
   $ ocamlc -c -o b.cmo b.ml -bin-annot -I .
   $ odoc compile --impl s.ml -I . s.cmt
+  List of collected shapes:
+  <S.0>
+  
   $ odoc compile --impl a.ml -I . a.cmt
+  Found an expression: S/270[2].x
+  Shape is :
+  <A.0>
+  
+  List of collected shapes:
+  <A.0> 
+  <A.0>
+  
   $ odoc compile --impl b.ml -I . b.cmt
+  List of collected shapes:
+  <<predef:int>>
+  
   $ odoc link -I . s.odoc
+  List of collected shapes:
+  <S.0> 
+  Trying to reduce:
+  <S.0>
+  
   $ odoc link -I . a.odoc
+  List of collected shapes:
+  <A.0> 
+  <A.0> 
+  Trying to reduce:
+  <A.0>
+  
+  Trying to reduce:
+  <A.0>
+  
   $ odoc link -I . b.odoc
+  List of collected shapes:
+  <<predef:int>> 
+  Trying to reduce:
+  <<predef:int>>
+  
   $ odoc html-generate --indent -o html s.odocl
   $ odoc html-generate --indent -o html a.odocl
   $ odoc html-generate --indent -o html b.odocl

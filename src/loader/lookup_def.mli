@@ -1,10 +1,15 @@
 open Odoc_model
 open Paths
-type t
+type t = Shape.t
 
 val lookup_def :
   (string -> (Lang.Compilation_unit.t * t) option) ->
   Identifier.t ->
+  (Identifier.RootModule.t * Lang.Locations.anchor) option
+
+val lookup_shape :
+  (string -> (Lang.Compilation_unit.t * t) option) ->
+  t * Env.t * string list ->
   (Identifier.RootModule.t * Lang.Locations.anchor) option
 
 val of_cmt : Cmt_format.cmt_infos -> t option

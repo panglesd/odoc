@@ -2,7 +2,15 @@ Compile the modules:
 
   $ ocamlc -c a.mli a.ml -bin-annot
   $ odoc compile --impl a.ml a.cmti
+  List of collected shapes:
+  <<predef:int>>
+  
   $ odoc link a.odoc
+  List of collected shapes:
+  <<predef:int>> 
+  Trying to reduce:
+  <<predef:int>>
+  
 
 Show the locations:
 

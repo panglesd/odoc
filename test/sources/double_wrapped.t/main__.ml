@@ -2,3 +2,5 @@
 
 module A = Main__A
 (** @canonical Main.A *)
+
+let xre = Main__A.x

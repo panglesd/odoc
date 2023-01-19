@@ -5,10 +5,14 @@ Similar to Astring library.
   $ ocamlc -c a.ml -bin-annot -I .
 
   $ odoc compile --hidden --impl a_x.ml -I . a_x.cmt
+  List of collected shapes:
   $ odoc compile --impl a.ml -I . a.cmti
+  List of collected shapes:
 
   $ odoc link -I . a_x.odoc
+  List of collected shapes:
   $ odoc link -I . a.odoc
+  List of collected shapes:
 
   $ odoc html-generate --indent -o html a_x.odocl
   $ odoc html-generate --indent -o html a.odocl
