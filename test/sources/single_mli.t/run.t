@@ -9,7 +9,9 @@ Similar to Astring library.
   $ odoc compile --source a.ml --source-parent page-root -I . a.cmti
 
   $ odoc link -I . a_x.odoc
+  Impl info has length 15
   $ odoc link -I . a.odoc
+  Impl info has length 6
 
 TODO: It seems that --hidden do not work:
   $ odoc_print a_x.odoc | grep hidden

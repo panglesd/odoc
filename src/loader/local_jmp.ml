@@ -51,7 +51,7 @@ module Global_analysis = struct
               let= anchor = anchor_of_uid value_description.val_uid in
               poses := (Occurence { anchor }, pos_of_loc exp_loc) :: !poses
           | None ->
-              Format.printf "Unknown uid is %a\n%!" Shape.Uid.print value_description.val_uid;
+              (* Format.printf "Unknown uid is %a\n%!" Shape.Uid.print value_description.val_uid; *)
               let info =  Global_occurence (value_description.val_uid) in
               poses := (info, pos_of_loc exp_loc) :: !poses
         )

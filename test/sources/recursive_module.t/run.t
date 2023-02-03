@@ -4,6 +4,7 @@ Checking that source links exists inside recursive modules.
   $ ocamlc -c main.ml -bin-annot -I .
   $ odoc compile --source main.ml --source-parent page-root -I . main.cmt
   $ odoc link -I . main.odoc
+  Impl info has length 44
   $ odoc html-generate --indent -o html main.odocl
 
 Both modules should contain source links

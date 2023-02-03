@@ -10,6 +10,7 @@ Checking that source parents are kept, using include.
   $ odoc compile --source main.ml --source-parent page-root -I . main.cmt
 
   $ odoc link -I . main.odoc
+  Impl info has length 12
   $ odoc link -I . main__A.odoc
 
   $ odoc html-generate --indent -o html main.odocl

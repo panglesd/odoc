@@ -11,6 +11,7 @@ Similar to the lookup_def_wrapped test.
   $ odoc compile --source main.ml --source-parent page-root -I . main.cmt
 
   $ odoc link -I . main.odoc
+  Impl info has length 9
   $ odoc link -I . main__A.odoc
   $ odoc link -I . main__.odoc
 

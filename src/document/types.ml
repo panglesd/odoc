@@ -176,7 +176,7 @@ end =
 and Source_page : sig
   type info =
     | Syntax of string
-    | Link_to_anchor of Odoc_model.Lang.Source_code.Info.anchor
+    (* | Link_to_anchor of Odoc_model.Lang.Source_code.Info.anchor *)
     | Anchor of string
     | Link of Url.Anchor.t
 

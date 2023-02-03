@@ -33,7 +33,12 @@ Compile the modules:
 Compile the pages without --source:
 
   $ odoc compile a.cmt
+  Unknown uid is Stdlib.48
+  Unknown uid is Stdlib.31
+  Unknown uid is Stdlib.17
+  Unknown uid is Stdlib.48
   $ odoc link -I . a.odoc
+  No source
   $ odoc html-generate --indent -o html a.odocl
 
 No source links are generated in the documentation:
@@ -48,7 +53,16 @@ No ids are generated in the source code:
 Now, compile the pages with the --source option:
 
   $ odoc compile -I . --source a.ml --source-parent page-root a.cmt
+  Unknown uid is Stdlib.48
+  Unknown uid is Stdlib.31
+  Unknown uid is Stdlib.17
+  Unknown uid is Stdlib.48
   $ odoc link -I . a.odoc
+  Impl info has length 125
+  not found
+  not found
+  not found
+  not found
   $ odoc html-generate --indent -o html a.odocl
 
 Source links generated in the documentation:

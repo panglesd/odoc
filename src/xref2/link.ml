@@ -321,20 +321,23 @@ and open_ env parent = function
 
 let source_code env src =
   match src with
-  | None -> None
+  | None ->
+      Format.printf "No source\n%!";
+      None
   | Some ({ Source_code.impl_info; _ } as src) ->
       let resolve_global = function
         | Source_code.Info.Local_jmp (Global_occurence uid), loc ->
             let loc_ = Env.lookup_uid uid env in
-            (match loc_ with
-            | None -> Format.printf "not found\n%!"
-            | Some { source_parent = _; anchor = Some anchor } ->
-                Format.printf "loc is %s\n%!" anchor
-            | Some { source_parent = _; anchor = None } ->
-                Format.printf "No anchor");
+            (* (match loc_ with *)
+            (* | None -> Format.printf "not found\n%!" *)
+            (* | Some { source_parent = _; anchor = Some anchor } -> *)
+            (*     Format.printf "loc is %s\n%!" anchor *)
+            (* | Some { source_parent = _; anchor = None } -> *)
+            (*     Format.printf "No anchor\n%!"); *)
             (Source_code.Info.Local_jmp (Resolved_occurence loc_), loc)
         | a -> a
       in
+      Format.printf "Impl info has length %d\n%!" (List.length impl_info);
       let impl_info = List.map resolve_global impl_info in
       Some { src with impl_info }
 
@@ -1027,7 +1030,8 @@ and type_expression : Env.t -> Id.Signature.t -> _ -> _ =
 
 let link ~filename x y =
   Lookup_failures.catch_failures ~filename (fun () ->
-      if y.Lang.Compilation_unit.linked || y.hidden then y else unit x y)
+      if false (* y.Lang.Compilation_unit.linked || y.hidden *) then y
+      else unit x y)
 
 let page env page =
   let children =

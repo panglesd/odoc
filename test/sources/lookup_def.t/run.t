@@ -4,6 +4,7 @@ Compile the modules:
   $ ocamlc -c a.mli a.ml -bin-annot
   $ odoc compile --source a.ml --source-parent page-root -I . a.cmti
   $ odoc link a.odoc
+  Impl info has length 108
 
 Show the locations:
 

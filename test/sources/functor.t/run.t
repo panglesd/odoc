@@ -6,10 +6,15 @@ Verify the behavior on functors.
   $ ocamlc -c -o b.cmo b.ml -bin-annot -I .
   $ odoc compile --source s.ml --source-parent page-root -I . s.cmt
   $ odoc compile --source a.ml --source-parent page-root -I . a.cmt
+  Unknown uid is S.1
   $ odoc compile --source b.ml --source-parent page-root -I . b.cmt
   $ odoc link -I . s.odoc
+  Impl info has length 19
   $ odoc link -I . a.odoc
+  Impl info has length 33
+  loc is def-1
   $ odoc link -I . b.odoc
+  Impl info has length 34
   $ odoc html-generate --indent -o html s.odocl
   $ odoc html-generate --indent -o html a.odocl
   $ odoc html-generate --indent -o html b.odocl
