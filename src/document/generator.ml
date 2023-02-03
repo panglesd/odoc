@@ -238,9 +238,27 @@ module Make (Syntax : SYNTAX) = struct
     val url : Paths.Identifier.SourcePage.t -> Url.t
     val source : Lang.Source_code.t -> Source_page.t
   end = struct
+    let ( >>= ) = Option.bind
+
     let path id = Url.Path.source_file_from_identifier id
     let url id = Url.from_path (path id)
+
+    let info_of_info = function
+      | Lang.Source_code.Info.Syntax s -> Some (Source_page.Syntax s)
+      | Local_jmp (Occurence anchor) -> Some (Link_to_anchor anchor)
+      | Local_jmp (Def string) -> Some (Anchor string)
+      | Local_jmp (Global_occurence _) -> None
+      | Local_jmp (Resolved_occurence None) -> None
+      | Local_jmp (Resolved_occurence loc_opt) -> (
+          match source_anchor loc_opt with
+          | None -> None
+          | Some link -> Some (Link link))
+
     let source { Lang.Source_code.id; impl_source; impl_info } =
+      let mapper (info, loc) =
+        info_of_info info >>= fun info -> Some (info, loc)
+      in
+      let impl_info = List.filter_map mapper impl_info in
       let url = path id and contents = Impl.impl ~infos:impl_info impl_source in
       { Source_page.url; contents }
   end

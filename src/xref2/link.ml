@@ -319,6 +319,25 @@ and open_ env parent = function
   | { Odoc_model__Lang.Open.doc; _ } as open_ ->
       { open_ with doc = comment_docs env parent doc }
 
+let source_code env src =
+  match src with
+  | None -> None
+  | Some ({ Source_code.impl_info; _ } as src) ->
+      let resolve_global = function
+        | Source_code.Info.Local_jmp (Global_occurence uid), loc ->
+            let loc_ = Env.lookup_uid uid env in
+            (match loc_ with
+            | None -> Format.printf "not found\n%!"
+            | Some { source_parent = _; anchor = Some anchor } ->
+                Format.printf "loc is %s\n%!" anchor
+            | Some { source_parent = _; anchor = None } ->
+                Format.printf "No anchor");
+            (Source_code.Info.Local_jmp (Resolved_occurence loc_), loc)
+        | a -> a
+      in
+      let impl_info = List.map resolve_global impl_info in
+      Some { src with impl_info }
+
 let rec unit env t =
   let open Compilation_unit in
   let content =
@@ -328,7 +347,8 @@ let rec unit env t =
         Module sg
     | Pack _ as p -> p
   in
-  { t with content; linked = true }
+  let sources = source_code env t.sources in
+  { t with content; linked = true; sources }
 
 and value_ env parent t =
   let open Value in

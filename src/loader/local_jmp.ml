@@ -46,9 +46,15 @@ module Global_analysis = struct
       ->
         (* Only generate anchor if the uid is in the location table. We don't
            link to modules outside of the compilation unit. *)
-        let= _ = Shape.Uid.Tbl.find_opt uid_to_loc value_description.val_uid in
-        let= anchor = anchor_of_uid value_description.val_uid in
-        poses := (Occurence { anchor }, pos_of_loc exp_loc) :: !poses
+        (match Shape.Uid.Tbl.find_opt uid_to_loc value_description.val_uid with
+          | Some  _ ->
+              let= anchor = anchor_of_uid value_description.val_uid in
+              poses := (Occurence { anchor }, pos_of_loc exp_loc) :: !poses
+          | None ->
+              Format.printf "Unknown uid is %a\n%!" Shape.Uid.print value_description.val_uid;
+              let info =  Global_occurence (value_description.val_uid) in
+              poses := (info, pos_of_loc exp_loc) :: !poses
+        )
     | _ -> ()
 end
 

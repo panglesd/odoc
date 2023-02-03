@@ -19,6 +19,7 @@ type resolver = {
   lookup_unit : string -> lookup_unit_result;
   lookup_page : string -> lookup_page_result;
   lookup_def : Identifier.t -> Lang.Locations.t option;
+  lookup_uid : Shape.Uid.t -> Lang.Locations.t option;
 }
 
 let unique_id =
@@ -427,6 +428,9 @@ let lookup_root_module name env =
 let lookup_def id env =
   let id = (id :> Paths.Identifier.Any.t) in
   match env.resolver with Some r -> r.lookup_def id | None -> None
+
+let lookup_uid uid env =
+  match env.resolver with Some r -> r.lookup_uid uid | None -> None
 
 let lookup_page name env =
   match env.resolver with None -> None | Some r -> r.lookup_page name

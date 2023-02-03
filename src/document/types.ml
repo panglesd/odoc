@@ -174,10 +174,14 @@ end =
   Page
 
 and Source_page : sig
+  type info =
+    | Syntax of string
+    | Link_to_anchor of Odoc_model.Lang.Source_code.Info.anchor
+    | Anchor of string
+    | Link of Url.Anchor.t
+
   type code = span list
-  and span =
-    | Tagged_code of Odoc_model.Lang.Source_code.Info.info * code
-    | Plain_code of string
+  and span = Tagged_code of info * code | Plain_code of string
 
   type t = { url : Url.Path.t; contents : code }
 end =

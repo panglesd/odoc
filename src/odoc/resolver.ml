@@ -221,8 +221,11 @@ let build_compile_env_for_unit
   let imports_map = build_imports_map m in
   let lookup_unit = lookup_unit ~important_digests ~imports_map ap
   and lookup_page = lookup_page ap
-  and lookup_def _ = failwith "Cannot lookup definition" in
-  let resolver = { Env.open_units; lookup_unit; lookup_page; lookup_def } in
+  and lookup_def _ = failwith "Cannot lookup definition"
+  and lookup_uid _ = failwith "Cannot lookup uid" in
+  let resolver =
+    { Env.open_units; lookup_unit; lookup_page; lookup_def; lookup_uid }
+  in
   Env.env_of_unit m ~linking:false resolver
 
 (** [important_digests] and [imports_map] only apply to modules. *)
@@ -233,10 +236,15 @@ let build ?(imports_map = StringMap.empty)
         match lookup_unit_by_name ap x with
         | Some (m, Some shape) -> Some (m, shape)
         | _ -> None)
+  and lookup_uid =
+    Odoc_loader.Lookup_def.lookup_uid (fun x ->
+        match lookup_unit_by_name ap x with
+        | Some (m, Some shape) -> Some (m, shape)
+        | _ -> None)
   in
   let lookup_unit = lookup_unit ~important_digests ~imports_map ap
   and lookup_page = lookup_page ap in
-  { Env.open_units; lookup_unit; lookup_page; lookup_def }
+  { Env.open_units; lookup_unit; lookup_page; lookup_def; lookup_uid }
 
 let build_link_env_for_unit t m impl_shape =
   add_unit_to_cache (Odoc_file.Unit_content (m, impl_shape));

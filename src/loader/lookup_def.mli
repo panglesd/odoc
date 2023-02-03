@@ -9,6 +9,13 @@ val lookup_def :
 (** Returns the root module containing the definition of the given identifier
     and the corresponding anchor. *)
 
+val lookup_uid :
+  (string -> (Lang.Compilation_unit.t * t) option) ->
+  Shape.Uid.t ->
+  Lang.Locations.t option
+(** Returns the root module containing the definition of the given identifier
+    and the corresponding anchor. *)
+
 val of_cmt : Cmt_format.cmt_infos -> t option
 (** Returns [None] if the cmt doesn't have a shape (eg. if it is not an
     implementation). Returns [Some _] even if shapes are not implemented.

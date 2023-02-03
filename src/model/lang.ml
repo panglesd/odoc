@@ -30,7 +30,11 @@ module Source_code = struct
   module Info = struct
     type anchor = { anchor : string }
 
-    type jmp_to_def = Occurence of anchor | Def of string
+    type jmp_to_def =
+      | Occurence of anchor
+      | Def of string
+      | Global_occurence of Shape.Uid.t
+      | Resolved_occurence of Locations.t option
 
     type info = Syntax of string | Local_jmp of jmp_to_def
 

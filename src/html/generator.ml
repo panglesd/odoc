@@ -418,7 +418,12 @@ module Breadcrumbs = struct
     |> List.rev |> List.map to_breadcrumb
 end
 
-module Page = struct
+module Page : sig
+  val page : config:Config.t -> Page.t -> Odoc_document.Renderer.page
+
+  val source_page :
+    config:Config.t -> Source_page.t -> Odoc_document.Renderer.page
+end = struct
   let on_sub = function
     | `Page _ -> None
     | `Include x -> (
@@ -463,9 +468,10 @@ module Page = struct
 
   and source_page ~config sp =
     let { Source_page.url; contents } = sp in
-    let title = url.Url.Path.name and doc = Html_source.html_of_doc contents in
-    let breadcrumbs = Breadcrumbs.gen_breadcrumbs ~config ~url in
     let resolve = Link.Current sp.url in
+    let title = url.Url.Path.name
+    and doc = Html_source.html_of_doc ~config ~resolve contents in
+    let breadcrumbs = Breadcrumbs.gen_breadcrumbs ~config ~url in
     let header =
       items ~config ~resolve (Doctree.PageTitle.render_src_title sp)
     in

@@ -72,6 +72,14 @@ let lookup_def lookup_unit id =
       let anchor = id >>= fun id -> Some (Uid.anchor_of_id id) in
       Some { Lang.Locations.source_parent = sources.id; anchor }
 
+
+let lookup_uid lookup_unit uid =
+      Uid.unpack_uid (Uid.of_shape_uid uid) >>= fun (unit_name, id) ->
+      lookup_unit unit_name >>= fun (unit, _) ->
+      unit.Lang.Compilation_unit.sources >>= fun sources ->
+      let anchor = id >>= fun id -> Some (Uid.anchor_of_id id) in
+      Some { Lang.Locations.source_parent = sources.id; anchor }
+
 let of_cmt (cmt : Cmt_format.cmt_infos) = cmt.cmt_impl_shape
 
 #else

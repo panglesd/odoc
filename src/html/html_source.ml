@@ -1,8 +1,7 @@
-open Odoc_model.Lang
 open Odoc_document.Types
 open Tyxml
 
-let html_of_doc docs =
+let html_of_doc ~config ~resolve docs =
   let open Html in
   let a :
       ( [< Html_types.a_attrib ],
@@ -23,16 +22,19 @@ let html_of_doc docs =
     | Tagged_code (info, docs) -> (
         let children = List.concat @@ List.map (doc_to_html ~is_in_a) docs in
         match info with
-        | Source_code.Info.Syntax tok ->
-            [ span ~a:[ a_class [ tok ] ] children ]
-        | Local_jmp (Occurence { anchor }) ->
+        | Syntax tok -> [ span ~a:[ a_class [ tok ] ] children ]
+        | Link anchor ->
+            let href = Link.href ~config ~resolve anchor in
+            [ a ~a:[ a_href href ] children ]
+        (* | Local_jmp (Resolved_occurence loc) -> _ *)
+        | Link_to_anchor { Odoc_model.Lang.Source_code.Info.anchor } ->
             if is_in_a then children
             else
               let children =
                 List.concat @@ List.map (doc_to_html ~is_in_a:true) docs
               in
               [ a ~a:[ a_href ("#" ^ anchor) ] children ]
-        | Local_jmp (Def lbl) -> [ span ~a:[ a_id lbl ] children ])
+        | Anchor lbl -> [ span ~a:[ a_id lbl ] children ])
   in
   span ~a:[] @@ List.concat @@ List.map (doc_to_html ~is_in_a:false) docs
 
@@ -62,7 +64,7 @@ let rec line_numbers acc n =
     in
     line_numbers (anchor :: txt "\n" :: acc) (n - 1)
 
-let html_of_doc docs =
+let html_of_doc ~config ~resolve docs =
   let open Html in
   pre
     ~a:[ a_class [ "source_container" ] ]
@@ -70,5 +72,7 @@ let html_of_doc docs =
       code
         ~a:[ a_class [ "source_line_column" ] ]
         (line_numbers [] (count_lines docs));
-      code ~a:[ a_class [ "source_code" ] ] [ html_of_doc docs ];
+      code
+        ~a:[ a_class [ "source_code" ] ]
+        [ html_of_doc ~config ~resolve docs ];
     ]
