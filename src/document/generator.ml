@@ -250,6 +250,7 @@ module Make (Syntax : SYNTAX) = struct
       | Local_jmp (Occurence { anchor }) ->
           Link (Url.Anchor.source_anchor url anchor)
       | Local_jmp (Def string) -> Anchor string
+      | Local_jmp (Type s) -> Tooltip s
 
     let source id infos source_code =
       let url = path id in

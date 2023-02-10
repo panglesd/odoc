@@ -174,7 +174,11 @@ end =
   Page
 
 and Source_page : sig
-  type info = Syntax of string | Anchor of string | Link of Url.Anchor.t
+  type info =
+    | Syntax of string
+    | Anchor of string
+    | Link of Url.Anchor.t
+    | Tooltip of string
 
   type code = span list
   and span = Tagged_code of info * code | Plain_code of string

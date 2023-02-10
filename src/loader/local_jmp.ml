@@ -7,7 +7,11 @@ let pos_of_loc loc = (loc.Location.loc_start.pos_cnum, loc.loc_end.pos_cnum)
 let ( let= ) m f = match m with Some x -> f x | None -> ()
 
 module Local_analysis = struct
+  
   let expr poses expr =
+      let str = Format.asprintf "%a" Printtyp.type_expr expr.Typedtree.exp_type in
+      poses := (Type str, pos_of_loc expr.exp_loc) :: !poses;
+
     match expr with
     | { Typedtree.exp_desc = Texp_ident (Pident id, _, _); exp_loc; _ }
       when not exp_loc.loc_ghost ->

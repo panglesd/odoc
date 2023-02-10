@@ -29,7 +29,7 @@ end
 module Source_info = struct
   type anchor = { anchor : string }
 
-  type jmp_to_def = Occurence of anchor | Def of string
+  type jmp_to_def = Occurence of anchor | Def of string | Type of string
 
   type info = Syntax of string | Local_jmp of jmp_to_def
 
