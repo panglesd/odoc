@@ -29,6 +29,7 @@ Source pages require a parent:
 Compile the modules:
 
   $ ocamlc -c a.ml -bin-annot
+  $ ocamlcmt a.cmt
 
 Compile the pages without --source:
 
@@ -40,9 +41,9 @@ No source links are generated in the documentation:
 
   $ ! grep source_link html/A/index.html -B 2
 
-No ids are generated in the source code:
+No source code is generated:
 
-  $ ! cat html/root/fake_src/a.ml.html
+  $ ! cat html/root/a.ml.html
   cat: html/root/fake_src/a.ml.html: No such file or directory
 
 Now, compile the pages with the --source option:
@@ -155,3 +156,5 @@ Ids generated in the source code:
   id="def-12"
   id="def-14"
   id="def-15"
+
+  $ cat html/root/a.ml.html | grep 'x_295'

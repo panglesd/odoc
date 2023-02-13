@@ -221,27 +221,27 @@ the hierarchy declared above.
 
 ```ocaml env=e1
 let dep_libraries_core = [
-    "odoc-parser";
-    "astring";
-    "cmdliner";
-    "fpath";
-    "result";
-    "tyxml";
-    "fmt";
-    "stdlib";
-    "yojson";
-    "biniou";
+    (* "odoc-parser"; *)
+    (* "astring"; *)
+    (* "cmdliner"; *)
+    (* "fpath"; *)
+    (* "result"; *)
+    (* "tyxml"; *)
+    (* "fmt"; *)
+    (* "stdlib"; *)
+    (* "yojson"; *)
+    (* "biniou"; *)
 ];;
 
 let extra_deps = [
-    "base";
-    "core_kernel";
-    "bin_prot";
-    "sexplib";
-    "sexplib0";
-    "base_quickcheck";
-    "ppx_sexp_conv";
-    "ppx_hash";
+    (* "base"; *)
+    (* "core_kernel"; *)
+    (* "bin_prot"; *)
+    (* "sexplib"; *)
+    (* "sexplib0"; *)
+    (* "base_quickcheck"; *)
+    (* "ppx_sexp_conv"; *)
+    (* "ppx_hash"; *)
 ]
 
 let dep_libraries =

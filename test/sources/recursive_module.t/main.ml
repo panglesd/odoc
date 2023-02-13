@@ -1,9 +1,13 @@
 module rec A : sig
   type t = B.t
-end =
-  A
+end = struct
+  type t = B.t
+end
 
 and B : sig
-  type t = Cons of A.t
-end =
-  B
+  type t = int
+end = struct
+  type t = int
+end
+
+type t = B.t
