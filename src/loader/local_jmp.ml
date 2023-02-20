@@ -12,6 +12,7 @@ let ( let= ) m f = match m with Some x -> f x | None -> ()
     | _ -> None
 
 let rebuild_env loadpath env =
+  Load_path.init loadpath;
   try Envaux.env_of_only_summary env
   with Envaux.Error e ->
     Format.printf "Error while trying to rebuild env with env %s from summary: %a\n%!"
@@ -48,7 +49,7 @@ module Local_analysis = struct
     | { Typedtree.ctyp_desc = Ttyp_constr (path, _, _); ctyp_loc; ctyp_env;_ }
       when not ctyp_loc.loc_ghost -> (
         try
-          let env = rebuild_env ["/home/user/.opam/4.14.0/lib/ocaml"] ctyp_env in
+          let env = rebuild_env ["";"/home/user/.opam/4.14.0/lib/ocaml"] ctyp_env in
           let shape = Env.shape_of_path ~namespace:Shape.Sig_component_kind.Type env path in
           (match shape.uid with
             | Some uid ->
