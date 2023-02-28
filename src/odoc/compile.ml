@@ -183,14 +183,15 @@ let root_of_compilation_unit ~parent_spec ~hidden ~output ~module_name ~digest =
       else Error (`Msg "Specified parent is not a parent of this file")
   | Package parent -> result (Some parent)
 
-let name_of_output ~prefix ~is_parent_explicit output =
+let name_of_output ~prefix output =
   let page_dash_root =
     Filename.chop_extension Fs.File.(to_string @@ basename output)
   in
-  let root_name =
-    String.sub page_dash_root (String.length prefix)
-      (String.length page_dash_root - String.length prefix)
-  in
+  String.sub page_dash_root (String.length prefix)
+    (String.length page_dash_root - String.length prefix)
+
+let page_name_of_output ~is_parent_explicit output =
+  let root_name = name_of_output ~prefix:"page-" output in
   (if is_parent_explicit then
    match root_name with
    | "index" ->
@@ -198,8 +199,6 @@ let name_of_output ~prefix ~is_parent_explicit output =
          "Warning: Potential name clash - child page named 'index'\n%!"
    | _ -> ());
   root_name
-
-let page_name_of_output = name_of_output ~prefix:"page-"
 
 let mld ~parent_spec ~output ~children ~warnings_options input =
   List.fold_left
@@ -292,8 +291,8 @@ let compile ~resolver ~parent_cli_spec ~hidden ~children ~output
           Error (`Msg "Specified source-parent is not a parent of the source.")
         in
         match parent.Odoc_file.content with
-        | Odoc_file.Source_tree page -> (
-            match page.Lang.SourceTreePage.name with
+        | Odoc_file.Source_tree_content page -> (
+            match page.Lang.SourceTree.name with
             | { Paths.Identifier.iv = `Page _; _ } as parent_id ->
                 let name = Paths.Identifier.Mk.source_page (parent_id, name) in
                 if

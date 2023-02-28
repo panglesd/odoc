@@ -24,9 +24,7 @@ let parse_input_file input =
 let source_child_id parent segs = Id.Mk.source_page (parent, segs)
 
 let compile ~resolver ~parent ~output ~warnings_options:_ input =
-  let root_name =
-    Compile.name_of_output ~prefix:"page-" ~is_parent_explicit:true output
-  in
+  let root_name = Compile.name_of_output ~prefix:"src-" output in
   let page_name = PageName.make_std root_name in
   Compile.resolve_parent_page resolver parent >>= fun (parent, siblings) ->
   let id = Id.Mk.page (Some parent, page_name) in
@@ -38,8 +36,7 @@ let compile ~resolver ~parent ~output ~warnings_options:_ input =
   in
   let source_children = List.rev_map (source_child_id id) source_tree in
   let page =
-    Lang.SourceTreePage.
-      { name = (id :> Id.Page.t); root; source_children; digest }
+    Lang.SourceTree.{ name = (id :> Id.Page.t); root; source_children; digest }
   in
-  Odoc_file.save_src_tree_page output ~warnings:[] page;
+  Odoc_file.save_source_tree output ~warnings:[] page;
   Ok ()

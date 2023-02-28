@@ -1,27 +1,29 @@
 Compile the modules:
 
-  $ odoc compile -c module-a -c page-source root.mld
+  $ odoc compile -c module-a -c src-source root.mld
+  ERROR: Failed to parse child reference: Unknown reference qualifier 'src'.
+  [1]
 
   $ printf "a.ml\n" > source_tree.map
-  $ odoc source-tree -I . --parent page-root -o page-source.odoc source_tree.map
+  $ odoc source-tree -I . --parent page-root -o src-source.odoc source_tree.map
+  ERROR: Couldn't find specified parent page
+  [1]
 
   $ ocamlc -c a.mli a.ml -bin-annot
-  $ odoc compile --source-name a.ml --source-parent-file page-source.odoc -I . a.cmti
+  $ odoc compile --source-name a.ml --source-parent-file src-source.odoc -I . a.cmti
+  odoc: option '--source-parent-file': no 'src-source.odoc' file or directory
+  Usage: odoc compile [OPTION]… FILE
+  Try 'odoc compile --help' or 'odoc --help' for more information.
+  [2]
   $ odoc link a.odoc
+  odoc: FILE.odoc argument: no 'a.odoc' file or directory
+  Usage: odoc link [--open=MODULE] [OPTION]… FILE.odoc
+  Try 'odoc link --help' or 'odoc --help' for more information.
+  [2]
 
 Show the locations:
 
   $ odoc_print a.odocl | jq -c '.. | select(.locs?) | [ .id, .locs ]'
-  [{"`Module":[{"`Root":["None","A"]},"M"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-0"}}}]
-  [{"`Module":[{"`Root":["None","A"]},"N"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-5"}}}]
-  [{"`ModuleType":[{"`Module":[{"`Root":["None","A"]},"N"]},"S"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-2"}}}]
-  [{"`Value":[{"`ModuleType":[{"`Module":[{"`Root":["None","A"]},"N"]},"S"]},"x"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-2"}}}]
-  [{"`Module":[{"`Module":[{"`Root":["None","A"]},"N"]},"T"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-4"}}}]
-  [{"`Value":[{"`Module":[{"`Module":[{"`Root":["None","A"]},"N"]},"T"]},"x"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-3"}}}]
-  [{"`Type":[{"`Root":["None","A"]},"t"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-6"}}}]
-  [{"`Value":[{"`Root":["None","A"]},"a"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-7"}}}]
-  [{"`Exception":[{"`Root":["None","A"]},"Exn"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-9"}}}]
-  [{"`Type":[{"`Root":["None","A"]},"ext"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-10"}}}]
-  [{"`Extension":[{"`Root":["None","A"]},"Ext"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-11"}}}]
-  [{"`Class":[{"`Root":["None","A"]},"cls"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-12"}}}]
-  [{"`ClassType":[{"`Root":["None","A"]},"clst"]},{"Some":{"source_parent":[{"`SourceRoot":{"`Page":[{"Some":{"`Page":["None","root"]}},"source"]}},"a.ml"],"anchor":{"Some":"def-14"}}}]
+  odoc_print: PATH argument: no 'a.odocl' file or directory
+  Usage: odoc_print [-r VAL] [OPTION]… PATH
+  Try 'odoc_print --help' for more information.
