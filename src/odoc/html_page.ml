@@ -16,19 +16,46 @@
 
 open Odoc_model
 
-type args = { html_config : Odoc_html.Config.t; source_file : Fpath.t option }
+type source =
+  | File of Fpath.t
+  | Root of Fpath.t
 
-let render { html_config; source_file = _ } page =
+let pp fmt = function
+  | File f -> Format.fprintf fmt "File: %a" Fpath.pp f
+  | Root f -> Format.fprintf fmt "File: %a" Fpath.pp f
+
+let to_string f =
+  Format.asprintf "%a" pp f
+
+type args = { html_config : Odoc_html.Config.t; source : source option }
+
+let render { html_config; source = _ } page =
   Odoc_html.Generator.render ~config:html_config page
 
 let extra_documents args unit ~syntax =
-  match (unit.Lang.Compilation_unit.source_info, args.source_file) with
+  match (unit.Lang.Compilation_unit.source_info, args.source) with
   | Some { Lang.Source_info.id; infos }, Some src -> (
-      match Fs.File.read src with
+      let file =
+        match src with
+        | File f -> f
+        | Root f ->
+          let open Odoc_model.Paths.Identifier in
+          let rec get_path_dir : SourceDir.t -> Fpath.t =
+            function
+            | { iv=`SourceDir (d, f); _ } -> Fpath.(get_path_dir d / f)
+            | { iv=`SourceRoot _; _ } -> f
+          in
+          let get_path : SourcePage.t -> Fpath.t =
+            function
+            | { iv=`SourcePage (d, f); _ } -> Fpath.(get_path_dir d / f)
+          in
+          get_path id
+      in
+      match Fs.File.read file with
       | Error (`Msg msg) ->
           Error.raise_warning
             (Error.filename_only "Couldn't load source file: %s" msg
-               (Fs.File.to_string src));
+               (Fs.File.to_string file));
           []
       | Ok source_code ->
           let infos = infos @ Odoc_loader.Source_info.of_source source_code in
@@ -50,7 +77,7 @@ let extra_documents args unit ~syntax =
         (Error.filename_only
            "--source argument is invalid on compilation unit that were not \
             compiled with --source-parent and --source-name"
-           (Fs.File.to_string src));
+           (to_string src));
       []
   | None, None -> []
 

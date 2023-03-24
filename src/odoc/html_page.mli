@@ -16,6 +16,12 @@
 
 open Odoc_document
 
-type args = { html_config : Odoc_html.Config.t; source_file : Fpath.t option }
+type source =
+  | File of Fpath.t
+  | Root of Fpath.t
+
+val pp : Format.formatter -> source -> unit
+
+type args = { html_config : Odoc_html.Config.t; source : source option }
 
 val renderer : args Renderer.t
