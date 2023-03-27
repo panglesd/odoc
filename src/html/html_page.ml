@@ -105,6 +105,22 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
             ]
           ();
         Html.script ~a:[ Html.a_src highlight_js_uri ] (Html.txt "");
+        Html.script
+          ~a:[ Html.a_src "https://unpkg.com/lunr/lunr.js" ]
+          (Html.txt "");
+        Html.script
+          ~a:[ Html.a_src "https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js" ]
+          (Html.txt "");
+        Html.script ~a:[]
+          (Html.txt
+             (Printf.sprintf "let base_url = '%s'"
+                (let page =
+                   Url.Path.{ kind = `File; parent = None; name = "" }
+                 in
+                 Link.href ~config ~resolve:(Current url) (Url.from_path page))));
+        Html.script
+          ~a:[ Html.a_src (file_uri support_uri "index.js"); Html.a_defer () ]
+          (Html.txt "");
         Html.script (Html.txt "hljs.initHighlightingOnLoad();");
       ]
     in
@@ -137,9 +153,12 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
     in
     Html.head (Html.title (Html.txt title_string)) meta_elements
   in
+  let search_bar = Html.input ~a:[ Html.a_class [ "search-bar" ] ] () in
+  let search_result = Html.div ~a:[ Html.a_class [ "search-result" ] ] [] in
 
   let body =
-    html_of_breadcrumbs breadcrumbs
+    [ search_bar; search_result ]
+    @ html_of_breadcrumbs breadcrumbs
     @ [ Html.header ~a:[ Html.a_class [ "odoc-preamble" ] ] header ]
     @ html_of_toc toc
     @ [ Html.div ~a:[ Html.a_class [ "odoc-content" ] ] content ]

@@ -219,6 +219,10 @@ module Identifier = struct
     let compare = compare
 
     let root id = Signature.root (id :> Signature.t)
+
+    let name
+        { iv = `Root (_, name) | `Module (_, name) | `Parameter (_, name); _ } =
+      ModuleName.to_string name
   end
 
   module FunctorParameter = struct
@@ -255,6 +259,8 @@ module Identifier = struct
     let hash = hash
 
     let compare = compare
+
+    let name { iv = `ModuleType (_, name); _ } = ModuleTypeName.to_string name
   end
 
   module Type = struct
@@ -267,6 +273,9 @@ module Identifier = struct
     let hash = hash
 
     let compare = compare
+
+    let name { iv = `Type (_, name) | `CoreType name; _ } =
+      TypeName.to_string name
   end
 
   module Constructor = struct
@@ -327,6 +336,9 @@ module Identifier = struct
     let hash = hash
 
     let compare = compare
+
+    let name = function
+      | { iv = `Value (_, name); _ } -> Names.ValueName.to_string name
   end
 
   module Class = struct
