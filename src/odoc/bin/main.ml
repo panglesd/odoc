@@ -384,6 +384,34 @@ module Source_tree = struct
     Term.info "source-tree" ~docs ~doc
 end
 
+module Indexing = struct
+  let output_file ~output =
+    match output with
+    | Some output -> Fpath.v output
+    | None -> Fpath.v "index.index"
+
+  let index directories output warnings_options =
+    let output = output_file ~output in
+    Indexing.index ~output ~warnings_options directories
+
+  let cmd =
+    let dst =
+      let doc =
+        "Output file path. Non-existing intermediate directories are created. \
+         The basename must start with the prefix 'src-' and extension '.odoc'."
+      in
+      Arg.(
+        value & opt (some string) None & info ~docs ~docv:"PATH" ~doc [ "o" ])
+    in
+    Term.(
+      const handle_error
+      $ (const index $ odoc_file_directories $ dst $ warnings_options))
+
+  let info ~docs =
+    let doc = "Index all .odocl files found in the given directory." in
+    Term.info "index" ~docs ~doc
+end
+
 module Support_files_command = struct
   let support_files without_theme output_dir =
     Support_files.write ~without_theme output_dir
@@ -1034,6 +1062,7 @@ let () =
       Odoc_html.generate ~docs:section_pipeline;
       Support_files_command.(cmd, info ~docs:section_pipeline);
       Source_tree.(cmd, info ~docs:section_pipeline);
+      Indexing.(cmd, info ~docs:section_pipeline);
       Odoc_manpage.generate ~docs:section_generators;
       Odoc_latex.generate ~docs:section_generators;
       Odoc_html_url.(cmd, info ~docs:section_support);
