@@ -42,3 +42,6 @@ val load : Fs.File.t -> (t, [> msg ]) result
 
 val load_root : Fs.File.t -> (Root.t, [> msg ]) result
 (** Only load the root. Faster than {!load}, used for looking up imports. *)
+
+val load_dir : Fs.Directory.t -> (t list, [> msg ]) result
+(** Only load the root. Faster than {!load}, used for looking up imports. *)

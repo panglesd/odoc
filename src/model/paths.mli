@@ -113,6 +113,9 @@ module Identifier : sig
     val hash : t -> int
 
     val compare : t -> t -> int
+    val root : t -> RootModule.t
+
+    val name : t -> string
   end
 
   module FunctorParameter : sig
@@ -149,6 +152,8 @@ module Identifier : sig
     val hash : t -> int
 
     val compare : t -> t -> int
+
+    val name : t -> string
   end
 
   module Type : sig
@@ -161,6 +166,8 @@ module Identifier : sig
     val hash : t -> int
 
     val compare : t -> t -> int
+
+    val name : t -> string
   end
 
   module Constructor : sig
@@ -221,6 +228,8 @@ module Identifier : sig
     val hash : t -> int
 
     val compare : t -> t -> int
+
+    val name : t -> string
   end
 
   module Class : sig
