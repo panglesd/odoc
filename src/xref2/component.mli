@@ -480,6 +480,9 @@ module Element : sig
   type extension =
     [ `Extension of Identifier.Extension.t * Extension.Constructor.t ]
 
+  type extension_decl =
+    [ `ExtensionDecl of Identifier.Extension.t * Extension.Constructor.t ]
+
   type field = [ `Field of Identifier.Field.t * TypeDecl.Field.t ]
 
   (* No component for pages yet *)
@@ -497,6 +500,7 @@ module Element : sig
     | constructor
     | exception_
     | extension
+    | extension_decl
     | field
     | page ]
 

@@ -76,6 +76,9 @@ val add_exception : Identifier.Exception.t -> Component.Exception.t -> t -> t
 val add_extension_constructor :
   Identifier.Extension.t -> Component.Extension.Constructor.t -> t -> t
 
+val add_extension_decl :
+  Identifier.Extension.t -> Component.Extension.Constructor.t -> t -> t
+
 val add_docs : Comment.docs -> t -> t
 
 val add_comment : Comment.docs_or_stop -> t -> t
@@ -142,6 +145,8 @@ val s_constructor : Component.Element.constructor scope
 val s_exception : Component.Element.exception_ scope
 
 val s_extension : Component.Element.extension scope
+
+val s_extension_decl : Component.Element.extension_decl scope
 
 val s_field : Component.Element.field scope
 

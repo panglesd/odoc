@@ -43,6 +43,7 @@ module Identifier = struct
     | `Constructor (_, name) -> ConstructorName.to_string name
     | `Field (_, name) -> FieldName.to_string name
     | `Extension (_, name) -> ExtensionName.to_string name
+    | `ExtensionDecl (_, name) -> ExtensionName.to_string name
     | `Exception (_, name) -> ExceptionName.to_string name
     | `CoreException name -> ExceptionName.to_string name
     | `Value (_, name) -> ValueName.to_string name
@@ -78,6 +79,7 @@ module Identifier = struct
       | { iv = `ClassType (p, _); _ }
       | { iv = `Type (p, _); _ }
       | { iv = `Extension (p, _); _ }
+      | { iv = `ExtensionDecl (p, _); _ }
       | { iv = `Exception (p, _); _ }
       | { iv = `Value (p, _); _ } ->
           (p : signature :> label_parent)
@@ -207,6 +209,18 @@ module Identifier = struct
   module Extension = struct
     type t = Id.extension
     type t_pv = Id.extension_pv
+  end
+
+  module ExtensionDecl = struct
+    type t = Paths_types.Identifier.extension_decl
+
+    type t_pv = Paths_types.Identifier.extension_decl_pv
+
+    let equal = equal
+
+    let hash = hash
+
+    let compare = compare
   end
 
   module Exception = struct
@@ -461,6 +475,12 @@ module Identifier = struct
         Signature.t * ExtensionName.t ->
         [> `Extension of Signature.t * ExtensionName.t ] id =
       mk_parent ExtensionName.to_string "extn" (fun (p, n) -> `Extension (p, n))
+
+    let extension_decl :
+        Signature.t * ExtensionName.t ->
+        [> `ExtensionDecl of Signature.t * ExtensionName.t ] id =
+      mk_parent ExtensionName.to_string "extn-decl" (fun (p, n) ->
+          `ExtensionDecl (p, n))
 
     let exception_ :
         Signature.t * ExceptionName.t ->
@@ -835,6 +855,8 @@ module Reference = struct
           Identifier.Mk.constructor (parent_type_identifier s, n)
       | `Extension (p, q) ->
           Identifier.Mk.extension (parent_signature_identifier p, q)
+      | `ExtensionDecl (p, q) ->
+          Identifier.Mk.extension_decl (parent_signature_identifier p, q)
       | `Exception (p, q) ->
           Identifier.Mk.exception_ (parent_signature_identifier p, q)
       | `Value (p, q) -> Identifier.Mk.value (parent_signature_identifier p, q)
@@ -887,6 +909,10 @@ module Reference = struct
 
     module Extension = struct
       type t = Paths_types.Resolved_reference.extension
+    end
+
+    module ExtensionDecl = struct
+      type t = Paths_types.Resolved_reference.extension_decl
     end
 
     module Exception = struct
@@ -968,6 +994,10 @@ module Reference = struct
 
   module Extension = struct
     type t = Paths_types.Reference.extension
+  end
+
+  module ExtensionDecl = struct
+    type t = Paths_types.Reference.extension_decl
   end
 
   module Exception = struct

@@ -84,6 +84,7 @@ type kind =
   | Kind_Constructor
   | Kind_Exception
   | Kind_Extension
+  | Kind_ExtensionDecl
   | Kind_Field
 
 module ElementsByName : sig
@@ -356,6 +357,12 @@ let add_extension_constructor identifier
   add_to_elts Kind_Extension identifier (`Extension (identifier, ec)) env
   |> add_cdocs identifier ec.doc
 
+let add_extension_decl identifier (ec : Component.Extension.Constructor.t) env =
+  add_to_elts Kind_ExtensionDecl identifier
+    (`ExtensionDecl (identifier, ec))
+    env
+  |> add_cdocs identifier ec.doc
+
 let module_of_unit : Lang.Compilation_unit.t -> Component.Module.t =
  fun unit ->
   let id = (unit.id :> Paths.Identifier.Module.t) in
@@ -584,6 +591,11 @@ let s_extension : Component.Element.extension scope =
     | #Component.Element.extension as r -> Some r
     | _ -> None)
 
+let s_extension_decl : Component.Element.extension_decl scope =
+  make_scope (function
+    | #Component.Element.extension_decl as r -> Some r
+    | _ -> None)
+
 let s_field : Component.Element.field scope =
   make_scope (function #Component.Element.field as r -> Some r | _ -> None)
 
@@ -727,6 +739,13 @@ let rec open_signature : Lang.Signature.t -> t -> t =
         | Comment c, true -> add_comment c env
         | TypExt te, true ->
             let doc = docs ident_map te.doc in
+            let env =
+              match te.L.Extension.constructors with
+              | [] -> env
+              | x :: _ ->
+                  let ty = extension_constructor ident_map x in
+                  add_extension_decl x.L.Extension.Constructor.id ty env
+            in
             List.fold_left
               (fun env tec ->
                 let ty = extension_constructor ident_map tec in

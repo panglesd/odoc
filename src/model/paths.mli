@@ -97,6 +97,18 @@ module Identifier : sig
     type t_pv = Id.extension_pv
   end
 
+  module ExtensionDecl : sig
+    type t = Paths_types.Identifier.extension_decl
+
+    type t_pv = Paths_types.Identifier.extension_decl_pv
+
+    val equal : t -> t -> bool
+
+    val hash : t -> int
+
+    val compare : t -> t -> int
+  end
+
   module Exception : sig
     type t = Id.exception_
     type t_pv = Id.exception_pv
@@ -266,6 +278,10 @@ module Identifier : sig
     val extension :
       Signature.t * ExtensionName.t ->
       [> `Extension of Signature.t * ExtensionName.t ] id
+
+    val extension_decl :
+      Signature.t * ExtensionName.t ->
+      [> `ExtensionDecl of Signature.t * ExtensionName.t ] id
 
     val exception_ :
       Signature.t * ExceptionName.t ->
@@ -464,6 +480,10 @@ module rec Reference : sig
       type t = Paths_types.Resolved_reference.extension
     end
 
+    module ExtensionDecl : sig
+      type t = Paths_types.Resolved_reference.extension_decl
+    end
+
     module Exception : sig
       type t = Paths_types.Resolved_reference.exception_
     end
@@ -543,6 +563,10 @@ module rec Reference : sig
 
   module Extension : sig
     type t = Paths_types.Reference.extension
+  end
+
+  module ExtensionDecl : sig
+    type t = Paths_types.Reference.extension_decl
   end
 
   module Exception : sig

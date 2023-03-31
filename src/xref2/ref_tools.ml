@@ -68,6 +68,7 @@ let ref_kind_of_element = function
   | `Constructor _ -> "constructor"
   | `Exception _ -> "exception"
   | `Extension _ -> "extension"
+  | `ExtensionDecl _ -> "extension-decl"
   | `Field _ -> "field"
   | `Page _ -> "page"
 
@@ -82,6 +83,7 @@ let ref_kind_of_find = function
   | `FConstructor _ | `In_type (_, _, `FConstructor _) -> "constructor"
   | `FExn _ -> "exception"
   | `FExt _ -> "extension"
+  | `FExtDecl _ -> "extension-decl"
   | `FField _ | `In_type (_, _, `FField _) -> "field"
   | `FMethod _ -> "method"
   | `FInstance_variable _ -> "instance-variable"
@@ -386,6 +388,22 @@ module EC = struct
     let sg = Tools.prefix_signature (parent_cp, sg) in
     find Find.extension_in_sig sg (ExtensionName.to_string name) >>= fun _ ->
     Ok (`Extension (parent', name))
+end
+
+module ED = struct
+  (** Extension decl *)
+
+  type t = Resolved.Constructor.t
+
+  let in_env env name =
+    env_lookup_by_name Env.s_extension_decl name env
+    >>= fun (`ExtensionDecl (id, _)) -> Ok (`Identifier id :> t)
+
+  let in_signature _env ((parent', parent_cp, sg) : signature_lookup_result)
+      name =
+    let sg = Tools.prefix_signature (parent_cp, sg) in
+    find Find.extension_in_sig sg (ExtensionName.to_string name) >>= fun _ ->
+    Ok (`ExtensionDecl (parent', name))
 end
 
 module EX = struct
@@ -747,6 +765,7 @@ let resolve_reference =
         | `Constructor (id, _) -> identifier id
         | `Exception (id, _) -> identifier id
         | `Extension (id, _) -> identifier id
+        | `ExtensionDecl (id, _) -> identifier id
         | `Field (id, _) -> identifier id
         | `Page (id, _) -> identifier id)
     | `Resolved r -> Ok r
@@ -794,6 +813,10 @@ let resolve_reference =
     | `Extension (parent, name) ->
         resolve_signature_reference env parent >>= fun p ->
         EC.in_signature env p name >>= resolved1
+    | `Root (name, `TExtensionDecl) -> ED.in_env env name >>= resolved1
+    | `ExtensionDecl (parent, name) ->
+        resolve_signature_reference env parent >>= fun p ->
+        ED.in_signature env p name >>= resolved1
     | `Root (name, `TField) -> F.in_env env name >>= resolved1
     | `Field (parent, name) ->
         resolve_label_parent_reference env (parent : Parent.t :> LabelParent.t)

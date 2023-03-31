@@ -512,6 +512,9 @@ module Element = struct
   type extension =
     [ `Extension of Identifier.Extension.t * Extension.Constructor.t ]
 
+  type extension_decl =
+    [ `ExtensionDecl of Identifier.Extension.t * Extension.Constructor.t ]
+
   type field = [ `Field of Identifier.Field.t * TypeDecl.Field.t ]
 
   (* No component for pages yet *)
@@ -529,6 +532,7 @@ module Element = struct
     | constructor
     | exception_
     | extension
+    | extension_decl
     | field
     | page ]
 
@@ -546,6 +550,7 @@ module Element = struct
     | `Exception (id, _) -> (id :> t)
     | `Field (id, _) -> (id :> t)
     | `Extension (id, _) -> (id :> t)
+    | `ExtensionDecl (id, _) -> (id :> t)
     | `Page (id, _) -> (id :> t)
 end
 
@@ -1245,6 +1250,10 @@ module Fmt = struct
         Format.fprintf ppf "%a.%s" model_identifier
           (p :> Odoc_model.Paths.Identifier.t)
           (ExtensionName.to_string name)
+    | `ExtensionDecl (p, name) ->
+        Format.fprintf ppf "%a.%s" model_identifier
+          (p :> Odoc_model.Paths.Identifier.t)
+          (ExtensionName.to_string name)
     | `Page (_, name) | `LeafPage (_, name) ->
         Format.fprintf ppf "%s" (PageName.to_string name)
     | `SourcePage (p, name) | `SourceDir (p, name) ->
@@ -1407,6 +1416,10 @@ module Fmt = struct
         Format.fprintf ppf "%a.%s" model_resolved_reference
           (parent :> t)
           (ExtensionName.to_string name)
+    | `ExtensionDecl (parent, name) ->
+        Format.fprintf ppf "%a.%s" model_resolved_reference
+          (parent :> t)
+          (ExtensionName.to_string name)
     | `Exception (parent, name) ->
         Format.fprintf ppf "%a.%s" model_resolved_reference
           (parent :> t)
@@ -1474,6 +1487,10 @@ module Fmt = struct
           (parent :> t)
           (FieldName.to_string name)
     | `Extension (parent, name) ->
+        Format.fprintf ppf "%a.%s" model_reference
+          (parent :> t)
+          (ExtensionName.to_string name)
+    | `ExtensionDecl (parent, name) ->
         Format.fprintf ppf "%a.%s" model_reference
           (parent :> t)
           (ExtensionName.to_string name)
