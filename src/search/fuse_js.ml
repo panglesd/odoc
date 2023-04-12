@@ -44,7 +44,7 @@ and link_content l =
 and non_link_inline_element (n : Odoc_model.Comment.non_link_inline_element) =
   inline (n :> Odoc_model.Comment.inline_element)
 
-let string_of_entry { Types.id; name; doc } =
+let string_of_entry { Types.id; doc } =
   Odoc_document.Url.from_identifier ~stop_before:false id >>= fun url ->
   let config =
     Odoc_html.Config.v ~semantic_uris:true ~indent:false ~flat:false
@@ -60,7 +60,8 @@ let string_of_entry { Types.id; name; doc } =
    %s
  },
     |}
-       name url
+       (Odoc_model.Paths.Identifier.name id)
+       url
        (match doc with
        | None -> ""
        | Some doc ->

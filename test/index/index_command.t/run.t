@@ -10,7 +10,7 @@ $ odoc compile -c module-main -c src-source root.mld
 
   $ odoc link -I . main.odoc
 
-  $ odoc index -I .
+  $ odoc fuse-index -I .
 
 
   $ cat index.index
@@ -76,37 +76,35 @@ $ odoc compile -c module-main -c src-source root.mld
   $ odoc html-generate -o html main.odocl
   $ odoc support-files -o html
   $ cp index.index html/index.js
-  $ find html
+  $ find html | sort
   html
-  html/fonts
-  html/fonts/KaTeX_Script-Regular.woff2
-  html/fonts/KaTeX_Size1-Regular.woff2
-  html/fonts/KaTeX_Caligraphic-Bold.woff2
-  html/fonts/KaTeX_Typewriter-Regular.woff2
-  html/fonts/KaTeX_Size3-Regular.woff2
-  html/fonts/KaTeX_Fraktur-Regular.woff2
-  html/fonts/KaTeX_Main-BoldItalic.woff2
-  html/fonts/KaTeX_SansSerif-Italic.woff2
-  html/fonts/KaTeX_SansSerif-Regular.woff2
-  html/fonts/KaTeX_Size2-Regular.woff2
-  html/fonts/KaTeX_Math-BoldItalic.woff2
-  html/fonts/KaTeX_Caligraphic-Regular.woff2
-  html/fonts/KaTeX_Main-Bold.woff2
-  html/fonts/KaTeX_Math-Italic.woff2
-  html/fonts/KaTeX_Size4-Regular.woff2
-  html/fonts/KaTeX_AMS-Regular.woff2
-  html/fonts/KaTeX_Main-Regular.woff2
-  html/fonts/KaTeX_Main-Italic.woff2
-  html/fonts/KaTeX_SansSerif-Bold.woff2
-  html/fonts/KaTeX_Fraktur-Bold.woff2
   html/Main
   html/Main/index.html
-  html/index.js
-  html/katex.min.js
-  html/katex.min.css
-  html/odoc.css
+  html/fonts
+  html/fonts/KaTeX_AMS-Regular.woff2
+  html/fonts/KaTeX_Caligraphic-Bold.woff2
+  html/fonts/KaTeX_Caligraphic-Regular.woff2
+  html/fonts/KaTeX_Fraktur-Bold.woff2
+  html/fonts/KaTeX_Fraktur-Regular.woff2
+  html/fonts/KaTeX_Main-Bold.woff2
+  html/fonts/KaTeX_Main-BoldItalic.woff2
+  html/fonts/KaTeX_Main-Italic.woff2
+  html/fonts/KaTeX_Main-Regular.woff2
+  html/fonts/KaTeX_Math-BoldItalic.woff2
+  html/fonts/KaTeX_Math-Italic.woff2
+  html/fonts/KaTeX_SansSerif-Bold.woff2
+  html/fonts/KaTeX_SansSerif-Italic.woff2
+  html/fonts/KaTeX_SansSerif-Regular.woff2
+  html/fonts/KaTeX_Script-Regular.woff2
+  html/fonts/KaTeX_Size1-Regular.woff2
+  html/fonts/KaTeX_Size2-Regular.woff2
+  html/fonts/KaTeX_Size3-Regular.woff2
+  html/fonts/KaTeX_Size4-Regular.woff2
+  html/fonts/KaTeX_Typewriter-Regular.woff2
   html/highlight.pack.js
+  html/index.js
+  html/katex.min.css
+  html/katex.min.js
+  html/odoc.css
 
   $ firefox html/Main/index.html
-  Gtk-Message: 10:36:33.250: Failed to load module "xapp-gtk3-module"
-  Gtk-Message: 10:36:33.251: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
