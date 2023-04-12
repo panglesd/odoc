@@ -4,10 +4,13 @@
   <link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/>
   <meta name="generator" content="odoc %%VERSION%%"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <script src="highlight.pack.js"></script>
+  <script src="highlight.pack.js"></script><script>let base_url = ''</script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+  <script src="index.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
  </head>
- <body class="odoc">
+ <body class="odoc"><input class="search-bar"/>
+  <div class="search-result"></div>
   <nav class="odoc-nav"><a href="Include_sections.html">Up</a> – 
    <a href="Include_sections.html">Include_sections</a> &#x00BB; Something
   </nav>
@@ -49,6 +52,6 @@
    <h2 id="something-1-bis"><a href="#something-1-bis" class="anchor"></a>
     Something 1-bis
    </h2><p>Some text.</p>
-  </div>
+  </div><script src="fuse_search.js"></script>
  </body>
 </html>
