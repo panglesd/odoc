@@ -50,25 +50,51 @@ let string_of_entry { Types.id; doc } =
     Odoc_html.Config.v ~semantic_uris:true ~indent:false ~flat:false
       ~open_details:false ~as_json:false ()
   in
+  let name = Odoc_model.Paths.Identifier.name id in
+  let kind =
+    match id.iv with
+    | `InstanceVariable _ -> "instance variable"
+    | `Parameter _ -> "parameter"
+    | `Module _ -> "module"
+    | `ModuleType _ -> "module type"
+    | `Method _ -> "method"
+    | `Field _ -> "field"
+    | `Result _ -> "result"
+    | `Label _ -> "label"
+    | `Type _ -> "type"
+    | `Exception _ -> "exception"
+    | `Class _ -> "class"
+    | `Page _ -> "page"
+    | `LeafPage _ -> "leaf page"
+    | `CoreType _ -> "core type"
+    | `ClassType _ -> "class type"
+    | `Value _ -> "value"
+    | `CoreException _ -> "core exception"
+    | `Constructor _ -> "constructor"
+    | `Extension _ -> "extension"
+    | `Root _ -> "root"
+  in
   let url = Odoc_html.Link.href ~config ~resolve:(Base "") url in
+  let comment =
+    match doc with
+    | None -> ""
+    | Some doc ->
+        Printf.sprintf {|"comment": "%s"|}
+          (String.escaped
+          @@ String.map (function '\n' -> ' ' | a -> a)
+          @@ string_of_doc doc)
+  in
   Ok
     (Printf.sprintf
        {|
  {
    "name": "%s",
+   "kind": "%s",
    "url": "%s",
    %s
  },
     |}
-       (Odoc_model.Paths.Identifier.name id)
-       url
-       (match doc with
-       | None -> ""
-       | Some doc ->
-           Printf.sprintf {|"comment": "%s"|}
-             (String.escaped
-             @@ String.map (function '\n' -> ' ' | a -> a)
-             @@ string_of_doc doc)))
+       name kind url comment)
 
 let render_index index ppf =
   Format.fprintf ppf "var documents = [";
@@ -107,11 +133,15 @@ document.querySelector(".search-bar").addEventListener("input", (event) => {
         let name = document.createElement("div");
         name.style = "padding-right: 10px;"
         name.innerText = entry.item.name;
+        let kind = document.createElement("div");
+        kind.style = "padding-left: 10px;"
+        kind.innerText = entry.item.kind;
         let comment = document.createElement("div");
         comment.innerText = entry.item.comment;
         container.href = base_url + entry.item.url;
         container.appendChild(name);
         container.appendChild(comment);
+        container.appendChild(kind)
         search_result.appendChild(container);
     } ;
     results.map(f);
