@@ -17,13 +17,23 @@ $ odoc compile -c module-main -c src-source root.mld
   var documents = [
    {
      "name": "Main",
+     "kind": "root",
      "url": "Main/index.html",
      
    },
       
   
    {
+     "name": "cc",
+     "kind": "value",
+     "url": "Main/index.html#val-cc",
+     "comment": ""
+   },
+      
+  
+   {
      "name": "v",
+     "kind": "value",
      "url": "Main/index.html#val-v",
      "comment": "title and a reference "
    },
@@ -31,46 +41,16 @@ $ odoc compile -c module-main -c src-source root.mld
   
    {
      "name": "t",
+     "kind": "type",
      "url": "Main/index.html#type-t",
      "comment": "A comment"
    },
       
   ] ; 
    
-  
-    var idx = lunr(function () {
-      this.ref('url')
-      this.field('name')
-      this.field('comment')
-  
-      documents.forEach(function (doc) {
-        this.add(doc)
-      }, this)
-    })
+  const options = { keys: ['name', 'comment'] };
+  var idx_fuse = new Fuse(documents, options);
     
-    const options = { keys: ['name', 'comment'] };
-    var idx_fuse = new Fuse(documents, options);
-  
-  document.querySelector(".search-bar").addEventListener("input", (event) => {
-      let results = idx_fuse.search(event.target.value);
-      let search_result = document.querySelector(".search-result");
-      search_result.innerHTML = "";
-      let f = (entry) => {
-          let container = document.createElement("a");
-          container.style = "display:flex; margin: 10px;"
-          let name = document.createElement("div");
-          name.style = "padding-right: 10px;"
-          name.innerText = entry.item.name;
-          let comment = document.createElement("div");
-          comment.innerText = entry.item.comment;
-          container.href = base_url + entry.item.url;
-          container.appendChild(name);
-          container.appendChild(comment);
-          search_result.appendChild(container);
-      } ;
-      results.map(f);
-  });
-  
 
 
   $ odoc html-generate -o html main.odocl
@@ -101,6 +81,7 @@ $ odoc compile -c module-main -c src-source root.mld
   html/fonts/KaTeX_Size3-Regular.woff2
   html/fonts/KaTeX_Size4-Regular.woff2
   html/fonts/KaTeX_Typewriter-Regular.woff2
+  html/fuse_search.js
   html/highlight.pack.js
   html/index.js
   html/katex.min.css
