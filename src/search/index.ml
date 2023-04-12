@@ -5,12 +5,7 @@ open Types
 let rec unit idx t =
   let open Compilation_unit in
   let idx = content idx t.content in
-  {
-    Types.id = (t.id :> Identifier.Any.t);
-    name = Identifier.RootModule.name t.id;
-    doc = None;
-  }
-  :: idx
+  { Types.id = (t.id :> Identifier.Any.t); doc = None } :: idx
 
 and content idx =
   let open Compilation_unit in
@@ -39,22 +34,11 @@ and signature_item idx s_item =
   | Include _ -> idx
   | Comment _ -> idx
 
-and value idx v =
-  {
-    id = (v.id :> Identifier.Any.t);
-    name = Identifier.Value.name v.id;
-    doc = Some v.doc;
-  }
-  :: idx
+and value idx v = { id = (v.id :> Identifier.Any.t); doc = Some v.doc } :: idx
 
 and module_ idx m =
   let idx =
-    {
-      Types.id = (m.id :> Identifier.Any.t);
-      name = Identifier.Module.name m.id;
-      doc = Some m.doc;
-    }
-    :: idx
+    { Types.id = (m.id :> Identifier.Any.t); doc = Some m.doc } :: idx
   in
   let idx =
     match m.type_ with
@@ -65,22 +49,10 @@ and module_ idx m =
   idx
 
 and type_decl idx td =
-  {
-    id = (td.id :> Identifier.Any.t);
-    name = Identifier.Type.name td.id;
-    doc = Some td.doc;
-  }
-  :: idx
+  { id = (td.id :> Identifier.Any.t); doc = Some td.doc } :: idx
 
 and module_type idx mt =
-  let idx =
-    {
-      id = (mt.id :> Identifier.Any.t);
-      name = Identifier.ModuleType.name mt.id;
-      doc = Some mt.doc;
-    }
-    :: idx
-  in
+  let idx = { id = (mt.id :> Identifier.Any.t); doc = Some mt.doc } :: idx in
   idx
 
 and simple_expansion idx _s_e = idx

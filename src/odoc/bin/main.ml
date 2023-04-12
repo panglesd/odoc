@@ -392,8 +392,11 @@ module Indexing = struct
       $ (const index $ odoc_file_directories $ dst $ warnings_options))
 
   let info ~docs =
-    let doc = "Index all .odocl files found in the given directory." in
-    Term.info "index" ~docs ~doc
+    let doc =
+      "Generate a fuse.js search index for all .odocl files found in the given \
+       directories."
+    in
+    Term.info "fuse-index" ~docs ~doc
 end
 
 module Support_files_command = struct
