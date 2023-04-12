@@ -48,9 +48,13 @@ There are two references in N, one should point to a local label and the other t
     <meta name="generator" content="odoc %%VERSION%%"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <script src="../../../highlight.pack.js"></script>
+    <script>let base_url = '../../../'</script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <script src="../../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc">
+   <body class="odoc"><input class="search-bar"/>
+    <div class="search-result"></div>
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../../index.html">test</a> &#x00BB; 
      <a href="../index.html">Test</a> &#x00BB; N
@@ -66,7 +70,7 @@ There are two references in N, one should point to a local label and the other t
      <p><a href="#B">An other conflicting label</a> 
       <a href="../M/index.html#B"><code>B</code></a>
      </p>
-    </div>
+    </div><script src="../../../fuse_search.js"></script>
    </body>
   </html>
 
@@ -81,9 +85,13 @@ The second occurence of 'B' in the main page should be disambiguated
     <meta name="generator" content="odoc %%VERSION%%"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <script src="../../highlight.pack.js"></script>
+    <script>let base_url = '../../'</script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <script src="../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc">
+   <body class="odoc"><input class="search-bar"/>
+    <div class="search-result"></div>
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../index.html">test</a> &#x00BB; Test
     </nav>
@@ -131,6 +139,6 @@ The second occurence of 'B' in the main page should be disambiguated
       <a href="M/index.html#B"><code>B</code></a> 
       <a href="N/index.html#B"><code>B</code></a>
      </p>
-    </div>
+    </div><script src="../../fuse_search.js"></script>
    </body>
   </html>

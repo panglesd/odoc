@@ -74,20 +74,17 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
   let support_uri = Config.support_uri config in
   let path = Link.Path.for_printing url in
 
+  let file_uri base file =
+    let open Odoc_document in
+    match base with
+    | Types.Absolute uri -> uri ^ "/" ^ file
+    | Relative uri ->
+        let page = Url.Path.{ kind = `File; parent = uri; name = file } in
+        Link.href ~config ~resolve:(Current url) (Url.from_path page)
+  in
   let head : Html_types.head Html.elt =
     let title_string =
       Printf.sprintf "%s (%s)" url.name (String.concat "." path)
-    in
-
-    let file_uri base file =
-      match base with
-      | Types.Absolute uri -> uri ^ "/" ^ file
-      | Relative uri ->
-          let page =
-            Odoc_document.Url.Path.{ kind = `File; parent = uri; name = file }
-          in
-          Link.href ~config ~resolve:(Current url)
-            (Odoc_document.Url.from_path page)
     in
 
     let odoc_css_uri = file_uri theme_uri "odoc.css" in
@@ -107,12 +104,6 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
             ]
           ();
         Html.script ~a:[ Html.a_src highlight_js_uri ] (Html.txt "");
-        Html.script
-          ~a:[ Html.a_src "https://unpkg.com/lunr/lunr.js" ]
-          (Html.txt "");
-        Html.script
-          ~a:[ Html.a_src "https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js" ]
-          (Html.txt "");
         Html.script ~a:[]
           (Html.txt
              (Printf.sprintf "let base_url = '%s'"
@@ -121,7 +112,10 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
                  in
                  Link.href ~config ~resolve:(Current url) (Url.from_path page))));
         Html.script
-          ~a:[ Html.a_src (file_uri support_uri "index.js"); Html.a_defer () ]
+          ~a:[ Html.a_src "https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js" ]
+          (Html.txt "");
+        Html.script
+          ~a:[ Html.a_src (file_uri support_uri "index.js") ]
           (Html.txt "");
         Html.script (Html.txt "hljs.initHighlightingOnLoad();");
       ]
@@ -158,12 +152,15 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
   let search_bar = Html.input ~a:[ Html.a_class [ "search-bar" ] ] () in
   let search_result = Html.div ~a:[ Html.a_class [ "search-result" ] ] [] in
 
+  let fuse_search_js_uri = file_uri support_uri "fuse_search.js" in
+
   let body =
     [ search_bar; search_result ]
     @ html_of_breadcrumbs breadcrumbs
     @ [ Html.header ~a:[ Html.a_class [ "odoc-preamble" ] ] header ]
     @ html_of_toc toc
     @ [ Html.div ~a:[ Html.a_class [ "odoc-content" ] ] content ]
+    @ [ Html.script ~a:[ Html.a_src fuse_search_js_uri ] (Html.txt "") ]
   in
   let htmlpp = Html.pp ~indent:(Config.indent config) () in
   let html = Html.html head (Html.body ~a:[ Html.a_class [ "odoc" ] ] body) in

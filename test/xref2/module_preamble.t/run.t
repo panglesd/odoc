@@ -36,9 +36,13 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
     <meta name="generator" content="odoc %%VERSION%%"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <script src="../../highlight.pack.js"></script>
+    <script>let base_url = '../../'</script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <script src="../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc">
+   <body class="odoc"><input class="search-bar"/>
+    <div class="search-result"></div>
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../index.html">test</a> &#x00BB; A
     </nav>
@@ -60,7 +64,7 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
       <div class="spec-doc"><p>Module B. This paragraph is the synopsis.</p>
       </div>
      </div>
-    </div>
+    </div><script src="../../fuse_search.js"></script>
    </body>
   </html>
 
@@ -74,9 +78,13 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
     <meta name="generator" content="odoc %%VERSION%%"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <script src="../../../highlight.pack.js"></script>
+    <script>let base_url = '../../../'</script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <script src="../../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc">
+   <body class="odoc"><input class="search-bar"/>
+    <div class="search-result"></div>
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../../index.html">test</a> &#x00BB; <a href="../index.html">A</a>
       &#x00BB; B
@@ -100,7 +108,7 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
        <code><span><span class="keyword">type</span> t</span></code>
       </div>
      </div>
-    </div>
+    </div><script src="../../../fuse_search.js"></script>
    </body>
   </html>
 

@@ -117,6 +117,7 @@ Let's also check the hierarchy of files produced:
   html/fonts/KaTeX_Size3-Regular.woff2
   html/fonts/KaTeX_Size4-Regular.woff2
   html/fonts/KaTeX_Typewriter-Regular.woff2
+  html/fuse_search.js
   html/highlight.pack.js
   html/katex.min.css
   html/katex.min.js
