@@ -10,10 +10,9 @@ $ odoc compile -c module-main -c src-source root.mld
 
   $ odoc link -I . main.odoc
 
-  $ odoc fuse-index -I .
+  $ odoc fuse-index -I . -o html
 
-
-  $ cat index.index
+  $ cat html/index.js
   var documents = [
    {
      "name": "Main",
@@ -55,7 +54,6 @@ $ odoc compile -c module-main -c src-source root.mld
 
   $ odoc html-generate -o html main.odocl
   $ odoc support-files -o html
-  $ cp index.index html/index.js
   $ find html | sort
   html
   html/Main

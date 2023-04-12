@@ -385,23 +385,26 @@ module Source_tree = struct
 end
 
 module Indexing = struct
-  let output_file ~output =
-    match output with
-    | Some output -> Fpath.v output
-    | None -> Fpath.v "index.index"
+  let output_file ~directory =
+    match directory with
+    | Some directory -> Fs.File.create ~directory ~name:"index.js"
+    | None -> Fpath.v "index.js"
 
-  let index directories output warnings_options =
-    let output = output_file ~output in
+  let index directories output_dir warnings_options =
+    let output = output_file ~directory:output_dir in
     Indexing.index ~output ~warnings_options directories
 
   let cmd =
     let dst =
       let doc =
-        "Output file path. Non-existing intermediate directories are created. \
-         The basename must start with the prefix 'src-' and extension '.odoc'."
+        "Output dir path. Non-existing intermediate directories are created. \
+         The file will be created as index.js in this directory. Defaults to \
+         the current directory."
       in
       Arg.(
-        value & opt (some string) None & info ~docs ~docv:"PATH" ~doc [ "o" ])
+        value
+        & opt (some (convert_directory ~create:true ())) None
+        & info ~docs ~docv:"PATH" ~doc [ "o" ])
     in
     Term.(
       const handle_error
