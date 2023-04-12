@@ -5,3 +5,5 @@ type t = int
 
 and a reference {!t} *)
 let v = 9
+
+let cc = 1
