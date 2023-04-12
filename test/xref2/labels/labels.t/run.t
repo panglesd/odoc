@@ -53,8 +53,7 @@ There are two references in N, one should point to a local label and the other t
     <script src="../../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc"><input class="search-bar"/>
-    <div class="search-result"></div>
+   <body class="odoc">
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../../index.html">test</a> &#x00BB; 
      <a href="../index.html">Test</a> &#x00BB; N
@@ -63,7 +62,13 @@ There are two references in N, one should point to a local label and the other t
      <h1>Module <code><span>Test.N</span></code></h1>
     </header>
     <nav class="odoc-toc">
-     <ul><li><a href="#B">An other conflicting label</a></li></ul>
+     <div class="odoc-search"><h4>Search</h4>
+      <input class="search-bar" placeholder="🔎 Search..."/>
+      <div class="search-result"></div>
+     </div>
+     <div class="odoc-table"><h4>Table of Content</h4>
+      <ul><li><a href="#B">An other conflicting label</a></li></ul>
+     </div>
     </nav>
     <div class="odoc-content">
      <h2 id="B"><a href="#B" class="anchor"></a>An other conflicting label</h2>
@@ -90,8 +95,7 @@ The second occurence of 'B' in the main page should be disambiguated
     <script src="../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc"><input class="search-bar"/>
-    <div class="search-result"></div>
+   <body class="odoc">
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../index.html">test</a> &#x00BB; Test
     </nav>
@@ -99,10 +103,16 @@ The second occurence of 'B' in the main page should be disambiguated
      <h1>Module <code><span>Test</span></code></h1>
     </header>
     <nav class="odoc-toc">
-     <ul><li><a href="#A">First label</a></li>
-      <li><a href="#B">Floating label</a></li>
-      <li><a href="#B_4">Dupplicate B</a></li>
-     </ul>
+     <div class="odoc-search"><h4>Search</h4>
+      <input class="search-bar" placeholder="🔎 Search..."/>
+      <div class="search-result"></div>
+     </div>
+     <div class="odoc-table"><h4>Table of Content</h4>
+      <ul><li><a href="#A">First label</a></li>
+       <li><a href="#B">Floating label</a></li>
+       <li><a href="#B_4">Dupplicate B</a></li>
+      </ul>
+     </div>
     </nav>
     <div class="odoc-content">
      <h2 id="A"><a href="#A" class="anchor"></a>First label</h2>

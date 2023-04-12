@@ -27,17 +27,23 @@ The table of content should point to unique anchors:
 
   $ sed -n '/<nav class="odoc-toc">$/,/<\/nav>/p' html/test/Test/index.html
     <nav class="odoc-toc">
-     <ul>
-      <li><a href="#section-1">Section 1</a>
-       <ul><li><a href="#example">Example</a></li></ul>
-      </li>
-      <li><a href="#section-2">Section 2</a>
-       <ul><li><a href="#example_2">Example</a></li>
-        <li><a href="#example__3">Example</a></li>
-        <li><a href="#example_3">Example_3</a></li>
-       </ul>
-      </li>
-     </ul>
+     <div class="odoc-search"><h4>Search</h4>
+      <input class="search-bar" placeholder="🔎 Search..."/>
+      <div class="search-result"></div>
+     </div>
+     <div class="odoc-table"><h4>Table of Content</h4>
+      <ul>
+       <li><a href="#section-1">Section 1</a>
+        <ul><li><a href="#example">Example</a></li></ul>
+       </li>
+       <li><a href="#section-2">Section 2</a>
+        <ul><li><a href="#example_2">Example</a></li>
+         <li><a href="#example__3">Example</a></li>
+         <li><a href="#example_3">Example_3</a></li>
+        </ul>
+       </li>
+      </ul>
+     </div>
     </nav>
 
 References should resolve to the first occurence of the ambiguous label. It is

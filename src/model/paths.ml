@@ -104,6 +104,20 @@ module Identifier = struct
     let hash = hash
 
     let compare = compare
+
+    let rec root = function
+      | { iv = `Root _; _ } as root -> root
+      | {
+          iv =
+            ( `ModuleType (parent, _)
+            | `Module (parent, _)
+            | `Parameter (parent, _) );
+          _;
+        } ->
+          root parent
+      | { iv = `Result x; _ } -> root x
+
+    let root id = root (id :> t)
   end
 
   module ClassSignature = struct

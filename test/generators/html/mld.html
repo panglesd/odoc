@@ -8,8 +8,7 @@
   <script src="index.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
  </head>
- <body class="odoc"><input class="search-bar"/>
-  <div class="search-result"></div>
+ <body class="odoc">
   <header class="odoc-preamble">
    <h1 id="mld-page"><a href="#mld-page" class="anchor"></a>Mld Page</h1>
    <p>This is an <code>.mld</code> file. It doesn't have an auto-generated
@@ -17,13 +16,19 @@
    </p><p>It will have a TOC generated from section headings.</p>
   </header>
   <nav class="odoc-toc">
-   <ul><li><a href="#section">Section</a></li>
-    <li><a href="#another-section">Another section</a>
-     <ul><li><a href="#subsection">Subsection</a></li>
-      <li><a href="#another-subsection">Another Subsection</a></li>
-     </ul>
-    </li>
-   </ul>
+   <div class="odoc-search"><h4>Search</h4>
+    <input class="search-bar" placeholder="🔎 Search..."/>
+    <div class="search-result"></div>
+   </div>
+   <div class="odoc-table"><h4>Table of Content</h4>
+    <ul><li><a href="#section">Section</a></li>
+     <li><a href="#another-section">Another section</a>
+      <ul><li><a href="#subsection">Subsection</a></li>
+       <li><a href="#another-subsection">Another Subsection</a></li>
+      </ul>
+     </li>
+    </ul>
+   </div>
   </nav>
   <div class="odoc-content">
    <h2 id="section"><a href="#section" class="anchor"></a>Section</h2>

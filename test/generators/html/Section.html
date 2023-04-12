@@ -9,8 +9,7 @@
   <script src="index.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
  </head>
- <body class="odoc"><input class="search-bar"/>
-  <div class="search-result"></div>
+ <body class="odoc">
   <header class="odoc-preamble">
    <h1>Module <code><span>Section</span></code></h1>
    <p>This is the module comment. Eventually, sections won't be allowed
@@ -18,25 +17,32 @@
    </p>
   </header>
   <nav class="odoc-toc">
-   <ul><li><a href="#empty-section">Empty section</a></li>
-    <li><a href="#text-only">Text only</a></li>
-    <li><a href="#aside-only">Aside only</a></li>
-    <li><a href="#value-only">Value only</a></li>
-    <li><a href="#empty-section_2">Empty section</a></li>
-    <li><a href="#within-a-comment">within a comment</a>
-     <ul>
-      <li>
-       <a href="#and-one-with-a-nested-section">and one with a nested section
-       </a>
-      </li>
-     </ul>
-    </li>
-    <li>
-     <a href="#this-section-title-has-markup"><em>This</em> 
-      <code>section</code> <b>title</b> <sub>has</sub> <sup>markup</sup>
-     </a>
-    </li>
-   </ul>
+   <div class="odoc-search"><h4>Search</h4>
+    <input class="search-bar" placeholder="🔎 Search..."/>
+    <div class="search-result"></div>
+   </div>
+   <div class="odoc-table"><h4>Table of Content</h4>
+    <ul><li><a href="#empty-section">Empty section</a></li>
+     <li><a href="#text-only">Text only</a></li>
+     <li><a href="#aside-only">Aside only</a></li>
+     <li><a href="#value-only">Value only</a></li>
+     <li><a href="#empty-section_2">Empty section</a></li>
+     <li><a href="#within-a-comment">within a comment</a>
+      <ul>
+       <li>
+        <a href="#and-one-with-a-nested-section">and one with a nested
+          section
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="#this-section-title-has-markup"><em>This</em> 
+       <code>section</code> <b>title</b> <sub>has</sub> <sup>markup</sup>
+      </a>
+     </li>
+    </ul>
+   </div>
   </nav>
   <div class="odoc-content">
    <h2 id="empty-section"><a href="#empty-section" class="anchor"></a>

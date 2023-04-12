@@ -41,14 +41,19 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
     <script src="../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc"><input class="search-bar"/>
-    <div class="search-result"></div>
+   <body class="odoc">
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../index.html">test</a> &#x00BB; A
     </nav>
     <header class="odoc-preamble"><h1>Module <code><span>A</span></code></h1>
      <p>Module A.</p>
     </header>
+    <nav class="odoc-toc">
+     <div class="odoc-search"><h4>Search</h4>
+      <input class="search-bar" placeholder="🔎 Search..."/>
+      <div class="search-result"></div>
+     </div>
+    </nav>
     <div class="odoc-content">
      <div class="odoc-spec">
       <div class="spec module anchored" id="module-B">
@@ -83,8 +88,7 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
     <script src="../../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc"><input class="search-bar"/>
-    <div class="search-result"></div>
+   <body class="odoc">
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../../index.html">test</a> &#x00BB; <a href="../index.html">A</a>
       &#x00BB; B
@@ -94,7 +98,13 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
      <p>This paragraph and the previous are part of the preamble.</p>
     </header>
     <nav class="odoc-toc">
-     <ul><li><a href="#an-heading">An heading</a></li></ul>
+     <div class="odoc-search"><h4>Search</h4>
+      <input class="search-bar" placeholder="🔎 Search..."/>
+      <div class="search-result"></div>
+     </div>
+     <div class="odoc-table"><h4>Table of Content</h4>
+      <ul><li><a href="#an-heading">An heading</a></li></ul>
+     </div>
     </nav>
     <div class="odoc-content">
      <h3 id="an-heading"><a href="#an-heading" class="anchor"></a>An heading
@@ -122,6 +132,9 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
     <meta name="generator" content="odoc %%VERSION%%"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <script src="../../highlight.pack.js"></script>
+    <script>let base_url = '../../'</script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <script src="../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
    <body class="odoc">
@@ -130,6 +143,13 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
     </nav>
     <header class="odoc-preamble">
      <h1>Module <code><span>A__b</span></code></h1>
-    </header><div class="odoc-content"></div>
+    </header>
+    <nav class="odoc-toc">
+     <div class="odoc-search"><h4>Search</h4>
+      <input class="search-bar" placeholder="🔎 Search..."/>
+      <div class="search-result"></div>
+     </div>
+    </nav><div class="odoc-content"></div>
+    <script src="../../fuse_search.js"></script>
    </body>
   </html>

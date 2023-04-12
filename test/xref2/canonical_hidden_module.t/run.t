@@ -80,11 +80,16 @@ See the comments on the types at the end of test.mli for the expectation.
     <script src="../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc"><input class="search-bar"/>
-    <div class="search-result"></div>
+   <body class="odoc">
     <header class="odoc-preamble">
      <h1>Module <code><span>Test</span></code></h1>
     </header>
+    <nav class="odoc-toc">
+     <div class="odoc-search"><h4>Search</h4>
+      <input class="search-bar" placeholder="🔎 Search..."/>
+      <div class="search-result"></div>
+     </div>
+    </nav>
     <div class="odoc-content">
      <div class="odoc-spec">
       <div class="spec module anchored" id="module-A_nonhidden">

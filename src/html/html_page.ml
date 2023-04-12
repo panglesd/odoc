@@ -26,9 +26,34 @@ let html_of_toc toc =
     |> List.map (fun the_section -> Html.li (section the_section))
     |> Html.ul
   in
-  match toc with
-  | [] -> []
-  | _ -> [ Html.nav ~a:[ Html.a_class [ "odoc-toc" ] ] [ sections toc ] ]
+  match toc with [] -> [] | _ -> [ sections toc ]
+
+let html_of_search =
+  let search_bar =
+    Html.input
+      ~a:[ Html.a_class [ "search-bar" ]; Html.a_placeholder "🔎 Search..." ]
+      ()
+  in
+  let search_result = Html.div ~a:[ Html.a_class [ "search-result" ] ] [] in
+  [ search_bar; search_result ]
+
+let sidebar toc =
+  let toc =
+    match toc with
+    | [] -> []
+    | _ ->
+        [
+          Html.div
+            ~a:[ Html.a_class [ "odoc-table" ] ]
+            (Html.h4 [ Html.txt "Table of Content" ] :: html_of_toc toc);
+        ]
+  in
+  let search =
+    Html.div
+      ~a:[ Html.a_class [ "odoc-search" ] ]
+      (Html.h4 [ Html.txt "Search" ] :: html_of_search)
+  in
+  [ Html.nav ~a:[ Html.a_class [ "odoc-toc" ] ] (search :: toc) ]
 
 let html_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) =
   let make_navigation ~up_url rest =
@@ -75,10 +100,10 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
   let path = Link.Path.for_printing url in
 
   let file_uri base file =
-    let open Odoc_document in
     match base with
     | Types.Absolute uri -> uri ^ "/" ^ file
     | Relative uri ->
+        let open Odoc_document in
         let page = Url.Path.{ kind = `File; parent = uri; name = file } in
         Link.href ~config ~resolve:(Current url) (Url.from_path page)
   in
@@ -108,9 +133,11 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
           (Html.txt
              (Printf.sprintf "let base_url = '%s'"
                 (let page =
-                   Url.Path.{ kind = `File; parent = None; name = "" }
+                   Odoc_document.Url.Path.
+                     { kind = `File; parent = None; name = "" }
                  in
-                 Link.href ~config ~resolve:(Current url) (Url.from_path page))));
+                 Link.href ~config ~resolve:(Current url)
+                   (Odoc_document.Url.from_path page))));
         Html.script
           ~a:[ Html.a_src "https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js" ]
           (Html.txt "");
@@ -149,16 +176,13 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
     in
     Html.head (Html.title (Html.txt title_string)) meta_elements
   in
-  let search_bar = Html.input ~a:[ Html.a_class [ "search-bar" ] ] () in
-  let search_result = Html.div ~a:[ Html.a_class [ "search-result" ] ] [] in
 
   let fuse_search_js_uri = file_uri support_uri "fuse_search.js" in
 
   let body =
-    [ search_bar; search_result ]
-    @ html_of_breadcrumbs breadcrumbs
+    html_of_breadcrumbs breadcrumbs
     @ [ Html.header ~a:[ Html.a_class [ "odoc-preamble" ] ] header ]
-    @ html_of_toc toc
+    @ sidebar toc
     @ [ Html.div ~a:[ Html.a_class [ "odoc-content" ] ] content ]
     @ [ Html.script ~a:[ Html.a_src fuse_search_js_uri ] (Html.txt "") ]
   in

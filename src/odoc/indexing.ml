@@ -12,8 +12,7 @@ let index ~output ~warnings_options:_ dirs =
   let units =
     List.filter_map
       (function
-        | { Odoc_file.content = Unit_content (unit, _); _ } when not unit.hidden
-          ->
+        | { Odoc_file.content = Unit_content unit; _ } when not unit.hidden ->
             Some unit
         | _ -> None)
       units

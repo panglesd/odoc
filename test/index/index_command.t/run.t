@@ -23,10 +23,10 @@ $ odoc compile -c module-main -c src-source root.mld
       
   
    {
-     "name": "cc",
+     "name": "lorem",
      "kind": "value",
-     "url": "Main/index.html#val-cc",
-     "comment": ""
+     "url": "Main/index.html#val-lorem",
+     "comment": "Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat."
    },
       
   
@@ -34,7 +34,7 @@ $ odoc compile -c module-main -c src-source root.mld
      "name": "v",
      "kind": "value",
      "url": "Main/index.html#val-v",
-     "comment": "title and a reference "
+     "comment": "a reference "
    },
       
   
@@ -87,3 +87,5 @@ $ odoc compile -c module-main -c src-source root.mld
   html/odoc.css
 
   $ firefox html/Main/index.html
+  Gtk-Message: 16:49:28.337: Failed to load module "xapp-gtk3-module"
+  Gtk-Message: 16:49:28.338: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
