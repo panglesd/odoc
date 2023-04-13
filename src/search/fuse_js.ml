@@ -68,7 +68,7 @@ let string_of_entry { Types.id; doc } =
     | `LeafPage _ -> "leaf page"
     | `CoreType _ -> "core type"
     | `ClassType _ -> "class type"
-    | `Value _ -> "value"
+    | `Value _ -> "val"
     | `CoreException _ -> "core exception"
     | `Constructor _ -> "constructor"
     | `Extension _ -> "extension"
