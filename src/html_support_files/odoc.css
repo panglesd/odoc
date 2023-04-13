@@ -644,8 +644,18 @@ td.def-doc *:first-child {
   color: var(--toc-before-color);
   line-height: 1.2;
 }
+.odoc-search:before {
+  display: block;
+  content: "Search";
+  text-transform: uppercase;
+  font-size: 1em;
+  margin: 1.414em 0 0.5em;
+  font-weight: 500;
+  color: var(--toc-before-color);
+  line-height: 1.2;
+}
 
-.odoc-toc {
+.odoc-sidebar {
   position: fixed;
   top: 0px;
   bottom: 0px;
@@ -660,7 +670,7 @@ td.def-doc *:first-child {
   padding-right: 2ex;
 }
 
-.odoc-toc ul li a {
+.odoc-sidebar ul li a {
   font-family: "Fira Sans", sans-serif;
   font-size: 0.95em;
   color: var(--color);
@@ -669,37 +679,76 @@ td.def-doc *:first-child {
   display: block;
 }
 
-.odoc-toc ul li a:hover {
+.odoc-sidebar ul li a:hover {
   box-shadow: none;
   text-decoration: underline;
 }
 
-.odoc-toc .odoc-search {
+.odoc-sidebar .odoc-search { }
+.odoc-sidebar .odoc-search.active {
 
+position: fixed;
+background: white;
+border: 1px solid;
+left: 5%;
+right: 5%;
+padding-left: calc(10vw + 20ex - 5%);
+padding-right: calc(100% - 5% - 10vw - 20ex - 100ex);
+bottom: 5%;
+top: 2%;
+overflow: scroll;
 }
 
-.odoc-toc .odoc-search .search-entry {
+.search-active-add, .search-active-remove {
+display: none;
+}
+.search-bar {
+width: 100%;
+}
+.search-bar-container {
+display:flex;
+}
+
+.odoc-sidebar .odoc-search:not(.active) .search-bar + .search-active-add {
+display: inline-block;
+}
+.active .search-active-remove {
+display: inline-block;
+}
+
+
+.odoc-sidebar .odoc-search .search-entry {
   color: black ;
   display: block;
   margin: 10px;
   /* border: 3px ridge pink */
+  border-left: 2px solid transparent;
 }
-.odoc-toc .odoc-search .search-entry.value {
+
+.odoc-sidebar .odoc-search .search-entry:hover {
+  border: none;
+  box-shadow: none;
+  border-left: 2px solid var(--link-color);
+}
+
+.odoc-sidebar .odoc-search .search-entry.value {
   /* border: 3px ridge red */
 }
-.odoc-toc .odoc-search .search-entry.type {
+.odoc-sidebar .odoc-search .search-entry.type {
   /* border: 3px ridge blue */
 }
-.odoc-toc .odoc-search .search-entry .entry-name {
+.odoc-sidebar .odoc-search .search-entry .entry-name {
   padding-right: 10px;
   background: lightgrey;
+  font-size: 1.2em;
 }
-.odoc-toc .odoc-search .search-entry .entry-comment {
-  font-size: 0.8em;
+.odoc-sidebar .odoc-search .search-entry .entry-comment {
   margin-left: 10px;
+  max-height: 100px;
+  overflow: scroll;
+}
+.odoc-sidebar .odoc-search.active .search-entry .entry-comment {
   max-height: 300px;
-  text-overflow: ellipsis;
-  overflow: hidden;
 }
 
 /* First level titles */
