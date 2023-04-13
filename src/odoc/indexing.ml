@@ -25,4 +25,4 @@ let index ~output ~warnings_options:_ dirs =
     let oc = open_out_bin (Fs.File.to_string output) in
     Format.formatter_of_out_channel oc
   in
-  Ok (Fuse_js.render_index index output)
+  Ok (Sherlodoc.render_index index output)

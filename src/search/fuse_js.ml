@@ -53,10 +53,10 @@ let string_of_entry { Types.id; doc } =
   let name = Odoc_model.Paths.Identifier.name id in
   let kind =
     match id.iv with
-    | `InstanceVariable _ -> "instance variable"
+    | `InstanceVariable _ -> "instance-variable"
     | `Parameter _ -> "parameter"
     | `Module _ -> "module"
-    | `ModuleType _ -> "module type"
+    | `ModuleType _ -> "module-type"
     | `Method _ -> "method"
     | `Field _ -> "field"
     | `Result _ -> "result"
@@ -65,11 +65,11 @@ let string_of_entry { Types.id; doc } =
     | `Exception _ -> "exception"
     | `Class _ -> "class"
     | `Page _ -> "page"
-    | `LeafPage _ -> "leaf page"
-    | `CoreType _ -> "core type"
-    | `ClassType _ -> "class type"
+    | `LeafPage _ -> "leaf-page"
+    | `CoreType _ -> "core-type"
+    | `ClassType _ -> "class-type"
     | `Value _ -> "val"
-    | `CoreException _ -> "core exception"
+    | `CoreException _ -> "core-exception"
     | `Constructor _ -> "constructor"
     | `Extension _ -> "extension"
     | `Root _ -> "root"
