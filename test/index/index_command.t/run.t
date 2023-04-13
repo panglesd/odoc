@@ -11,6 +11,7 @@ $ odoc compile -c module-main -c src-source root.mld
   $ odoc link -I . main.odoc
 
   $ odoc fuse-index -I . -o html
+  $ cp ../../../src/jsoo/sherlodoc.bc.js html/sherlodoc.bc.js
 
   $ cat html/index.js
   var documents = [
@@ -118,6 +119,7 @@ $ odoc compile -c module-main -c src-source root.mld
   html/katex.min.js
   html/odoc.css
 
-  $ cp -r html /tmp 
+  $ ls -a
+ 
 
-  $ firefox /tmp/html/Main/index.html
+  $ firefox html/Main/index.html

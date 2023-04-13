@@ -1,6 +1,6 @@
 open Js_of_ocaml
 
-let x = Data.x
+let x = Js.to_string @@ Js.Unsafe.js_expr "data"
 
 let v : Odoc_search.Types.index =
   match Base64.decode x with
@@ -8,10 +8,10 @@ let v : Odoc_search.Types.index =
   | Ok x -> Marshal.from_string x 0
 
 let () =
-  List.iter
-    (fun { Odoc_search.Types.id; doc = _ } ->
-      print_endline @@ Odoc_model.Paths.Identifier.name id)
-    v;
+  (* List.iter *)
+  (*   (fun { Odoc_search.Types.id; doc = _ } -> *)
+  (*     print_endline @@ Odoc_model.Paths.Identifier.name id) *)
+  (*   v; *)
   Js_of_ocaml.Js.export "my_index" v;
   Js_of_ocaml.Js.export "my_function" (fun x -> print_endline x);
   let _ = Js.Unsafe.global##.document in
@@ -52,8 +52,14 @@ let _id =
              (Js.Unsafe.coerce query : Html.inputElement Js.t)##.value
          in
          let results =
-           ignore query;
-           v
+           List.filter
+             (fun x ->
+               String.for_all
+                 (fun c ->
+                   String.exists (Char.equal c)
+                     (Odoc_model.Paths.Identifier.name x.Odoc_search.Types.id))
+                 query)
+             v
          in
          search_result##.innerHTML := Js.string "";
          let f entry =
@@ -97,8 +103,29 @@ let _id =
            in
            container##.classList##add (Js.string "search-entry");
            container##.classList##add (Js.string kind);
+
+           let title = Html.createCode Html.document in
+           title##.classList##add (Js.string "entry-title");
+
+           let kindE = Html.createSpan Html.document in
+           kindE##.classList##add (Js.string "entry-kind");
+           kindE##.innerText := Js.string kind;
+
+           let name = Html.createSpan Html.document in
+           name##.classList##add (Js.string "entry-name");
+           name##.innerText :=
+             Js.string (Odoc_model.Paths.Identifier.name entry.id);
+
+           Dom.appendChild title kindE;
+           Dom.appendChild title name;
+
+           Dom.appendChild container title;
+
            Dom.appendChild search_result container
          in
-         List.iter f results;
+         print_endline
+           ("query is:\n" ^ query ^ "\nwith length " ^ string_of_int
+          @@ String.length query);
+         if String.length query > 0 then List.iter f results else ();
          Js._true))
     Js._true

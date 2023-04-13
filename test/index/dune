@@ -3,7 +3,8 @@
 (env
  (_
   (binaries
-   (../odoc_print/odoc_print.exe as odoc_print))))
+   (../odoc_print/odoc_print.exe as odoc_print)
+(../../src/jsoo/sherlodoc.bc.js as sherlodoc.js))))
 
 (cram
- (deps %{bin:odoc} %{bin:odoc_print}))
+ (deps %{bin:odoc} ../../src/jsoo/sherlodoc.bc.js %{bin:odoc_print}))

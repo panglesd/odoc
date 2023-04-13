@@ -142,7 +142,7 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
         Html.script ~a:[ Html.a_src highlight_js_uri ] (Html.txt "");
         Html.script ~a:[]
           (Html.txt
-             (Printf.sprintf "let base_url = '%s'"
+             (Printf.sprintf "var baseurl = '%s'"
                 (let page =
                    Url.Path.{ kind = `File; parent = None; name = "" }
                  in
@@ -152,6 +152,13 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
           (Html.txt "");
         Html.script
           ~a:[ Html.a_src (file_uri support_uri "index.js") ]
+          (Html.txt "");
+        Html.script
+          ~a:
+            [
+              Html.a_src (file_uri support_uri "sherlodoc.bc.js");
+              Html.a_defer ();
+            ]
           (Html.txt "");
         Html.script (Html.txt "hljs.initHighlightingOnLoad();");
       ]
@@ -186,14 +193,13 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
     Html.head (Html.title (Html.txt title_string)) meta_elements
   in
 
-  let fuse_search_js_uri = file_uri support_uri "fuse_search.js" in
-
+  (* let fuse_search_js_uri = file_uri support_uri "fuse_search.js" in *)
   let body =
     html_of_breadcrumbs breadcrumbs
     @ [ Html.header ~a:[ Html.a_class [ "odoc-preamble" ] ] header ]
     @ sidebar toc
     @ [ Html.div ~a:[ Html.a_class [ "odoc-content" ] ] content ]
-    @ [ Html.script ~a:[ Html.a_src fuse_search_js_uri ] (Html.txt "") ]
+    (* @ [ Html.script ~a:[ Html.a_src fuse_search_js_uri ] (Html.txt "") ] *)
   in
   let htmlpp = Html.pp ~indent:(Config.indent config) () in
   let html = Html.html head (Html.body ~a:[ Html.a_class [ "odoc" ] ] body) in
