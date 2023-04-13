@@ -31,9 +31,29 @@ let html_of_toc toc =
 
 let html_of_search =
   let search_bar =
-    Html.input
-      ~a:[ Html.a_class [ "search-bar" ]; Html.a_placeholder "🔎 Search..." ]
-      ()
+    let fullscreen_button action =
+      let action, icon =
+        match action with `Add -> ("add", "⇲") | `Remove -> ("remove", "⇱")
+      in
+      Html.button
+        ~a:
+          [
+            Html.a_onclick
+              ({|document.querySelector(".odoc-search").classList.|} ^ action
+             ^ {|("active");|});
+            Html.a_class [ "search-active-" ^ action ];
+          ]
+        [ Html.txt icon ]
+    in
+    Html.div
+      ~a:[ Html.a_class [ "search-bar-container" ] ]
+      [
+        Html.input
+          ~a:[ Html.a_class [ "search-bar" ]; Html.a_placeholder "🔎 Search..." ]
+          ();
+        fullscreen_button `Add;
+        fullscreen_button `Remove;
+      ]
   in
   let search_result = Html.div ~a:[ Html.a_class [ "search-result" ] ] [] in
   [ search_bar; search_result ]
@@ -42,19 +62,10 @@ let sidebar toc =
   let toc =
     match toc with
     | [] -> []
-    | _ ->
-        [
-          Html.div
-            ~a:[ Html.a_class [ "odoc-table" ] ]
-            (Html.h4 [ Html.txt "Table of Content" ] :: html_of_toc toc);
-        ]
+    | _ -> [ Html.div ~a:[ Html.a_class [ "odoc-toc" ] ] (html_of_toc toc) ]
   in
-  let search =
-    Html.div
-      ~a:[ Html.a_class [ "odoc-search" ] ]
-      (Html.h4 [ Html.txt "Search" ] :: html_of_search)
-  in
-  [ Html.nav ~a:[ Html.a_class [ "odoc-toc" ] ] (search :: toc) ]
+  let search = Html.div ~a:[ Html.a_class [ "odoc-search" ] ] html_of_search in
+  [ Html.nav ~a:[ Html.a_class [ "odoc-sidebar" ] ] (search :: toc) ]
 
 let html_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) =
   let make_navigation ~up_url rest =
