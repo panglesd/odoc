@@ -729,7 +729,8 @@ td.def-doc *:first-child {
 .odoc-sidebar .odoc-search .search-entry {
   color: var(--color);
   display: block;
-  margin: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   /* border: 3px ridge pink */
   border-left: 2px solid transparent;
 }
