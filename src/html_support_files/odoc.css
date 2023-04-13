@@ -10,7 +10,7 @@
 
 :root,
 .light:root {
-   --main-background: #FFFFFF;
+  --main-background: #FFFFFF;
 
   --color: #333333;
   --link-color: #2C94BD;
@@ -31,6 +31,7 @@
   --toc-color: #1F2D3D;
   --toc-before-color: #777;
   --toc-background: #f6f8fa;
+  --toc-background-emph: #ecf0f5;
   --toc-list-border: #ccc;
 
   --spec-summary-border-color: #5c9cf5;
@@ -65,6 +66,7 @@
   --li-code-color: #999;
   --toc-color: #777;
   --toc-background: #252525;
+  --toc-background-emph: #2a2a2a;
 
   --hljs-link: #999;
   --hljs-keyword: #cda869;
@@ -107,6 +109,7 @@
     --toc-color: #777;
     --toc-before-color: #777;
     --toc-background: #252525;
+    --toc-background-emph: #2a2a2a;
     --toc-list-border: #ccc;
     --spec-summary-hover-background: #ebeff2;
     --spec-details-after-background: rgba(0, 4, 15, 0.05);
@@ -638,6 +641,7 @@ td.def-doc *:first-child {
   color: var(--toc-before-color);
   line-height: 1.2;
 }
+
 .odoc-search:before {
   display: block;
   content: "Search";
@@ -678,41 +682,46 @@ td.def-doc *:first-child {
   text-decoration: underline;
 }
 
-.odoc-sidebar .odoc-search { }
+.odoc-sidebar .odoc-search {}
+
 .odoc-sidebar .odoc-search.active {
 
-position: fixed;
-background: white;
-border: 1px solid;
-left: 5%;
-right: 5%;
-padding-left: calc(10vw + 20ex - 5%);
-padding-right: calc(100% - 5% - 10vw - 20ex - 100ex);
-bottom: 5%;
-top: 2%;
-overflow: scroll;
+  position: fixed;
+  background: var(--toc-background);
+  border: 1px solid;
+  left: 5%;
+  right: 5%;
+  padding-left: calc(10vw + 20ex - 5%);
+  padding-right: calc(100% - 5% - 10vw - 20ex - 100ex);
+  bottom: 5%;
+  top: 2%;
+  overflow: scroll;
 }
 
-.search-active-add, .search-active-remove {
-display: none;
+.search-active-add,
+.search-active-remove {
+  display: none;
 }
+
 .search-bar {
-width: 100%;
-}
-.search-bar-container {
-display:flex;
+  width: 100%;
 }
 
-.odoc-sidebar .odoc-search:not(.active) .search-bar + .search-active-add {
-display: inline-block;
+.search-bar-container {
+  display: flex;
 }
+
+.odoc-sidebar .odoc-search:not(.active) .search-bar+.search-active-add {
+  display: inline-block;
+}
+
 .active .search-active-remove {
-display: inline-block;
+  display: inline-block;
 }
 
 
 .odoc-sidebar .odoc-search .search-entry {
-  color: black ;
+  color: var(--color);
   display: block;
   margin: 10px;
   /* border: 3px ridge pink */
@@ -728,21 +737,40 @@ display: inline-block;
 .odoc-sidebar .odoc-search .search-entry.value {
   /* border: 3px ridge red */
 }
-.odoc-sidebar .odoc-search .search-entry.type {
-  /* border: 3px ridge blue */
+
+.odoc-sidebar .odoc-search .search-entry .entry-title .entry-kind {
+  font-size: 0.75em;
+  font-weight: 900;
+  border: 1px solid;
+  border-color: var(--color);
+  border-radius: 3px;
+  margin-right: 0.5em;
+  margin-left: 0.25em;
+  padding-right: 0.25em;
+  padding-left: 0.25em;
 }
-.odoc-sidebar .odoc-search .search-entry .entry-name {
+
+.odoc-sidebar .odoc-search .search-entry .entry-title {
   padding-right: 10px;
-  background: lightgrey;
+  background-color: var(--toc-background-emph);
+  width: 100%;
+  display: block;
+}
+
+.odoc-sidebar .odoc-search.active .search-entry .entry-name {
   font-size: 1.2em;
 }
+
 .odoc-sidebar .odoc-search .search-entry .entry-comment {
   margin-left: 10px;
   max-height: 100px;
   overflow: scroll;
+  font-size: 0.8em;
 }
+
 .odoc-sidebar .odoc-search.active .search-entry .entry-comment {
   max-height: 300px;
+  font-size: 1rem;
 }
 
 /* First level titles */
