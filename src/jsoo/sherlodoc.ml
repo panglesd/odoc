@@ -58,7 +58,16 @@ let _id =
                  (fun c ->
                    String.exists (Char.equal c)
                      (Odoc_model.Paths.Identifier.name x.Odoc_search.Types.id))
-                 query)
+                 query
+               ||
+               match x.doc with
+               | None -> false
+               | Some doc ->
+                   String.for_all
+                     (fun c ->
+                       String.exists (Char.equal c)
+                         (Odoc_search.Fuse_js.string_of_doc doc))
+                     query)
              v
          in
          search_result##.innerHTML := Js.string "";
@@ -95,7 +104,7 @@ let _id =
              | `LeafPage _ -> "leaf-page"
              | `CoreType _ -> "core-type"
              | `ClassType _ -> "class-type"
-             | `Value _ -> "value"
+             | `Value _ -> "val"
              | `CoreException _ -> "core-exception"
              | `Constructor _ -> "constructor"
              | `Extension _ -> "extension"
@@ -116,10 +125,19 @@ let _id =
            name##.innerText :=
              Js.string (Odoc_model.Paths.Identifier.name entry.id);
 
+           let comment = Html.createDiv Html.document in
+           comment##.classList##add (Js.string "entry-comment");
+           comment##.innerText :=
+             Js.string
+               (match entry.doc with
+               | None -> ""
+               | Some doc -> Odoc_search.Fuse_js.string_of_doc doc);
+
            Dom.appendChild title kindE;
            Dom.appendChild title name;
 
            Dom.appendChild container title;
+           Dom.appendChild container comment;
 
            Dom.appendChild search_result container
          in
