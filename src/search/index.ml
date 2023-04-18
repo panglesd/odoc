@@ -21,18 +21,83 @@ and signature_item idx s_item =
   match s_item with
   | Signature.Module (_, m) -> module_ idx m
   | ModuleType mt -> module_type idx mt
-  | ModuleSubstitution _mod_subst -> (* module_subst idx mod_subst *) idx
-  | ModuleTypeSubstitution _mt_subst -> (* module_type_subst idx mt_subst *) idx
+  | ModuleSubstitution mod_subst -> module_subst idx mod_subst
+  | ModuleTypeSubstitution mt_subst -> module_type_subst idx mt_subst
   | Open _ -> idx
   | Type (_, t_decl) -> type_decl idx t_decl
-  | TypeSubstitution t_decl -> type_decl idx t_decl
-  | TypExt _ -> idx
-  | Exception _ -> idx
+  | TypeSubstitution t_decl -> type_decl idx t_decl (* TODO check *)
+  | TypExt te -> type_extension idx te
+  | Exception exc -> exception_ idx exc
   | Value v -> value idx v
-  | Class (_, _) -> idx
-  | ClassType (_, _) -> idx
-  | Include _ -> idx
-  | Comment _ -> idx
+  | Class (_, cl) -> class_ idx cl
+  | ClassType (_, clt) -> class_type idx clt
+  | Include i -> include_ idx i
+  | Comment _ -> idx (* TODO: do not include stopped entries *)
+
+and include_ idx _inc = idx (* TODO *)
+
+and class_type idx ct =
+  let idx = { id = (ct.id :> Identifier.Any.t); doc = Some ct.doc } :: idx in
+  let idx = class_type_expr idx ct.expr in
+  match ct.expansion with None -> idx | Some cs -> class_signature idx cs
+
+and class_type_expr idx ct_expr =
+  match ct_expr with
+  | ClassType.Constr (_, _) -> idx
+  | ClassType.Signature cs -> class_signature idx cs
+
+and class_signature idx ct_expr =
+  List.fold_left class_signature_item idx ct_expr.items
+
+and class_signature_item idx item =
+  match item with
+  | ClassSignature.Method m ->
+      { id = (m.id :> Identifier.Any.t); doc = Some m.doc } :: idx
+  | ClassSignature.InstanceVariable _ -> idx
+  | ClassSignature.Constraint _ -> idx
+  | ClassSignature.Inherit _ -> idx
+  | ClassSignature.Comment _ -> idx
+
+and class_ idx cl =
+  let idx = { id = (cl.id :> Identifier.Any.t); doc = Some cl.doc } :: idx in
+  let idx = class_decl idx cl.type_ in
+  match cl.expansion with
+  | None -> idx
+  | Some cl_signature -> class_signature idx cl_signature
+
+and class_decl idx cl_decl =
+  match cl_decl with
+  | Class.ClassType expr -> class_type_expr idx expr
+  | Class.Arrow (_, _, decl) -> class_decl idx decl
+
+and exception_ idx exc =
+  { id = (exc.id :> Identifier.Any.t); doc = Some exc.doc } :: idx
+
+and type_extension idx te =
+  match te.constructors with
+  | [] -> idx
+  | c :: _ ->
+      let idx = { id = (c.id :> Identifier.Any.t); doc = Some te.doc } :: idx in
+      List.fold_left extension_constructor idx te.constructors
+
+and extension_constructor idx ext_constr =
+  { id = (ext_constr.id :> Identifier.Any.t); doc = Some ext_constr.doc } :: idx
+
+and module_subst idx _mod_subst = idx
+
+and module_type_subst idx _mod_subst = idx
+
+(* contacter la fourrière
+              icap ? déclarer animal perdu
+
+              ordre de malt
+              magdalena
+
+              "bons plans entre voisins du quartier"/page facebook
+
+              paroisse saint joseph
+   45.186605756550044, 5.717968307671358
+*)
 
 and value idx v = { id = (v.id :> Identifier.Any.t); doc = Some v.doc } :: idx
 
@@ -51,13 +116,27 @@ and module_ idx m =
 and type_decl idx td =
   { id = (td.id :> Identifier.Any.t); doc = Some td.doc } :: idx
 
-and module_type idx mt =
-  let idx = { id = (mt.id :> Identifier.Any.t); doc = Some mt.doc } :: idx in
-  idx
+and module_type idx { id; doc; locs = _; canonical = _; expr } =
+  let idx = { id = (id :> Identifier.Any.t); doc = Some doc } :: idx in
+  match expr with None -> idx | Some mt_expr -> module_type_expr idx mt_expr
 
 and simple_expansion idx _s_e = idx
 
-and module_type_expr idx _mte = idx
+and module_type_expr idx mte =
+  match mte with
+  | ModuleType.Path _ -> idx
+  | ModuleType.Signature s -> signature idx s
+  | ModuleType.Functor (fp, mt_expr) ->
+      let idx = functor_parameter idx fp in
+      let idx = module_type_expr idx mt_expr in
+      idx
+  | ModuleType.With _ -> idx (* TODO *)
+  | ModuleType.TypeOf _ -> idx (* TODO *)
+
+and functor_parameter idx fp =
+  match fp with
+  | FunctorParameter.Unit -> idx
+  | FunctorParameter.Named n -> module_type_expr idx n.expr
 
 let compilation_unit u = unit [] u
 
