@@ -36,7 +36,14 @@ and signature_item idx s_item =
   | Include i -> include_ idx i
   | Comment _ -> idx (* TODO: do not include stopped entries *)
 
-and include_ idx _inc = idx (* TODO *)
+and include_ idx inc =
+  let idx = include_decl idx inc.decl in
+  let idx = include_expansion idx inc.expansion in
+  idx (* TODO *)
+
+and include_decl idx _decl = idx (* TODO *)
+
+and include_expansion idx expansion = signature idx expansion.content
 
 and class_type idx ct =
   let idx = add { id = (ct.id :> Identifier.Any.t); doc = Some ct.doc } idx in
