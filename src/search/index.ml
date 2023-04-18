@@ -116,7 +116,7 @@ and module_ idx m =
 and type_decl idx td =
   { id = (td.id :> Identifier.Any.t); doc = Some td.doc } :: idx
 
-and module_type idx { id; doc; locs = _; canonical = _; expr } =
+and module_type idx { id; doc; canonical = _; expr } =
   let idx = { id = (id :> Identifier.Any.t); doc = Some doc } :: idx in
   match expr with None -> idx | Some mt_expr -> module_type_expr idx mt_expr
 
