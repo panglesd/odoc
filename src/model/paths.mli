@@ -385,6 +385,8 @@ module Identifier : sig
   val hash : t -> int
 
   val name : [< t_pv ] id -> string
+  val fullname : [< t_pv ] id -> string
+  val prefixname : [< t_pv ] id -> string
 
   val compare : t -> t -> int
 

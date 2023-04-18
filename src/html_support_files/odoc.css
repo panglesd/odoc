@@ -740,6 +740,12 @@ td.def-doc *:first-child {
 .odoc-sidebar .odoc-search.active .search-entry .entry-name {
   font-size: 1.2em;
 }
+.odoc-sidebar .odoc-search.active .search-entry .prefix-name {
+  font-size: 1.2em;
+}
+.odoc-sidebar .odoc-search .search-entry .prefix-name {
+opacity: 0.5;
+}
 
 .odoc-sidebar .odoc-search .search-entry .entry-comment {
   margin-left: 10px;

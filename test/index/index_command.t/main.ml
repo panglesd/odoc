@@ -6,6 +6,11 @@ type t = int
 
     *)
 
+module M = struct
+  type t
+  (** dsdsd *)
+end
+
 (**  a reference {!t} *)
 let v = 9
 

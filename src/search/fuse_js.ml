@@ -51,6 +51,7 @@ let string_of_entry { Types.id; doc } =
       ~open_details:false ~as_json:false ()
   in
   let name = Odoc_model.Paths.Identifier.name id in
+  let prefixname = Odoc_model.Paths.Identifier.prefixname id in
   let kind =
     match id.iv with
     | `InstanceVariable _ -> "instance variable"
@@ -89,12 +90,13 @@ let string_of_entry { Types.id; doc } =
        {|
  {
    "name": "%s",
+   "prefixname": "%s",
    "kind": "%s",
    "url": "%s",
    %s
  },
     |}
-       name kind url comment)
+       name prefixname kind url comment)
 
 let render_index index ppf =
   Format.fprintf ppf "var documents = [";
