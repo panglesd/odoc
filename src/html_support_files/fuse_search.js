@@ -11,11 +11,15 @@ document.querySelector(".search-bar").addEventListener("input", (event) => {
         let kind = document.createElement("span");
         kind.innerText = entry.item.kind;
         kind.classList.add("entry-kind");
+        let prefixname = document.createElement("span");
+        prefixname.classList.add("prefix-name");
+        prefixname.innerText = entry.item.prefixname != "" ? entry.item.prefixname+ "." : entry.item.prefixname;
         let name = document.createElement("span");
         name.classList.add("entry-name");
         name.innerText = entry.item.name;
 
         title.appendChild(kind);
+        title.appendChild(prefixname);
         title.appendChild(name);
 
         let comment = document.createElement("div");
