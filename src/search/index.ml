@@ -2,10 +2,12 @@ open Odoc_model.Lang
 open Odoc_model.Paths
 open Types
 
+let add t q = if Identifier.is_internal t.id then q else t :: q
+
 let rec unit idx t =
   let open Compilation_unit in
   let idx = content idx t.content in
-  { Types.id = (t.id :> Identifier.Any.t); doc = None } :: idx
+  add { Types.id = (t.id :> Identifier.Any.t); doc = None } idx
 
 and content idx =
   let open Compilation_unit in
@@ -37,7 +39,7 @@ and signature_item idx s_item =
 and include_ idx _inc = idx (* TODO *)
 
 and class_type idx ct =
-  let idx = { id = (ct.id :> Identifier.Any.t); doc = Some ct.doc } :: idx in
+  let idx = add { id = (ct.id :> Identifier.Any.t); doc = Some ct.doc } idx in
   let idx = class_type_expr idx ct.expr in
   match ct.expansion with None -> idx | Some cs -> class_signature idx cs
 
@@ -52,14 +54,14 @@ and class_signature idx ct_expr =
 and class_signature_item idx item =
   match item with
   | ClassSignature.Method m ->
-      { id = (m.id :> Identifier.Any.t); doc = Some m.doc } :: idx
+      add { id = (m.id :> Identifier.Any.t); doc = Some m.doc } idx
   | ClassSignature.InstanceVariable _ -> idx
   | ClassSignature.Constraint _ -> idx
   | ClassSignature.Inherit _ -> idx
   | ClassSignature.Comment _ -> idx
 
 and class_ idx cl =
-  let idx = { id = (cl.id :> Identifier.Any.t); doc = Some cl.doc } :: idx in
+  let idx = add { id = (cl.id :> Identifier.Any.t); doc = Some cl.doc } idx in
   let idx = class_decl idx cl.type_ in
   match cl.expansion with
   | None -> idx
@@ -71,17 +73,21 @@ and class_decl idx cl_decl =
   | Class.Arrow (_, _, decl) -> class_decl idx decl
 
 and exception_ idx exc =
-  { id = (exc.id :> Identifier.Any.t); doc = Some exc.doc } :: idx
+  add { id = (exc.id :> Identifier.Any.t); doc = Some exc.doc } idx
 
 and type_extension idx te =
   match te.constructors with
   | [] -> idx
   | c :: _ ->
-      let idx = { id = (c.id :> Identifier.Any.t); doc = Some te.doc } :: idx in
+      let idx =
+        add { id = (c.id :> Identifier.Any.t); doc = Some te.doc } idx
+      in
       List.fold_left extension_constructor idx te.constructors
 
 and extension_constructor idx ext_constr =
-  { id = (ext_constr.id :> Identifier.Any.t); doc = Some ext_constr.doc } :: idx
+  add
+    { id = (ext_constr.id :> Identifier.Any.t); doc = Some ext_constr.doc }
+    idx
 
 and module_subst idx _mod_subst = idx
 
@@ -99,11 +105,11 @@ and module_type_subst idx _mod_subst = idx
    45.186605756550044, 5.717968307671358
 *)
 
-and value idx v = { id = (v.id :> Identifier.Any.t); doc = Some v.doc } :: idx
+and value idx v = add { id = (v.id :> Identifier.Any.t); doc = Some v.doc } idx
 
 and module_ idx m =
   let idx =
-    { Types.id = (m.id :> Identifier.Any.t); doc = Some m.doc } :: idx
+    add { Types.id = (m.id :> Identifier.Any.t); doc = Some m.doc } idx
   in
   let idx =
     match m.type_ with
@@ -114,10 +120,10 @@ and module_ idx m =
   idx
 
 and type_decl idx td =
-  { id = (td.id :> Identifier.Any.t); doc = Some td.doc } :: idx
+  add { id = (td.id :> Identifier.Any.t); doc = Some td.doc } idx
 
 and module_type idx { id; doc; canonical = _; expr } =
-  let idx = { id = (id :> Identifier.Any.t); doc = Some doc } :: idx in
+  let idx = add { id = (id :> Identifier.Any.t); doc = Some doc } idx in
   match expr with None -> idx | Some mt_expr -> module_type_expr idx mt_expr
 
 and simple_expansion idx _s_e = idx
