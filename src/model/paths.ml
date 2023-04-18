@@ -50,6 +50,30 @@ module Identifier = struct
     | `InstanceVariable (_, name) -> InstanceVariableName.to_string name
     | `Label (_, name) -> LabelName.to_string name
 
+  let rec is_internal : t -> bool =
+   fun x ->
+    match x.iv with
+    | `Root (_, name) -> ModuleName.is_internal name
+    | `Page (_, _) -> false
+    | `LeafPage (_, _) -> false
+    | `Module (_, name) -> ModuleName.is_internal name
+    | `Parameter (_, name) -> ModuleName.is_internal name
+    | `Result x -> is_internal (x :> t)
+    | `ModuleType (_, name) -> ModuleTypeName.is_internal name
+    | `Type (_, name) -> TypeName.is_internal name
+    | `CoreType name -> TypeName.is_internal name
+    | `Constructor (parent, _) -> is_internal (parent :> t)
+    | `Field (parent, _) -> is_internal (parent :> t)
+    | `Extension (parent, _) -> is_internal (parent :> t)
+    | `Exception (parent, _) -> is_internal (parent :> t)
+    | `CoreException _ -> false
+    | `Value (_, name) -> ValueName.is_internal name
+    | `Class (_, name) -> ClassName.is_internal name
+    | `ClassType (_, name) -> ClassTypeName.is_internal name
+    | `Method (parent, _) -> is_internal (parent :> t)
+    | `InstanceVariable (parent, _) -> is_internal (parent :> t)
+    | `Label (parent, _) -> is_internal (parent :> t)
+
   let rec full_name_aux : t -> string list =
    fun x ->
     match x.iv with
@@ -96,6 +120,7 @@ module Identifier = struct
     match full_name_aux (n :> t) with [] -> "" | _ :: q -> String.concat "." q
 
   let name : [< t_pv ] id -> string = fun n -> name_aux (n :> t)
+  let is_internal : [< t_pv ] id -> bool = fun n -> is_internal (n :> t)
 
   let rec root id =
     match id.iv with
