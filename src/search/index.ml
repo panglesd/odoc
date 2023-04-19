@@ -1,13 +1,14 @@
 open Odoc_model.Lang
 open Odoc_model.Paths
+
 open Types
 
-let add t q = if Identifier.is_internal t.id then q else t :: q
+let add t q = if Identifier.is_internal t.id then q else Index_db.add t q
 
 let rec unit idx t =
   let open Compilation_unit in
   let idx = content idx t.content in
-  add { Types.id = (t.id :> Identifier.Any.t); doc = None } idx
+  add { id = (t.id :> Identifier.Any.t); doc = None } idx
 
 and content idx =
   let open Compilation_unit in
@@ -100,24 +101,10 @@ and module_subst idx _mod_subst = idx
 
 and module_type_subst idx _mod_subst = idx
 
-(* contacter la fourrière
-              icap ? déclarer animal perdu
-
-              ordre de malt
-              magdalena
-
-              "bons plans entre voisins du quartier"/page facebook
-
-              paroisse saint joseph
-   45.186605756550044, 5.717968307671358
-*)
-
 and value idx v = add { id = (v.id :> Identifier.Any.t); doc = Some v.doc } idx
 
 and module_ idx m =
-  let idx =
-    add { Types.id = (m.id :> Identifier.Any.t); doc = Some m.doc } idx
-  in
+  let idx = add { id = (m.id :> Identifier.Any.t); doc = Some m.doc } idx in
   let idx =
     match m.type_ with
     | Module.Alias (_, None) -> idx
@@ -151,9 +138,4 @@ and functor_parameter idx fp =
   | FunctorParameter.Unit -> idx
   | FunctorParameter.Named n -> module_type_expr idx n.expr
 
-let compilation_unit u = unit [] u
-
-(* TODO: make it robust when agregating from multiple package, and multiple
-   times the same index *)
-let aggregate_index = ( @ )
-let aggregate_indexes = List.concat
+let compilation_unit u = unit Index_db.empty u

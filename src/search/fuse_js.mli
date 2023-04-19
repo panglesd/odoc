@@ -1,3 +1,1 @@
-open Types
-
-val render_index : index -> renderer
+val render_index : Index_db.index -> Types.renderer

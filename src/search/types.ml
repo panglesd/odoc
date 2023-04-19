@@ -6,6 +6,4 @@ type index_entry = {
   doc : Odoc_model.Comment.docs option;
 }
 
-type index = index_entry list
-
 type renderer = Format.formatter -> unit

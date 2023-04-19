@@ -100,7 +100,7 @@ let string_of_entry { Types.id; doc } =
 
 let render_index index ppf =
   Format.fprintf ppf "var documents = [";
-  List.iter
+  Index_db.iter
     (fun entry ->
       match string_of_entry entry with
       | Ok entry -> Format.fprintf ppf "%s" (entry ^ "\n")

@@ -19,7 +19,7 @@ let index ~output ~warnings_options:_ dirs =
       units
   in
   let indexes = List.map Index.compilation_unit units in
-  let index = Index.aggregate_indexes indexes in
+  let index = Index_db.aggregate_indexes indexes in
   let output =
     Fs.Directory.mkdir_p (Fs.File.dirname output);
     let oc = open_out_bin (Fs.File.to_string output) in
