@@ -1,9 +1,9 @@
 open Odoc_model.Lang
 open Odoc_model.Paths
 
-open Types
-
-let add t q = if Identifier.is_internal t.id then q else Index_db.add t q
+let add t q =
+  if Identifier.is_internal t.Odoc_model.Index_db.id then q
+  else Odoc_model.Index_db.add t q
 
 let rec unit idx t =
   let open Compilation_unit in
@@ -116,7 +116,7 @@ and module_ idx m =
 and type_decl idx td =
   add { id = (td.id :> Identifier.Any.t); doc = Some td.doc } idx
 
-and module_type idx { id; doc; canonical = _; expr } =
+and module_type idx { id; doc; canonical = _; expr; locs = _ } =
   let idx = add { id = (id :> Identifier.Any.t); doc = Some doc } idx in
   match expr with None -> idx | Some mt_expr -> module_type_expr idx mt_expr
 
@@ -138,4 +138,4 @@ and functor_parameter idx fp =
   | FunctorParameter.Unit -> idx
   | FunctorParameter.Named n -> module_type_expr idx n.expr
 
-let compilation_unit u = unit Index_db.empty u
+let compilation_unit u = unit Odoc_model.Index_db.empty u

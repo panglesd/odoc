@@ -315,7 +315,7 @@ let compile ~resolver ~parent_cli_spec ~hidden ~children ~output
                 then Ok (Some name)
                 else err_not_parent ()
             | { iv = `LeafPage _; _ } -> err_not_parent ())
-        | Unit_content _ | Odoc_file.Page_content _ ->
+        | Unit_content _ | Index_content _ | Odoc_file.Page_content _ ->
             Error
               (`Msg "Specified source-parent should be a page but is a module.")
         )

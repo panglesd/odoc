@@ -369,37 +369,98 @@ module Source_tree = struct
 end
 
 module Indexing = struct
-  let output_file ~directory =
-    match directory with
-    | Some directory -> Fs.File.create ~directory ~name:"index.js"
-    | None -> Fpath.v "index.js"
+  module Compile = struct
+    let output_file ~output =
+      match output with
+      | Some output -> output
+      | None -> Fpath.v "index-index.odoc"
 
-  let index directories output_dir warnings_options =
-    let output = output_file ~directory:output_dir in
-    Indexing.index ~output ~warnings_options directories
+    let index directories output warnings_options =
+      let output = output_file ~output in
+      Indexing.compile ~output ~warnings_options ~resolver:() ~parent:()
+        directories
 
-  let cmd =
-    let dst =
-      let doc =
-        "Output dir path. Non-existing intermediate directories are created. \
-         The file will be created as index.js in this directory. Defaults to \
-         the current directory."
+    let cmd =
+      let has_index_prefix input =
+        input |> Fs.File.basename |> Fs.File.to_string
+        |> Astring.String.is_prefix ~affix:"index-"
       in
-      Arg.(
-        value
-        & opt (some (convert_directory ~create:true ())) None
-        & info ~docs ~docv:"PATH" ~doc [ "o" ])
-    in
-    Term.(
-      const handle_error
-      $ (const index $ odoc_file_directories $ dst $ warnings_options))
+      let arg_page_output =
+        let open Or_error in
+        let parse inp =
+          match Arg.(conv_parser string) inp with
+          | Ok s ->
+              let f = Fs.File.of_string s in
+              if not (Fs.File.has_ext ".odoc" f) then
+                Error (`Msg "Output file must have '.odoc' extension.")
+              else if not (has_index_prefix f) then
+                Error (`Msg "Output file must be prefixed with 'src-'.")
+              else Ok f
+          | Error _ as e -> e
+        and print = Fpath.pp in
+        Arg.conv (parse, print)
+      in
+      let dst =
+        let doc =
+          "Output file path. Non-existing intermediate directories are \
+           created. The basename must start with the prefix 'index-' and \
+           extension '.odoc'. Defaults to index-index.odoc"
+        in
+        Arg.(
+          value
+          & opt (some arg_page_output) None
+          & info ~docs ~docv:"PATH" ~doc [ "o" ])
+      in
+      Term.(
+        const handle_error
+        $ (const index $ odoc_file_directories $ dst $ warnings_options))
 
-  let info ~docs =
-    let doc =
-      "Generate a fuse.js search index for all .odocl files found in the given \
-       directories."
-    in
-    Term.info "fuse-index" ~docs ~doc
+    let info ~docs =
+      let doc =
+        "Generate an index of all identified entries in the .odocl files found \
+         in the given directories."
+      in
+      Term.info "compile-index" ~docs ~doc
+  end
+
+  module Generate = struct
+    let output_file ~directory =
+      match directory with
+      | Some directory -> Fs.File.create ~directory ~name:"index.json"
+      | None -> Fs.File.of_string "index.json"
+
+    let generate file output_dir warnings_options =
+      let output = output_file ~directory:output_dir in
+      Indexing.generate ~output ~warnings_options (Fpath.v file)
+
+    let cmd =
+      let dst =
+        let doc =
+          "Output dir path. Non-existing intermediate directories are created. \
+           The file will be created as index.js in this directory. Defaults to \
+           the current directory."
+        in
+        Arg.(
+          value
+          & opt (some (convert_directory ~create:true ())) None
+          & info ~docs ~docv:"PATH" ~doc [ "o" ])
+      in
+      let input_odocl =
+        let doc = "Input file." in
+        Arg.(
+          required & pos 0 (some file) None & info ~doc ~docv:"FILE.odocl" [])
+      in
+      Term.(
+        const handle_error
+        $ (const generate $ input_odocl $ dst $ warnings_options))
+
+    let info ~docs =
+      let doc =
+        "Generate a fuse.js search index for all .odocl files found in the \
+         given directories."
+      in
+      Term.info "generate-index" ~docs ~doc
+  end
 end
 
 module Support_files_command = struct
@@ -1032,7 +1093,8 @@ let () =
       Odoc_html.generate ~docs:section_pipeline;
       Support_files_command.(cmd, info ~docs:section_pipeline);
       Source_tree.(cmd, info ~docs:section_pipeline);
-      Indexing.(cmd, info ~docs:section_pipeline);
+      Indexing.Compile.(cmd, info ~docs:section_pipeline);
+      Indexing.Generate.(cmd, info ~docs:section_pipeline);
       Odoc_manpage.generate ~docs:section_generators;
       Odoc_latex.generate ~docs:section_generators;
       Odoc_html_url.(cmd, info ~docs:section_support);

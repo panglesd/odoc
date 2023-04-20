@@ -1,5 +1,5 @@
 document.querySelector(".search-bar").addEventListener("input", (event) => {
-    let results = idx_fuse.search(event.target.value);
+    let results = odoc_search(event.target.value);
     let search_result = document.querySelector(".search-result");
     search_result.innerHTML = "";
     let f = (entry) => {

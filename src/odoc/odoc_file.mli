@@ -26,6 +26,7 @@ type content =
   | Page_content of Lang.Page.t
   | Source_tree_content of Lang.SourceTree.t
   | Unit_content of unit_content
+  | Index_content of Lang.Index.t
 
 type t = { content : content; warnings : Error.t list }
 
@@ -40,6 +41,10 @@ val save_source_tree :
     missing. *)
 
 val save_unit : Fs.File.t -> warnings:Error.t list -> unit_content -> unit
+(** Save a module. *)
+
+val save_index :
+  Fs.File.t -> warnings:Error.t list -> Root.t -> Lang.Index.t -> unit
 (** Save a module. *)
 
 (** {2 Deserialization} *)

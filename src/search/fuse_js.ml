@@ -44,7 +44,7 @@ and link_content l =
 and non_link_inline_element (n : Odoc_model.Comment.non_link_inline_element) =
   inline (n :> Odoc_model.Comment.inline_element)
 
-let string_of_entry { Types.id; doc } =
+let string_of_entry { Odoc_model.Index_db.id; doc } =
   Odoc_document.Url.from_identifier ~stop_before:false id >>= fun url ->
   let config =
     Odoc_html.Config.v ~semantic_uris:true ~indent:false ~flat:false
@@ -76,40 +76,26 @@ let string_of_entry { Types.id; doc } =
     | `Root _ -> "root"
   in
   let url = Odoc_html.Link.href ~config ~resolve:(Base "") url in
-  let comment =
-    match doc with
-    | None -> ""
-    | Some doc ->
-        Printf.sprintf {|"comment": "%s"|}
-          (String.escaped
-          @@ String.map (function '\n' -> ' ' | a -> a)
-          @@ string_of_doc doc)
+  let json =
+    `Object
+      [
+        ("name", `String name);
+        ("prefixname", `String prefixname);
+        ("kind", `String kind);
+        ("url", `String url);
+        ( "comment",
+          match doc with None -> `Null | Some c -> `String (string_of_doc c) );
+      ]
   in
-  Ok
-    (Printf.sprintf
-       {|
- {
-   "name": "%s",
-   "prefixname": "%s",
-   "kind": "%s",
-   "url": "%s",
-   %s
- },
-    |}
-       name prefixname kind url comment)
+  Ok (Odoc_html.Json.to_string json)
 
 let render_index index ppf =
-  Format.fprintf ppf "var documents = [";
-  Index_db.iter
-    (fun entry ->
-      match string_of_entry entry with
-      | Ok entry -> Format.fprintf ppf "%s" (entry ^ "\n")
-      | Error _ -> ())
-    index;
-  Format.fprintf ppf "] ; \n \n";
-
-  Format.fprintf ppf
-    {|const options = { keys: ['name', 'comment'] };
-var idx_fuse = new Fuse(documents, options);
-  |};
-  ()
+  if not (Odoc_model.Index_db.is_empty index) then (
+    Format.fprintf ppf "[";
+    Odoc_model.Index_db.iter
+      (fun entry ->
+        match string_of_entry entry with
+        | Ok entry -> Format.fprintf ppf "%s,\n" entry
+        | Error _ -> ())
+      index;
+    Format.fprintf ppf "]")

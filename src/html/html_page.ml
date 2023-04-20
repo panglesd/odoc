@@ -148,9 +148,6 @@ let page_creator ~config ~url ~uses_katex header breadcrumbs toc content =
                  in
                  Link.href ~config ~resolve:(Current url) (Url.from_path page))));
         Html.script
-          ~a:[ Html.a_src "https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js" ]
-          (Html.txt "");
-        Html.script
           ~a:[ Html.a_src (file_uri support_uri "index.js") ]
           (Html.txt "");
         Html.script (Html.txt "hljs.initHighlightingOnLoad();");

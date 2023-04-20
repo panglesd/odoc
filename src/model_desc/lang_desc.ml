@@ -705,6 +705,16 @@ and page_t =
       F ("digest", (fun t -> t.digest), Digest.t);
     ]
 
+and index_t =
+  let open Lang.Index in
+  Record
+    [
+      F ("name", (fun t -> t.name), identifier);
+      F ("root", (fun t -> t.root), root);
+      F ("content", (fun _ -> "..."), string);
+      F ("digest", (fun t -> t.digest), Digest.t);
+    ]
+
 and source_tree_page_t =
   let open Lang.SourceTree in
   Record
