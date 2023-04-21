@@ -42,7 +42,7 @@ type module_reference = {
     resolved during linking. *)
 
 type nestable_block_element =
-  [ `Paragraph of paragraph
+  [ `Paragraph of Identifier.Label.t * paragraph
   | `Code_block of string option * string with_location
   | `Math_block of string
   | `Verbatim of string
