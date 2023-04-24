@@ -357,14 +357,14 @@ module Internal = struct
     | "fonts/KaTeX_Size3-Regular.woff2" | "/fonts/KaTeX_Size3-Regular.woff2" -> Some [ d_9108a400f4787cffdcc3a3b813401e6a; ]
     | "fonts/KaTeX_Size4-Regular.woff2" | "/fonts/KaTeX_Size4-Regular.woff2" -> Some [ d_a4340a688d0f3c6d6cbb55ca090506e3; d_e4a12f7ec4801d06858e634cb2f32ebc; ]
     | "fonts/KaTeX_Typewriter-Regular.woff2" | "/fonts/KaTeX_Typewriter-Regular.woff2" -> Some [ d_75765194c06fcfc933acdeb26ef15d3d; d_a051704e837d53143bcae86905d21302; d_9c62ce25963b0733dee65c540c429af6; d_0f6a949341647131a618c717cc034d0f; ]
-    | "fuse_search.js" | "/fuse_search.js" -> Some [ d_b622b9dc06264850fd389fec64c496c3; ]
     | "highlight.pack.js" | "/highlight.pack.js" -> Some [ d_6b9eea5bd2cdd91f629293ab3b8808d1; d_30baf6fb746860926fdd280eefc46735; d_7df05ceea77c14d78f1f1df8f98def4f; d_106b469c9254e3a72af1bc5085256cca; d_5fcd7eba230acf47d54c1897a9a9c394; d_df9507781455088adf4ca1bd7fc0a321; d_b223e3337242ba6cf0905995918760a5; d_d6a1be8caf2478248edb48ee82070d9e; d_98850966979dd224456f716b44220d69; d_9873a9ace25bcd721b8eeb6b8dad71cf; d_b23657c0bc089d459bc6099791f97c23; d_f9c0b1a6ea9c119cb0f7ead5c3dac542; d_80a0027403c5ad56c7da4589713b2348; d_fe8f6a1f53d067d447bae579dc60d6f0; ]
     | "katex.min.css" | "/katex.min.css" -> Some [ d_2d798108ddda42cb699f6ad4421e720e; d_b128d6f091a42be5d7a929703f09ac36; d_1476b6e94be68e530a90bd0723d69c88; d_e357f75b8a7d9a6031bbdc38adcf1422; d_ad152fcf832897f8629ca758460f3d22; d_7c9075f31df2a532c3135ae327c84a92; ]
     | "katex.min.js" | "/katex.min.js" -> Some [ d_0c2c3443b618aef3ac4519dd2b159bbe; d_a2070486fb8e9102cd1537ebd1216a96; d_48a6338945c47ceb84d335248c3d6873; d_ad48849637d7c8349cb3e6952d5c8699; d_32baa17e8a53bbd439c58b0d89bc0503; d_c7561e7d22eb89e10083cfba7680012c; d_d04b09d89ef0b9af8a297a3592a2e4b1; d_c0cf7351fa27f73a72840e453c4b15f3; d_fadfd470a088dde5c3755136ac4b6188; d_326148c9e075f26f4dd5ee3862f61cf6; d_a55141bd5690b03d71c9675038f73b3f; d_225bdd9918928e02697ef5570454bf56; d_bf8e1c09c2162b9bb4b6578a59cc8069; d_bb5a8ed07dc95fa6f9f51938da398a35; d_b93e718b1ddefad06d18d9736584ad78; d_e12a510e69c6b3e0210294eedc2c3be3; d_bf043adf1d8ba761903c6f3447bae9d3; d_80ae3e22d162129b593049c0dc7f2407; d_d7b447b6bfc36721f581470728505547; d_92e0c0a734f49413d685531ad3f0a03e; d_cabefc6c9607b95a33af32a8c8832767; d_a03f60fbbac88837b2763d52df2c0820; d_5795c26325c462426548bd12ff6ef7a1; d_c0939c104021af2b0d9b24c7102061f2; d_3a7455b94742964a6cc5e84e314a6cfb; d_dc2a908015f68e5bff245fff4e602604; d_96c4d8e2622ac6552ccf67643b20f09c; d_37935d98135b118d937e895f4bb55add; d_efe21915ced6043dcaa8ff576e7948c7; d_fe0aa5b4043d6894e289163dd38508b7; d_dc29762de1ae6c28b3b3cc202f52ac6f; d_2c5af911fa1596ad2eef3a7e342be949; d_01738333fc004372ab1ae8bc7d370677; d_0d6ec6387686b4173900d29c91f338ee; d_5f9942b4d85184e45b9addfc25ca6fd4; d_105a9e030400f28a404c6badd930fe01; d_79c029f6f746a52f4a8bc8b6280c5c88; d_3a50124eae7017a15bb92024b9f6c8ad; d_d1d8d575696cbb5a4994efc9e2862948; d_a6e92521674c97f4d1bd649490d8a987; d_8f38ae17980f4039d715823515fd56d0; d_a841840589a3efb0465e49e0d8f985b5; d_e33d592534625de6438003412e1d8813; d_5b12b53efc1e6da3a434634e81c2251b; d_c7270ab94b84005c36e6e864e6ea5b10; d_5e57240b8ff6745d663ebd2060201199; d_02c9bc01125e92ce389d2ac93e62d14b; d_0d4c13a0e6487657499a2f37795ab83b; d_8ff622534e1e1348711c11358657050b; d_a8b5fa32242a1d360076af4bdc9dafbe; d_725c52bce5d22dff34816d0cea74cf51; d_a6db9cb29ea27586d2138cf4f8710b12; d_31ee9944b6c75c4351486bc790988371; d_1005d4f63119125aeb03e8a2fa265969; d_9ff5a6ec97f55e01b81f13d9d3f0ff67; d_f361846717ba3e91093152df70d5aab3; d_e462cdcfecbc18ac1f1e447bf1ed3697; d_0d5bde992f9fa1c53103cd024ff5833b; d_1b66f4e8c1fbc1c74875f8da050cc1d0; d_bad0217136fdcd657898ee631bd512d1; d_428c2b0f069b4ffaef294dc85aef1e4b; d_cb988ca0480d611a7c52551adcc9ed48; d_cdc6e947cdb2e0bb7fae7f338ffa12a0; d_f56cd226d59f4d3190a095998f97ac56; d_f5d214c6b91ee7f61f5a433fcdd70682; d_f4caf2cb8610b6735641c064e6453b79; d_da739bd79e1901a19d34fbf2d1a16298; ]
     | "odoc.css" | "/odoc.css" -> Some [ d_74853849a873a3facc2f5334394b867e; d_843d3443b4d945387042fb50da793971; d_aa4e5ad2415b2b82e65408aed3e78677; d_73d9ba09e7ce0d96157134e37c11abf8; d_8a1b8fa31c19edb15e8e3e544e25c3c4; ]
+    | "odoc_search.js" | "/odoc_search.js" -> Some [ d_b622b9dc06264850fd389fec64c496c3; ]
     | _ -> None
 
-  let file_list = [ "fonts/KaTeX_AMS-Regular.woff2"; "fonts/KaTeX_Caligraphic-Bold.woff2"; "fonts/KaTeX_Caligraphic-Regular.woff2"; "fonts/KaTeX_Fraktur-Bold.woff2"; "fonts/KaTeX_Fraktur-Regular.woff2"; "fonts/KaTeX_Main-Bold.woff2"; "fonts/KaTeX_Main-BoldItalic.woff2"; "fonts/KaTeX_Main-Italic.woff2"; "fonts/KaTeX_Main-Regular.woff2"; "fonts/KaTeX_Math-BoldItalic.woff2"; "fonts/KaTeX_Math-Italic.woff2"; "fonts/KaTeX_SansSerif-Bold.woff2"; "fonts/KaTeX_SansSerif-Italic.woff2"; "fonts/KaTeX_SansSerif-Regular.woff2"; "fonts/KaTeX_Script-Regular.woff2"; "fonts/KaTeX_Size1-Regular.woff2"; "fonts/KaTeX_Size2-Regular.woff2"; "fonts/KaTeX_Size3-Regular.woff2"; "fonts/KaTeX_Size4-Regular.woff2"; "fonts/KaTeX_Typewriter-Regular.woff2"; "fuse_search.js"; "highlight.pack.js"; "katex.min.css"; "katex.min.js"; "odoc.css"; ]
+  let file_list = [ "fonts/KaTeX_AMS-Regular.woff2"; "fonts/KaTeX_Caligraphic-Bold.woff2"; "fonts/KaTeX_Caligraphic-Regular.woff2"; "fonts/KaTeX_Fraktur-Bold.woff2"; "fonts/KaTeX_Fraktur-Regular.woff2"; "fonts/KaTeX_Main-Bold.woff2"; "fonts/KaTeX_Main-BoldItalic.woff2"; "fonts/KaTeX_Main-Italic.woff2"; "fonts/KaTeX_Main-Regular.woff2"; "fonts/KaTeX_Math-BoldItalic.woff2"; "fonts/KaTeX_Math-Italic.woff2"; "fonts/KaTeX_SansSerif-Bold.woff2"; "fonts/KaTeX_SansSerif-Italic.woff2"; "fonts/KaTeX_SansSerif-Regular.woff2"; "fonts/KaTeX_Script-Regular.woff2"; "fonts/KaTeX_Size1-Regular.woff2"; "fonts/KaTeX_Size2-Regular.woff2"; "fonts/KaTeX_Size3-Regular.woff2"; "fonts/KaTeX_Size4-Regular.woff2"; "fonts/KaTeX_Typewriter-Regular.woff2"; "highlight.pack.js"; "katex.min.css"; "katex.min.js"; "odoc.css"; "odoc_search.js"; ]
 end
 
 let file_list = Internal.file_list
@@ -395,11 +395,11 @@ let hash = function
   | "fonts/KaTeX_Size3-Regular.woff2" | "/fonts/KaTeX_Size3-Regular.woff2" -> Some "9108a400f4787cffdcc3a3b813401e6a"
   | "fonts/KaTeX_Size4-Regular.woff2" | "/fonts/KaTeX_Size4-Regular.woff2" -> Some "61522cd3d9043622e235ab57762754f2"
   | "fonts/KaTeX_Typewriter-Regular.woff2" | "/fonts/KaTeX_Typewriter-Regular.woff2" -> Some "b8b8393d2e65fcebda5fa99fa3264f41"
-  | "fuse_search.js" | "/fuse_search.js" -> Some "b622b9dc06264850fd389fec64c496c3"
   | "highlight.pack.js" | "/highlight.pack.js" -> Some "f7f17015c0de1023c93929e3725a9248"
   | "katex.min.css" | "/katex.min.css" -> Some "1a262c83aa48d3ba34dd01c2ec6087d8"
   | "katex.min.js" | "/katex.min.js" -> Some "0376fd70eef224e946e13788118db3d1"
   | "odoc.css" | "/odoc.css" -> Some "f1972e5ff29512064d4c8b5a921607be"
+  | "odoc_search.js" | "/odoc_search.js" -> Some "b622b9dc06264850fd389fec64c496c3"
   | _ -> None
 
 let size = function
@@ -423,9 +423,9 @@ let size = function
   | "fonts/KaTeX_Size3-Regular.woff2" | "/fonts/KaTeX_Size3-Regular.woff2" -> Some 3624
   | "fonts/KaTeX_Size4-Regular.woff2" | "/fonts/KaTeX_Size4-Regular.woff2" -> Some 4928
   | "fonts/KaTeX_Typewriter-Regular.woff2" | "/fonts/KaTeX_Typewriter-Regular.woff2" -> Some 13568
-  | "fuse_search.js" | "/fuse_search.js" -> Some 1299
   | "highlight.pack.js" | "/highlight.pack.js" -> Some 54535
   | "katex.min.css" | "/katex.min.css" -> Some 20978
   | "katex.min.js" | "/katex.min.js" -> Some 270376
   | "odoc.css" | "/odoc.css" -> Some 19112
+  | "odoc_search.js" | "/odoc_search.js" -> Some 1299
   | _ -> None

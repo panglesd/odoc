@@ -14,8 +14,6 @@ $ odoc compile -c module-main -c src-source root.mld
 
   $ odoc compile-index -I .
 
-
-
   $ odoc generate-index index-index.odoc
 
   $ ls
