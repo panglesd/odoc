@@ -144,7 +144,10 @@ and module_type idx { id; doc; canonical = _; expr; locs = _ } =
   let idx = add { id = (id :> Identifier.Any.t); doc = Some doc } idx in
   match expr with None -> idx | Some mt_expr -> module_type_expr idx mt_expr
 
-and simple_expansion idx _s_e = idx
+and simple_expansion idx s_e =
+  match s_e with
+  | ModuleType.Signature sg -> signature idx sg
+  | ModuleType.Functor (_, s_e) -> simple_expansion idx s_e
 
 and module_type_expr idx mte =
   match mte with
