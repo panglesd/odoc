@@ -53,11 +53,22 @@ let compile ~resolver:_ ~parent:_ ~output ~warnings_options:_ dirs =
       (function
         | { Odoc_file.content = Unit_content (unit, _); _ } when not unit.hidden
           ->
-            Some unit
+            Some (`Unit unit)
+        | { Odoc_file.content = Page_content page; _ } -> Some (`Page page)
         | _ -> None)
       units
   in
-  let indexes = List.map Index.compilation_unit units in
+  let indexes =
+    List.map
+      (function
+        | `Page p ->
+            Format.printf "AAAAA\n%!";
+            Index.page p
+        | `Unit u ->
+            Format.printf "BBBBB\n%!";
+            Index.compilation_unit u)
+      units
+  in
   let index = Index_db.aggregate_indexes indexes in
   let lang = Odoc_model.Lang.Index.{ name; root; index; digest } in
   Ok (Odoc_file.save_index output root ~warnings:[] lang)

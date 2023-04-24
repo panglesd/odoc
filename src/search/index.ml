@@ -10,6 +10,10 @@ let rec unit idx t =
   let idx = content idx t.content in
   add { id = (t.id :> Identifier.Any.t); doc = None } idx
 
+and page idx t =
+  let open Page in
+  docs idx t.content
+
 and content idx =
   let open Compilation_unit in
   function
@@ -35,7 +39,27 @@ and signature_item idx s_item =
   | Class (_, cl) -> class_ idx cl
   | ClassType (_, clt) -> class_type idx clt
   | Include i -> include_ idx i
-  | Comment _ -> idx (* TODO: do not include stopped entries *)
+  | Comment `Stop -> idx
+  | Comment (`Docs d) -> docs idx d (* TODO: do not include stopped entries *)
+
+and docs idx d = List.fold_left doc idx d
+
+and doc idx d =
+  match d.value with
+  | `Paragraph (lbl, _) ->
+      add { id = (lbl :> Identifier.Any.t); doc = Some [ d ] } idx
+  | `Tag _ -> idx
+  | `List (_, ds) ->
+      List.fold_left docs idx (ds :> Odoc_model.Comment.docs list)
+  | `Heading (_, lbl, _) ->
+      add { id = (lbl :> Identifier.Any.t); doc = Some [ d ] } idx
+  | `Modules _ -> idx
+  | `Code_block (lbl, _, _) ->
+      add { id = (lbl :> Identifier.Any.t); doc = Some [ d ] } idx
+  | `Verbatim (lbl, _) ->
+      add { id = (lbl :> Identifier.Any.t); doc = Some [ d ] } idx
+  | `Math_block (lbl, _) ->
+      add { id = (lbl :> Identifier.Any.t); doc = Some [ d ] } idx
 
 and include_ idx inc =
   let idx = include_decl idx inc.decl in
@@ -139,3 +163,5 @@ and functor_parameter idx fp =
   | FunctorParameter.Named n -> module_type_expr idx n.expr
 
 let compilation_unit u = unit Odoc_model.Index_db.empty u
+
+let page p = page Odoc_model.Index_db.empty p

@@ -7,8 +7,10 @@ $ odoc compile -c module-main -c src-source root.mld
   $ ocamlc -c main.ml -bin-annot -I .
 
   $ odoc compile -I . main.cmt
+  $ odoc compile -I . page.mld
 
   $ odoc link -I . main.odoc
+  $ odoc link -I . page-page.odoc
 
   $ odoc compile-index -I .
 
@@ -47,7 +49,7 @@ The index.js file need to provide a odoc_search command, from a
 
   $ echo "\n\nconst options = { keys: ['name', 'comment'] };" >> index.js
   $ echo "\nvar idx_fuse = new Fuse(documents, options);" >> index.js
-  $ echo "\nvar odoc_search = idx_fuse.search;" >> index.js
+  $ echo "\nfunction odoc_search(query) {let result = idx_fuse.search(query); return result.map(entry => entry.item)};" >> index.js
 
   $ odoc html-generate -o html main.odocl
   $ odoc support-files -o html

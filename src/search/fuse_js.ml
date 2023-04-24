@@ -9,16 +9,16 @@ let rec string_of_doc (doc : Odoc_model.Comment.docs) =
 
 and s_of_block_element (be : Odoc_model.Comment.block_element) =
   match be with
-  | `Paragraph is -> inlines is
+  | `Paragraph (_, is) -> inlines is
   | `Tag _ -> ""
   | `List (_, ls) ->
       List.map (fun x -> x |> List.map get_value |> List.map nestable) ls
       |> List.concat |> String.concat " "
-  | `Heading (_, _, h) -> link_content h
+  | `Heading (_, _, h) -> inlines h
   | `Modules _ -> ""
-  | `Code_block (_, s) -> s |> get_value
-  | `Verbatim v -> v
-  | `Math_block m -> m
+  | `Code_block (_, _, s) -> s |> get_value
+  | `Verbatim (_, v) -> v
+  | `Math_block (_, m) -> m
 
 and nestable (n : Odoc_model.Comment.nestable_block_element) =
   s_of_block_element (n :> Odoc_model.Comment.block_element)
@@ -50,7 +50,9 @@ let string_of_entry { Odoc_model.Index_db.id; doc } =
     Odoc_html.Config.v ~semantic_uris:true ~indent:false ~flat:false
       ~open_details:false ~as_json:false ()
   in
-  let name = Odoc_model.Paths.Identifier.name id in
+  let name =
+    match id.iv with `Label _ -> "" | _ -> Odoc_model.Paths.Identifier.name id
+  in
   let prefixname = Odoc_model.Paths.Identifier.prefixname id in
   let kind =
     match id.iv with

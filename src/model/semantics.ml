@@ -275,6 +275,15 @@ let generate_heading_label : Comment.inline_element with_location list -> string
   in
   content |> List.map (fun ele -> ele.Location.value) |> scan_inline_elements ""
 
+let generate_label =
+  let current_label = ref 0 in
+  fun status ->
+    incr current_label;
+    Paths.Identifier.Mk.label
+      ( status.parent_of_sections,
+        Names.LabelName.make_std ("search_label_" ^ string_of_int !current_label)
+      )
+
 let rec nestable_block_element :
     status ->
     Odoc_parser.Ast.nestable_block_element with_location ->
@@ -282,18 +291,23 @@ let rec nestable_block_element :
  fun status element ->
   match element with
   | { value = `Paragraph content; location } ->
-      Location.at location
-        (`Paragraph
-          (generate_heading_label content, inline_elements status content))
+      let content = inline_elements status content in
+      let label = generate_label status in
+      Location.at location (`Paragraph (label, content))
   | { value = `Code_block (metadata, code); location } ->
       let lang_tag =
         match metadata with
         | Some ({ Location.value; _ }, _) -> Some value
         | None -> None
       in
-      Location.at location (`Code_block (lang_tag, code))
-  | { value = `Math_block s; location } -> Location.at location (`Math_block s)
-  | { value = `Verbatim _; _ } as element -> element
+      let label = generate_label status in
+      Location.at location (`Code_block (label, lang_tag, code))
+  | { value = `Math_block s; location } ->
+      let label = generate_label status in
+      Location.at location (`Math_block (label, s))
+  | { value = `Verbatim v; location } ->
+      let label = generate_label status in
+      Location.at location (`Verbatim (label, v))
   | { value = `Modules modules; location } ->
       let modules =
         List.fold_left
@@ -383,9 +397,10 @@ let section_heading :
   | `None, _any_level ->
       Error.raise_warning (headings_not_allowed location);
       let text = (text :> Comment.inline_element with_location list) in
+      let label = generate_label status in
       let element =
         Location.at location
-          (`Paragraph [ Location.at location (`Styled (`Bold, text)) ])
+          (`Paragraph (label, [ Location.at location (`Styled (`Bold, text)) ]))
       in
       (top_heading_level, element)
   | `No_titles, 0 ->

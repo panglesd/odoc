@@ -43,9 +43,9 @@ type module_reference = {
 
 type nestable_block_element =
   [ `Paragraph of Identifier.Label.t * paragraph
-  | `Code_block of string option * string with_location
-  | `Math_block of string
-  | `Verbatim of string
+  | `Code_block of Identifier.Label.t * string option * string with_location
+  | `Math_block of Identifier.Label.t * string
+  | `Verbatim of Identifier.Label.t * string
   | `Modules of module_reference list
   | `List of
     [ `Unordered | `Ordered ] * nestable_block_element with_location list list
@@ -97,7 +97,7 @@ type docs_or_stop = [ `Docs of docs | `Stop ]
 (** The synopsis is the first element of a comment if it is a paragraph.
     Otherwise, there is no synopsis. *)
 let synopsis = function
-  | { Location_.value = `Paragraph p; _ } :: _ -> Some p
+  | { Location_.value = `Paragraph (_, p); _ } :: _ -> Some p
   | _ -> None
 
 let rec link_content_of_inline_element :

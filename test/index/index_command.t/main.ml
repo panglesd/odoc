@@ -1,8 +1,9 @@
 type t = int
 (** A comment *)
 
-(** {1 title}
+(** {1 this is a title}
 
+    and this is a paragraph
 
     *)
 
