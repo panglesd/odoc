@@ -49,7 +49,8 @@ The index.js file need to provide a odoc_search command, from a
   $ echo "\nvar idx_fuse = new Fuse(documents, options);" >> index.js
   $ echo "\nfunction odoc_search(query) {let result = idx_fuse.search(query); return result.map(entry => entry.item)};" >> index.js
 
-  $ odoc html-generate -o html main.odocl
+  $ odoc html-generate --with-search -o html main.odocl
+  $ odoc html-generate --with-search -o html page-page.odocl
   $ odoc support-files -o html
   $ cp index.js html/index.js
 

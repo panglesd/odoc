@@ -48,7 +48,7 @@ let string_of_entry { Odoc_model.Index_db.id; doc } =
   Odoc_document.Url.from_identifier ~stop_before:false id >>= fun url ->
   let config =
     Odoc_html.Config.v ~semantic_uris:true ~indent:false ~flat:false
-      ~open_details:false ~as_json:false ()
+      ~open_details:false ~as_json:false ~with_search:false ()
   in
   let name =
     match id.iv with `Label _ -> "" | _ -> Odoc_model.Paths.Identifier.name id

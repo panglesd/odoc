@@ -8,11 +8,21 @@ type t = {
   flat : bool;
   open_details : bool;
   as_json : bool;
+  with_search : bool;
 }
 
 let v ?theme_uri ?support_uri ~semantic_uris ~indent ~flat ~open_details
-    ~as_json () =
-  { semantic_uris; indent; flat; open_details; theme_uri; support_uri; as_json }
+    ~as_json ~with_search () =
+  {
+    semantic_uris;
+    indent;
+    flat;
+    open_details;
+    theme_uri;
+    support_uri;
+    as_json;
+    with_search;
+  }
 
 let theme_uri config =
   match config.theme_uri with None -> Types.Relative None | Some uri -> uri
@@ -29,3 +39,5 @@ let flat config = config.flat
 let open_details config = config.open_details
 
 let as_json config = config.as_json
+
+let with_search config = config.with_search

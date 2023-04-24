@@ -456,8 +456,8 @@ module Indexing = struct
 
     let info ~docs =
       let doc =
-        "Generate a fuse.js search index for all .odocl files found in the \
-         given directories."
+        "Generate a json search index for all .odocl files found in the given \
+         directories."
       in
       Term.info "generate-index" ~docs ~doc
   end
@@ -791,6 +791,15 @@ module Odoc_html_args = struct
     in
     Arg.(value & flag & info ~doc [ "as-json" ])
 
+  let with_search =
+    let doc =
+      "Include a search bar in the side content. The generated html expect an \
+       index.js file providing a javascript function odoc_search. This \
+       function expects a string, and outputs an array of objects, following \
+       the same format as in the json file of index-generate."
+    in
+    Arg.(value & flag & info ~doc [ "with-search" ])
+
   let source_file =
     let doc =
       "Source code for the compilation unit. It must have been compiled with \
@@ -803,17 +812,17 @@ module Odoc_html_args = struct
 
   let extra_args =
     let config semantic_uris closed_details indent theme_uri support_uri flat
-        as_json source_file =
+        as_json with_search source_file =
       let open_details = not closed_details in
       let html_config =
         Odoc_html.Config.v ~theme_uri ~support_uri ~semantic_uris ~indent ~flat
-          ~open_details ~as_json ()
+          ~open_details ~as_json ~with_search ()
       in
       { Html_page.html_config; source_file }
     in
     Term.(
       const config $ semantic_uris $ closed_details $ indent $ theme_uri
-      $ support_uri $ flat $ as_json $ source_file)
+      $ support_uri $ flat $ as_json $ with_search $ source_file)
 end
 
 module Odoc_html = Make_renderer (Odoc_html_args)
