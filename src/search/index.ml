@@ -151,14 +151,17 @@ and simple_expansion idx s_e =
 
 and module_type_expr idx mte =
   match mte with
-  | ModuleType.Path _ -> idx
   | ModuleType.Signature s -> signature idx s
-  | ModuleType.Functor (fp, mt_expr) ->
+  | Functor (fp, mt_expr) ->
       let idx = functor_parameter idx fp in
       let idx = module_type_expr idx mt_expr in
       idx
-  | ModuleType.With _ -> idx (* TODO *)
-  | ModuleType.TypeOf _ -> idx (* TODO *)
+  | With { w_expansion = Some sg; _ } -> simple_expansion idx sg
+  | TypeOf { t_expansion = Some sg; _ } -> simple_expansion idx sg
+  | Path { p_expansion = Some sg; _ } -> simple_expansion idx sg
+  | Path _ -> idx
+  | With _ -> idx
+  | TypeOf _ -> idx
 
 and functor_parameter idx fp =
   match fp with
