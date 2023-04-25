@@ -19,7 +19,7 @@
   (glob_files *.png)
   (glob_files library_mlds/*.mld)
   (package odoc)
-  fuse.js.js)
+  minisearch.js)
  (enabled_if
   (> %{ocaml_version} 4.11))
  (action

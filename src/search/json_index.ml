@@ -46,20 +46,16 @@ and non_link_inline_element (n : Odoc_model.Comment.non_link_inline_element) =
 
 let string_of_entry { Odoc_model.Index_db.id; doc } =
   Odoc_document.Url.from_identifier ~stop_before:false id >>= fun url ->
-  let config =
-    Odoc_html.Config.v ~semantic_uris:true ~indent:false ~flat:false
-      ~open_details:false ~as_json:false ~with_search:false ()
-  in
   let name =
     match id.iv with `Label _ -> "" | _ -> Odoc_model.Paths.Identifier.name id
   in
   let prefixname = Odoc_model.Paths.Identifier.prefixname id in
   let kind =
     match id.iv with
-    | `InstanceVariable _ -> "instance variable"
+    | `InstanceVariable _ -> "instance-variable"
     | `Parameter _ -> "parameter"
     | `Module _ -> "module"
-    | `ModuleType _ -> "module type"
+    | `ModuleType _ -> "module-type"
     | `Method _ -> "method"
     | `Field _ -> "field"
     | `Result _ -> "result"
@@ -68,16 +64,22 @@ let string_of_entry { Odoc_model.Index_db.id; doc } =
     | `Exception _ -> "exception"
     | `Class _ -> "class"
     | `Page _ -> "page"
-    | `LeafPage _ -> "leaf page"
-    | `CoreType _ -> "core type"
-    | `ClassType _ -> "class type"
-    | `Value _ -> "val"
-    | `CoreException _ -> "core exception"
+    | `LeafPage _ -> "leaf-page"
+    | `CoreType _ -> "core-type"
+    | `ClassType _ -> "class-type"
+    | `Value _ -> "value"
+    | `CoreException _ -> "core-exception"
     | `Constructor _ -> "constructor"
     | `Extension _ -> "extension"
     | `Root _ -> "root"
   in
-  let url = Odoc_html.Link.href ~config ~resolve:(Base "") url in
+  let url =
+    let config =
+      Odoc_html.Config.v ~semantic_uris:false ~indent:false ~flat:false
+        ~open_details:false ~as_json:false ~with_search:false ()
+    in
+    Odoc_html.Link.href ~config ~resolve:(Base "") url
+  in
   let json =
     `Object
       [

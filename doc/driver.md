@@ -591,7 +591,8 @@ let generate_all odocl_files =
   support_files ()
 ```
 
-Finally, we generate an index for search
+Finally, we generate an index of all values, types, ... This index is meant to be consumed by search engines, to create their own index. It consists of a JSON array, containing entries with the name, full name, associated comment, link and anchor, and kind.
+Generating the index is done in two phases. The first one is done via `odoc compile-index`, which create a `index-index.odoc` file. This file is used when aggregating multiple indexes, and for search engine which prefer to read OCaml values than JSON. The second one, `odoc generate-index`, generates from an `odoc` index a JSON value which contains all entries in JSON format. This second format is meant to be consumed by search engines written in other languages than OCaml.
 
 ```ocaml env=e1
 let index_generate ?(ignore_output = false) () =
@@ -606,20 +607,35 @@ let index_generate ?(ignore_output = false) () =
     add_prefixed_output cmd generate_output "index generation" lines;
 ```
 
-We turn this index into a javascript library:
+We turn the JSON index into a javascript file. There are few requirements for this file:
+
+- It must provide an `odoc_search` function, which takes a string and returns a list of results, as json objects with the same form as in the generated JSON index.
+- The file must be named `index.js` and be located in the `odoc-support` URI.
+
+In this driver, we use the minisearch javascript library. For more involved application, we could use `index.js` to call a server-side search engine via an API call.
 
 ```ocaml env=e1
 let js_index () =
   let index = Bos.OS.File.read Fpath.(v "html" / "index.json") |> get_ok in
-  let fuse = Bos.OS.File.read Fpath.(v "fuse.js.js") |> get_ok in
+  let minisearch = Bos.OS.File.read Fpath.(v "minisearch.js") |> get_ok in
   Bos.OS.File.writef Fpath.(v "html" / "odoc" / "index.js") {|%s
 let documents = 
   %s
 ;
-const options = { keys: ['name', 'comment'] };
-var idx_fuse = new Fuse(documents, options);
-function odoc_search(query) {let result = idx_fuse.search(query); return result.map(entry => entry.item)};
-|} fuse index
+
+let miniSearch = new MiniSearch({
+  fields: ['name', 'comment'], // fields to index for full-text search
+  storeFields: ['name', 'prefixname', 'kind', 'url', 'comment'] // fields to return with search results
+})
+
+// Index all documents
+miniSearch.addAll(documents.map((index, id) => {index.id = id; return index}));
+
+function odoc_search(query) {
+  let result = miniSearch.search(query);
+  return result.slice(0,200);
+}
+|} minisearch index
 ```
 
 
