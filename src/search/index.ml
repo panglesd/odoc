@@ -1,25 +1,31 @@
 open Odoc_model.Lang
-open Odoc_model.Paths
+
+module Doc = Odoc_document.ML
+module ToHtml = Odoc_html.Generator
+
+type any_id = Odoc_model.Paths.Identifier.Any.t
 
 let add t q =
-  if Identifier.is_internal t.Odoc_model.Index_db.id then q
-  else Odoc_model.Index_db.add t q
+  (* if Identifier.is_internal t.Index_db.id then q else *) Index_db.add t q
+
+let add_entry ~id ~doc ~kind idx =
+  let entry = { Index_db.id; kind; doc } in
+  add entry idx
 
 let rec unit idx t =
   let open Compilation_unit in
-  let idx = content idx t.content in
-  add { id = (t.id :> Identifier.Any.t); doc = None } idx
+  content t.id idx t.content
 
 and page idx t =
   let open Page in
   docs idx t.content
 
-and content idx =
+and content unit_id idx =
   let open Compilation_unit in
   function
   | Module m ->
-      let idx = signature idx m in
-      idx
+      let idx = add_entry ~id:(unit_id :> any_id) ~doc:m.doc ~kind:Module idx in
+      signature idx m
   | Pack _ -> idx
 
 and signature idx (s : Signature.t) = List.fold_left signature_item idx s.items
@@ -47,19 +53,19 @@ and docs idx d = List.fold_left doc idx d
 and doc idx d =
   match d.value with
   | `Paragraph (lbl, _) ->
-      add { id = (lbl :> Identifier.Any.t); doc = Some [ d ] } idx
+      add_entry ~id:(lbl :> any_id) ~doc:[ d ] ~kind:(Doc Paragraph) idx
   | `Tag _ -> idx
   | `List (_, ds) ->
       List.fold_left docs idx (ds :> Odoc_model.Comment.docs list)
   | `Heading (_, lbl, _) ->
-      add { id = (lbl :> Identifier.Any.t); doc = Some [ d ] } idx
+      add_entry ~id:(lbl :> any_id) ~doc:[ d ] ~kind:(Doc Heading) idx
   | `Modules _ -> idx
   | `Code_block (lbl, _, _) ->
-      add { id = (lbl :> Identifier.Any.t); doc = Some [ d ] } idx
+      add_entry ~id:(lbl :> any_id) ~doc:[ d ] ~kind:(Doc CodeBlock) idx
   | `Verbatim (lbl, _) ->
-      add { id = (lbl :> Identifier.Any.t); doc = Some [ d ] } idx
+      add_entry ~id:(lbl :> any_id) ~doc:[ d ] ~kind:(Doc Verbatim) idx
   | `Math_block (lbl, _) ->
-      add { id = (lbl :> Identifier.Any.t); doc = Some [ d ] } idx
+      add_entry ~id:(lbl :> any_id) ~doc:[ d ] ~kind:(Doc MathBlock) idx
 
 and include_ idx inc =
   let idx = include_decl idx inc.decl in
@@ -71,7 +77,13 @@ and include_decl idx _decl = idx (* TODO *)
 and include_expansion idx expansion = signature idx expansion.content
 
 and class_type idx ct =
-  let idx = add { id = (ct.id :> Identifier.Any.t); doc = Some ct.doc } idx in
+  let idx =
+    let kind =
+      Index_db.Class_type
+        { virtual_ = ct.virtual_; params = ct.params; expr = ct.expr }
+    in
+    add_entry ~id:(ct.id :> any_id) ~doc:ct.doc ~kind idx
+  in
   let idx = class_type_expr idx ct.expr in
   match ct.expansion with None -> idx | Some cs -> class_signature idx cs
 
@@ -86,14 +98,24 @@ and class_signature idx ct_expr =
 and class_signature_item idx item =
   match item with
   | ClassSignature.Method m ->
-      add { id = (m.id :> Identifier.Any.t); doc = Some m.doc } idx
+      let kind =
+        Index_db.Method
+          { virtual_ = m.virtual_; private_ = m.private_; type_ = m.type_ }
+      in
+      add_entry ~id:(m.id :> any_id) ~doc:m.doc ~kind idx
   | ClassSignature.InstanceVariable _ -> idx
   | ClassSignature.Constraint _ -> idx
   | ClassSignature.Inherit _ -> idx
   | ClassSignature.Comment _ -> idx
 
 and class_ idx cl =
-  let idx = add { id = (cl.id :> Identifier.Any.t); doc = Some cl.doc } idx in
+  let idx =
+    let kind =
+      Index_db.Class
+        { virtual_ = cl.virtual_; params = cl.params; type_ = cl.type_ }
+    in
+    add_entry ~id:(cl.id :> any_id) ~doc:cl.doc ~kind idx
+  in
   let idx = class_decl idx cl.type_ in
   match cl.expansion with
   | None -> idx
@@ -105,30 +127,47 @@ and class_decl idx cl_decl =
   | Class.Arrow (_, _, decl) -> class_decl idx decl
 
 and exception_ idx exc =
-  add { id = (exc.id :> Identifier.Any.t); doc = Some exc.doc } idx
+  let kind = Index_db.Exception { args = exc.args; res = exc.res } in
+  add_entry ~id:(exc.id :> any_id) ~doc:exc.doc ~kind idx
 
 and type_extension idx te =
   match te.constructors with
   | [] -> idx
   | c :: _ ->
+      (* Type extension do not have an ID yet... we use the first constructor for the url. *)
       let idx =
-        add { id = (c.id :> Identifier.Any.t); doc = Some te.doc } idx
+        let kind =
+          Index_db.TypeExtension
+            {
+              type_path = te.type_path;
+              type_params = te.type_params;
+              private_ = te.private_;
+            }
+        in
+        add_entry ~id:(c.id :> any_id) ~doc:te.doc ~kind idx
       in
       List.fold_left extension_constructor idx te.constructors
 
 and extension_constructor idx ext_constr =
-  add
-    { id = (ext_constr.id :> Identifier.Any.t); doc = Some ext_constr.doc }
-    idx
+  let kind =
+    Index_db.ExtensionConstructor
+      { args = ext_constr.args; res = ext_constr.res }
+  in
+  add_entry ~id:(ext_constr.id :> any_id) ~doc:ext_constr.doc ~kind idx
 
 and module_subst idx _mod_subst = idx
 
 and module_type_subst idx _mod_subst = idx
 
-and value idx v = add { id = (v.id :> Identifier.Any.t); doc = Some v.doc } idx
+and value idx v =
+  let kind = Index_db.Value { value = v.value; type_ = v.type_ } in
+  add_entry ~id:(v.id :> any_id) ~doc:v.doc ~kind idx
 
 and module_ idx m =
-  let idx = add { id = (m.id :> Identifier.Any.t); doc = Some m.doc } idx in
+  let idx =
+    let kind = Index_db.Module in
+    add_entry ~id:(m.id :> any_id) ~doc:m.doc ~kind idx
+  in
   let idx =
     match m.type_ with
     | Module.Alias (_, None) -> idx
@@ -138,11 +177,17 @@ and module_ idx m =
   idx
 
 and type_decl idx td =
-  add { id = (td.id :> Identifier.Any.t); doc = Some td.doc } idx
+  let kind = Index_db.TypeDecl td in
+  add_entry ~id:(td.id :> any_id) ~doc:td.doc ~kind idx
 
-and module_type idx { id; doc; canonical = _; expr; locs = _ } =
-  let idx = add { id = (id :> Identifier.Any.t); doc = Some doc } idx in
-  match expr with None -> idx | Some mt_expr -> module_type_expr idx mt_expr
+and module_type idx mt =
+  let idx =
+    let kind = Index_db.ModuleType in
+    add_entry ~id:(mt.id :> any_id) ~doc:mt.doc ~kind idx
+  in
+  match mt.expr with
+  | None -> idx
+  | Some mt_expr -> module_type_expr idx mt_expr
 
 and simple_expansion idx s_e =
   match s_e with
@@ -168,6 +213,6 @@ and functor_parameter idx fp =
   | FunctorParameter.Unit -> idx
   | FunctorParameter.Named n -> module_type_expr idx n.expr
 
-let compilation_unit u = unit Odoc_model.Index_db.empty u
+let compilation_unit u = unit Index_db.empty u
 
-let page p = page Odoc_model.Index_db.empty p
+let page p = page Index_db.empty p

@@ -173,9 +173,6 @@ let run inp ref =
   | Odoc_file.Page_content page ->
       print_json_desc Lang_desc.page_t page;
       Ok ()
-  | Odoc_file.Index_content idx ->
-      print_json_desc Lang_desc.index_t idx;
-      Ok ()
   | Unit_content (u, _) -> (
       match ref with
       | None ->

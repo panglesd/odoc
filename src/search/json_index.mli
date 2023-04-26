@@ -1,1 +1,1 @@
-val render_index : Odoc_model.Index_db.index -> Types.renderer
+val render_index : Index_db.index -> Types.renderer

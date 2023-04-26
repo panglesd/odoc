@@ -32,7 +32,6 @@ let from_odoc ~resolver ~warnings_options input output =
   Odoc_file.load input >>= fun unit ->
   let input_warnings = unit.Odoc_file.warnings in
   match unit.content with
-  | Index_content _ -> Error (`Msg "indexes are not supposed to be link.")
   | Source_tree_content st ->
       Odoc_file.save_source_tree output ~warnings:[] st;
       Ok (`Source_tree st)

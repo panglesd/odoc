@@ -14,29 +14,274 @@ $ odoc compile -c module-main -c src-source root.mld
 
   $ odoc compile-index -I .
 
-  $ odoc generate-index index-index.odoc
-
-  $ ls
-  index-index.odoc
-  index.json
-  main.cmi
-  main.cmo
-  main.cmt
-  main.ml
-  main.odoc
-  main.odocl
-
-  $ cat index.json
-  [{"name":"Main","prefixname":"","kind":"root","url":"Main/index.html","comment":null},
-  {"name":"lorem5","prefixname":"Main","kind":"val","url":"Main/index.html#val-lorem5","comment":"Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat."},
-  {"name":"lorem4","prefixname":"Main","kind":"val","url":"Main/index.html#val-lorem4","comment":"Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat."},
-  {"name":"lorem3","prefixname":"Main","kind":"val","url":"Main/index.html#val-lorem3","comment":"Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat."},
-  {"name":"lorem2","prefixname":"Main","kind":"val","url":"Main/index.html#val-lorem2","comment":"Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat."},
-  {"name":"lorem","prefixname":"Main","kind":"val","url":"Main/index.html#val-lorem","comment":"Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat. Aliquam erat volutpat. Nunc eleifend leo vitae magna. In id erat non orci commodo lobortis. Proin neque massa, cursus ut, gravida ut, lobortis eget, lacus. Sed diam. Praesent fermentum tempor tellus. Nullam tempus. Mauris ac felis vel velit tristique imperdiet. Donec at pede. Etiam vel neque nec dui dignissim bibendum. Vivamus id enim. Phasellus neque orci, porta a, aliquet quis, semper a, massa. Phasellus purus. Pellentesque tristique imperdiet tortor. Nam euismod tellus id erat."},
-  {"name":"v","prefixname":"Main","kind":"val","url":"Main/index.html#val-v","comment":"a reference "},
-  {"name":"t","prefixname":"M.Main","kind":"type","url":"Main/M/index.html#type-t","comment":"dsdsd"},
-  {"name":"M","prefixname":"Main","kind":"module","url":"Main/M/index.html","comment":""},
-  {"name":"t","prefixname":"Main","kind":"type","url":"Main/index.html#type-t","comment":"A comment"},
+  $ cat index.json | jq
+  [
+    {
+      "id": [
+        "Main",
+        "lorem4"
+      ],
+      "url": "Main/index.html#val-lorem4",
+      "doc": {
+        "txt": "lorem 4",
+        "html": "<div><p>lorem 4</p></div>"
+      },
+      "kind": {
+        "kind": "Value",
+        "type": {
+          "txt": "int",
+          "html": "<div><code><span>int</span></code></div>"
+        }
+      }
+    },
+    {
+      "id": [
+        "Main",
+        "lorem3"
+      ],
+      "url": "Main/index.html#val-lorem3",
+      "doc": {
+        "txt": "lorem 3",
+        "html": "<div><p>lorem 3</p></div>"
+      },
+      "kind": {
+        "kind": "Value",
+        "type": {
+          "txt": "int",
+          "html": "<div><code><span>int</span></code></div>"
+        }
+      }
+    },
+    {
+      "id": [
+        "Main",
+        "lorem2"
+      ],
+      "url": "Main/index.html#val-lorem2",
+      "doc": {
+        "txt": "lorem 2",
+        "html": "<div><p>lorem 2</p></div>"
+      },
+      "kind": {
+        "kind": "Value",
+        "type": {
+          "txt": "int",
+          "html": "<div><code><span>int</span></code></div>"
+        }
+      }
+    },
+    {
+      "id": [
+        "Main",
+        "lorem"
+      ],
+      "url": "Main/index.html#val-lorem",
+      "doc": {
+        "txt": "lorem 1",
+        "html": "<div><p>lorem 1</p></div>"
+      },
+      "kind": {
+        "kind": "Value",
+        "type": {
+          "txt": "int",
+          "html": "<div><code><span>int</span></code></div>"
+        }
+      }
+    },
+    {
+      "id": [
+        "Main",
+        "v"
+      ],
+      "url": "Main/index.html#val-v",
+      "doc": {
+        "txt": "a reference , and some formatted content with code and\ncode blocks",
+        "html": "<div><p>a reference <span><code>t</code></span>, and some <em>formatted</em> <b>content</b> with <code>code</code> and</p><pre class=\"language-ocaml\"><code>code blocks</code></pre></div>"
+      },
+      "kind": {
+        "kind": "Value",
+        "type": {
+          "txt": "int",
+          "html": "<div><code><span>int</span></code></div>"
+        }
+      }
+    },
+    {
+      "id": [
+        "Main",
+        "M",
+        "t"
+      ],
+      "url": "Main/M/index.html#type-t",
+      "doc": {
+        "txt": "dsdsd",
+        "html": "<div><p>dsdsd</p></div>"
+      },
+      "kind": {
+        "kind": "TypeDecl",
+        "type": {
+          "txt": "type t",
+          "html": "<div><div class=\"odoc-spec\"><div class=\"spec type\"><code><span><span class=\"keyword\">type</span> t</span></code></div><div class=\"spec-doc\"><p>dsdsd</p></div></div></div>"
+        }
+      }
+    },
+    {
+      "id": [
+        "Main",
+        "M"
+      ],
+      "url": "Main/M/index.html",
+      "doc": {
+        "txt": "",
+        "html": "<div></div>"
+      },
+      "kind": {
+        "kind": "Module"
+      }
+    },
+    {
+      "id": [
+        "Main",
+        "search_label_2"
+      ],
+      "url": "Main/index.html#search_label_2",
+      "doc": {
+        "txt": "and this is a paragraph",
+        "html": "<div><p>and this is a paragraph</p></div>"
+      },
+      "kind": {
+        "kind": "Doc"
+      }
+    },
+    {
+      "id": [
+        "Main",
+        "this-is-a-title"
+      ],
+      "url": "Main/index.html#this-is-a-title",
+      "doc": {
+        "txt": "this is a title",
+        "html": "<div><p>this is a title</p></div>"
+      },
+      "kind": {
+        "kind": "Doc"
+      }
+    },
+    {
+      "id": [
+        "Main",
+        "t"
+      ],
+      "url": "Main/index.html#type-t",
+      "doc": {
+        "txt": "A comment",
+        "html": "<div><p>A comment</p></div>"
+      },
+      "kind": {
+        "kind": "TypeDecl",
+        "type": {
+          "txt": "type t = int",
+          "html": "<div><div class=\"odoc-spec\"><div class=\"spec type\"><code><span><span class=\"keyword\">type</span> t</span><span> = int</span></code></div><div class=\"spec-doc\"><p>A comment</p></div></div></div>"
+        }
+      }
+    },
+    {
+      "id": [
+        "Main"
+      ],
+      "url": "Main/index.html",
+      "doc": {
+        "txt": "",
+        "html": "<div></div>"
+      },
+      "kind": {
+        "kind": "Module"
+      }
+    },
+    {
+      "id": [
+        "page",
+        "search_label_5"
+      ],
+      "url": "page.html#search_label_5",
+      "doc": {
+        "txt": "bliblib",
+        "html": "<div><p>bliblib</p></div>"
+      },
+      "kind": {
+        "kind": "Doc"
+      }
+    },
+    {
+      "id": [
+        "page",
+        "search_label_4"
+      ],
+      "url": "page.html#search_label_4",
+      "doc": {
+        "txt": "a list of things",
+        "html": "<div><p>a list <em>of</em> things</p></div>"
+      },
+      "kind": {
+        "kind": "Doc"
+      }
+    },
+    {
+      "id": [
+        "page",
+        "search_label_3"
+      ],
+      "url": "page.html#search_label_3",
+      "doc": {
+        "txt": "and code",
+        "html": "<div><pre class=\"language-ocaml\"><code>and code</code></pre></div>"
+      },
+      "kind": {
+        "kind": "Doc"
+      }
+    },
+    {
+      "id": [
+        "page",
+        "search_label_2"
+      ],
+      "url": "page.html#search_label_2",
+      "doc": {
+        "txt": "some verbatim",
+        "html": "<div><pre>some verbatim</pre></div>"
+      },
+      "kind": {
+        "kind": "Doc"
+      }
+    },
+    {
+      "id": [
+        "page",
+        "search_label_1"
+      ],
+      "url": "page.html#search_label_1",
+      "doc": {
+        "txt": "A paragraph",
+        "html": "<div><p>A paragraph</p></div>"
+      },
+      "kind": {
+        "kind": "Doc"
+      }
+    },
+    {
+      "id": [
+        "page",
+        "a-title"
+      ],
+      "url": "page.html#a-title",
+      "doc": {
+        "txt": "A title",
+        "html": "<div><p>A title</p></div>"
+      },
+      "kind": {
+        "kind": "Doc"
+      }
+    }
   ]
 
 The index.js file need to provide a odoc_search command, from a 
@@ -81,12 +326,14 @@ The index.js file need to provide a odoc_search command, from a
   html/fonts/KaTeX_Size3-Regular.woff2
   html/fonts/KaTeX_Size4-Regular.woff2
   html/fonts/KaTeX_Typewriter-Regular.woff2
-  html/fuse_search.js
   html/highlight.pack.js
+  html/index.js
   html/katex.min.css
   html/katex.min.js
   html/odoc.css
+  html/odoc_search.js
+  html/page.html
 
   $ firefox html/Main/index.html
-  Gtk-Message: 17:40:56.664: Failed to load module "xapp-gtk3-module"
-  Gtk-Message: 17:40:56.665: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+  Gtk-Message: 19:58:39.228: Failed to load module "xapp-gtk3-module"
+  Gtk-Message: 19:58:39.229: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.

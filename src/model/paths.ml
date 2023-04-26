@@ -112,8 +112,8 @@ module Identifier = struct
     | `Label (parent, name) ->
         LabelName.to_string name :: full_name_aux (parent :> t)
 
-  let fullname : [< t_pv ] id -> string =
-   fun n -> String.concat "." @@ full_name_aux (n :> t)
+  let fullname : [< t_pv ] id -> string list =
+   fun n -> List.rev @@ full_name_aux (n :> t)
 
   let prefixname : [< t_pv ] id -> string =
    fun n ->

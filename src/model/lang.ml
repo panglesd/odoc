@@ -520,15 +520,15 @@ module rec Page : sig
 end =
   Page
 
-module rec Index : sig
-  type t = {
-    name : Identifier.Page.t;
-    root : Root.t;
-    index : Index_db.index;
-    digest : Digest.t;
-  }
-end =
-  Index
+(* module rec Index : sig *)
+(*   type t = { *)
+(*     name : Identifier.Page.t; *)
+(*     root : Root.t; *)
+(*     index : Index_db.index; *)
+(*     digest : Digest.t; *)
+(*   } *)
+(* end = *)
+(*   Index *)
 
 module rec SourceTree : sig
   type t = {

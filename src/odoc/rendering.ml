@@ -15,7 +15,6 @@ let documents_of_unit ~warnings_options ~syntax ~renderer ~extra unit =
 let documents_of_odocl ~warnings_options ~renderer ~extra ~syntax input =
   Odoc_file.load input >>= fun unit ->
   match unit.content with
-  | Odoc_file.Index_content _idx -> Ok [] (* TODO: render a glossary *)
   | Odoc_file.Page_content odoctree ->
       Ok [ Renderer.document_of_page ~syntax odoctree ]
   | Source_tree_content srctree ->
