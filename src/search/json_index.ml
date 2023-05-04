@@ -37,8 +37,8 @@ type json_entry = {
 (*   | None -> `Null *)
 
 (* let json_of_type te = *)
-(*   let txt = Utils.text_of_type te in *)
-(*   let html = Tyxml.Html.div ~a:[] (Utils.html_of_type te) in *)
+(*   let txt = Render.text_of_type te in *)
+(*   let html = Tyxml.Html.div ~a:[] (Render.html_of_type te) in *)
 (*   let html = Format.asprintf "%a" (Tyxml.Html.pp_elt ()) html in *)
 (*   `Object [ ("html", `String html); ("txt", `String txt) ] *)
 
@@ -64,32 +64,32 @@ type json_entry = {
 (* let json_of_type_path _ = `String "" *)
 
 let json_entry_of_entry { Index_db.id; doc; kind } =
-  let url = Utils.url id in
+  let url = Render.url id in
   let id = Odoc_model.Paths.Identifier.fullname id in
   let kind =
     match kind with
     | TypeDecl type_decl ->
-        let html = Utils.html_of_typedecl type_decl
-        and txt = Utils.text_of_typedecl type_decl in
+        let html = Render.html_of_typedecl type_decl
+        and txt = Render.text_of_typedecl type_decl in
         TypeDecl { html; txt }
         (* Canonical and equation are not represented in JSON format *)
         (* ("type", [ ("representation", json_of_representation representation) ]) *)
     | Module -> Module
     | Value { value = _; type_ } ->
         (* Value is ignored for now *)
-        let html = Utils.html_of_type type_
-        and txt = Utils.text_of_type type_ in
+        let html = Render.html_of_type type_
+        and txt = Render.text_of_type type_ in
         Value { type_ = { html; txt } }
     | Doc _ -> Doc
     | Exception { args = _; res = None } ->
         Exception { (* args;  *) res = None }
     | Exception { args = _; res = Some res } ->
-        let html = Utils.html_of_type res and txt = Utils.text_of_type res in
+        let html = Render.html_of_type res and txt = Render.text_of_type res in
         Exception { (* args;  *) res = Some { html; txt } }
     | Class_type _ -> Class_type
     | Method { private_; virtual_; type_ } ->
-        let html = Utils.html_of_type type_
-        and txt = Utils.text_of_type type_ in
+        let html = Render.html_of_type type_
+        and txt = Render.text_of_type type_ in
         Method { private_; virtual_; type_ = { html; txt } }
     | Class _ -> Class
     | TypeExtension _ -> TypeExtension
@@ -103,7 +103,7 @@ let json_entry_of_entry { Index_db.id; doc; kind } =
     | InstanceVariable _ -> InstanceVariable
   in
   let doc =
-    let html = Utils.html_of_doc doc and txt = Utils.text_of_doc doc in
+    let html = Render.html_of_doc doc and txt = Render.text_of_doc doc in
     { html; txt }
   in
   { id; url; doc; kind }
