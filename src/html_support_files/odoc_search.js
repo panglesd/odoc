@@ -1,3 +1,7 @@
+function hasType(kind) {
+  return (kind === "val" || kind === "constructor" || kind === "field");
+}
+
 document.querySelector(".search-bar").addEventListener("input", (event) => {
   let results = odoc_search(event.target.value);
   let search_result = document.querySelector(".search-result");
@@ -19,11 +23,17 @@ document.querySelector(".search-bar").addEventListener("input", (event) => {
     let name = document.createElement("span");
     name.classList.add("entry-name");
     name.innerText = entry.name;
-
+  
     title.appendChild(kind);
     title.appendChild(prefixname);
     title.appendChild(name);
-
+    let has_type = hasType(entry.kind);
+    if (has_type) {
+      let type = document.createElement("code");
+      type.classList.add("entry-type");
+      type.innerHTML = ": " + entry.type
+      title.appendChild(type);
+    }
     let comment = document.createElement("div");
     comment.innerText = entry.comment;
     comment.classList.add("entry-comment");

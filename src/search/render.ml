@@ -35,7 +35,7 @@ module String_of = struct
     let one o =
       match o.Odoc_document.Types.Inline.desc with
       | Text t -> t
-      | Entity e -> e
+      | Entity e -> "&" ^ e
       | Linebreak -> "\n"
       | Styled (_, t) -> inline t
       | Link (_, t) -> inline t
