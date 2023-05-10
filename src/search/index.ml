@@ -178,7 +178,51 @@ and module_ idx m =
 
 and type_decl idx td =
   let kind = Index_db.TypeDecl td in
+  let idx =
+    let open Odoc_model.Lang.TypeDecl in
+    match td.representation with
+    | None -> idx
+    | Some (Representation.Variant li) ->
+        List.fold_left (constructor td.id) idx li
+    | Some (Representation.Record fields) ->
+        List.fold_left (field td.id) idx fields
+    | Some Representation.Extensible -> idx
+  in
   add_entry ~id:(td.id :> any_id) ~doc:td.doc ~kind idx
+
+and constructor id_parent idx constructor =
+  let idx =
+    match constructor.args with
+    | TypeDecl.Constructor.Tuple _ -> idx
+    | TypeDecl.Constructor.Record fields ->
+        (* TODO : fix parent type *)
+        List.fold_left (field id_parent) idx fields
+  in
+  let args = constructor.args in
+  let res =
+    match constructor.res with
+    | Some res -> res
+    | None ->
+        TypeExpr.Constr
+          ( `Identifier
+              ((id_parent :> Odoc_model.Paths.Identifier.Path.Type.t), false),
+            [] )
+  in
+  let kind = Index_db.Constructor { args; res } in
+  add_entry ~id:(constructor.id :> any_id) ~doc:constructor.doc ~kind idx
+
+and field id_parent idx field =
+  let parent_type =
+    TypeExpr.Constr
+      ( `Identifier
+          ((id_parent :> Odoc_model.Paths.Identifier.Path.Type.t), false),
+        [] )
+  in
+  let kind =
+    Index_db.Field
+      { mutable_ = field.mutable_; type_ = field.type_; parent_type }
+  in
+  add_entry ~id:(field.id :> any_id) ~doc:field.doc ~kind idx
 
 and module_type idx mt =
   let idx =

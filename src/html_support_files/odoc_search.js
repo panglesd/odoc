@@ -5,7 +5,7 @@ document.querySelector(".search-bar").addEventListener("input", (event) => {
   let f = (entry) => {
     let container = document.createElement("a");
     container.href = base_url + entry.url;
-    container.classList.add("search-entry", entry.kind);
+    container.classList.add("search-entry", entry.kind.replace(' ', '-'));
     let title = document.createElement("code");
     title.classList.add("entry-title");
     let kind = document.createElement("span");

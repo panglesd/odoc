@@ -37,10 +37,14 @@ type extension_constructor_entry = {
 
 type constructor_entry = {
   args : TypeDecl.Constructor.argument;
-  res : TypeExpr.t option;
+  res : TypeExpr.t;
 }
 
-type field_entry = { mutable_ : bool; type_ : TypeExpr.t }
+type field_entry = {
+  mutable_ : bool;
+  type_ : TypeExpr.t;
+  parent_type : TypeExpr.t;
+}
 
 type module_substitution_entry = { manifest : Paths.Path.Module.t }
 

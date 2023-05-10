@@ -1,7 +1,7 @@
 open Odoc_search
 open Or_error
 
-let compile ~resolver:_ ~parent:_ ~output ~warnings_options:_ dirs =
+let compile ~binary ~resolver:_ ~parent:_ ~output ~warnings_options:_ dirs =
   dirs
   |> List.fold_left
        (fun acc dir ->
@@ -25,9 +25,10 @@ let compile ~resolver:_ ~parent:_ ~output ~warnings_options:_ dirs =
       units
   in
   let index = Index_db.aggregate_indexes indexes in
-  let output =
+  let output_channel =
     Fs.Directory.mkdir_p (Fs.File.dirname output);
-    let oc = open_out_bin (Fs.File.to_string output) in
-    Format.formatter_of_out_channel oc
+    open_out_bin (Fs.File.to_string output)
   in
-  Ok (Odoc_search.Json_index.render_index index output)
+  let output = Format.formatter_of_out_channel output_channel in
+  if binary then Ok (Odoc_search.Binary_index.render_index index output)
+  else Ok (Odoc_search.Json_index.render_index index output)
