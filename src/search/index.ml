@@ -183,40 +183,49 @@ and type_decl idx td =
     match td.representation with
     | None -> idx
     | Some (Representation.Variant li) ->
-        List.fold_left (constructor td.id) idx li
+        List.fold_left (constructor td.id td.equation.params) idx li
     | Some (Representation.Record fields) ->
-        List.fold_left (field td.id) idx fields
+        List.fold_left (field td.id td.equation.params) idx fields
     | Some Representation.Extensible -> idx
   in
   add_entry ~id:(td.id :> any_id) ~doc:td.doc ~kind idx
 
-and constructor id_parent idx constructor =
-  let idx =
-    match constructor.args with
-    | TypeDecl.Constructor.Tuple _ -> idx
-    | TypeDecl.Constructor.Record fields ->
-        (* TODO : fix parent type *)
-        List.fold_left (field id_parent) idx fields
-  in
+and constructor id_parent params idx constructor =
   let args = constructor.args in
   let res =
     match constructor.res with
     | Some res -> res
     | None ->
+        let params =
+          List.mapi
+            (fun i param ->
+              match param.TypeDecl.desc with
+              | Var name -> TypeExpr.Var name
+              | Any -> TypeExpr.Var (Printf.sprintf "tv_%i" i))
+            params
+        in
         TypeExpr.Constr
           ( `Identifier
               ((id_parent :> Odoc_model.Paths.Identifier.Path.Type.t), false),
-            [] )
+            params )
   in
   let kind = Index_db.Constructor { args; res } in
   add_entry ~id:(constructor.id :> any_id) ~doc:constructor.doc ~kind idx
 
-and field id_parent idx field =
+and field id_parent params idx field =
+  let params =
+    List.mapi
+      (fun i param ->
+        match param.TypeDecl.desc with
+        | Var name -> TypeExpr.Var name
+        | Any -> TypeExpr.Var (Printf.sprintf "tv_%i" i))
+      params
+  in
   let parent_type =
     TypeExpr.Constr
       ( `Identifier
           ((id_parent :> Odoc_model.Paths.Identifier.Path.Type.t), false),
-        [] )
+        params )
   in
   let kind =
     Index_db.Field
