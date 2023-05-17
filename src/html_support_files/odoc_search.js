@@ -19,6 +19,8 @@ document.querySelector(".search-bar").addEventListener("input", (ev) => {
 
 function hasType(kind) {
   return kind === "val" || kind === "constructor" || kind === "field";
+}
+
 function typeSeparator(kind) {
   switch (kind) {
     case "val":
