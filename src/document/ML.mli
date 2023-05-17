@@ -31,3 +31,10 @@ val source_page :
   Types.Document.t
 
 val type_expr : ?needs_parentheses:bool -> Lang.TypeExpr.t -> Codefmt.t
+
+val type_decl :
+  ?is_substitution:bool ->
+  Lang.Signature.recursive * Lang.TypeDecl.t ->
+  Types.Item.t
+
+val record : Lang.TypeDecl.Field.t list -> Types.DocumentedSrc.one list
