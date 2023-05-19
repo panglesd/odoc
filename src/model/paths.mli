@@ -413,8 +413,6 @@ module Identifier : sig
   val hash : t -> int
 
   val name : [< t_pv ] id -> string
-  val fullname : [< t_pv ] id -> string list
-  val prefixname : [< t_pv ] id -> string
   val is_internal : [< t_pv ] id -> bool
 
   val root : [< t_pv ] id -> RootModule.t_pv id option

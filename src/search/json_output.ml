@@ -199,5 +199,14 @@ let unit ppf u =
     let entries = Entry.entries_of_item i in
     output_json ppf first entries
   in
-  ignore @@ Odoc_model.Fold.unit ~f true u;
+  let _first = Odoc_model.Fold.unit ~f true u in
+  Format.fprintf ppf "]"
+
+let page ppf (page : Odoc_model.Lang.Page.t) =
+  Format.fprintf ppf "[";
+  let f first i =
+    let entries = Entry.entries_of_item i in
+    output_json ppf first entries
+  in
+  let _first = Odoc_model.Fold.page ~f true page in
   Format.fprintf ppf "]"

@@ -9,4 +9,3 @@ module Error = Error
 module Location_ = Location_
 module Compat = Compat
 module Semantics = Semantics
-(* module Index_db = Index_db *)

@@ -1870,8 +1870,6 @@ module Make (Syntax : SYNTAX) = struct
 
   let type_expr = type_expr
 
-  let type_decl = type_decl
-
   let source_page id infos source_code =
     Document.Source_page (Source_page.source id infos source_code)
 end

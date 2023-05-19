@@ -1,7 +1,6 @@
 open Or_error
 
 val compile :
-  binary:bool ->
   resolver:'a ->
   parent:'b ->
   output:Fs.file ->
