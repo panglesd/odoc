@@ -495,35 +495,3 @@ let render ~config = function
 let doc ~config ~xref_base_uri b =
   let resolve = Link.Base xref_base_uri in
   block ~config ~resolve b
-
-let source s =
-  let search_result = true
-  and theme_uri = None
-  and support_uri = None
-  and semantic_uris = false
-  and indent = false
-  and flat = false
-  and open_details = false
-  and as_json = false
-  and with_search = false in
-  let config =
-    Config.v ~search_result ?theme_uri ?support_uri ~semantic_uris ~indent ~flat
-      ~open_details ~as_json ~with_search ()
-  in
-  Html.div ~a:[] (source (inline ~config ~resolve:(Base "")) s)
-
-let items s =
-  let search_result = true
-  and theme_uri = None
-  and support_uri = None
-  and semantic_uris = false
-  and indent = false
-  and flat = false
-  and open_details = false
-  and as_json = false
-  and with_search = false in
-  let config =
-    Config.v ~search_result ?theme_uri ?support_uri ~semantic_uris ~indent ~flat
-      ~open_details ~as_json ~with_search ()
-  in
-  items ~config ~resolve:(Base "") s

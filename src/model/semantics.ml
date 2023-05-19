@@ -216,65 +216,6 @@ let rec inline_element :
 
 and inline_elements status elements = List.map (inline_element status) elements
 
-(* When the user does not give a section heading a label (anchor), we generate
-   one from the text in the heading. This is the common case. This involves
-   simply scanning the AST for words, lowercasing them, and joining them with
-   hyphens.
-
-   This must be done in the parser (i.e. early, not at HTML/other output
-   generation time), so that the cross-referencer can see these anchors. *)
-let generate_heading_label : Comment.inline_element with_location list -> string
-    =
- fun content ->
-  (* Code spans can contain spaces, so we need to replace them with hyphens. We
-     also lowercase all the letters, for consistency with the rest of this
-     procedure. *)
-  let replace_spaces_with_hyphens_and_lowercase s =
-    let result = Bytes.create (String.length s) in
-    s
-    |> String.iteri (fun index c ->
-           let c =
-             match c with
-             | ' ' | '\t' | '\r' | '\n' -> '-'
-             | _ -> Astring.Char.Ascii.lowercase c
-           in
-           Bytes.set result index c);
-    Bytes.unsafe_to_string result
-  in
-
-  let strip_locs li = List.map (fun ele -> ele.Location.value) li in
-  (* Perhaps this should be done using a [Buffer.t]; we can switch to that as
-     needed. *)
-  let rec scan_inline_elements anchor = function
-    | [] -> anchor
-    | element :: more ->
-        let anchor =
-          match (element : Comment.inline_element) with
-          | `Space -> anchor ^ "-"
-          | `Word w -> anchor ^ Astring.String.Ascii.lowercase w
-          | `Code_span c | `Math_span c ->
-              anchor ^ replace_spaces_with_hyphens_and_lowercase c
-          | `Raw_markup _ ->
-              (* TODO Perhaps having raw markup in a section heading should be an
-                 error? *)
-              anchor
-          | `Styled (_, content) ->
-              content |> strip_locs |> scan_inline_elements anchor
-          | `Reference (_, content) ->
-              content |> strip_locs
-              |> List.map (fun (ele : Comment.non_link_inline_element) ->
-                     (ele :> Comment.inline_element))
-              |> scan_inline_elements anchor
-          | `Link (_, content) ->
-              content |> strip_locs
-              |> List.map (fun (ele : Comment.non_link_inline_element) ->
-                     (ele :> Comment.inline_element))
-              |> scan_inline_elements anchor
-        in
-        scan_inline_elements anchor more
-  in
-  content |> List.map (fun ele -> ele.Location.value) |> scan_inline_elements ""
-
 let generate_label =
   let current_label = ref 0 in
   fun status ->
@@ -362,6 +303,65 @@ let tag :
       ok (`See (kind, target, nestable_block_elements status content))
   | `Before (version, content) ->
       ok (`Before (version, nestable_block_elements status content))
+
+(* When the user does not give a section heading a label (anchor), we generate
+   one from the text in the heading. This is the common case. This involves
+   simply scanning the AST for words, lowercasing them, and joining them with
+   hyphens.
+
+   This must be done in the parser (i.e. early, not at HTML/other output
+   generation time), so that the cross-referencer can see these anchors. *)
+let generate_heading_label : Comment.inline_element with_location list -> string
+    =
+ fun content ->
+  (* Code spans can contain spaces, so we need to replace them with hyphens. We
+     also lowercase all the letters, for consistency with the rest of this
+     procedure. *)
+  let replace_spaces_with_hyphens_and_lowercase s =
+    let result = Bytes.create (String.length s) in
+    s
+    |> String.iteri (fun index c ->
+           let c =
+             match c with
+             | ' ' | '\t' | '\r' | '\n' -> '-'
+             | _ -> Astring.Char.Ascii.lowercase c
+           in
+           Bytes.set result index c);
+    Bytes.unsafe_to_string result
+  in
+
+  let strip_locs li = List.map (fun ele -> ele.Location.value) li in
+  (* Perhaps this should be done using a [Buffer.t]; we can switch to that as
+     needed. *)
+  let rec scan_inline_elements anchor = function
+    | [] -> anchor
+    | element :: more ->
+        let anchor =
+          match (element : Comment.inline_element) with
+          | `Space -> anchor ^ "-"
+          | `Word w -> anchor ^ Astring.String.Ascii.lowercase w
+          | `Code_span c | `Math_span c ->
+              anchor ^ replace_spaces_with_hyphens_and_lowercase c
+          | `Raw_markup _ ->
+              (* TODO Perhaps having raw markup in a section heading should be an
+                 error? *)
+              anchor
+          | `Styled (_, content) ->
+              content |> strip_locs |> scan_inline_elements anchor
+          | `Reference (_, content) ->
+              content |> strip_locs
+              |> List.map (fun (ele : Comment.non_link_inline_element) ->
+                     (ele :> Comment.inline_element))
+              |> scan_inline_elements anchor
+          | `Link (_, content) ->
+              content |> strip_locs
+              |> List.map (fun (ele : Comment.non_link_inline_element) ->
+                     (ele :> Comment.inline_element))
+              |> scan_inline_elements anchor
+        in
+        scan_inline_elements anchor more
+  in
+  content |> List.map (fun ele -> ele.Location.value) |> scan_inline_elements ""
 
 let section_heading :
     status ->

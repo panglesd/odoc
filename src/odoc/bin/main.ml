@@ -374,9 +374,9 @@ module Indexing = struct
     | Some file -> Fs.File.of_string file
     | None -> Fs.File.of_string "index.json"
 
-  let index binary directories dst warnings_options =
+  let index directories dst warnings_options =
     let output = output_file ~dst in
-    Indexing.compile ~binary ~output ~warnings_options ~resolver:() ~parent:()
+    Indexing.compile ~output ~warnings_options ~resolver:() ~parent:()
       directories
 
   let cmd =
@@ -388,15 +388,9 @@ module Indexing = struct
       Arg.(
         value & opt (some string) None & info ~docs ~docv:"PATH" ~doc [ "o" ])
     in
-    let binary =
-      let doc =
-        "Set the output format to binary (using marshal). Unset by default."
-      in
-      Arg.(value & flag & info ~docs ~doc [ "binary" ])
-    in
     Term.(
       const handle_error
-      $ (const index $ binary $ odoc_file_directories $ dst $ warnings_options))
+      $ (const index $ odoc_file_directories $ dst $ warnings_options))
 
   let info ~docs =
     let doc =
