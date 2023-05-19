@@ -27,7 +27,7 @@ let compile ~binary ~resolver:_ ~parent:_ ~output ~warnings_options:_ dirs =
   ignore binary;
   let output = Format.formatter_of_out_channel output_channel in
   let () =
-    List.iter (Json_value.unit output)
+    List.iter (Json_output.unit output)
       (* (function `Page p -> Index.page p | `Unit u -> Index.compilation_unit u) *)
       units
   in
