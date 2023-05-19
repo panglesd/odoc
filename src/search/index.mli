@@ -1,6 +1,8 @@
-open Odoc_model.Lang
+(* open Odoc_model.Lang *)
 
-open Index_db
+val entries_of_item : Odoc_model.Fold.item -> Index_db.t list
 
-val compilation_unit : Compilation_unit.t -> index
-val page : Page.t -> index
+(* open Index_db *)
+
+(* val compilation_unit : Compilation_unit.t -> index *)
+(* val page : Page.t -> index *)

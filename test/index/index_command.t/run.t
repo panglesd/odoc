@@ -18,270 +18,217 @@ $ odoc compile -c module-main -c src-source root.mld
   [
     {
       "id": [
-        "Main",
-        "lorem4"
-      ],
-      "url": "Main/index.html#val-lorem4",
-      "doc": {
-        "txt": "lorem 4",
-        "html": "<div><p>lorem 4</p></div>"
-      },
-      "kind": {
-        "kind": "Value",
-        "type": {
-          "txt": "int",
-          "html": "<div><code><span>int</span></code></div>"
+        {
+          "kind": "Root",
+          "name": "Main"
         }
-      }
-    },
-    {
-      "id": [
-        "Main",
-        "lorem3"
-      ],
-      "url": "Main/index.html#val-lorem3",
-      "doc": {
-        "txt": "lorem 3",
-        "html": "<div><p>lorem 3</p></div>"
-      },
-      "kind": {
-        "kind": "Value",
-        "type": {
-          "txt": "int",
-          "html": "<div><code><span>int</span></code></div>"
-        }
-      }
-    },
-    {
-      "id": [
-        "Main",
-        "lorem2"
-      ],
-      "url": "Main/index.html#val-lorem2",
-      "doc": {
-        "txt": "lorem 2",
-        "html": "<div><p>lorem 2</p></div>"
-      },
-      "kind": {
-        "kind": "Value",
-        "type": {
-          "txt": "int",
-          "html": "<div><code><span>int</span></code></div>"
-        }
-      }
-    },
-    {
-      "id": [
-        "Main",
-        "lorem"
-      ],
-      "url": "Main/index.html#val-lorem",
-      "doc": {
-        "txt": "lorem 1",
-        "html": "<div><p>lorem 1</p></div>"
-      },
-      "kind": {
-        "kind": "Value",
-        "type": {
-          "txt": "int",
-          "html": "<div><code><span>int</span></code></div>"
-        }
-      }
-    },
-    {
-      "id": [
-        "Main",
-        "v"
-      ],
-      "url": "Main/index.html#val-v",
-      "doc": {
-        "txt": "a reference , and some formatted content with code and\ncode blocks",
-        "html": "<div><p>a reference <span><code>t</code></span>, and some <em>formatted</em> <b>content</b> with <code>code</code> and</p><pre class=\"language-ocaml\"><code>code blocks</code></pre></div>"
-      },
-      "kind": {
-        "kind": "Value",
-        "type": {
-          "txt": "int",
-          "html": "<div><code><span>int</span></code></div>"
-        }
-      }
-    },
-    {
-      "id": [
-        "Main",
-        "M",
-        "t"
-      ],
-      "url": "Main/M/index.html#type-t",
-      "doc": {
-        "txt": "dsdsd",
-        "html": "<div><p>dsdsd</p></div>"
-      },
-      "kind": {
-        "kind": "TypeDecl",
-        "type": {
-          "txt": "type t",
-          "html": "<div><div class=\"odoc-spec\"><div class=\"spec type\"><code><span><span class=\"keyword\">type</span> t</span></code></div><div class=\"spec-doc\"><p>dsdsd</p></div></div></div>"
-        }
-      }
-    },
-    {
-      "id": [
-        "Main",
-        "M"
-      ],
-      "url": "Main/M/index.html",
-      "doc": {
-        "txt": "",
-        "html": "<div></div>"
-      },
-      "kind": {
-        "kind": "Module"
-      }
-    },
-    {
-      "id": [
-        "Main",
-        "search_label_2"
-      ],
-      "url": "Main/index.html#search_label_2",
-      "doc": {
-        "txt": "and this is a paragraph",
-        "html": "<div><p>and this is a paragraph</p></div>"
-      },
-      "kind": {
-        "kind": "Doc"
-      }
-    },
-    {
-      "id": [
-        "Main",
-        "this-is-a-title"
-      ],
-      "url": "Main/index.html#this-is-a-title",
-      "doc": {
-        "txt": "this is a title",
-        "html": "<div><p>this is a title</p></div>"
-      },
-      "kind": {
-        "kind": "Doc"
-      }
-    },
-    {
-      "id": [
-        "Main",
-        "t"
-      ],
-      "url": "Main/index.html#type-t",
-      "doc": {
-        "txt": "A comment",
-        "html": "<div><p>A comment</p></div>"
-      },
-      "kind": {
-        "kind": "TypeDecl",
-        "type": {
-          "txt": "type t = int",
-          "html": "<div><div class=\"odoc-spec\"><div class=\"spec type\"><code><span><span class=\"keyword\">type</span> t</span><span> = int</span></code></div><div class=\"spec-doc\"><p>A comment</p></div></div></div>"
-        }
-      }
-    },
-    {
-      "id": [
-        "Main"
       ],
       "url": "Main/index.html",
-      "doc": {
-        "txt": "",
-        "html": "<div></div>"
-      },
-      "kind": {
+      "doc": "",
+      "extra": {
         "kind": "Module"
       }
     },
     {
       "id": [
-        "page",
-        "search_label_5"
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Type",
+          "name": "t"
+        }
       ],
-      "url": "page.html#search_label_5",
-      "doc": {
-        "txt": "bliblib",
-        "html": "<div><p>bliblib</p></div>"
-      },
-      "kind": {
-        "kind": "Doc"
+      "url": "Main/index.html#type-t",
+      "doc": "A comment",
+      "extra": {
+        "kind": "TypeDecl",
+        "private": false,
+        "manifest": "int",
+        "constraints": []
       }
     },
     {
       "id": [
-        "page",
-        "search_label_4"
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Label",
+          "name": "this-is-a-title"
+        }
       ],
-      "url": "page.html#search_label_4",
-      "doc": {
-        "txt": "a list of things",
-        "html": "<div><p>a list <em>of</em> things</p></div>"
-      },
-      "kind": {
-        "kind": "Doc"
+      "url": "Main/index.html#this-is-a-title",
+      "doc": "this is a title",
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Heading"
       }
     },
     {
       "id": [
-        "page",
-        "search_label_3"
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_2"
+        }
       ],
-      "url": "page.html#search_label_3",
-      "doc": {
-        "txt": "and code",
-        "html": "<div><pre class=\"language-ocaml\"><code>and code</code></pre></div>"
-      },
-      "kind": {
-        "kind": "Doc"
+      "url": "Main/index.html#search_label_2",
+      "doc": "and this is a paragraph",
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Paragraph"
       }
     },
     {
       "id": [
-        "page",
-        "search_label_2"
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "M"
+        }
       ],
-      "url": "page.html#search_label_2",
-      "doc": {
-        "txt": "some verbatim",
-        "html": "<div><pre>some verbatim</pre></div>"
-      },
-      "kind": {
-        "kind": "Doc"
+      "url": "Main/M/index.html",
+      "doc": "",
+      "extra": {
+        "kind": "Module"
       }
     },
     {
       "id": [
-        "page",
-        "search_label_1"
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "M"
+        },
+        {
+          "kind": "Type",
+          "name": "t"
+        }
       ],
-      "url": "page.html#search_label_1",
-      "doc": {
-        "txt": "A paragraph",
-        "html": "<div><p>A paragraph</p></div>"
-      },
-      "kind": {
-        "kind": "Doc"
+      "url": "Main/M/index.html#type-t",
+      "doc": "dsdsd",
+      "extra": {
+        "kind": "TypeDecl",
+        "private": false,
+        "manifest": null,
+        "constraints": []
       }
     },
     {
       "id": [
-        "page",
-        "a-title"
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Value",
+          "name": "v"
+        }
       ],
-      "url": "page.html#a-title",
-      "doc": {
-        "txt": "A title",
-        "html": "<div><p>A title</p></div>"
-      },
-      "kind": {
-        "kind": "Doc"
+      "url": "Main/index.html#val-v",
+      "doc": "a reference , and some formatted content with code and\ncode blocks",
+      "extra": {
+        "kind": "Value",
+        "type": "int"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Value",
+          "name": "lorem"
+        }
+      ],
+      "url": "Main/index.html#val-lorem",
+      "doc": "lorem 1",
+      "extra": {
+        "kind": "Value",
+        "type": "int"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Value",
+          "name": "lorem2"
+        }
+      ],
+      "url": "Main/index.html#val-lorem2",
+      "doc": "lorem 2",
+      "extra": {
+        "kind": "Value",
+        "type": "int"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Value",
+          "name": "lorem3"
+        }
+      ],
+      "url": "Main/index.html#val-lorem3",
+      "doc": "lorem 3",
+      "extra": {
+        "kind": "Value",
+        "type": "int"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Value",
+          "name": "lorem4"
+        }
+      ],
+      "url": "Main/index.html#val-lorem4",
+      "doc": "lorem 4",
+      "extra": {
+        "kind": "Value",
+        "type": "int"
       }
     }
+  ]
+  $ cat index.json
+  [{"id":[{"kind":"Root","name":"Main"}],"url":"Main/index.html","doc":"","extra":{"kind":"Module"}}
+  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Type","name":"t"}],"url":"Main/index.html#type-t","doc":"A comment","extra":{"kind":"TypeDecl","private":false,"manifest":"int","constraints":[]}}
+  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Label","name":"this-is-a-title"}],"url":"Main/index.html#this-is-a-title","doc":"this is a title","extra":{"kind":"Doc","subkind":"Heading"}}
+  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Label","name":"search_label_2"}],"url":"Main/index.html#search_label_2","doc":"and this is a paragraph","extra":{"kind":"Doc","subkind":"Paragraph"}}
+  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"M"}],"url":"Main/M/index.html","doc":"","extra":{"kind":"Module"}}
+  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"M"},{"kind":"Type","name":"t"}],"url":"Main/M/index.html#type-t","doc":"dsdsd","extra":{"kind":"TypeDecl","private":false,"manifest":null,"constraints":[]}}
+  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"v"}],"url":"Main/index.html#val-v","doc":"a reference , and some formatted content with code and\u000Acode blocks","extra":{"kind":"Value","type":"int"}}
+  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem"}],"url":"Main/index.html#val-lorem","doc":"lorem 1","extra":{"kind":"Value","type":"int"}}
+  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem2"}],"url":"Main/index.html#val-lorem2","doc":"lorem 2","extra":{"kind":"Value","type":"int"}}
+  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem3"}],"url":"Main/index.html#val-lorem3","doc":"lorem 3","extra":{"kind":"Value","type":"int"}}
+  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem4"}],"url":"Main/index.html#val-lorem4","doc":"lorem 4","extra":{"kind":"Value","type":"int"}}
   ]
 
 The index.js file need to provide a odoc_search command, from a 
@@ -290,7 +237,7 @@ The index.js file need to provide a odoc_search command, from a
   $ echo "\n\nlet documents = " >> index.js
   $ cat index.json >> index.js
 
-  $ echo "\n\nconst options = { keys: ['name', 'comment'] };" >> index.js
+  $ echo "\n\nconst options = { keys: ['id', 'doc'] };" >> index.js
   $ echo "\nvar idx_fuse = new Fuse(documents, options);" >> index.js
   $ echo "\nfunction odoc_search(query) {let result = idx_fuse.search(query); return result.map(entry => entry.item)};" >> index.js
 
@@ -335,5 +282,5 @@ The index.js file need to provide a odoc_search command, from a
   html/page.html
 
   $ firefox html/Main/index.html
-  Gtk-Message: 19:58:39.228: Failed to load module "xapp-gtk3-module"
-  Gtk-Message: 19:58:39.229: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+  Gtk-Message: 10:27:50.871: Failed to load module "xapp-gtk3-module"
+  Gtk-Message: 10:27:50.872: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.

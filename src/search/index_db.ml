@@ -1,5 +1,5 @@
-open Odoc_model
-open Lang
+open Odoc_model.Paths
+open Odoc_model.Lang
 
 type type_decl_entry = TypeDecl.t
 
@@ -25,7 +25,7 @@ type class_entry = {
 }
 
 type type_extension_entry = {
-  type_path : Paths.Path.Type.t;
+  type_path : Path.Type.t;
   type_params : TypeDecl.param list;
   private_ : bool;
 }
@@ -46,7 +46,7 @@ type field_entry = {
   parent_type : TypeExpr.t;
 }
 
-type module_substitution_entry = { manifest : Paths.Path.Module.t }
+type module_substitution_entry = { manifest : Path.Module.t }
 
 type instance_variable_entry = {
   mutable_ : bool;
@@ -58,7 +58,7 @@ type doc_entry = Paragraph | Heading | CodeBlock | MathBlock | Verbatim
 
 type value_entry = { value : Value.value; type_ : TypeExpr.t }
 
-type kind =
+type extra =
   | TypeDecl of type_decl_entry
   | Module
   | Value of value_entry
@@ -85,24 +85,24 @@ type html =
 type t = {
   id : Odoc_model.Paths.Identifier.Any.t;
   doc : Odoc_model.Comment.docs;
-  kind : kind;
+  extra : extra;
 }
 
-(* TODO: add from which opam package it comes *)
-type entry = { id_ : Paths.Identifier.Any.t; doc : Comment.docs option }
+(* (\* TODO: add from which opam package it comes *\) *)
+(* type entry = { id_ : Paths.Identifier.Any.t; doc : Comment.docs option } *)
 
-type index = t list
+(* type index = t list *)
 
-(* TODO: make it robust when agregating from multiple package, and multiple
-   times the same index *)
-let aggregate_index = ( @ )
-let aggregate_indexes = List.concat
+(* (\* TODO: make it robust when agregating from multiple package, and multiple *)
+(*    times the same index *\) *)
+(* let aggregate_index = ( @ ) *)
+(* let aggregate_indexes = List.concat *)
 
-let add a b = a :: b
+(* let add a b = a :: b *)
 
-let fold = List.fold_left
-let iter = List.iter
+(* let fold = List.fold_left *)
+(* let iter = List.iter *)
 
-let empty = []
+(* let empty = [] *)
 
-let is_empty = ( = ) []
+(* let is_empty = ( = ) [] *)
