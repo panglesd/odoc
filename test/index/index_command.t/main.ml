@@ -21,7 +21,7 @@ end
  *)
 let v = 9
 
-(** lorem 1
+(** lorem 1 and a {{:http://perdu.com}link}
   *)
 let lorem = 1
 
