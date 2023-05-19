@@ -24,11 +24,16 @@ let compile ~resolver:_ ~parent:_ ~output ~warnings_options:_ dirs =
     open_out_bin (Fs.File.to_string output)
   in
   let output = Format.formatter_of_out_channel output_channel in
-  let () =
-    List.iter
-      (function
+  Format.fprintf output "[";
+  let _first =
+    List.fold_left
+      (fun first up ->
+        if not first then Format.fprintf output ",";
+        (match up with
         | `Page p -> Json_output.page output p
-        | `Unit u -> Json_output.unit output u)
-      units
+        | `Unit u -> Json_output.unit output u);
+        false)
+      true units
   in
+  Format.fprintf output "]";
   Ok ()

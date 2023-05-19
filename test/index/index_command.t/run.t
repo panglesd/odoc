@@ -270,7 +270,7 @@ The index.js file need to provide a odoc_search command, from a
   $ echo "\n\nlet documents = " >> index.js
   $ cat index.json >> index.js
 
-  $ echo "\n\nconst options = { keys: ['id', 'doc.txt'] };" >> index.js
+  $ echo "\n\nconst options = { keys: ['odoc_id', 'doc.txt'] };" >> index.js
   $ echo "\nvar idx_fuse = new Fuse(documents, options);" >> index.js
   $ echo "\nfunction odoc_search(query) {let result = idx_fuse.search(query); return result.map(entry => entry.item)};" >> index.js
 

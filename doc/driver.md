@@ -597,14 +597,10 @@ Generating the index is done in two phases. The first one is done via `odoc comp
 ```ocaml env=e1
 let index_generate ?(ignore_output = false) () =
   let open Cmd in
-  let cmd = odoc % "compile-index" % "-I" % "." in
+  let cmd = odoc % "compile-index" % "-o" % "html/index.json" % "-I" % "." in
   let lines = run cmd in
   if not ignore_output then
     add_prefixed_output cmd generate_output "index compilation" lines;
-  let cmd = odoc % "generate-index" % "-o" % "html" % "index-index.odoc" in
-  let lines = run cmd in
-  if not ignore_output then
-    add_prefixed_output cmd generate_output "index generation" lines;
 ```
 
 We turn the JSON index into a javascript file. There are few requirements for this file:
@@ -624,16 +620,26 @@ let documents =
 ;
 
 let miniSearch = new MiniSearch({
-  fields: ['name', 'comment'], // fields to index for full-text search
-  storeFields: ['name', 'prefixname', 'kind', 'url', 'comment'] // fields to return with search results
+  fields: ['odoc_id', 'doc.txt'], // fields to index for full-text search
+  storeFields: ['odoc_id', 'doc', 'url', 'extra', 'original'], // fields to return with search results
+  extractField: (document, fieldName) => {
+    if (fieldName === 'odoc_id') {
+      return document.odoc_id.map(e => e.name).join('.')
+    }
+    if (fieldName === 'doc.txt') {
+      return document.doc.txt
+    }
+    return document[fieldName]
+  }
 })
 
+
 // Index all documents
-miniSearch.addAll(documents.map((index, id) => {index.id = id; return index}));
+miniSearch.addAll(documents.map((index, id) => {index.id = id; index.original = index; return index}));
 
 function odoc_search(query) {
   let result = miniSearch.search(query);
-  return result.slice(0,200);
+  return result.slice(0,200).map(a => a.original);
 }
 |} minisearch index
 ```

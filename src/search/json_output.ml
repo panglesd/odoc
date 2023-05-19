@@ -178,7 +178,7 @@ let json_of_entry ({ id; doc; extra } : Entry.t) =
             ("parent_type", `String (Render.text_of_type parent_type));
           ]
   in
-  `Object [ ("id", j_id); ("url", j_url); ("doc", doc); ("extra", extra) ]
+  `Object [ ("odoc_id", j_id); ("url", j_url); ("doc", doc); ("extra", extra) ]
 
 let output_json ppf first entries =
   let output_json json =
@@ -194,19 +194,17 @@ let output_json ppf first entries =
     first entries
 
 let unit ppf u =
-  Format.fprintf ppf "[";
   let f first i =
     let entries = Entry.entries_of_item i in
     output_json ppf first entries
   in
   let _first = Odoc_model.Fold.unit ~f true u in
-  Format.fprintf ppf "]"
+  ()
 
 let page ppf (page : Odoc_model.Lang.Page.t) =
-  Format.fprintf ppf "[";
   let f first i =
     let entries = Entry.entries_of_item i in
     output_json ppf first entries
   in
   let _first = Odoc_model.Fold.page ~f true page in
-  Format.fprintf ppf "]"
+  ()
