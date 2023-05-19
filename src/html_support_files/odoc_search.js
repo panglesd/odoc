@@ -44,7 +44,7 @@ document.querySelector(".search-bar").addEventListener("input", (event) => {
       title.appendChild(type);
     }
     let comment = document.createElement("div");
-    comment.innerText = entry.doc;
+    comment.innerHTML = entry.doc.html;
     comment.classList.add("entry-comment");
 
     container.appendChild(title);

@@ -1,10 +1,74 @@
+open Odoc_model.Lang
+open Odoc_model.Paths
+
+type type_decl_entry = {
+  canonical : Path.Type.t option;
+  equation : TypeDecl.Equation.t;
+  representation : TypeDecl.Representation.t option;
+}
+
+type exception_entry = {
+  args : TypeDecl.Constructor.argument;
+  res : TypeExpr.t option;
+}
+
+type class_type_entry = { virtual_ : bool; params : TypeDecl.param list }
+
+type method_entry = { private_ : bool; virtual_ : bool; type_ : TypeExpr.t }
+
+type class_entry = { virtual_ : bool; params : TypeDecl.param list }
+
+type type_extension_entry = {
+  type_path : Path.Type.t;
+  type_params : TypeDecl.param list;
+  private_ : bool;
+}
+
+type extension_constructor_entry = {
+  args : TypeDecl.Constructor.argument;
+  res : TypeExpr.t option;
+}
+
+type constructor_entry = {
+  args : TypeDecl.Constructor.argument;
+  res : TypeExpr.t;
+}
+
+type field_entry = {
+  mutable_ : bool;
+  type_ : TypeExpr.t;
+  parent_type : TypeExpr.t;
+}
+
+type instance_variable_entry = {
+  mutable_ : bool;
+  virtual_ : bool;
+  type_ : TypeExpr.t;
+}
+
 type doc_entry = Paragraph | Heading | CodeBlock | MathBlock | Verbatim
-module Html : sig end
-module Doc : sig end
-module ToHtml : sig end
-val entry : id:'a -> doc:'b -> extra:'c -> 'd
-val entry_of_constructor : 'a -> 'b list -> 'c -> 'd
-val entry_of_field : 'a -> 'b list -> 'c -> 'd
-val entries_of_docs : 'a list -> 'b list
-val entries_of_doc : 'a -> 'b list
-val entries_of_item : 'a -> 'b
+
+type value_entry = { value : Value.value; type_ : TypeExpr.t }
+
+type extra =
+  | TypeDecl of type_decl_entry
+  | Module
+  | Value of value_entry
+  | Doc of doc_entry
+  | Exception of exception_entry
+  | Class_type of class_type_entry
+  | Method of method_entry
+  | Class of class_entry
+  | TypeExtension of type_extension_entry
+  | ExtensionConstructor of extension_constructor_entry
+  | ModuleType
+  | Constructor of constructor_entry
+  | Field of field_entry
+
+type t = {
+  id : Odoc_model.Paths.Identifier.Any.t;
+  doc : Odoc_model.Comment.docs;
+  extra : extra;
+}
+
+val entries_of_item : Odoc_model.Fold.item -> t list

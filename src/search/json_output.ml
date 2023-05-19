@@ -30,8 +30,7 @@ let json_of_args (args : Odoc_model.Lang.TypeDecl.Constructor.argument) =
                  fl) );
         ]
 
-let rec json_of_id : Odoc_model.Paths.Identifier.t -> _ =
- fun x ->
+let rec json_of_id x =
   let open Odoc_model.Names in
   let open Odoc_model.Paths.Identifier in
   let ret kind name =
@@ -77,18 +76,22 @@ let rec json_of_id : Odoc_model.Paths.Identifier.t -> _ =
   | `Label (parent, name) ->
       ret "Label" (LabelName.to_string name) :: json_of_id (parent :> t)
 
-let json_of_id :
-    [< Odoc_model.Paths.Identifier.t_pv ] Odoc_model.Paths.Identifier.id -> _ =
- fun n -> `Array (List.rev @@ json_of_id (n :> Odoc_model.Paths.Identifier.t))
+let json_of_id n =
+  `Array (List.rev @@ json_of_id (n :> Odoc_model.Paths.Identifier.t))
+
+let json_of_doc (doc : Odoc_model.Comment.docs) =
+  let txt = Render.text_of_doc doc in
+  let html = Render.html_of_doc doc in
+  `Object
+    [
+      ("html", `String (Format.asprintf "%a" (Tyxml.Html.pp_elt ()) html));
+      ("txt", `String txt);
+    ]
 
 let json_of_entry ({ id; doc; extra } : Entry.t) =
   let j_url = `String (Render.url id) in
-  let j_id =
-    json_of_id id
-    (* let id = Odoc_model.Paths.Identifier.fullname id in *)
-    (* `Array (List.map (fun x -> `String x) id) *)
-  in
-  let doc = `String (Render.text_of_doc doc) in
+  let j_id = json_of_id id in
+  let doc = json_of_doc doc in
   let extra =
     let return kind arr = `Object (("kind", `String kind) :: arr) in
     match extra with

@@ -67,25 +67,21 @@ type extra =
 
 module Html = Tyxml.Html
 
-type html =
-  Html_types.flow5_without_sectioning_heading_header_footer Html.elt list
-
 type t = {
   id : Odoc_model.Paths.Identifier.Any.t;
   doc : Odoc_model.Comment.docs;
   extra : extra;
 }
 
-(**************************)
-
-module Doc = Odoc_document.ML
-module ToHtml = Odoc_html.Generator
-
-type any_id = Odoc_model.Paths.Identifier.Any.t
-
 let entry ~id ~doc ~extra =
-  let id = (id :> any_id) in
+  let id = (id :> Odoc_model.Paths.Identifier.Any.t) in
   { id; extra; doc }
+
+let varify_params =
+  List.mapi (fun i param ->
+      match param.TypeDecl.desc with
+      | Var name -> TypeExpr.Var name
+      | Any -> Var (Printf.sprintf "tv_%i" i))
 
 let entry_of_constructor id_parent params (constructor : TypeDecl.Constructor.t)
     =
@@ -94,14 +90,7 @@ let entry_of_constructor id_parent params (constructor : TypeDecl.Constructor.t)
     match constructor.res with
     | Some res -> res
     | None ->
-        let params =
-          List.mapi
-            (fun i param ->
-              match param.TypeDecl.desc with
-              | Var name -> TypeExpr.Var name
-              | Any -> TypeExpr.Var (Printf.sprintf "tv_%i" i))
-            params
-        in
+        let params = varify_params params in
         TypeExpr.Constr
           ( `Identifier
               ((id_parent :> Odoc_model.Paths.Identifier.Path.Type.t), false),
@@ -111,14 +100,7 @@ let entry_of_constructor id_parent params (constructor : TypeDecl.Constructor.t)
   entry ~id:constructor.id ~doc:constructor.doc ~extra
 
 let entry_of_field id_parent params (field : TypeDecl.Field.t) =
-  let params =
-    List.mapi
-      (fun i param ->
-        match param.TypeDecl.desc with
-        | Var name -> TypeExpr.Var name
-        | Any -> TypeExpr.Var (Printf.sprintf "tv_%i" i))
-      params
-  in
+  let params = varify_params params in
   let parent_type =
     TypeExpr.Constr
       ( `Identifier
