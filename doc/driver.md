@@ -620,22 +620,23 @@ let documents =
 ;
 
 let miniSearch = new MiniSearch({
-  fields: ['odoc_id', 'doc.txt'], // fields to index for full-text search
-  storeFields: ['odoc_id', 'doc', 'url', 'extra', 'original'], // fields to return with search results
+  fields: ['id', 'doc.txt'], // fields to index for full-text search
+  storeFields: ['id', 'doc', 'url', 'extra', 'original'], // fields to return with search results
   extractField: (document, fieldName) => {
-    if (fieldName === 'odoc_id') {
-      return document.odoc_id.map(e => e.name).join('.')
+    if (fieldName === 'id') {
+      return document.id.map(e => e.name).join('.')
     }
     if (fieldName === 'doc.txt') {
       return document.doc.txt
     }
     return document[fieldName]
-  }
+  },
+  idField: 'search_id'
 })
 
 
 // Index all documents
-miniSearch.addAll(documents.map((index, id) => {index.id = id; index.original = index; return index}));
+miniSearch.addAll(documents.map((index, id) => {index.search_id = id; index.original = index; return index}));
 
 function odoc_search(query) {
   let result = miniSearch.search(query);

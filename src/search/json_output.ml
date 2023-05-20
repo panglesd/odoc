@@ -178,7 +178,7 @@ let json_of_entry ({ id; doc; extra } : Entry.t) =
             ("parent_type", `String (Render.text_of_type parent_type));
           ]
   in
-  `Object [ ("odoc_id", j_id); ("url", j_url); ("doc", doc); ("extra", extra) ]
+  `Object [ ("id", j_id); ("url", j_url); ("doc", doc); ("extra", extra) ]
 
 let output_json ppf first entries =
   let output_json json =
