@@ -4,83 +4,87 @@
   <link rel="stylesheet" href="odoc.css"/><meta charset="utf-8"/>
   <meta name="generator" content="odoc %%VERSION%%"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <script src="highlight.pack.js"></script><script>let base_url = ''</script>
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
-  <script src="index.js"></script>
+  <script src="highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
  </head>
- <body class="odoc"><input class="search-bar"/>
-  <div class="search-result"></div>
+ <body class="odoc">
   <header class="odoc-preamble">
    <h1>Module <code><span>Ocamlary</span></code></h1>
-   <p>This is an <i>interface</i> with <b>all</b> of the 
-    <em>module system</em> features. This documentation demonstrates:
+   <p id="search_label_1">This is an <i>interface</i> with <b>all</b>
+     of the <em>module system</em> features. This documentation demonstrates:
    </p>
    <ul><li>comment formatting</li><li>unassociated comments</li>
     <li>documentation sections</li>
-    <li><p>module system documentation including</p>
+    <li><p id="search_label_5">module system documentation including</p>
      <ol><li>submodules</li><li>module aliases</li><li>module types</li>
       <li>module type aliases</li><li>modules with signatures</li>
       <li>modules with aliased signatures</li>
      </ol>
     </li>
-   </ul><p>A numbered list:</p><ol><li>3</li><li>2</li><li>1</li></ol>
-   <p>David Sheets is the author.</p>
+   </ul><p id="search_label_12">A numbered list:</p>
+   <ol><li>3</li><li>2</li><li>1</li></ol>
+   <p id="search_label_16">David Sheets is the author.</p>
    <ul class="at-tags">
     <li class="author"><span class="at-tag">author</span> David Sheets</li>
    </ul>
   </header>
-  <nav class="odoc-toc">
-   <ul>
-    <li><a href="#level-1">Level 1</a>
-     <ul>
-      <li><a href="#level-2">Level 2</a>
-       <ul>
-        <li><a href="#level-3">Level 3</a>
-         <ul><li><a href="#level-4">Level 4</a></li></ul>
-        </li><li><a href="#basic-module-stuff">Basic module stuff</a></li>
-       </ul>
-      </li>
-     </ul>
-    </li>
-    <li><a href="#s9000">Section 9000</a>
-     <ul><li><a href="#emptySig">EmptySig</a></li>
-      <li><a href="#basic-exception-stuff">Basic exception stuff</a></li>
-      <li>
-       <a href="#basic-type-and-value-stuff-with-advanced-doc-comments">
-        Basic type and value stuff with advanced doc comments
-       </a>
-      </li><li><a href="#some-operators">Some Operators</a></li>
-      <li><a href="#advanced-module-stuff">Advanced Module Stuff</a></li>
-      <li><a href="#advanced-type-stuff">Advanced Type Stuff</a></li>
-     </ul>
-    </li>
-    <li><a href="#indexmodules">Trying the {!modules: ...} command.</a>
-     <ul>
-      <li>
-       <a href="#weirder-usages-involving-module-types">Weirder usages
-         involving module types
-       </a>
-      </li>
-     </ul>
-    </li>
-    <li>
-     <a href="#playing-with-@canonical-paths">Playing with @canonical paths
-     </a>
-    </li><li><a href="#aliases">Aliases again</a></li>
-    <li><a href="#section-title-splicing">Section title splicing</a></li>
-    <li><a href="#new-reference-syntax">New reference syntax</a></li>
-   </ul>
-  </nav>
+  <div class="odoc-sidebar">
+   <nav class="odoc-toc">
+    <ul>
+     <li><a href="#level-1">Level 1</a>
+      <ul>
+       <li><a href="#level-2">Level 2</a>
+        <ul>
+         <li><a href="#level-3">Level 3</a>
+          <ul><li><a href="#level-4">Level 4</a></li></ul>
+         </li><li><a href="#basic-module-stuff">Basic module stuff</a></li>
+        </ul>
+       </li>
+      </ul>
+     </li>
+     <li><a href="#s9000">Section 9000</a>
+      <ul><li><a href="#emptySig">EmptySig</a></li>
+       <li><a href="#basic-exception-stuff">Basic exception stuff</a></li>
+       <li>
+        <a href="#basic-type-and-value-stuff-with-advanced-doc-comments">
+         Basic type and value stuff with advanced doc comments
+        </a>
+       </li><li><a href="#some-operators">Some Operators</a></li>
+       <li><a href="#advanced-module-stuff">Advanced Module Stuff</a></li>
+       <li><a href="#advanced-type-stuff">Advanced Type Stuff</a></li>
+      </ul>
+     </li>
+     <li><a href="#indexmodules">Trying the {!modules: ...} command.</a>
+      <ul>
+       <li>
+        <a href="#weirder-usages-involving-module-types">Weirder usages
+          involving module types
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a href="#playing-with-@canonical-paths">Playing with @canonical paths
+      </a>
+     </li><li><a href="#aliases">Aliases again</a></li>
+     <li><a href="#section-title-splicing">Section title splicing</a></li>
+     <li><a href="#new-reference-syntax">New reference syntax</a></li>
+    </ul>
+   </nav>
+  </div>
   <div class="odoc-content">
-   <p>You may find more information about this HTML documentation renderer
-     at 
+   <p id="search_label_17">You may find more information about this HTML
+     documentation renderer at 
     <a href="https://github.com/dsheets/ocamlary">github.com/dsheets/ocamlary
     </a>.
-   </p><p>This is some verbatim text:</p><pre>verbatim</pre>
-   <p>This is some verbatim text:</p><pre>[][df[]]}}</pre>
-   <p>Here is some raw LaTeX: </p>
-   <p>Here is an index table of <code>Empty</code> modules:</p>
+   </p><p id="search_label_18">This is some verbatim text:</p>
+   <pre id="search_label_19">verbatim</pre>
+   <p id="search_label_20">This is some verbatim text:</p>
+   <pre id="search_label_21">[][df[]]}}</pre>
+   <p id="search_label_22">Here is some raw LaTeX: </p>
+   <p id="search_label_23">Here is an index table of <code>Empty</code>
+     modules:
+   </p>
    <ul class="modules">
     <li><a href="Ocamlary-Empty.html"><code>Empty</code></a> 
      <span class="synopsis">A plain, empty module</span>
@@ -88,12 +92,14 @@
     <li><a href="Ocamlary-Empty.html"><code>EmptyAlias</code></a> 
      <span class="synopsis">A plain module alias of <code>Empty</code></span>
     </li>
-   </ul><p>Odoc doesn't support <code>{!indexlist}</code>.</p>
-   <p>Here is some superscript: x<sup>2</sup></p>
-   <p>Here is some subscript: x<sub>0</sub></p>
-   <p>Here are some escaped brackets: { [ @ ] }</p>
-   <p>Here is some <em>emphasis</em> <code>followed by code</code>.</p>
-   <p>An unassociated comment</p>
+   </ul>
+   <p id="search_label_24">Odoc doesn't support <code>{!indexlist}</code>.
+   </p><p id="search_label_25">Here is some superscript: x<sup>2</sup></p>
+   <p id="search_label_26">Here is some subscript: x<sub>0</sub></p>
+   <p id="search_label_27">Here are some escaped brackets: { [ @ ] }</p>
+   <p id="search_label_28">Here is some <em>emphasis</em> 
+    <code>followed by code</code>.
+   </p><p id="search_label_29">An unassociated comment</p>
    <h2 id="level-1"><a href="#level-1" class="anchor"></a>Level 1</h2>
    <h3 id="level-2"><a href="#level-2" class="anchor"></a>Level 2</h3>
    <h4 id="level-3"><a href="#level-3" class="anchor"></a>Level 3</h4>
@@ -260,7 +266,7 @@
      </code>
     </div>
    </div>
-   <p>For a good time, see 
+   <p id="search_label_43">For a good time, see 
     <a href="Ocamlary-module-type-SuperSig-module-type-SubSigA.html#subSig">
      <code>subSig</code>
     </a> or 
@@ -292,11 +298,11 @@
        won't resolve.
      </p>
     </div>
-   </div><p>Some text before exception title.</p>
+   </div><p id="search_label_45">Some text before exception title.</p>
    <h4 id="basic-exception-stuff">
     <a href="#basic-exception-stuff" class="anchor"></a>Basic exception
      stuff
-   </h4><p>After exception title.</p>
+   </h4><p id="search_label_46">After exception title.</p>
    <div class="odoc-spec">
     <div class="spec exception anchored" id="exception-Kaboom">
      <a href="#exception-Kaboom" class="anchor"></a>
@@ -305,7 +311,10 @@
        <span class="keyword">of</span> unit
       </span>
      </code>
-    </div><div class="spec-doc"><p>Unary exception constructor</p></div>
+    </div>
+    <div class="spec-doc">
+     <p id="search_label_47">Unary exception constructor</p>
+    </div>
    </div>
    <div class="odoc-spec">
     <div class="spec exception anchored" id="exception-Kablam">
@@ -315,7 +324,10 @@
        <span class="keyword">of</span> unit * unit
       </span>
      </code>
-    </div><div class="spec-doc"><p>Binary exception constructor</p></div>
+    </div>
+    <div class="spec-doc">
+     <p id="search_label_48">Binary exception constructor</p>
+    </div>
    </div>
    <div class="odoc-spec">
     <div class="spec exception anchored" id="exception-Kapow">
@@ -327,7 +339,8 @@
      </code>
     </div>
     <div class="spec-doc">
-     <p>Unary exception constructor over binary tuple</p>
+     <p id="search_label_49">Unary exception constructor over binary tuple
+     </p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -338,7 +351,7 @@
      </code>
     </div>
     <div class="spec-doc">
-     <p>
+     <p id="search_label_50">
       <a href="Ocamlary-module-type-EmptySig.html"><code>EmptySig</code></a>
        is a module and 
       <a href="#exception-EmptySig"><code>EmptySig</code></a> is this
@@ -354,7 +367,8 @@
      </code>
     </div>
     <div class="spec-doc">
-     <p><a href="#exception-EmptySigAlias"><code>EmptySigAlias</code></a>
+     <p id="search_label_51">
+      <a href="#exception-EmptySigAlias"><code>EmptySigAlias</code></a>
        is this exception.
      </p>
     </div>
@@ -379,9 +393,10 @@
      </code>
     </div>
     <div class="spec-doc">
-     <p><a href="#type-a_function"><code>a_function</code></a> is this
-       type and <a href="#val-a_function"><code>a_function</code></a>
-       is the value below.
+     <p id="search_label_52">
+      <a href="#type-a_function"><code>a_function</code></a> is this 
+      type and <a href="#val-a_function"><code>a_function</code></a> 
+      is the value below.
      </p>
     </div>
    </div>
@@ -395,15 +410,18 @@
      </code>
     </div>
     <div class="spec-doc">
-     <p>This is <code>a_function</code> with param and return type.</p>
+     <p id="search_label_53">This is <code>a_function</code> with param
+       and return type.
+     </p>
      <ul class="at-tags">
       <li class="parameter"><span class="at-tag">parameter</span> 
-       <span class="value">x</span> <p>the <code>x</code> coordinate</p>
+       <span class="value">x</span> 
+       <p id="search_label_54">the <code>x</code> coordinate</p>
       </li>
      </ul>
      <ul class="at-tags">
       <li class="returns"><span class="at-tag">returns</span> 
-       <p>the <code>y</code> coordinate</p>
+       <p id="search_label_55">the <code>y</code> coordinate</p>
       </li>
      </ul>
     </div>
@@ -450,7 +468,7 @@
     <div class="spec-doc">
      <ul class="at-tags">
       <li class="raises"><span class="at-tag">raises</span> 
-       <code>Not_found</code> <p>That's all it does</p>
+       <code>Not_found</code> <p id="search_label_56">That's all it does</p>
       </li>
      </ul>
     </div>
@@ -468,7 +486,7 @@
      <ul class="at-tags">
       <li class="raises"><span class="at-tag">raises</span> 
        <a href="#exception-Kaboom"><code>Kaboom</code></a> 
-       <p>That's all it does</p>
+       <p id="search_label_57">That's all it does</p>
       </li>
      </ul>
     </div>
@@ -483,7 +501,7 @@
      <ul class="at-tags">
       <li class="see"><span class="at-tag">see</span> 
        <a href="http://ocaml.org/" class="value">http://ocaml.org/</a>
-        <p>The OCaml Web site</p>
+        <p id="search_label_58">The OCaml Web site</p>
       </li>
      </ul>
     </div>
@@ -498,7 +516,7 @@
      <ul class="at-tags">
       <li class="see"><span class="at-tag">see</span> 
        <code class="value">some_file</code> 
-       <p>The file called <code>some_file</code></p>
+       <p id="search_label_59">The file called <code>some_file</code></p>
       </li>
      </ul>
     </div>
@@ -513,7 +531,7 @@
      <ul class="at-tags">
       <li class="see"><span class="at-tag">see</span> 
        <span class="value">some_doc</span> 
-       <p>The document called <code>some_doc</code></p>
+       <p id="search_label_60">The document called <code>some_doc</code></p>
       </li>
      </ul>
     </div>
@@ -526,7 +544,8 @@
      </code>
     </div>
     <div class="spec-doc">
-     <p>This value was introduced in the Mesozoic era.</p>
+     <p id="search_label_61">This value was introduced in the Mesozoic era.
+     </p>
      <ul class="at-tags">
       <li class="since"><span class="at-tag">since</span> mesozoic</li>
      </ul>
@@ -539,15 +558,19 @@
      </code>
     </div>
     <div class="spec-doc">
-     <p>This value has had changes in 1.0.0, 1.1.0, and 1.2.0.</p>
+     <p id="search_label_62">This value has had changes in 1.0.0, 1.1.0,
+       and 1.2.0.
+     </p>
      <ul class="at-tags">
       <li class="before"><span class="at-tag">before</span> 
-       <span class="value">1.0.0</span> <p>before 1.0.0</p>
+       <span class="value">1.0.0</span> 
+       <p id="search_label_63">before 1.0.0</p>
       </li>
      </ul>
      <ul class="at-tags">
       <li class="before"><span class="at-tag">before</span> 
-       <span class="value">1.1.0</span> <p>before 1.1.0</p>
+       <span class="value">1.1.0</span> 
+       <p id="search_label_64">before 1.1.0</p>
       </li>
      </ul>
      <ul class="at-tags">
@@ -920,7 +943,7 @@
        <a href="#type-record.field1" class="anchor"></a>
        <code><span>field1 : int;</span></code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>This comment is for <code>field1</code>.</p>
+        <p id="search_label_99">This comment is for <code>field1</code>.</p>
         <span class="comment-delim">*)</span>
        </div>
       </li>
@@ -928,14 +951,16 @@
        <a href="#type-record.field2" class="anchor"></a>
        <code><span>field2 : int;</span></code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>This comment is for <code>field2</code>.</p>
+        <p id="search_label_100">This comment is for <code>field2</code>.</p>
         <span class="comment-delim">*)</span>
        </div>
       </li>
      </ol><code><span>}</span></code>
     </div>
-    <div class="spec-doc"><p>This comment is for <code>record</code>.</p>
-     <p>This comment is also for <code>record</code>.</p>
+    <div class="spec-doc">
+     <p id="search_label_97">This comment is for <code>record</code>.</p>
+     <p id="search_label_98">This comment is also for <code>record</code>.
+     </p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -950,7 +975,7 @@
        <code><span><span class="keyword">mutable</span> a : int;</span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p><code>a</code> is first and mutable</p>
+        <p id="search_label_101"><code>a</code> is first and mutable</p>
         <span class="comment-delim">*)</span>
        </div>
       </li>
@@ -958,7 +983,7 @@
        <a href="#type-mutable_record.b" class="anchor"></a>
        <code><span>b : unit;</span></code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p><code>b</code> is second and immutable</p>
+        <p id="search_label_102"><code>b</code> is second and immutable</p>
         <span class="comment-delim">*)</span>
        </div>
       </li>
@@ -967,7 +992,7 @@
        <code><span><span class="keyword">mutable</span> c : int;</span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p><code>c</code> is third and mutable</p>
+        <p id="search_label_103"><code>c</code> is third and mutable</p>
         <span class="comment-delim">*)</span>
        </div>
       </li>
@@ -1007,7 +1032,7 @@
         <span><span class="constructor">TagA</span></span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>This comment is for <code>TagA</code>.</p>
+        <p id="search_label_106">This comment is for <code>TagA</code>.</p>
         <span class="comment-delim">*)</span>
        </div>
       </li>
@@ -1019,8 +1044,8 @@
         </span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>This comment is for <code>ConstrB</code>.</p>
-        <span class="comment-delim">*)</span>
+        <p id="search_label_107">This comment is for <code>ConstrB</code>.
+        </p><span class="comment-delim">*)</span>
        </div>
       </li>
       <li id="type-variant.ConstrC" class="def variant constructor anchored">
@@ -1031,8 +1056,9 @@
         </span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>This comment is for binary <code>ConstrC</code>.</p>
-        <span class="comment-delim">*)</span>
+        <p id="search_label_108">This comment is for binary 
+         <code>ConstrC</code>.
+        </p><span class="comment-delim">*)</span>
        </div>
       </li>
       <li id="type-variant.ConstrD" class="def variant constructor anchored">
@@ -1043,14 +1069,17 @@
         </span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>This comment is for unary <code>ConstrD</code> of binary tuple.
+        <p id="search_label_109">This comment is for unary 
+         <code>ConstrD</code> of binary tuple.
         </p><span class="comment-delim">*)</span>
        </div>
       </li>
      </ol>
     </div>
-    <div class="spec-doc"><p>This comment is for <code>variant</code>.</p>
-     <p>This comment is also for <code>variant</code>.</p>
+    <div class="spec-doc">
+     <p id="search_label_104">This comment is for <code>variant</code>.</p>
+     <p id="search_label_105">This comment is also for <code>variant</code>.
+     </p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1072,8 +1101,8 @@
      </ol><code><span> ]</span></code>
     </div>
     <div class="spec-doc">
-     <p>This comment is for <code>poly_variant</code>.</p>
-     <p>Wow! It was a polymorphic variant!</p>
+     <p id="search_label_110">This comment is for <code>poly_variant</code>.
+     </p><p id="search_label_111">Wow! It was a polymorphic variant!</p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1132,8 +1161,9 @@
       </li>
      </ol>
     </div>
-    <div class="spec-doc"><p>This comment is for <code>full_gadt</code>.</p>
-     <p>Wow! It was a GADT!</p>
+    <div class="spec-doc">
+     <p id="search_label_112">This comment is for <code>full_gadt</code>.</p>
+     <p id="search_label_113">Wow! It was a GADT!</p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1184,8 +1214,8 @@
      </ol>
     </div>
     <div class="spec-doc">
-     <p>This comment is for <code>partial_gadt</code>.</p>
-     <p>Wow! It was a mixed GADT!</p>
+     <p id="search_label_114">This comment is for <code>partial_gadt</code>.
+     </p><p id="search_label_115">Wow! It was a mixed GADT!</p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1195,7 +1225,8 @@
       <span> = <a href="#type-variant">variant</a></span>
      </code>
     </div>
-    <div class="spec-doc"><p>This comment is for <code>alias</code>.</p>
+    <div class="spec-doc">
+     <p id="search_label_116">This comment is for <code>alias</code>.</p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1212,7 +1243,8 @@
       </span>
      </code>
     </div>
-    <div class="spec-doc"><p>This comment is for <code>tuple</code>.</p>
+    <div class="spec-doc">
+     <p id="search_label_117">This comment is for <code>tuple</code>.</p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1255,7 +1287,8 @@
      </ol>
     </div>
     <div class="spec-doc">
-     <p>This comment is for <code>variant_alias</code>.</p>
+     <p id="search_label_118">This comment is for <code>variant_alias</code>.
+     </p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1277,7 +1310,8 @@
      </ol><code><span>}</span></code>
     </div>
     <div class="spec-doc">
-     <p>This comment is for <code>record_alias</code>.</p>
+     <p id="search_label_119">This comment is for <code>record_alias</code>.
+     </p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1300,7 +1334,9 @@
      </ol><code><span> ]</span></code>
     </div>
     <div class="spec-doc">
-     <p>This comment is for <code>poly_variant_union</code>.</p>
+     <p id="search_label_120">This comment is for 
+      <code>poly_variant_union</code>.
+     </p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1559,7 +1595,9 @@
      </ol>
     </div>
     <div class="spec-doc">
-     <p>This comment is for <code>full_gadt_alias</code>.</p>
+     <p id="search_label_121">This comment is for 
+      <code>full_gadt_alias</code>.
+     </p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1617,7 +1655,9 @@
      </ol>
     </div>
     <div class="spec-doc">
-     <p>This comment is for <code>partial_gadt_alias</code>.</p>
+     <p id="search_label_122">This comment is for 
+      <code>partial_gadt_alias</code>.
+     </p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -1630,7 +1670,7 @@
      </code>
     </div>
     <div class="spec-doc">
-     <p>This comment is for 
+     <p id="search_label_123">This comment is for 
       <a href="#exception-Exn_arrow"><code>Exn_arrow</code></a>.
      </p>
     </div>
@@ -1656,7 +1696,7 @@
         </span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>This comment is between 
+        <p id="search_label_125">This comment is between 
          <a href="#type-mutual_constr_a"><code>mutual_constr_a</code></a>
           and 
          <a href="#type-mutual_constr_b"><code>mutual_constr_b</code></a>
@@ -1667,7 +1707,7 @@
      </ol>
     </div>
     <div class="spec-doc">
-     <p>This comment is for 
+     <p id="search_label_124">This comment is for 
       <a href="#type-mutual_constr_a"><code>mutual_constr_a</code></a>
        then <a href="#type-mutual_constr_b"><code>mutual_constr_b</code></a>
       .
@@ -1695,14 +1735,15 @@
         </span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>This comment must be here for the next to associate correctly.</p>
-        <span class="comment-delim">*)</span>
+        <p id="search_label_127">This comment must be here for the next
+          to associate correctly.
+        </p><span class="comment-delim">*)</span>
        </div>
       </li>
      </ol>
     </div>
     <div class="spec-doc">
-     <p>This comment is for 
+     <p id="search_label_126">This comment is for 
       <a href="#type-mutual_constr_b"><code>mutual_constr_b</code></a>
        then <a href="#type-mutual_constr_a"><code>mutual_constr_a</code></a>
       .
@@ -1780,7 +1821,10 @@
      <code><span><span class="keyword">type</span> ext</span><span> = </span>
       <span>..</span>
      </code>
-    </div><div class="spec-doc"><p>A mystery wrapped in an ellipsis</p></div>
+    </div>
+    <div class="spec-doc">
+     <p id="search_label_128">A mystery wrapped in an ellipsis</p>
+    </div>
    </div>
    <div class="odoc-spec">
     <div class="spec type extension anchored" id="extension-decl-ExtA">
@@ -1880,7 +1924,8 @@
       <span><span class="keyword">type</span> <span>'a poly_ext</span></span>
       <span> = </span><span>..</span>
      </code>
-    </div><div class="spec-doc"><p>'a poly_ext</p></div>
+    </div>
+    <div class="spec-doc"><p id="search_label_129">'a poly_ext</p></div>
    </div>
    <div class="odoc-spec">
     <div class="spec type extension anchored" id="extension-decl-Foo">
@@ -1908,7 +1953,8 @@
         </span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>'b poly_ext</p><span class="comment-delim">*)</span>
+        <p id="search_label_130">'b poly_ext</p>
+        <span class="comment-delim">*)</span>
        </div>
       </li>
      </ol>
@@ -1931,7 +1977,8 @@
         </span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>'c poly_ext</p><span class="comment-delim">*)</span>
+        <p id="search_label_131">'c poly_ext</p>
+        <span class="comment-delim">*)</span>
        </div>
       </li>
      </ol>
@@ -1965,7 +2012,8 @@
         <span><span class="extension">ZzzTop0</span></span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>It's got the rock</p><span class="comment-delim">*)</span>
+        <p id="search_label_132">It's got the rock</p>
+        <span class="comment-delim">*)</span>
        </div>
       </li>
      </ol>
@@ -1988,7 +2036,8 @@
         </span>
        </code>
        <div class="def-doc"><span class="comment-delim">(*</span>
-        <p>and it packs a unit.</p><span class="comment-delim">*)</span>
+        <p id="search_label_133">and it packs a unit.</p>
+        <span class="comment-delim">*)</span>
        </div>
       </li>
      </ol>
@@ -2002,7 +2051,10 @@
        <span>unit <span class="arrow">&#45;&gt;</span></span> unit
       </span>
      </code>
-    </div><div class="spec-doc"><p>Rotate keys on my mark...</p></div>
+    </div>
+    <div class="spec-doc">
+     <p id="search_label_134">Rotate keys on my mark...</p>
+    </div>
    </div>
    <div class="odoc-spec">
     <div class="spec type anchored" id="type-my_mod">
@@ -2016,7 +2068,8 @@
       </span>
      </code>
     </div>
-    <div class="spec-doc"><p>A brown paper package tied up with string</p>
+    <div class="spec-doc">
+     <p id="search_label_135">A brown paper package tied up with string</p>
     </div>
    </div>
    <div class="odoc-spec">
@@ -2704,11 +2757,11 @@
    <h2 id="indexmodules"><a href="#indexmodules" class="anchor"></a>Trying
      the {!modules: ...} command.
    </h2>
-   <p>With ocamldoc, toplevel units will be linked and documented, while
-     submodules will behave as simple references.
+   <p id="search_label_137">With ocamldoc, toplevel units will be linked
+     and documented, while submodules will behave as simple references.
    </p>
-   <p>With odoc, everything should be resolved (and linked) but only 
-    toplevel units will be documented.
+   <p id="search_label_138">With odoc, everything should be resolved 
+    (and linked) but only toplevel units will be documented.
    </p>
    <ul class="modules">
     <li><a href="Ocamlary-Dep1-X.html"><code>Dep1.X</code></a> </li>
@@ -2752,7 +2805,7 @@
      </code>
     </div>
    </div>
-   <p>Some ref to 
+   <p id="search_label_139">Some ref to 
     <a href="Ocamlary-CanonicalTest-Base_Tests-C.html#type-t">
      <code>CanonicalTest.Base_Tests.C.t</code>
     </a> and 
@@ -2783,7 +2836,7 @@
    <h2 id="section-title-splicing">
     <a href="#section-title-splicing" class="anchor"></a>Section title
      splicing
-   </h2><p>I can refer to</p>
+   </h2><p id="search_label_143">I can refer to</p>
    <ul>
     <li><code>{!section:indexmodules}</code> : 
      <a href="#indexmodules" title="indexmodules">Trying the {!modules:
@@ -2793,7 +2846,7 @@
     <li><code>{!aliases}</code> : 
      <a href="#aliases" title="aliases">Aliases again</a>
     </li>
-   </ul><p>But also to things in submodules:</p>
+   </ul><p id="search_label_146">But also to things in submodules:</p>
    <ul>
     <li><code>{!section:SuperSig.SubSigA.subSig}</code> : 
      <a href="Ocamlary-module-type-SuperSig-module-type-SubSigA.html#subSig">
@@ -2803,7 +2856,7 @@
     <li><code>{!Aliases.incl}</code> : 
      <a href="Ocamlary-Aliases.html#incl"><code>incl</code></a>
     </li>
-   </ul><p>And just to make sure we do not mess up:</p>
+   </ul><p id="search_label_149">And just to make sure we do not mess up:</p>
    <ul>
     <li><code>{{!section:indexmodules}A}</code> : 
      <a href="#indexmodules" title="indexmodules">A</a>
@@ -2849,7 +2902,7 @@
       </span>
      </code>
     </div>
-   </div><p>Here goes:</p>
+   </div><p id="search_label_154">Here goes:</p>
    <ul>
     <li><code>{!module-M.t}</code> : 
      <a href="Ocamlary-M.html#type-t"><code>M.t</code></a>
@@ -2950,6 +3003,6 @@
      </code>
     </div>
    </div>
-  </div><script src="fuse_search.js"></script>
+  </div>
  </body>
 </html>
