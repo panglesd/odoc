@@ -592,7 +592,7 @@ let generate_all odocl_files =
 ```
 
 Finally, we generate an index of all values, types, ... This index is meant to be consumed by search engines, to create their own index. It consists of a JSON array, containing entries with the name, full name, associated comment, link and anchor, and kind.
-Generating the index is done in two phases. The first one is done via `odoc compile-index`, which create a `index-index.odoc` file. This file is used when aggregating multiple indexes, and for search engine which prefer to read OCaml values than JSON. The second one, `odoc generate-index`, generates from an `odoc` index a JSON value which contains all entries in JSON format. This second format is meant to be consumed by search engines written in other languages than OCaml.
+Generating the index is done via `odoc compile-index`, which create a json file. This second format is meant to be consumed by search engines to populate their search index. Search engines written in OCaml can also call the `Odoc_model.Fold.unit` and  `Odoc_model.Fold.page` function, in conjunction with `Odoc_search.Entry.entry_of_item` in order to get a (version stable) OCaml value of each element to be indexed.
 
 ```ocaml env=e1
 let index_generate ?(ignore_output = false) () =
@@ -603,9 +603,10 @@ let index_generate ?(ignore_output = false) () =
     add_prefixed_output cmd generate_output "index compilation" lines;
 ```
 
-We turn the JSON index into a javascript file. There are few requirements for this file:
+We turn the JSON index into a javascript file. In order to never block the UI, this file will be used as a web worker by `odoc`, to perform searches:
 
-- It must provide an `odoc_search` function, which takes a string and returns a list of results, as json objects with the same form as in the generated JSON index.
+- The search query will be sent as a plain string to the web worker, using the standard mechanism of message passing
+- The web worker has to sent back the result as a message to the main thread, containing the list of result. Each entry of this list must have the same form as it had in the original JSON file.
 - The file must be named `index.js` and be located in the `odoc-support` URI.
 
 In this driver, we use the minisearch javascript library. For more involved application, we could use `index.js` to call a server-side search engine via an API call.
@@ -638,9 +639,10 @@ let miniSearch = new MiniSearch({
 // Index all documents
 miniSearch.addAll(documents.map((index, id) => {index.search_id = id; index.original = index; return index}));
 
-function odoc_search(query) {
+onmessage = (m) => {
+  let query = m.data;
   let result = miniSearch.search(query);
-  return result.slice(0,200).map(a => a.original);
+  postMessage(result.slice(0,200).map(a => a.original));
 }
 |} minisearch index
 ```

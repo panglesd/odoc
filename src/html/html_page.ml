@@ -135,14 +135,12 @@ let page_creator ~config ~url ~uses_katex ~with_search header breadcrumbs toc
         [
           Html.script ~a:[]
             (Html.txt
-               (Printf.sprintf "let base_url = '%s'"
+               (Printf.sprintf "let base_url = '%s'; let search_url = '%s';"
                   (let page =
                      Url.Path.{ kind = `File; parent = None; name = "" }
                    in
-                   Link.href ~config ~resolve:(Current url) (Url.from_path page))));
-          Html.script
-            ~a:[ Html.a_src (file_uri support_uri "index.js"); Html.a_defer () ]
-            (Html.txt "");
+                   Link.href ~config ~resolve:(Current url) (Url.from_path page))
+                  (file_uri support_uri "index.js")));
           Html.script
             ~a:
               [
