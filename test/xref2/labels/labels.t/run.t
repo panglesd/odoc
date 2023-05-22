@@ -48,13 +48,9 @@ There are two references in N, one should point to a local label and the other t
     <meta name="generator" content="odoc %%VERSION%%"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <script src="../../../highlight.pack.js"></script>
-    <script>let base_url = '../../../'</script>
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
-    <script src="../../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc"><input class="search-bar"/>
-    <div class="search-result"></div>
+   <body class="odoc">
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../../index.html">test</a> &#x00BB; 
      <a href="../index.html">Test</a> &#x00BB; N
@@ -62,15 +58,18 @@ There are two references in N, one should point to a local label and the other t
     <header class="odoc-preamble">
      <h1>Module <code><span>Test.N</span></code></h1>
     </header>
-    <nav class="odoc-toc">
-     <ul><li><a href="#B">An other conflicting label</a></li></ul>
-    </nav>
+    <div class="odoc-sidebar">
+     <nav class="odoc-toc">
+      <ul><li><a href="#B">An other conflicting label</a></li></ul>
+     </nav>
+    </div>
     <div class="odoc-content">
      <h2 id="B"><a href="#B" class="anchor"></a>An other conflicting label</h2>
-     <p><a href="#B" title="B">An other conflicting label</a> 
+     <p id="search_label_1">
+      <a href="#B" title="B">An other conflicting label</a> 
       <a href="../M/index.html#B"><code>B</code></a>
      </p>
-    </div><script src="../../../fuse_search.js"></script>
+    </div>
    </body>
   </html>
 
@@ -85,25 +84,23 @@ The second occurence of 'B' in the main page should be disambiguated
     <meta name="generator" content="odoc %%VERSION%%"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <script src="../../highlight.pack.js"></script>
-    <script>let base_url = '../../'</script>
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
-    <script src="../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc"><input class="search-bar"/>
-    <div class="search-result"></div>
+   <body class="odoc">
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../index.html">test</a> &#x00BB; Test
     </nav>
     <header class="odoc-preamble">
      <h1>Module <code><span>Test</span></code></h1>
     </header>
-    <nav class="odoc-toc">
-     <ul><li><a href="#A">First label</a></li>
-      <li><a href="#B">Floating label</a></li>
-      <li><a href="#B_2">Dupplicate B</a></li>
-     </ul>
-    </nav>
+    <div class="odoc-sidebar">
+     <nav class="odoc-toc">
+      <ul><li><a href="#A">First label</a></li>
+       <li><a href="#B">Floating label</a></li>
+       <li><a href="#B_2">Dupplicate B</a></li>
+      </ul>
+     </nav>
+    </div>
     <div class="odoc-content">
      <h2 id="A"><a href="#A" class="anchor"></a>First label</h2>
      <h2 id="B"><a href="#B" class="anchor"></a>Floating label</h2>
@@ -131,15 +128,15 @@ The second occurence of 'B' in the main page should be disambiguated
        </code>
       </div>
      </div><h2 id="B_2"><a href="#B_2" class="anchor"></a>Dupplicate B</h2>
-     <p>Define <code>B</code> again in the same scope.</p>
-     <p>References to the labels:</p>
-     <p><a href="#A" title="A">First label</a> 
+     <p id="search_label_2">Define <code>B</code> again in the same scope.</p>
+     <p id="search_label_3">References to the labels:</p>
+     <p id="search_label_4"><a href="#A" title="A">First label</a> 
       <a href="#B" title="B">Dupplicate B</a> 
       <a href="M/index.html#C"><code>C</code></a> 
       <a href="M/index.html#D"><code>D</code></a> 
       <a href="M/index.html#B"><code>B</code></a> 
       <a href="N/index.html#B"><code>B</code></a>
      </p>
-    </div><script src="../../fuse_search.js"></script>
+    </div>
    </body>
   </html>

@@ -22,11 +22,11 @@
   with-theme/fonts/KaTeX_Size3-Regular.woff2
   with-theme/fonts/KaTeX_Size4-Regular.woff2
   with-theme/fonts/KaTeX_Typewriter-Regular.woff2
-  with-theme/fuse_search.js
   with-theme/highlight.pack.js
   with-theme/katex.min.css
   with-theme/katex.min.js
   with-theme/odoc.css
+  with-theme/odoc_search.js
 
   $ odoc support-files --without-theme -o without-theme
   $ find without-theme | sort
@@ -52,8 +52,8 @@
   without-theme/fonts/KaTeX_Size3-Regular.woff2
   without-theme/fonts/KaTeX_Size4-Regular.woff2
   without-theme/fonts/KaTeX_Typewriter-Regular.woff2
-  without-theme/fuse_search.js
   without-theme/highlight.pack.js
   without-theme/katex.min.css
   without-theme/katex.min.js
+  without-theme/odoc_search.js
 

@@ -35,18 +35,14 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
     <meta name="generator" content="odoc %%VERSION%%"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <script src="../../highlight.pack.js"></script>
-    <script>let base_url = '../../'</script>
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
-    <script src="../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc"><input class="search-bar"/>
-    <div class="search-result"></div>
+   <body class="odoc">
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../index.html">test</a> &#x00BB; A
     </nav>
     <header class="odoc-preamble"><h1>Module <code><span>A</span></code></h1>
-     <p>Module A.</p>
+     <p id="search_label_1">Module A.</p>
     </header>
     <div class="odoc-content">
      <div class="odoc-spec">
@@ -63,7 +59,7 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
       <div class="spec-doc"><p>Module B. This paragraph is the synopsis.</p>
       </div>
      </div>
-    </div><script src="../../fuse_search.js"></script>
+    </div>
    </body>
   </html>
 
@@ -77,29 +73,29 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
     <meta name="generator" content="odoc %%VERSION%%"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <script src="../../../highlight.pack.js"></script>
-    <script>let base_url = '../../../'</script>
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
-    <script src="../../../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc"><input class="search-bar"/>
-    <div class="search-result"></div>
+   <body class="odoc">
     <nav class="odoc-nav"><a href="../index.html">Up</a> – 
      <a href="../../index.html">test</a> &#x00BB; <a href="../index.html">A</a>
       &#x00BB; B
     </nav>
     <header class="odoc-preamble"><h1>Module <code><span>A.B</span></code></h1>
-     <p>Module B. This paragraph is the synopsis.</p>
-     <p>This paragraph and the previous are part of the preamble.</p>
+     <p id="search_label_1">Module B. This paragraph is the synopsis.</p>
+     <p id="search_label_2">This paragraph and the previous are part of
+       the preamble.
+     </p>
     </header>
-    <nav class="odoc-toc">
-     <ul><li><a href="#an-heading">An heading</a></li></ul>
-    </nav>
+    <div class="odoc-sidebar">
+     <nav class="odoc-toc">
+      <ul><li><a href="#an-heading">An heading</a></li></ul>
+     </nav>
+    </div>
     <div class="odoc-content">
      <h3 id="an-heading"><a href="#an-heading" class="anchor"></a>An heading
      </h3>
-     <p>This paragraph is not part of the preamble. It'll be rendered in
-       the &quot;content&quot;.
+     <p id="search_label_3">This paragraph is not part of the preamble.
+       It'll be rendered in the &quot;content&quot;.
      </p>
      <div class="odoc-spec">
       <div class="spec type anchored" id="type-t">
@@ -107,7 +103,7 @@ and that "hidden" modules (eg. `A__b`, rendered to `html/A__b`) are not rendered
        <code><span><span class="keyword">type</span> t</span></code>
       </div>
      </div>
-    </div><script src="../../../fuse_search.js"></script>
+    </div>
    </body>
   </html>
 

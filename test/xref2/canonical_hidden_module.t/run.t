@@ -75,13 +75,9 @@ See the comments on the types at the end of test.mli for the expectation.
     <meta charset="utf-8"/><meta name="generator" content="odoc %%VERSION%%"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
     <script src="../highlight.pack.js"></script>
-    <script>let base_url = '../'</script>
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
-    <script src="../index.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
    </head>
-   <body class="odoc"><input class="search-bar"/>
-    <div class="search-result"></div>
+   <body class="odoc">
     <header class="odoc-preamble">
      <h1>Module <code><span>Test</span></code></h1>
     </header>
@@ -157,8 +153,8 @@ See the comments on the types at the end of test.mli for the expectation.
        </code>
       </div>
       <div class="spec-doc">
-       <p>This should render as A.t but link to A_nonhidden/index.html 
-        - since A has no expansion
+       <p id="search_label_5">This should render as A.t but link to 
+        A_nonhidden/index.html - since A has no expansion
        </p>
       </div>
      </div>
@@ -168,8 +164,8 @@ See the comments on the types at the end of test.mli for the expectation.
        <code><span><span class="keyword">type</span> b</span></code>
       </div>
       <div class="spec-doc">
-       <p>This should have no RHS as it's hidden and there is no canonical
-         alternative
+       <p id="search_label_6">This should have no RHS as it's hidden and
+         there is no canonical alternative
        </p>
       </div>
      </div>
@@ -181,7 +177,9 @@ See the comments on the types at the end of test.mli for the expectation.
        </code>
       </div>
       <div class="spec-doc">
-       <p>This should render as C.t and link to C/index.html</p>
+       <p id="search_label_7">This should render as C.t and link to 
+        C/index.html
+       </p>
       </div>
      </div>
      <div class="odoc-spec">
@@ -192,10 +190,12 @@ See the comments on the types at the end of test.mli for the expectation.
        </code>
       </div>
       <div class="spec-doc">
-       <p>This should render as D.t and link to D/index.html</p>
+       <p id="search_label_8">This should render as D.t and link to 
+        D/index.html
+       </p>
       </div>
      </div>
-    </div><script src="../fuse_search.js"></script>
+    </div>
    </body>
   </html>
 

@@ -59,17 +59,19 @@ let html_of_search () =
   [ search_bar; search_result ]
 
 let sidebar toc with_search =
-  let toc =
+  let toc, has_toc =
     match toc with
-    | [] -> []
-    | _ -> [ Html.div ~a:[ Html.a_class [ "odoc-toc" ] ] (html_of_toc toc) ]
+    | [] -> ([], false)
+    | _ ->
+        ([ Html.nav ~a:[ Html.a_class [ "odoc-toc" ] ] (html_of_toc toc) ], true)
   in
   if with_search then
     let search =
       Html.div ~a:[ Html.a_class [ "odoc-search" ] ] (html_of_search ())
     in
-    [ Html.nav ~a:[ Html.a_class [ "odoc-sidebar" ] ] (search :: toc) ]
-  else [ Html.nav ~a:[ Html.a_class [ "odoc-sidebar" ] ] toc ]
+    [ Html.div ~a:[ Html.a_class [ "odoc-sidebar" ] ] (search :: toc) ]
+  else if has_toc then [ Html.div ~a:[ Html.a_class [ "odoc-sidebar" ] ] toc ]
+  else []
 
 let html_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) =
   let make_navigation ~up_url rest =
