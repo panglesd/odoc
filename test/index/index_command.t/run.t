@@ -376,25 +376,6 @@ $ odoc compile -c module-main -c src-source root.mld
       }
     }
   ]
-  $ cat index.json
-  [{"id":[{"kind":"Root","name":"Main"}],"url":"Main/index.html","doc":{"html":"<div></div>","txt":""},"extra":{"kind":"Module"}}
-  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Type","name":"t"}],"url":"Main/index.html#type-t","doc":{"html":"<div><p>A comment</p></div>","txt":"A comment"},"extra":{"kind":"TypeDecl","private":false,"manifest":"int","constraints":[]}}
-  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Label","name":"this-is-a-title"}],"url":"Main/index.html#this-is-a-title","doc":{"html":"<div><p>this is a title</p></div>","txt":"this is a title"},"extra":{"kind":"Doc","subkind":"Heading"}}
-  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Label","name":"search_label_2"}],"url":"Main/index.html#search_label_2","doc":{"html":"<div><p>and this is a paragraph</p></div>","txt":"and this is a paragraph"},"extra":{"kind":"Doc","subkind":"Paragraph"}}
-  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"M"}],"url":"Main/M/index.html","doc":{"html":"<div></div>","txt":""},"extra":{"kind":"Module"}}
-  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"M"},{"kind":"Type","name":"t"}],"url":"Main/M/index.html#type-t","doc":{"html":"<div><p>dsdsd</p></div>","txt":"dsdsd"},"extra":{"kind":"TypeDecl","private":false,"manifest":null,"constraints":[]}}
-  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"v"}],"url":"Main/index.html#val-v","doc":{"html":"<div><p>a reference <span><code>t</code></span>, and some <em>formatted</em> <b>content</b> with <code>code</code> and</p><pre class=\"language-ocaml\"><code>code blocks</code></pre></div>","txt":"a reference , and some formatted content with code and\u000Acode blocks"},"extra":{"kind":"Value","type":"int"}}
-  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem"}],"url":"Main/index.html#val-lorem","doc":{"html":"<div><p>lorem 1 and a <span>link</span></p></div>","txt":"lorem 1 and a link"},"extra":{"kind":"Value","type":"int"}}
-  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem2"}],"url":"Main/index.html#val-lorem2","doc":{"html":"<div><p>lorem 2</p></div>","txt":"lorem 2"},"extra":{"kind":"Value","type":"int"}}
-  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem3"}],"url":"Main/index.html#val-lorem3","doc":{"html":"<div><p>lorem 3</p></div>","txt":"lorem 3"},"extra":{"kind":"Value","type":"int"}}
-  ,{"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem4"}],"url":"Main/index.html#val-lorem4","doc":{"html":"<div><p>lorem 4</p></div>","txt":"lorem 4"},"extra":{"kind":"Value","type":"int"}}
-  ,{"id":[{"kind":"Page","name":"page"},{"kind":"Label","name":"a-title"}],"url":"page.html#a-title","doc":{"html":"<div><p>A title</p></div>","txt":"A title"},"extra":{"kind":"Doc","subkind":"Heading"}}
-  ,{"id":[{"kind":"Page","name":"page"},{"kind":"Label","name":"search_label_1"}],"url":"page.html#search_label_1","doc":{"html":"<div><p>A paragraph</p></div>","txt":"A paragraph"},"extra":{"kind":"Doc","subkind":"Paragraph"}}
-  ,{"id":[{"kind":"Page","name":"page"},{"kind":"Label","name":"search_label_2"}],"url":"page.html#search_label_2","doc":{"html":"<div><pre>some verbatim</pre></div>","txt":"some verbatim"},"extra":{"kind":"Doc","subkind":"Verbatim"}}
-  ,{"id":[{"kind":"Page","name":"page"},{"kind":"Label","name":"search_label_3"}],"url":"page.html#search_label_3","doc":{"html":"<div><pre class=\"language-ocaml\"><code>and code</code></pre></div>","txt":"and code"},"extra":{"kind":"Doc","subkind":"CodeBlock"}}
-  ,{"id":[{"kind":"Page","name":"page"},{"kind":"Label","name":"search_label_4"}],"url":"page.html#search_label_4","doc":{"html":"<div><p>a list <em>of</em> things</p></div>","txt":"a list of things"},"extra":{"kind":"Doc","subkind":"Paragraph"}}
-  ,{"id":[{"kind":"Page","name":"page"},{"kind":"Label","name":"search_label_5"}],"url":"page.html#search_label_5","doc":{"html":"<div><p>bliblib</p></div>","txt":"bliblib"},"extra":{"kind":"Doc","subkind":"Paragraph"}}
-  ]
 
 The index.js file need to provide a odoc_search command, from a 
 
@@ -402,9 +383,9 @@ The index.js file need to provide a odoc_search command, from a
   $ echo "\n\nlet documents = " >> index.js
   $ cat index.json >> index.js
 
-  $ echo "\n\nconst options = { keys: ['odoc_id', 'doc.txt'] };" >> index.js
+  $ echo "\n\nconst options = { keys: ['id', 'doc.txt'] };" >> index.js
   $ echo "\nvar idx_fuse = new Fuse(documents, options);" >> index.js
-  $ echo "\nfunction odoc_search(query) {let result = idx_fuse.search(query); return result.map(entry => entry.item)};" >> index.js
+  $ echo "\nonmessage = (m) => {\n  let query = m.data;\n  let result = idx_fuse.search(query);\n  postMessage(result.slice(0,200).map(a => a.item));};" >> index.js
 
   $ odoc html-generate --with-search -o html main.odocl
   $ odoc html-generate --with-search -o html page-page.odocl
@@ -446,6 +427,6 @@ The index.js file need to provide a odoc_search command, from a
   html/odoc_search.js
   html/page.html
 
-  $ firefox html/Main/index.html
-  Gtk-Message: 10:35:32.166: Failed to load module "xapp-gtk3-module"
-  Gtk-Message: 10:35:32.166: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+Run
+$ firefox html/Main/index.html
+to manually test the search
