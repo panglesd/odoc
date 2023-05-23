@@ -90,8 +90,3 @@ let load file = load_ file (fun ic _ -> Ok (Marshal.from_channel ic))
 
 (** The root is saved separately in the files to support this function. *)
 let load_root file = load_ file (fun _ root -> Ok root)
-
-let load_dir path =
-  Fs.Directory.fold_files_rec_result ~ext:"odocl"
-    (fun acc file -> load file >>= fun unit -> Ok (unit :: acc))
-    [] path
