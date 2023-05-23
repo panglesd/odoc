@@ -170,6 +170,14 @@ module Identifier : sig
     module Type :
       IdSig with type t = Id.path_type and type t_pv = Id.path_type_pv
 
+    module DataType :
+      IdSig with type t = Id.path_datatype and type t_pv = Id.path_datatype_pv
+
+    module Constructor :
+      IdSig with type t = Id.path_constructor and type t_pv = Id.constructor_pv
+
+    module Value : IdSig with type t = Id.path_value and type t_pv = Id.value_pv
+
     module ClassType :
       IdSig
         with type t = Id.path_class_type
@@ -186,7 +194,7 @@ module Identifier : sig
 
   val name : [< t_pv ] id -> string
 
-  (* val root : [< t_pv ] id -> RootModule.t_pv id option *)
+  val fullname : [< t_pv ] id -> string list
 
   val compare : t -> t -> int
 
@@ -339,6 +347,24 @@ module rec Path : sig
       (* val identifier : t -> Identifier.Path.Type.t *)
     end
 
+    module DataType : sig
+      type t = Paths_types.Resolved_path.datatype
+    end
+
+    module Constructor : sig
+      type t = Paths_types.Resolved_path.constructor
+    end
+
+    module Value : sig
+      type t = Paths_types.Resolved_path.value
+
+      (* val of_ident : Identifier.Path.Value.t -> t *)
+
+      (* val is_hidden : t -> bool *)
+
+      (* val identifier : t -> Identifier.Path.Type.t *)
+    end
+
     module ClassType : sig
       type t = Paths_types.Resolved_path.class_type
 
@@ -366,6 +392,18 @@ module rec Path : sig
 
   module Type : sig
     type t = Paths_types.Path.type_
+  end
+
+  module DataType : sig
+    type t = Paths_types.Path.datatype
+  end
+
+  module Constructor : sig
+    type t = Paths_types.Path.constructor
+  end
+
+  module Value : sig
+    type t = Paths_types.Path.value
   end
 
   module ClassType : sig

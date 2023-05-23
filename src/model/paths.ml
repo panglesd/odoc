@@ -64,6 +64,55 @@ module Identifier = struct
 
   let name : [< t_pv ] id -> string = fun n -> name_aux (n :> t)
 
+  let rec full_name_aux : t -> string list =
+   fun x ->
+    match x.iv with
+    | `Root (_, name) -> [ ModuleName.to_string name ]
+    | `Page (_, name) -> [ PageName.to_string name ]
+    | `LeafPage (_, name) -> [ PageName.to_string name ]
+    | `Module (parent, name) ->
+        ModuleName.to_string name :: full_name_aux (parent :> t)
+    | `Parameter (parent, name) ->
+        ModuleName.to_string name :: full_name_aux (parent :> t)
+    | `Result x -> full_name_aux (x :> t)
+    | `ModuleType (parent, name) ->
+        ModuleTypeName.to_string name :: full_name_aux (parent :> t)
+    | `Type (parent, name) ->
+        TypeName.to_string name :: full_name_aux (parent :> t)
+    | `CoreType name -> [ TypeName.to_string name ]
+    | `Constructor (parent, name) ->
+        ConstructorName.to_string name :: full_name_aux (parent :> t)
+    | `Field (parent, name) ->
+        FieldName.to_string name :: full_name_aux (parent :> t)
+    | `Extension (parent, name) ->
+        ExtensionName.to_string name :: full_name_aux (parent :> t)
+    | `Exception (parent, name) ->
+        ExceptionName.to_string name :: full_name_aux (parent :> t)
+    | `CoreException name -> [ ExceptionName.to_string name ]
+    | `Value (parent, name) ->
+        ValueName.to_string name :: full_name_aux (parent :> t)
+    | `Class (parent, name) ->
+        ClassName.to_string name :: full_name_aux (parent :> t)
+    | `ClassType (parent, name) ->
+        ClassTypeName.to_string name :: full_name_aux (parent :> t)
+    | `Method (parent, name) ->
+        MethodName.to_string name :: full_name_aux (parent :> t)
+    | `InstanceVariable (parent, name) ->
+        InstanceVariableName.to_string name :: full_name_aux (parent :> t)
+    | `Label (parent, name) ->
+        LabelName.to_string name :: full_name_aux (parent :> t)
+    | `SourceDir (parent, name) -> name :: full_name_aux (parent :> t)
+    | `SourceLocation (parent, name) ->
+        DefName.to_string name :: full_name_aux (parent :> t)
+    | `SourceLocationInternal (parent, name) ->
+        LocalName.to_string name :: full_name_aux (parent :> t)
+    | `SourceLocationMod name -> full_name_aux (name :> t)
+    | `SourcePage (parent, name) -> name :: full_name_aux (parent :> t)
+    | `AssetFile (parent, name) -> name :: full_name_aux (parent :> t)
+
+  let fullname : [< t_pv ] id -> string list =
+   fun n -> List.rev @@ full_name_aux (n :> t)
+
   let rec label_parent_aux =
     let open Id in
     fun (n : non_src) ->
@@ -330,6 +379,30 @@ module Identifier = struct
       let compare = compare
     end
 
+    module DataType = struct
+      type t = Id.path_datatype
+      type t_pv = Id.path_datatype_pv
+      let equal = equal
+      let hash = hash
+      let compare = compare
+    end
+
+    module Constructor = struct
+      type t = Id.path_constructor
+      type t_pv = Id.constructor_pv
+      let equal = equal
+      let hash = hash
+      let compare = compare
+    end
+
+    module Value = struct
+      type t = Id.path_value
+      type t_pv = Id.value_pv
+      let equal = equal
+      let hash = hash
+      let compare = compare
+    end
+
     module ClassType = struct
       type t = Id.path_class_type
       type t_pv = Id.path_class_type_pv
@@ -555,6 +628,9 @@ module Path = struct
       | `ModuleType (p, _) -> inner (p : module_ :> any)
       | `Type (_, t) when Names.TypeName.is_internal t -> true
       | `Type (p, _) -> inner (p : module_ :> any)
+      | `Value (_, t) when Names.ValueName.is_internal t -> true
+      | `Value (p, _) -> inner (p : module_ :> any)
+      | `Constructor (p, _) -> inner (p : datatype :> any)
       | `Class (p, _) -> inner (p : module_ :> any)
       | `ClassType (p, _) -> inner (p : module_ :> any)
       | `Alias (dest, `Resolved src) ->
@@ -569,6 +645,8 @@ module Path = struct
       | `CanonicalModuleType (x, _) -> inner (x : module_type :> any)
       | `CanonicalType (_, `Resolved _) -> false
       | `CanonicalType (x, _) -> inner (x : type_ :> any)
+      | `CanonicalDataType (_, `Resolved _) -> false
+      | `CanonicalDataType (x, _) -> inner (x : datatype :> any)
       | `OpaqueModule m -> inner (m :> any)
       | `OpaqueModuleType mt -> inner (mt :> any)
     in
@@ -631,6 +709,14 @@ module Path = struct
       | `Alias (dest, _src) -> parent_module_identifier dest
       | `OpaqueModule m -> parent_module_identifier m
 
+    and parent_datatype_identifier :
+        Paths_types.Resolved_path.datatype -> Identifier.DataType.t = function
+      | `Identifier id ->
+          (id : Identifier.Path.DataType.t :> Identifier.DataType.t)
+      | `CanonicalDataType (_, `Resolved p) -> parent_datatype_identifier p
+      | `CanonicalDataType (p, _) -> parent_datatype_identifier p
+      | `Type (m, n) -> Identifier.Mk.type_ (parent_module_identifier m, n)
+
     module Module = struct
       type t = Paths_types.Resolved_path.module_
 
@@ -646,6 +732,18 @@ module Path = struct
       type t = Paths_types.Resolved_path.type_
     end
 
+    module DataType = struct
+      type t = Paths_types.Resolved_path.datatype
+    end
+
+    module Constructor = struct
+      type t = Paths_types.Resolved_path.constructor
+    end
+
+    module Value = struct
+      type t = Paths_types.Resolved_path.value
+    end
+
     module ClassType = struct
       type t = Paths_types.Resolved_path.class_type
     end
@@ -659,6 +757,9 @@ module Path = struct
       | `Canonical (p, _) -> identifier (p :> t)
       | `Apply (m, _) -> identifier (m :> t)
       | `Type (m, n) -> Identifier.Mk.type_ (parent_module_identifier m, n)
+      | `Value (m, n) -> Identifier.Mk.value (parent_module_identifier m, n)
+      | `Constructor (m, n) ->
+          Identifier.Mk.constructor (parent_datatype_identifier m, n)
       | `ModuleType (m, n) ->
           Identifier.Mk.module_type (parent_module_identifier m, n)
       | `Class (m, n) -> Identifier.Mk.class_ (parent_module_identifier m, n)
@@ -678,6 +779,8 @@ module Path = struct
       | `CanonicalModuleType (p, _) -> identifier (p :> t)
       | `CanonicalType (_, `Resolved p) -> identifier (p :> t)
       | `CanonicalType (p, _) -> identifier (p :> t)
+      | `CanonicalDataType (_, `Resolved p) -> identifier (p :> t)
+      | `CanonicalDataType (p, _) -> identifier (p :> t)
       | `OpaqueModule m -> identifier (m :> t)
       | `OpaqueModuleType mt -> identifier (mt :> t)
 
@@ -694,6 +797,18 @@ module Path = struct
 
   module Type = struct
     type t = Paths_types.Path.type_
+  end
+
+  module DataType = struct
+    type t = Paths_types.Path.datatype
+  end
+
+  module Constructor = struct
+    type t = Paths_types.Path.constructor
+  end
+
+  module Value = struct
+    type t = Paths_types.Path.value
   end
 
   module ClassType = struct

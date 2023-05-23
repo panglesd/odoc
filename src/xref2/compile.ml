@@ -21,6 +21,27 @@ let type_path : Env.t -> Paths.Path.Type.t -> Paths.Path.Type.t =
       | Ok p' -> `Resolved Lang_of.(Path.resolved_type (empty ()) p')
       | Error _ -> p)
 
+and value_path : Env.t -> Paths.Path.Value.t -> Paths.Path.Value.t =
+ fun env p ->
+  match p with
+  | `Resolved _ -> p
+  | _ -> (
+      let cp = Component.Of_Lang.(value_path (empty ()) p) in
+      match Tools.resolve_value_path env cp with
+      | Ok p' -> `Resolved Lang_of.(Path.resolved_value (empty ()) p')
+      | Error _ -> p)
+
+and constructor_path :
+    Env.t -> Paths.Path.Constructor.t -> Paths.Path.Constructor.t =
+ fun env p ->
+  match p with
+  | `Resolved _ -> p
+  | _ -> (
+      let cp = Component.Of_Lang.(constructor_path (empty ()) p) in
+      match Tools.resolve_constructor_path env cp with
+      | Ok p' -> `Resolved Lang_of.(Path.resolved_constructor (empty ()) p')
+      | Error _ -> p)
+
 and module_type_path :
     Env.t -> Paths.Path.ModuleType.t -> Paths.Path.ModuleType.t =
  fun env p ->
@@ -64,7 +85,30 @@ let rec unit env t =
 
 and source_info env si = { si with infos = source_info_infos env si.infos }
 
-and source_info_infos _env infos = infos
+and source_info_infos env infos =
+  let open Source_info in
+  List.map
+    (function
+      | ModulePath p, pos ->
+          let p = module_path env p in
+          (ModulePath p, pos)
+      | TypePath p, pos ->
+          let p = type_path env p in
+          (TypePath p, pos)
+      | MtyPath p, pos ->
+          let p = module_type_path env p in
+          (MtyPath p, pos)
+      | ClassPath p, pos ->
+          let p = class_type_path env p in
+          (ClassPath p, pos)
+      | ValuePath p, pos ->
+          let p = value_path env p in
+          (ValuePath p, pos)
+      | ConstructorPath p, pos ->
+          let p = constructor_path env p in
+          (ConstructorPath p, pos)
+      | i -> i)
+    infos
 
 and content env id =
   let open Compilation_unit in

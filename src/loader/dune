@@ -16,6 +16,15 @@
    %{workspace_root}
    (run %{bin:cppo} -V OCAML:%{ocaml_version} %{x} -o %{targets}))))
 
+(rule
+ (targets compat.ml)
+ (deps
+  (:x compat.cppo.ml))
+ (action
+  (chdir
+   %{workspace_root}
+   (run %{bin:cppo} -V OCAML:%{ocaml_version} %{x} -o %{targets}))))
+
 (library
  (name odoc_loader)
  (public_name odoc.loader)
