@@ -40,15 +40,30 @@ module Global_analysis = struct
         poses := (Def s, pos_of_loc t) :: !poses)
       uid_to_loc
 
+  let rec ref_of_path (path : Path.t) : Odoc_model.Paths.Reference.LabelParent.t option =
+    match path with
+    | Pident id ->
+        if Ident.persistent id then Some (`Root (Ident.name id, `TUnknown))
+        else None
+    | Pdot (i, l) -> (
+        match ref_of_path i with
+        | None -> None
+        | Some i -> Some (`Dot (i, l)))
+    | Papply (i, _) -> ref_of_path i
+
   let expr poses uid_to_loc expr =
     match expr with
-    | { Typedtree.exp_desc = Texp_ident (_, _, value_description); exp_loc; _ }
+    | { Typedtree.exp_desc = Texp_ident (p, _, value_description); exp_loc; _ }
       ->
-        (* Only generate anchor if the uid is in the location table. We don't
-           link to modules outside of the compilation unit. *)
-        let= _ = Shape.Uid.Tbl.find_opt uid_to_loc value_description.val_uid in
-        let= anchor = anchor_of_uid value_description.val_uid in
-        poses := (Occurence { anchor }, pos_of_loc exp_loc) :: !poses
+        (
+          match ref_of_path p with
+          | None ->
+              (* Only generate link to anchor if the uid is in the location table. *)
+              let= _ = Shape.Uid.Tbl.find_opt uid_to_loc value_description.val_uid in
+              let= anchor = anchor_of_uid value_description.val_uid in
+              poses := (Occurence { anchor }, pos_of_loc exp_loc) :: !poses
+          | Some ref_ ->
+              poses := (Ref (ref_ :> Odoc_model.Paths.Reference.t), pos_of_loc exp_loc) :: !poses)
     | _ -> ()
 end
 
