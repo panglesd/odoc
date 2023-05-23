@@ -88,14 +88,14 @@ let json_of_doc (doc : Odoc_model.Comment.docs) =
       ("txt", `String txt);
     ]
 
-let json_of_entry ({ id; doc; extra } : Entry.t) =
+let json_of_entry ({ id; doc; extra } : Entry.t) : Odoc_html.Json.json =
   let j_url = `String (Render.url id) in
   let j_id = json_of_id id in
   let doc = json_of_doc doc in
   let extra =
     let return kind arr = `Object (("kind", `String kind) :: arr) in
     match extra with
-    | TypeDecl { canonical = _; equation; representation = _ } ->
+    | TypeDecl { canonical = _; equation; representation = _; txt } ->
         let {
           Odoc_model.Lang.TypeDecl.Equation.params = _;
           private_;
@@ -121,12 +121,20 @@ let json_of_entry ({ id; doc; extra } : Entry.t) =
                    ])
                constraints)
         in
+        let segments = String.split_on_char '=' txt in
+        let rhs =
+          if List.length segments > 1 then
+            segments |> List.tl |> String.concat "=" |> String.trim
+            |> Option.some
+          else None
+        in
         return "TypeDecl"
-          [
-            ("private", private_);
-            ("manifest", manifest);
-            ("constraints", constraints);
-          ]
+          ((match rhs with None -> [] | Some rhs -> [ ("type", `String rhs) ])
+          @ [
+              ("private", private_);
+              ("manifest", manifest);
+              ("constraints", constraints);
+            ])
     | Module -> return "Module" []
     | Value { value = _; type_ } ->
         return "Value" [ ("type", `String (Render.text_of_type type_)) ]
@@ -179,6 +187,8 @@ let json_of_entry ({ id; doc; extra } : Entry.t) =
           ]
   in
   `Object [ ("id", j_id); ("url", j_url); ("doc", doc); ("extra", extra) ]
+
+let string_of_entry entry = entry |> json_of_entry |> Odoc_html.Json.to_string
 
 let output_json ppf first entries =
   let output_json json =
