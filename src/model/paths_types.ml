@@ -349,7 +349,10 @@ module rec Path : sig
     [ `Resolved of Resolved_path.constructor | `Dot of datatype * string ]
   (** @canonical Odoc_model.Paths.Path.Constructor.t *)
 
-  type value = [ `Resolved of Resolved_path.value | `Dot of module_ * string ]
+  type value =
+    [ `Resolved of Resolved_path.value
+    | `Identifier of Identifier.path_value * bool
+    | `Dot of module_ * string ]
   (** @canonical Odoc_model.Paths.Path.Value.t *)
 
   type class_type =
@@ -407,7 +410,8 @@ and Resolved_path : sig
   type constructor = [ `Constructor of datatype * ConstructorName.t ]
   (** @canonical Odoc_model.Paths.Path.Resolved.Constructor.t *)
 
-  type value = [ `Value of module_ * ValueName.t ]
+  type value =
+    [ `Identifier of Identifier.path_value | `Value of module_ * ValueName.t ]
   (** @canonical Odoc_model.Paths.Path.Resolved.Value.t *)
 
   type class_type =
