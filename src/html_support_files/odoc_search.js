@@ -19,6 +19,17 @@ document.querySelector(".search-bar").addEventListener("input", (ev) => {
 
 function hasType(kind) {
   return kind === "val" || kind === "constructor" || kind === "field";
+function typeSeparator(kind) {
+  switch (kind) {
+    case "val":
+    case "constructor":
+    case "field":
+      return " : ";
+    case "type":
+      return " = ";
+    default:
+      return "";
+  }
 }
 
 function hasName(kind) {
@@ -58,10 +69,11 @@ worker.onmessage = (e) => {
       title.appendChild(name);
     }
     let has_type = hasType(entry.kind);
-    if (has_type) {
+    if (typeof entry.type !== typeof undefined) {
       let type = document.createElement("code");
+      let sep = typeSeparator(entry.kind);
       type.classList.add("entry-type");
-      type.innerHTML = ": " + entry.type;
+      type.innerHTML = sep + entry.type
       title.appendChild(type);
     }
     let comment = document.createElement("div");
