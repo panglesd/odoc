@@ -21,6 +21,12 @@ module Source_info = struct
   type annotation =
     | Definition of Paths.Identifier.SourceLocation.t
     | Value of Paths.Identifier.SourceLocation.t
+    | ValuePath of Path.Value.t
+    | ModulePath of Path.Module.t
+    | ClassPath of Path.ClassType.t
+    | MtyPath of Path.ModuleType.t
+    | TypePath of Path.Type.t
+    | ConstructorPath of Path.Constructor.t
 
   type 'a with_pos = 'a * (int * int)
 
