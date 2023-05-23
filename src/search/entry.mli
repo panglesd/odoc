@@ -2,6 +2,7 @@ open Odoc_model.Lang
 open Odoc_model.Paths
 
 type type_decl_entry = {
+  txt : string;
   canonical : Path.Type.t option;
   equation : TypeDecl.Equation.t;
   representation : TypeDecl.Representation.t option;
