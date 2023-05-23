@@ -168,7 +168,7 @@ end = struct
 
   let compile hidden directories resolve_fwd_refs dst package_opt
       parent_name_opt open_modules children input warnings_options
-      source_parent_file source_name =
+      source_parent_file source_name count_occurrences =
     let open Or_error in
     let resolver =
       Resolver.create ~important_digests:(not resolve_fwd_refs) ~directories
@@ -200,7 +200,7 @@ end = struct
     source >>= fun source ->
     Fs.Directory.mkdir_p (Fs.File.dirname output);
     Compile.compile ~resolver ~parent_cli_spec ~hidden ~children ~output
-      ~warnings_options ~source input
+      ~warnings_options ~source ~count_occurrences input
 
   let input =
     let doc = "Input $(i,.cmti), $(i,.cmt), $(i,.cmi) or $(i,.mld) file." in
@@ -266,11 +266,16 @@ end = struct
       let doc = "Try resolving forward references." in
       Arg.(value & flag & info ~doc [ "r"; "resolve-fwd-refs" ])
     in
+    let count_occurrences =
+      let doc = "Count occurrences in implementation. Useful for " in
+      Arg.(value & flag & info ~doc [ "count-occurrences" ])
+    in
     Term.(
       const handle_error
       $ (const compile $ hidden $ odoc_file_directories $ resolve_fwd_refs $ dst
        $ package_opt $ parent_opt $ open_modules $ children $ input
-       $ warnings_options $ source_parent_file $ source_name))
+       $ warnings_options $ source_parent_file $ source_name $ count_occurrences
+        ))
 
   let info ~docs =
     let man =
@@ -961,6 +966,30 @@ module Targets = struct
   end
 end
 
+module Occurrences = struct
+  let index directories dst warnings_options =
+    let dst = Fpath.v dst in
+    Occurrences.count ~dst ~warnings_options directories
+
+  let cmd =
+    let dst =
+      let doc = "Output file path." in
+      Arg.(
+        required & opt (some string) None & info ~docs ~docv:"PATH" ~doc [ "o" ])
+    in
+    Term.(
+      const handle_error
+      $ (const index $ odoc_file_directories $ dst $ warnings_options))
+
+  let info ~docs =
+    let doc =
+      "Generate a hashtable mapping identifiers to number of occurrences, as \
+       computed from the implementations of .odocl files found in the given \
+       directories."
+    in
+    Term.info "count-occurrences" ~docs ~doc
+end
+
 module Odoc_error = struct
   let errors input =
     let open Odoc_odoc in
@@ -1001,6 +1030,7 @@ let () =
   Printexc.record_backtrace true;
   let subcommands =
     [
+      Occurrences.(cmd, info ~docs:section_pipeline);
       Compile.(cmd, info ~docs:section_pipeline);
       Odoc_link.(cmd, info ~docs:section_pipeline);
       Odoc_html.generate ~docs:section_pipeline;

@@ -47,11 +47,12 @@ exception Make_root_error of string
 
 (** [cmt_info.cmt_annots = Implementation _] *)
 let read_cmt_infos' cmt_info =
+  let occ_infos = Occurrences.of_cmt cmt_info in
   match Lookup_def.of_cmt cmt_info with
-  | None -> None
+  | None -> (None, occ_infos)
   | Some shape ->
       let jmp_infos = Local_jmp.of_cmt cmt_info in
-      Some (shape, jmp_infos)
+      (Some shape, List.rev_append occ_infos jmp_infos)
 
 let read_cmt_infos ~filename () =
   match Cmt_format.read_cmt filename with
@@ -98,7 +99,7 @@ let make_compilation_unit ~make_root ~imports ~interface ?sourcefile ~name ~id
     expansion = None;
     linked = false;
     canonical;
-    source_info = None;
+    source_info = { id = None; infos = [] };
   }
 
 let compilation_unit_of_sig ~make_root ~imports ~interface ?sourcefile ~name ~id
@@ -166,7 +167,7 @@ let read_cmt ~make_root ~parent ~filename () =
           let content = Odoc_model.Lang.Compilation_unit.Pack items in
           ( make_compilation_unit ~make_root ~imports ~interface ~sourcefile
               ~name ~id content,
-            None )
+            (None, []) )
       | Implementation impl ->
           let id, sg, canonical = Cmt.read_implementation parent name impl in
           ( compilation_unit_of_sig ~make_root ~imports ~interface ~sourcefile

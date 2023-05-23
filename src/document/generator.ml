@@ -21,6 +21,12 @@ open Types
 module O = Codefmt
 open O.Infix
 
+let filter_map f x =
+  List.rev
+  @@ List.fold_left
+       (fun acc x -> match f x with Some x -> x :: acc | None -> acc)
+       [] x
+
 let label t =
   match t with
   | Odoc_model.Lang.TypeExpr.Label s -> O.txt s
@@ -247,15 +253,53 @@ module Make (Syntax : SYNTAX) = struct
     let url id = Url.from_path (path id)
 
     let info_of_info url = function
-      | Lang.Source_info.Syntax s -> Source_page.Syntax s
+      | Lang.Source_info.Syntax s -> Some (Source_page.Syntax s)
       | Local_jmp (Occurence { anchor }) ->
-          Link (Url.Anchor.source_anchor url anchor)
-      | Local_jmp (Def string) -> Anchor string
+          Some (Link (Url.Anchor.source_anchor url anchor))
+      | Local_jmp (Def string) -> Some (Anchor string)
+      | Local_jmp (ModulePath (`Resolved p))
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
+          let id = Paths.Path.Resolved.(identifier (p :> t)) in
+          match Url.from_identifier ~stop_before:false id with
+          | Ok link -> Some (Link link)
+          | _ -> None)
+      | Local_jmp (TypePath (`Resolved p))
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
+          let id = Paths.Path.Resolved.(identifier (p :> t)) in
+          match Url.from_identifier ~stop_before:false id with
+          | Ok link -> Some (Link link)
+          | _ -> None)
+      | Local_jmp (ValuePath (`Resolved p))
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
+          let id = Paths.Path.Resolved.(identifier (p :> t)) in
+          match Url.from_identifier ~stop_before:false id with
+          | Ok link -> Some (Link link)
+          | _ -> None)
+      | Local_jmp (ConstructorPath (`Resolved p))
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
+          let id = Paths.Path.Resolved.(identifier (p :> t)) in
+          match Url.from_identifier ~stop_before:false id with
+          | Ok link -> Some (Link link)
+          | _ -> None)
+      | Local_jmp (ModulePath _) -> None
+      | Local_jmp (ClassPath _) -> None
+      | Local_jmp (TypePath _) -> None
+      | Local_jmp (MtyPath _) -> None
+      | Local_jmp (ValuePath _) -> None
+      | Local_jmp (ConstructorPath _) -> None
 
     let source id infos source_code =
       let url = path id in
-      let mapper (info, loc) = (info_of_info url info, loc) in
-      let infos = List.map mapper infos in
+      let mapper (info, loc) =
+        match info_of_info url info with
+        | Some info -> Some (info, loc)
+        | None -> None
+      in
+      let infos = filter_map mapper infos in
       let contents = Impl.impl ~infos source_code in
       { Source_page.url; contents }
   end
@@ -1756,8 +1800,8 @@ module Make (Syntax : SYNTAX) = struct
         | Pack packed -> ([], pack packed)
       in
       let source_anchor =
-        match t.source_info with
-        | Some src -> Some (Source_page.url src.id)
+        match t.source_info.id with
+        | Some id -> Some (Source_page.url id)
         | None -> None
       in
       let page = make_expansion_page ~source_anchor url [ unit_doc ] items in

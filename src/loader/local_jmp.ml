@@ -44,8 +44,7 @@ module Global_analysis = struct
     match expr with
     | { Typedtree.exp_desc = Texp_ident (_, _, value_description); exp_loc; _ }
       ->
-        (* Only generate anchor if the uid is in the location table. We don't
-           link to modules outside of the compilation unit. *)
+        (* Only generate link to anchor if the uid is in the location table. *)
         let= _ = Shape.Uid.Tbl.find_opt uid_to_loc value_description.val_uid in
         let= anchor = anchor_of_uid value_description.val_uid in
         poses := (Occurence { anchor }, pos_of_loc exp_loc) :: !poses

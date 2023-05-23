@@ -21,6 +21,27 @@ let type_path : Env.t -> Paths.Path.Type.t -> Paths.Path.Type.t =
       | Ok p' -> `Resolved Lang_of.(Path.resolved_type (empty ()) p')
       | Error _ -> p)
 
+and value_path : Env.t -> Paths.Path.Value.t -> Paths.Path.Value.t =
+ fun env p ->
+  match p with
+  | `Resolved _ -> p
+  | _ -> (
+      let cp = Component.Of_Lang.(value_path (empty ()) p) in
+      match Tools.resolve_value_path env cp with
+      | Ok p' -> `Resolved Lang_of.(Path.resolved_value (empty ()) p')
+      | Error _ -> p)
+
+and constructor_path :
+    Env.t -> Paths.Path.Constructor.t -> Paths.Path.Constructor.t =
+ fun env p ->
+  match p with
+  | `Resolved _ -> p
+  | _ -> (
+      let cp = Component.Of_Lang.(constructor_path (empty ()) p) in
+      match Tools.resolve_constructor_path env cp with
+      | Ok p' -> `Resolved Lang_of.(Path.resolved_constructor (empty ()) p')
+      | Error _ -> p)
+
 and module_type_path :
     Env.t -> Paths.Path.ModuleType.t -> Paths.Path.ModuleType.t =
  fun env p ->
@@ -55,7 +76,45 @@ and class_type_path : Env.t -> Paths.Path.ClassType.t -> Paths.Path.ClassType.t
 
 let rec unit env t =
   let open Compilation_unit in
-  { t with content = content env t.id t.content }
+  {
+    t with
+    content = content env t.id t.content;
+    source_info = source_info env t.source_info;
+  }
+
+and source_info env si =
+  let infos =
+    let open Source_info in
+    List.map
+      (function
+        | Source_info.Local_jmp jmp, pos ->
+            let info =
+              match jmp with
+              | ModulePath p ->
+                  let p = module_path env p in
+                  ModulePath p
+              | TypePath p ->
+                  let p = type_path env p in
+                  TypePath p
+              | MtyPath p ->
+                  let p = module_type_path env p in
+                  MtyPath p
+              | ClassPath p ->
+                  let p = class_type_path env p in
+                  ClassPath p
+              | ValuePath p ->
+                  let p = value_path env p in
+                  ValuePath p
+              | ConstructorPath p ->
+                  let p = constructor_path env p in
+                  ConstructorPath p
+              | i -> i
+            in
+            (Local_jmp info, pos)
+        | x -> x)
+      si.infos
+  in
+  { si with infos }
 
 and content env id =
   let open Compilation_unit in
