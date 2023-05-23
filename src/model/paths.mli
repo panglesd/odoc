@@ -194,7 +194,7 @@ module Identifier : sig
 
   val name : [< t_pv ] id -> string
 
-  (* val root : [< t_pv ] id -> RootModule.t_pv id option *)
+  val fullname : [< t_pv ] id -> string list
 
   val compare : t -> t -> int
 
@@ -357,12 +357,6 @@ module rec Path : sig
 
     module Value : sig
       type t = Paths_types.Resolved_path.value
-
-      (* val of_ident : Identifier.Path.Value.t -> t *)
-
-      (* val is_hidden : t -> bool *)
-
-      (* val identifier : t -> Identifier.Path.Type.t *)
     end
 
     module ClassType : sig

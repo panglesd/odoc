@@ -188,10 +188,6 @@ let constructor_path :
             `Resolved Lang_of.(Path.resolved_constructor (empty ()) result)
         | Error e ->
             Errors.report ~what:(`Constructor_path cp) ~tools_error:e `Lookup;
-            let _ =
-              ignore e;
-              failwith "todo"
-            in
             p)
 
 let class_type_path : Env.t -> Paths.Path.ClassType.t -> Paths.Path.ClassType.t
@@ -402,13 +398,44 @@ and open_ env parent = function
 let rec unit env t =
   let open Compilation_unit in
   let content =
-    match t.content with
-    | Module sg ->
-        let sg = signature env (t.id :> Id.Signature.t) sg in
-        Module sg
-    | Pack _ as p -> p
+    if t.Lang.Compilation_unit.linked || t.hidden then t.content
+    else
+      match t.content with
+      | Module sg ->
+          let sg = signature env (t.id :> Id.Signature.t) sg in
+          Module sg
+      | Pack _ as p -> p
   in
-  { t with content; linked = true }
+  let source_info =
+    let open Source_info in
+    match t.source_info with
+    | Some inf ->
+        let map_doc f v =
+          let documentation =
+            match v.documentation with Some p -> Some (f p) | None -> None
+          in
+          { v with documentation }
+        in
+        let infos =
+          List.map
+            (fun (i, pos) ->
+              let info =
+                match i with
+                | Value v -> Value (map_doc (value_path env) v)
+                | Module v -> Module (map_doc (module_path env) v)
+                | ModuleType v -> ModuleType (map_doc (module_type_path env) v)
+                | Type v -> Type (map_doc (type_path env) v)
+                | Constructor v ->
+                    Constructor (map_doc (constructor_path env) v)
+                | i -> i
+              in
+              (info, pos))
+            inf.infos
+        in
+        Some { inf with infos }
+    | None -> None
+  in
+  { t with content; linked = true; source_info }
 
 and value_ env parent t =
   let open Value in
@@ -1086,8 +1113,7 @@ and type_expression : Env.t -> Id.Signature.t -> _ -> _ =
   | Package p -> Package (type_expression_package env parent visited p)
 
 let link ~filename x y =
-  Lookup_failures.catch_failures ~filename (fun () ->
-      if y.Lang.Compilation_unit.linked || y.hidden then y else unit x y)
+  Lookup_failures.catch_failures ~filename (fun () -> unit x y)
 
 let page env page =
   let () =
