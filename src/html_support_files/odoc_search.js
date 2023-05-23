@@ -17,25 +17,17 @@ document.querySelector(".search-bar").addEventListener("input", (ev) => {
   worker.postMessage(ev.target.value);
 });
 
-function hasType(kind) {
-  return kind === "val" || kind === "constructor" || kind === "field";
-}
-
 function typeSeparator(kind) {
   switch (kind) {
-    case "val":
-    case "constructor":
-    case "field":
+    case "Value":
+    case "Constructor":
+    case "Field":
       return " : ";
-    case "type":
+    case "TypeDecl":
       return " = ";
     default:
       return "";
   }
-}
-
-function hasName(kind) {
-  return true;
 }
 
 worker.onmessage = (e) => {
@@ -63,19 +55,15 @@ worker.onmessage = (e) => {
     title.appendChild(kind);
     title.appendChild(prefixname);
 
-    let has_name = hasName(entry.kind);
-    if (has_name) {
-      let name = document.createElement("span");
-      name.classList.add("entry-name");
-      name.innerText = entry.id[entry.id.length - 1].name;
-      title.appendChild(name);
-    }
-    let has_type = hasType(entry.kind);
-    if (typeof entry.type !== typeof undefined) {
+    let name = document.createElement("span");
+    name.classList.add("entry-name");
+    name.innerText = entry.id[entry.id.length - 1].name;
+    title.appendChild(name);
+    if (typeof entry.extra.type !== typeof undefined) {
       let type = document.createElement("code");
-      let sep = typeSeparator(entry.kind);
+      let sep = typeSeparator(entry.extra.kind);
       type.classList.add("entry-type");
-      type.innerHTML = sep + entry.type
+      type.innerHTML = sep + entry.extra.type
       title.appendChild(type);
     }
     let comment = document.createElement("div");
