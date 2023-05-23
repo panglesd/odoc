@@ -40,6 +40,8 @@ module Path : sig
   val read_type : t -> Path.t -> Paths.Path.Type.t
 
   val read_class_type : t -> Path.t -> Paths.Path.ClassType.t
+
+  val read_value : t -> Path.t -> Paths.Path.Value.t
 end
 
 val find_module : t -> Ident.t -> Paths.Path.Module.t
@@ -82,5 +84,6 @@ val identifier_of_loc : t -> Location.t -> Paths.Identifier.t option
     knowing only the location. This is used to generate links to source from the
     resolution of a shape. *)
 
-val iter_located_identifier : t -> (Location.t -> Paths.Identifier.t -> unit) -> unit
+val iter_located_identifier :
+  t -> (Location.t -> Paths.Identifier.t -> unit) -> unit
 (** Iter on all stored pair [location]-[identifier]. *)
