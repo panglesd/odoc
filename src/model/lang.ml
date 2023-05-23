@@ -20,7 +20,7 @@ open Paths
 module Source_info = struct
   type anchor = { anchor : string }
 
-  type jmp_to_def = Occurence of anchor | Def of string
+  type jmp_to_def = Occurence of anchor | Def of string | Ref of Reference.t
 
   type info = Syntax of string | Local_jmp of jmp_to_def
 

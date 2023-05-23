@@ -349,13 +349,36 @@ and open_ env parent = function
 let rec unit env t =
   let open Compilation_unit in
   let content =
-    match t.content with
-    | Module sg ->
-        let sg = signature env (t.id :> Id.Signature.t) sg in
-        Module sg
-    | Pack _ as p -> p
+    if t.Lang.Compilation_unit.linked || t.hidden then t.content
+    else
+      match t.content with
+      | Module sg ->
+          let sg = signature env (t.id :> Id.Signature.t) sg in
+          Module sg
+      | Pack _ as p -> p
   in
-  { t with content; linked = true }
+  let source_info =
+    match t.source_info with
+    | None -> None
+    | Some si ->
+        let infos =
+          List.map
+            (function
+              | Source_info.Local_jmp (Ref r), pos ->
+                  let r =
+                    match
+                      Ref_tools.resolve_reference env r |> Error.raise_warnings
+                    with
+                    | Ok r -> `Resolved r
+                    | Error _ -> r
+                  in
+                  (Source_info.Local_jmp (Ref r), pos)
+              | x -> x)
+            si.infos
+        in
+        Some { si with infos }
+  in
+  { t with content; linked = true; source_info }
 
 and value_ env parent t =
   let open Value in
@@ -1033,8 +1056,7 @@ and type_expression : Env.t -> Id.Signature.t -> _ -> _ =
   | Package p -> Package (type_expression_package env parent visited p)
 
 let link ~filename x y =
-  Lookup_failures.catch_failures ~filename (fun () ->
-      if y.Lang.Compilation_unit.linked || y.hidden then y else unit x y)
+  Lookup_failures.catch_failures ~filename (fun () -> unit x y)
 
 let page env page =
   let () =
