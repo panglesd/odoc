@@ -265,6 +265,40 @@ module Make (Syntax : SYNTAX) = struct
           | `SourceLocationInternal (_, local) ->
               Some (Anchor (LocalName.to_string local))
           | _ -> None)
+      | ModulePath (`Resolved p)
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
+          let id = Paths.Path.Resolved.(identifier (p :> t)) in
+          match Url.from_identifier ~stop_before:false id with
+          | Ok link -> Some (Link link)
+          | _ -> None)
+      | TypePath (`Resolved p)
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
+          let id = Paths.Path.Resolved.(identifier (p :> t)) in
+          match Url.from_identifier ~stop_before:false id with
+          | Ok link -> Some (Link link)
+          | _ -> None)
+      | ValuePath (`Resolved p)
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
+          let id = Paths.Path.Resolved.(identifier (p :> t)) in
+          match Url.from_identifier ~stop_before:false id with
+          | Ok link -> Some (Link link)
+          | _ -> None)
+      | ConstructorPath (`Resolved p)
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
+          let id = Paths.Path.Resolved.(identifier (p :> t)) in
+          match Url.from_identifier ~stop_before:false id with
+          | Ok link -> Some (Link link)
+          | _ -> None)
+      | ModulePath _ -> None
+      | ClassPath _ -> None
+      | TypePath _ -> None
+      | MtyPath _ -> None
+      | ValuePath _ -> None
+      | ConstructorPath _ -> None
 
     let source id syntax_info infos source_code =
       let url = path id in
@@ -1776,7 +1810,7 @@ module Make (Syntax : SYNTAX) = struct
       in
       let source_anchor =
         match t.source_info with
-        | Some src -> Some (Source_page.url src.id)
+        | Some { id; _ } -> Some (Source_page.url id)
         | None -> None
       in
       let page = make_expansion_page ~source_anchor url [ unit_doc ] items in
