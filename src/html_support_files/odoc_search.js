@@ -17,25 +17,12 @@ document.querySelector(".search-bar").addEventListener("input", (ev) => {
   worker.postMessage(ev.target.value);
 });
 
-function typeSeparator(kind) {
-  switch (kind) {
-    case "Value":
-    case "Constructor":
-    case "Field":
-      return " : ";
-    case "TypeDecl":
-      return " = ";
-    default:
-      return "";
-  }
-}
 
 worker.onmessage = (e) => {
   let results = e.data;
   let search_result = document.querySelector(".search-result");
   search_result.innerHTML = "";
   let f = (entry) => {
-    entry.kind = entry.id[entry.id.length - 1].kind;
     let container = document.createElement("a");
     container.href = base_url + entry.url;
     container.classList.add("search-entry", entry.kind.replace(" ", "-"));
@@ -49,7 +36,6 @@ worker.onmessage = (e) => {
     prefixname.innerText =
       entry.id
         .slice(0, entry.id.length - 1)
-        .map((x) => x.name)
         .join(".") + (entry.id.length > 1 && entry.name != "" ? "." : "");
 
     title.appendChild(kind);
@@ -57,17 +43,16 @@ worker.onmessage = (e) => {
 
     let name = document.createElement("span");
     name.classList.add("entry-name");
-    name.innerText = entry.id[entry.id.length - 1].name;
+    name.innerText = entry.id[entry.id.length - 1];
     title.appendChild(name);
-    if (typeof entry.extra.type !== typeof undefined) {
-      let type = document.createElement("code");
-      let sep = typeSeparator(entry.extra.kind);
-      type.classList.add("entry-type");
-      type.innerHTML = sep + entry.extra.type
-      title.appendChild(type);
+    if (typeof entry.rhs !== typeof undefined) {
+      let rhs = document.createElement("code");
+      rhs.classList.add("entry-rhs");
+      rhs.innerHTML = entry.rhs
+      title.appendChild(rhs);
     }
     let comment = document.createElement("div");
-    comment.innerHTML = entry.doc.html;
+    comment.innerHTML = entry.doc;
     comment.classList.add("entry-comment");
 
     container.appendChild(title);

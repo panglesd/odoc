@@ -30,7 +30,7 @@ let json_of_args (args : Odoc_model.Lang.TypeDecl.Constructor.argument) =
                  fl) );
         ]
 
-let rec json_of_id x =
+let rec of_id x =
   let open Odoc_model.Names in
   let open Odoc_model.Paths.Identifier in
   let ret kind name =
@@ -41,45 +41,42 @@ let rec json_of_id x =
   | `Page (_, name) -> [ ret "Page" (PageName.to_string name) ]
   | `LeafPage (_, name) -> [ ret "Page" (PageName.to_string name) ]
   | `Module (parent, name) ->
-      ret "Module" (ModuleName.to_string name) :: json_of_id (parent :> t)
+      ret "Module" (ModuleName.to_string name) :: of_id (parent :> t)
   | `Parameter (parent, name) ->
-      ret "Parameter" (ModuleName.to_string name) :: json_of_id (parent :> t)
-  | `Result x -> json_of_id (x :> t)
+      ret "Parameter" (ModuleName.to_string name) :: of_id (parent :> t)
+  | `Result x -> of_id (x :> t)
   | `ModuleType (parent, name) ->
-      ret "ModuleType" (ModuleTypeName.to_string name)
-      :: json_of_id (parent :> t)
+      ret "ModuleType" (ModuleTypeName.to_string name) :: of_id (parent :> t)
   | `Type (parent, name) ->
-      ret "Type" (TypeName.to_string name) :: json_of_id (parent :> t)
+      ret "Type" (TypeName.to_string name) :: of_id (parent :> t)
   | `CoreType name -> [ ret "CoreType" (TypeName.to_string name) ]
   | `Constructor (parent, name) ->
-      ret "Constructor" (ConstructorName.to_string name)
-      :: json_of_id (parent :> t)
+      ret "Constructor" (ConstructorName.to_string name) :: of_id (parent :> t)
   | `Field (parent, name) ->
-      ret "Field" (FieldName.to_string name) :: json_of_id (parent :> t)
+      ret "Field" (FieldName.to_string name) :: of_id (parent :> t)
   | `Extension (parent, name) ->
-      ret "Extension" (ExtensionName.to_string name) :: json_of_id (parent :> t)
+      ret "Extension" (ExtensionName.to_string name) :: of_id (parent :> t)
   | `Exception (parent, name) ->
-      ret "Exception" (ExceptionName.to_string name) :: json_of_id (parent :> t)
+      ret "Exception" (ExceptionName.to_string name) :: of_id (parent :> t)
   | `CoreException name ->
       [ ret "CoreException" (ExceptionName.to_string name) ]
   | `Value (parent, name) ->
-      ret "Value" (ValueName.to_string name) :: json_of_id (parent :> t)
+      ret "Value" (ValueName.to_string name) :: of_id (parent :> t)
   | `Class (parent, name) ->
-      ret "Class" (ClassName.to_string name) :: json_of_id (parent :> t)
+      ret "Class" (ClassName.to_string name) :: of_id (parent :> t)
   | `ClassType (parent, name) ->
-      ret "ClassType" (ClassTypeName.to_string name) :: json_of_id (parent :> t)
+      ret "ClassType" (ClassTypeName.to_string name) :: of_id (parent :> t)
   | `Method (parent, name) ->
-      ret "Method" (MethodName.to_string name) :: json_of_id (parent :> t)
+      ret "Method" (MethodName.to_string name) :: of_id (parent :> t)
   | `InstanceVariable (parent, name) ->
       ret "InstanceVariable" (InstanceVariableName.to_string name)
-      :: json_of_id (parent :> t)
+      :: of_id (parent :> t)
   | `Label (parent, name) ->
-      ret "Label" (LabelName.to_string name) :: json_of_id (parent :> t)
+      ret "Label" (LabelName.to_string name) :: of_id (parent :> t)
 
-let json_of_id n =
-  `Array (List.rev @@ json_of_id (n :> Odoc_model.Paths.Identifier.t))
+let of_id n = `Array (List.rev @@ of_id (n :> Odoc_model.Paths.Identifier.t))
 
-let json_of_doc (doc : Odoc_model.Comment.docs) =
+let of_doc (doc : Odoc_model.Comment.docs) =
   let txt = Render.text_of_doc doc in
   let html = Render.html_of_doc doc in
   `Object
@@ -88,14 +85,15 @@ let json_of_doc (doc : Odoc_model.Comment.docs) =
       ("txt", `String txt);
     ]
 
-let json_of_entry ({ id; doc; extra } : Entry.t) : Odoc_html.Json.json =
+let of_entry ({ id; doc; extra } as entry : Entry.t) : Odoc_html.Json.json =
   let j_url = `String (Render.url id) in
-  let j_id = json_of_id id in
-  let doc = json_of_doc doc in
+  let j_id = of_id id in
+  let doc = of_doc doc in
+  let display = Json_display.of_entry entry in
   let extra =
     let return kind arr = `Object (("kind", `String kind) :: arr) in
     match extra with
-    | TypeDecl { canonical = _; equation; representation = _; txt } ->
+    | TypeDecl { canonical = _; equation; representation = _; txt=_ } ->
         let {
           Odoc_model.Lang.TypeDecl.Equation.params = _;
           private_;
@@ -121,20 +119,12 @@ let json_of_entry ({ id; doc; extra } : Entry.t) : Odoc_html.Json.json =
                    ])
                constraints)
         in
-        let segments = String.split_on_char '=' txt in
-        let rhs =
-          if List.length segments > 1 then
-            segments |> List.tl |> String.concat "=" |> String.trim
-            |> Option.some
-          else None
-        in
         return "TypeDecl"
-          ((match rhs with None -> [] | Some rhs -> [ ("type", `String rhs) ])
-          @ [
+          [
               ("private", private_);
               ("manifest", manifest);
               ("constraints", constraints);
-            ])
+            ]
     | Module -> return "Module" []
     | Value { value = _; type_ } ->
         return "Value" [ ("type", `String (Render.text_of_type type_)) ]
@@ -186,9 +176,14 @@ let json_of_entry ({ id; doc; extra } : Entry.t) : Odoc_html.Json.json =
             ("parent_type", `String (Render.text_of_type parent_type));
           ]
   in
-  `Object [ ("id", j_id); ("url", j_url); ("doc", doc); ("extra", extra) ]
-
-let string_of_entry entry = entry |> json_of_entry |> Odoc_html.Json.to_string
+  `Object
+    [
+      ("id", j_id);
+      ("url", j_url);
+      ("doc", doc);
+      ("extra", extra);
+      ("display", display);
+    ]
 
 let output_json ppf first entries =
   let output_json json =
@@ -197,7 +192,7 @@ let output_json ppf first entries =
   in
   List.fold_left
     (fun first entry ->
-      let json = json_of_entry entry in
+      let json = of_entry entry in
       if not first then Format.fprintf ppf ",";
       output_json json;
       false)

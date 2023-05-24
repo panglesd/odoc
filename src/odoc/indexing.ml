@@ -36,7 +36,7 @@ let compile ~resolver:_ ~parent:_ ~output ~warnings_options:_ dirs =
     false
   in
   Format.fprintf output "[";
-  fold_dirs ~dirs ~unit:(print Json_output.unit) ~page:(print Json_output.page)
+  fold_dirs ~dirs ~unit:(print Json_search.unit) ~page:(print Json_search.page)
     ~init:true
   >>= fun _ ->
   Format.fprintf output "]";
