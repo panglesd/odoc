@@ -953,6 +953,30 @@ module Targets = struct
   end
 end
 
+module Occurrences = struct
+  let index directories dst warnings_options =
+    let dst = Fpath.v dst in
+    Occurrences.count ~dst ~warnings_options directories
+
+  let cmd =
+    let dst =
+      let doc = "Output file path." in
+      Arg.(
+        required & opt (some string) None & info ~docs ~docv:"PATH" ~doc [ "o" ])
+    in
+    Term.(
+      const handle_error
+      $ (const index $ odoc_file_directories $ dst $ warnings_options))
+
+  let info ~docs =
+    let doc =
+      "Generate a hashtable mapping identifiers to number of occurrences, as \
+       computed from the implementations of .odocl files found in the given \
+       directories."
+    in
+    Term.info "count-occurrences" ~docs ~doc
+end
+
 module Odoc_error = struct
   let errors input =
     let open Odoc_odoc in
@@ -993,6 +1017,7 @@ let () =
   Printexc.record_backtrace true;
   let subcommands =
     [
+      Occurrences.(cmd, info ~docs:section_pipeline);
       Compile.(cmd, info ~docs:section_pipeline);
       Odoc_link.(cmd, info ~docs:section_pipeline);
       Odoc_html.generate ~docs:section_pipeline;

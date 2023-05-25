@@ -58,6 +58,52 @@ module Identifier = struct
 
   let name : [< t_pv ] id -> string = fun n -> name_aux (n :> t)
 
+  let rec full_name_aux : t -> string list =
+   fun x ->
+    match x.iv with
+    | `Root (_, name) -> [ ModuleName.to_string name ]
+    | `Page (_, name) -> [ PageName.to_string name ]
+    | `LeafPage (_, name) -> [ PageName.to_string name ]
+    | `Module (parent, name) ->
+        ModuleName.to_string name :: full_name_aux (parent :> t)
+    | `Parameter (parent, name) ->
+        ModuleName.to_string name :: full_name_aux (parent :> t)
+    | `Result x -> full_name_aux (x :> t)
+    | `ModuleType (parent, name) ->
+        ModuleTypeName.to_string name :: full_name_aux (parent :> t)
+    | `Type (parent, name) ->
+        TypeName.to_string name :: full_name_aux (parent :> t)
+    | `CoreType name -> [ TypeName.to_string name ]
+    | `Constructor (parent, name) ->
+        ConstructorName.to_string name :: full_name_aux (parent :> t)
+    | `Field (parent, name) ->
+        FieldName.to_string name :: full_name_aux (parent :> t)
+    | `Extension (parent, name) ->
+        ExtensionName.to_string name :: full_name_aux (parent :> t)
+    | `Exception (parent, name) ->
+        ExceptionName.to_string name :: full_name_aux (parent :> t)
+    | `CoreException name -> [ ExceptionName.to_string name ]
+    | `Value (parent, name) ->
+        ValueName.to_string name :: full_name_aux (parent :> t)
+    | `Class (parent, name) ->
+        ClassName.to_string name :: full_name_aux (parent :> t)
+    | `ClassType (parent, name) ->
+        ClassTypeName.to_string name :: full_name_aux (parent :> t)
+    | `Method (parent, name) ->
+        MethodName.to_string name :: full_name_aux (parent :> t)
+    | `InstanceVariable (parent, name) ->
+        InstanceVariableName.to_string name :: full_name_aux (parent :> t)
+    | `Label (parent, name) ->
+        LabelName.to_string name :: full_name_aux (parent :> t)
+    | `SourceDir (parent, name) -> name :: full_name_aux (parent :> t)
+    | `SourceLocation (parent, name) ->
+        DefName.to_string name :: full_name_aux (parent :> t)
+    | `SourceLocationMod name -> full_name_aux (name :> t)
+    | `SourcePage (parent, name) -> name :: full_name_aux (parent :> t)
+
+  let fullname : [< t_pv ] id -> string list =
+   fun n -> List.rev @@ full_name_aux (n :> t)
+
   let rec label_parent_aux =
     let open Id in
     fun (n : non_src) ->

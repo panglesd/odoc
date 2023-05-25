@@ -43,7 +43,7 @@ module Global_analysis = struct
   let rec ref_of_path (path : Path.t) : Odoc_model.Paths.Reference.LabelParent.t option =
     match path with
     | Pident id ->
-        if Ident.persistent id then Some (`Root (Ident.name id, `TUnknown))
+        if Ident.persistent id then Some (`Root (Ident.name id, `TModule))
         else None
     | Pdot (i, l) -> (
         match ref_of_path i with
