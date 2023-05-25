@@ -65,6 +65,28 @@ module Global_analysis = struct
           | Some ref_ ->
               poses := (Ref (ref_ :> Odoc_model.Paths.Reference.t), pos_of_loc exp_loc) :: !poses)
     | _ -> ()
+
+  let rec docpath_of_path (path : Path.t) : Odoc_model.Paths.Path.Module.t option =
+    match path with
+    | Pident id ->
+        if Ident.persistent id then Some (`Root (Ident.name id))
+        else None
+    | Pdot (i, l) -> (
+        match docpath_of_path i with
+        | None -> None
+        | Some i -> Some (`Dot (i, l)))
+    | Papply (i, _) -> docpath_of_path i
+
+  let module_expr poses mod_expr =
+    match mod_expr with
+    | { Typedtree.mod_desc = Tmod_ident (p, _); mod_loc; _ }
+      ->
+        (
+          match docpath_of_path p with
+          | None -> ()
+          | Some ref_ ->
+              poses := (Path ref_, pos_of_loc mod_loc) :: !poses)
+    | _ -> ()
 end
 
 let of_cmt (cmt : Cmt_format.cmt_infos) =
@@ -83,7 +105,11 @@ let of_cmt (cmt : Cmt_format.cmt_infos) =
         Local_analysis.pat poses pat;
         Tast_iterator.default_iterator.pat iterator pat
       in
-      let iterator = { Tast_iterator.default_iterator with expr; pat } in
+      let module_expr iterator mod_expr =
+        Global_analysis.module_expr poses mod_expr;
+        Tast_iterator.default_iterator.module_expr iterator mod_expr
+      in
+      let iterator = { Tast_iterator.default_iterator with expr; pat ; module_expr } in
       iterator.structure iterator structure;
       !poses
   | _ -> []

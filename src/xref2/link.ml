@@ -373,6 +373,9 @@ let rec unit env t =
                     | Error _ -> r
                   in
                   (Source_info.Local_jmp (Ref r), pos)
+              | Source_info.Local_jmp (Path p), pos ->
+                  let p = module_path env p in
+                  (Source_info.Local_jmp (Path p), pos)
               | x -> x)
             si.infos
         in
