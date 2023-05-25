@@ -55,7 +55,26 @@ and class_type_path : Env.t -> Paths.Path.ClassType.t -> Paths.Path.ClassType.t
 
 let rec unit env t =
   let open Compilation_unit in
-  { t with content = content env t.id t.content }
+  {
+    t with
+    content = content env t.id t.content;
+    source_info = source_info env t.source_info;
+  }
+
+and source_info env si =
+  match si with
+  | None -> None
+  | Some si ->
+      let infos =
+        List.map
+          (function
+            | Source_info.Local_jmp (Path p), pos ->
+                let p = module_path env p in
+                (Source_info.Local_jmp (Path p), pos)
+            | x -> x)
+          si.infos
+      in
+      Some { si with infos }
 
 and content env id =
   let open Compilation_unit in
