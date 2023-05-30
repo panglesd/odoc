@@ -85,7 +85,7 @@ Now count occurrences
   $ odoc count-occurrences -I . -o occurrences.txt
 
 Uses of A and B are counted correctly, since the path is rewritten correctly.
-Uses of C are not rewritten well, since the canonical destination does not exists.
+Uses of C are not counted, since the canonical destination does not exists.
 Uses of values Y.x and Z.y (in b.ml) are not counted since they come from a "local" module.
 Uses of values Main__.C.y and Main__.A.x are not rewritten since we use references instead of paths.
 
@@ -93,5 +93,4 @@ Uses of values Main__.C.y and Main__.A.x are not rewritten since we use referenc
   Main.A was used 2 times
   Main__.C.y was used 1 times
   Main__.A.x was used 1 times
-  Main__.C was used 1 times
   Main.B was used 1 times

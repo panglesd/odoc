@@ -40,14 +40,17 @@ let count ~dst ~warnings_options:_ directories =
                     match H.find_opt htbl id with Some n -> n | None -> 0
                   in
                   H.replace htbl id (old_value + 1)
-              | Odoc_model.Lang.Source_info.Local_jmp (Path (`Resolved p)), _ ->
+              | ( Odoc_model.Lang.Source_info.Local_jmp
+                    (Path (`Resolved p as p')),
+                  _ ) ->
                   let id =
                     Odoc_model.Paths.Path.Resolved.(identifier (p :> t))
                   in
                   let old_value =
                     match H.find_opt htbl id with Some n -> n | None -> 0
                   in
-                  H.replace htbl id (old_value + 1)
+                  if not Odoc_model.Paths.Path.(is_hidden (p' : Module.t :> t))
+                  then H.replace htbl id (old_value + 1)
               | _ -> ())
             info.infos
         in
