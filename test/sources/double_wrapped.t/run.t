@@ -3,24 +3,28 @@ Similar to the lookup_def_wrapped test.
 
   $ odoc compile -c module-a -c src-source root.mld
 
-  $ printf "a.ml\nmain.ml\n" > source_tree.map
+  $ printf "a.ml\nmain.ml\nb.ml\n" > source_tree.map
   $ odoc source-tree -I . --parent page-root -o src-source.odoc source_tree.map
 
+  $ ocamlc -c -o main__.cmo main__.ml -bin-annot -w -49 -no-alias-deps -I .
   $ ocamlc -c -o main__A.cmo a.ml -bin-annot -I .
-  $ ocamlc -c -o main__.cmo main__.ml -bin-annot -I .
+  $ ocamlc -c -open Main__ -o main__B.cmo b.ml -bin-annot -I .
   $ ocamlc -c -open Main__ main.ml -bin-annot -I .
 
   $ odoc compile --source-name a.ml --source-parent-file src-source.odoc -I . main__A.cmt
+  $ odoc compile --source-name b.ml --source-parent-file src-source.odoc -I . main__B.cmt
   $ odoc compile -I . main__.cmt
   $ odoc compile --source-name main.ml --source-parent-file src-source.odoc -I . main.cmt
 
   $ odoc link -I . main.odoc
   $ odoc link -I . main__A.odoc
+  $ odoc link -I . main__B.odoc
   $ odoc link -I . main__.odoc
 
   $ odoc html-generate --source main.ml --indent -o html main.odocl
   $ odoc html-generate --hidden --indent -o html main__.odocl
   $ odoc html-generate --source a.ml --hidden --indent -o html main__A.odocl
+  $ odoc html-generate --source b.ml --hidden --indent -o html main__B.odocl
 
 Look if all the source files are generated:
 
@@ -33,6 +37,7 @@ Look if all the source files are generated:
   html/root
   html/root/source
   html/root/source/a.ml.html
+  html/root/source/b.ml.html
   html/root/source/main.ml.html
 
   $ cat html/Main/A/index.html
@@ -65,3 +70,9 @@ Look if all the source files are generated:
     </div>
    </body>
   </html>
+
+  $ odoc count-occurrences -I . -o occurrences.txt
+
+  $ cat occurrences.txt
+  Main.A was used 3 times
+  Main__.A.x was used 1 times
