@@ -4,4 +4,7 @@ module A = Main__A
 (** @canonical Main.A *)
 
 module B = Main__B
-(** @canonical Main.A *)
+(** @canonical Main.B *)
+
+module C = Main__C
+(** @canonical Main.C *)
