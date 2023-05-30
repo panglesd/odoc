@@ -1,3 +1,5 @@
 module Y = A
 
-let y = Y.x + A.x
+module Z = C
+
+let y = Y.x + A.x + Z.y + C.y
