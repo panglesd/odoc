@@ -622,27 +622,26 @@ let documents =
 
 let miniSearch = new MiniSearch({
   fields: ['id', 'doc.txt'], // fields to index for full-text search
-  storeFields: ['id', 'doc', 'url', 'extra', 'original'], // fields to return with search results
+  storeFields: ['display'], // fields to return with search results
   extractField: (document, fieldName) => {
     if (fieldName === 'id') {
-      return document.id.map(e => e.name).join('.')
+      return document.id.map(e => e.kind + "-" + e.name).join('.')
     }
     if (fieldName === 'doc.txt') {
       return document.doc.txt
     }
     return document[fieldName]
-  },
-  idField: 'search_id'
+  }
 })
 
 
 // Index all documents
-miniSearch.addAll(documents.map((index, id) => {index.search_id = id; index.original = index; return index}));
+miniSearch.addAll(documents);
 
 onmessage = (m) => {
   let query = m.data;
   let result = miniSearch.search(query);
-  postMessage(result.slice(0,200).map(a => a.original));
+  postMessage(result.slice(0,200).map(a => a.display));
 }
 |} minisearch index
 ```

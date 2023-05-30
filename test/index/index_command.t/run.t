@@ -544,7 +544,7 @@ The index.js file need to provide a odoc_search command, from a
 
   $ echo "\n\nconst options = { keys: ['id', 'doc.txt'] };" >> index.js
   $ echo "\nvar idx_fuse = new Fuse(documents, options);" >> index.js
-  $ echo "\nonmessage = (m) => {\n  let query = m.data;\n  let result = idx_fuse.search(query);\n  postMessage(result.slice(0,200).map(a => a.item));};" >> index.js
+  $ echo "\nonmessage = (m) => {\n  let query = m.data;\n  let result = idx_fuse.search(query);\n  postMessage(result.slice(0,200).map(a => a.item.display));};" >> index.js
 
   $ odoc html-generate --with-search -o html main.odocl
   $ odoc html-generate --with-search -o html page-page.odocl
@@ -587,6 +587,5 @@ The index.js file need to provide a odoc_search command, from a
   html/page.html
 
 Run
-  $ cp -r html /tmp
-  $ firefox /tmp/html/Main/index.html
+ $ firefox html/Main/index.html
 to manually test the search
