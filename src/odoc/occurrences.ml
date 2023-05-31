@@ -41,7 +41,7 @@ let count ~dst ~warnings_options:_ directories =
                   in
                   H.replace htbl id (old_value + 1)
               | ( Odoc_model.Lang.Source_info.Local_jmp
-                    (Path (`Resolved p as p')),
+                    (ModulePath (`Resolved p as p')),
                   _ ) ->
                   let id =
                     Odoc_model.Paths.Path.Resolved.(identifier (p :> t))
