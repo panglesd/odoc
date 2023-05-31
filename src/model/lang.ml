@@ -24,7 +24,10 @@ module Source_info = struct
     | Occurence of anchor
     | Def of string
     | Ref of Reference.t
-    | Path of Path.Module.t
+    | ModulePath of Path.Module.t
+    | ClassPath of Path.ClassType.t
+    | MtyPath of Path.ModuleType.t
+    | TypePath of Path.Type.t
 
   type info = Syntax of string | Local_jmp of jmp_to_def
 

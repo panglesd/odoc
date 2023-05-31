@@ -257,12 +257,20 @@ module Make (Syntax : SYNTAX) = struct
           | Ok link -> Some (Link link)
           | _ -> None)
       | Local_jmp (Ref _) -> None
-      | Local_jmp (Path (`Resolved p)) -> (
+      | Local_jmp (ModulePath (`Resolved p)) -> (
           let id = Paths.Path.Resolved.(identifier (p :> t)) in
           match Url.from_identifier ~stop_before:false id with
           | Ok link -> Some (Link link)
           | _ -> None)
-      | Local_jmp (Path _) -> None
+      | Local_jmp (TypePath (`Resolved p)) -> (
+          let id = Paths.Path.Resolved.(identifier (p :> t)) in
+          match Url.from_identifier ~stop_before:false id with
+          | Ok link -> Some (Link link)
+          | _ -> None)
+      | Local_jmp (ModulePath _) -> None
+      | Local_jmp (ClassPath _) -> None
+      | Local_jmp (TypePath _) -> None
+      | Local_jmp (MtyPath _) -> None
 
     let source id infos source_code =
       let url = path id in

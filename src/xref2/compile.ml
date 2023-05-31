@@ -68,9 +68,12 @@ and source_info env si =
       let infos =
         List.map
           (function
-            | Source_info.Local_jmp (Path p), pos ->
+            | Source_info.Local_jmp (ModulePath p), pos ->
                 let p = module_path env p in
-                (Source_info.Local_jmp (Path p), pos)
+                (Source_info.Local_jmp (ModulePath p), pos)
+            | Source_info.Local_jmp (TypePath p), pos ->
+                let p = type_path env p in
+                (Source_info.Local_jmp (TypePath p), pos)
             | x -> x)
           si.infos
       in
