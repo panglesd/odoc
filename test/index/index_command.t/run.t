@@ -680,6 +680,111 @@ $ odoc compile -c module-main -c src-source root.mld
           "name": "I"
         },
         {
+          "kind": "Label",
+          "name": "search_label_12"
+        }
+      ],
+      "url": "Main/I/index.html#search_label_12",
+      "doc": {
+        "html": "<div><pre>verbatim</pre></div>",
+        "txt": "verbatim"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Verbatim"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "I",
+          "search_label_12"
+        ],
+        "url": "Main/I/index.html#search_label_12",
+        "kind": "doc",
+        "doc": "<div><pre>verbatim</pre></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "I"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_13"
+        }
+      ],
+      "url": "Main/I/index.html#search_label_13",
+      "doc": {
+        "html": "<div><p><code class=\"odoc-katex-math\">x + 1</code></p></div>",
+        "txt": "x + 1"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Paragraph"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "I",
+          "search_label_13"
+        ],
+        "url": "Main/I/index.html#search_label_13",
+        "kind": "doc",
+        "doc": "<div><p><code class=\"odoc-katex-math\">x + 1</code></p></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "I"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_14"
+        }
+      ],
+      "url": "Main/I/index.html#search_label_14",
+      "doc": {
+        "html": "<div><pre class=\"language-ocaml\"><code>blibli</code></pre></div>",
+        "txt": "blibli"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "CodeBlock"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "I",
+          "search_label_14"
+        ],
+        "url": "Main/I/index.html#search_label_14",
+        "kind": "doc",
+        "doc": "<div><pre class=\"language-ocaml\"><code>blibli</code></pre></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "I"
+        },
+        {
           "kind": "Value",
           "name": "y"
         }
@@ -743,15 +848,11 @@ $ odoc compile -c module-main -c src-source root.mld
           "name": "Main"
         },
         {
-          "kind": "Module",
-          "name": "I"
-        },
-        {
           "kind": "Label",
           "name": "search_label_10"
         }
       ],
-      "url": "Main/I/index.html#search_label_10",
+      "url": "Main/index.html#search_label_10",
       "doc": {
         "html": "<div><p>a paragraph</p></div>",
         "txt": "a paragraph"
@@ -763,10 +864,9 @@ $ odoc compile -c module-main -c src-source root.mld
       "display": {
         "id": [
           "Main",
-          "I",
           "search_label_10"
         ],
-        "url": "Main/I/index.html#search_label_10",
+        "url": "Main/index.html#search_label_10",
         "kind": "doc",
         "doc": "<div><p>a paragraph</p></div>"
       }
@@ -778,15 +878,11 @@ $ odoc compile -c module-main -c src-source root.mld
           "name": "Main"
         },
         {
-          "kind": "Module",
-          "name": "I"
-        },
-        {
           "kind": "Label",
           "name": "search_label_11"
         }
       ],
-      "url": "Main/I/index.html#search_label_11",
+      "url": "Main/index.html#search_label_11",
       "doc": {
         "html": "<div><p>and another</p></div>",
         "txt": "and another"
@@ -798,12 +894,101 @@ $ odoc compile -c module-main -c src-source root.mld
       "display": {
         "id": [
           "Main",
-          "I",
           "search_label_11"
         ],
-        "url": "Main/I/index.html#search_label_11",
+        "url": "Main/index.html#search_label_11",
         "kind": "doc",
         "doc": "<div><p>and another</p></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_12"
+        }
+      ],
+      "url": "Main/index.html#search_label_12",
+      "doc": {
+        "html": "<div><pre>verbatim</pre></div>",
+        "txt": "verbatim"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Verbatim"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "search_label_12"
+        ],
+        "url": "Main/index.html#search_label_12",
+        "kind": "doc",
+        "doc": "<div><pre>verbatim</pre></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_13"
+        }
+      ],
+      "url": "Main/index.html#search_label_13",
+      "doc": {
+        "html": "<div><p><code class=\"odoc-katex-math\">x + 1</code></p></div>",
+        "txt": "x + 1"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Paragraph"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "search_label_13"
+        ],
+        "url": "Main/index.html#search_label_13",
+        "kind": "doc",
+        "doc": "<div><p><code class=\"odoc-katex-math\">x + 1</code></p></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_14"
+        }
+      ],
+      "url": "Main/index.html#search_label_14",
+      "doc": {
+        "html": "<div><pre class=\"language-ocaml\"><code>blibli</code></pre></div>",
+        "txt": "blibli"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "CodeBlock"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "search_label_14"
+        ],
+        "url": "Main/index.html#search_label_14",
+        "kind": "doc",
+        "doc": "<div><pre class=\"language-ocaml\"><code>blibli</code></pre></div>"
       }
     },
     {

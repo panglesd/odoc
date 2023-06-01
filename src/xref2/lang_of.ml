@@ -1045,24 +1045,34 @@ and nestable_block_element parent
       Odoc_model.Location_.with_location) :
     Odoc_model.Comment.nestable_block_element Odoc_model.Location_.with_location
     =
+  let mk_label h =
+    let { Component.Label.label; content = _; location = _ } = h in
+    try Identifier.Mk.label (parent, Ident.Name.typed_label label)
+    with Not_found ->
+      Format.fprintf Format.err_formatter "Failed to find id: %a\n" Ident.fmt
+        label;
+      raise Not_found
+  in
   let value =
     match d.Odoc_model.Location_.value with
     | `Paragraph (h, text) ->
-        let { Component.Label.label; content = _; location = _ } = h in
-        let label =
-          try Identifier.Mk.label (parent, Ident.Name.typed_label label)
-          with Not_found ->
-            Format.fprintf Format.err_formatter "Failed to find id: %a\n"
-              Ident.fmt label;
-            raise Not_found
-        in
+        let label = mk_label h in
         `Paragraph (label, text)
+    | `Code_block (h, l, s) ->
+        let label = mk_label h in
+        `Code_block (label, l, s)
+    | `Math_block (h, s) ->
+        let label = mk_label h in
+        `Math_block (label, s)
+    | `Verbatim (h, s) ->
+        let label = mk_label h in
+        `Verbatim (label, s)
     | `List (ord, li) ->
         let li =
           List.map (List.map (fun x -> nestable_block_element parent x)) li
         in
         `List (ord, li)
-    | (`Code_block _ | `Math_block _ | `Verbatim _ | `Modules _) as n -> n
+    | `Modules _ as n -> n
   in
   { d with Odoc_model.Location_.value }
 

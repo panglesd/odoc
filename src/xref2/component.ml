@@ -465,11 +465,9 @@ and CComment : sig
   type nestable_block_element =
     [ `Paragraph of Label.t * Odoc_model.Comment.paragraph
     | `Code_block of
-      Odoc_model.Paths.Identifier.Label.t
-      * string option
-      * string Odoc_model.Comment.with_location
-    | `Math_block of Odoc_model.Paths.Identifier.Label.t * string
-    | `Verbatim of Odoc_model.Paths.Identifier.Label.t * string
+      Label.t * string option * string Odoc_model.Comment.with_location
+    | `Math_block of Label.t * string
+    | `Verbatim of Label.t * string
     | `Modules of Odoc_model.Comment.module_reference list
     | `List of
       [ `Unordered | `Ordered ]
@@ -2433,21 +2431,35 @@ module Of_Lang = struct
 
   and nestable_block_element map
       (b : Odoc_model.Comment.nestable_block_element Comment.with_location) =
+    let mk_label label location =
+      {
+        Label.label = Ident.Of_Identifier.label label;
+        location;
+        content = NestableBlock [];
+      }
+    in
     match b with
     | { Odoc_model.Location_.value = `Paragraph (label, text); location } ->
-        let label = Ident.Of_Identifier.label label in
-        let para =
-          `Paragraph
-            ({ Label.label; location; content = NestableBlock [] }, text)
-        in
+        let label = mk_label label location in
+        let para = `Paragraph (label, text) in
         Odoc_model.Location_.same b para
-    | { Odoc_model.Location_.value = `List (ord, items); _ } ->
+    | { value = `Code_block (label, l, s); location } ->
+        let label = mk_label label location in
+        let cb = `Code_block (label, l, s) in
+        Odoc_model.Location_.same b cb
+    | { value = `Math_block (label, s); location } ->
+        let label = mk_label label location in
+        let mb = `Math_block (label, s) in
+        Odoc_model.Location_.same b mb
+    | { value = `Verbatim (label, s); location } ->
+        let label = mk_label label location in
+        let v = `Verbatim (label, s) in
+        Odoc_model.Location_.same b v
+    | { value = `List (ord, items); _ } ->
         let items = List.map (List.map (nestable_block_element map)) items in
         let l = `List (ord, items) in
         Odoc_model.Location_.same b l
-    | { value = `Code_block _ | `Math_block _ | `Verbatim _ | `Modules _; _ } as
-      n ->
-        n
+    | { value = `Modules _; _ } as n -> n
 
   and block_element map b :
       CComment.block_element Odoc_model.Comment.with_location =

@@ -5,10 +5,10 @@
     File "test.mli", line 3, character 4
     File "test.mli", line 21, character 4
   File "test.mli", line 21, characters 4-22:
-  Warning: Label 'B' is ambiguous. The other occurences are:
+  Warning: Label 'B' is ambiguous. The other occurrences are:
     File "test.mli", line 3, character 4
   File "test.mli", line 3, characters 4-24:
-  Warning: Label 'B' is ambiguous. The other occurences are:
+  Warning: Label 'B' is ambiguous. The other occurrences are:
     File "test.mli", line 21, character 4
 
 Labels:

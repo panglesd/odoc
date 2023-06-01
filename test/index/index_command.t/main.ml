@@ -42,7 +42,14 @@ module I = struct
 
   (** a paragraph
 
-      and another *)
+      and another
+
+      {v verbatim v}
+
+      {m x + 1}
+
+      {[blibli]}
+       *)
 
   let y = 1
 end
