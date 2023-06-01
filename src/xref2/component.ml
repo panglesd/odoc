@@ -462,9 +462,23 @@ end =
   Substitution
 
 and CComment : sig
+  type nestable_block_element =
+    [ `Paragraph of Label.t * Odoc_model.Comment.paragraph
+    | `Code_block of
+      Odoc_model.Paths.Identifier.Label.t
+      * string option
+      * string Odoc_model.Comment.with_location
+    | `Math_block of Odoc_model.Paths.Identifier.Label.t * string
+    | `Verbatim of Odoc_model.Paths.Identifier.Label.t * string
+    | `Modules of Odoc_model.Comment.module_reference list
+    | `List of
+      [ `Unordered | `Ordered ]
+      * nestable_block_element Odoc_model.Comment.with_location list list ]
+
   type block_element =
-    [ Odoc_model.Comment.nestable_block_element
-    | `Heading of Label.t
+    [ nestable_block_element
+    | `Heading of
+      Odoc_model.Comment.heading_attrs * Label.t * Odoc_model.Comment.paragraph
     | `Tag of Odoc_model.Comment.tag ]
 
   type docs = block_element Odoc_model.Comment.with_location list
@@ -474,11 +488,16 @@ end =
   CComment
 
 and Label : sig
+  (** In order to generate content for links without content *)
+  type content =
+    | Heading of Odoc_model.Comment.paragraph
+    | NestableBlock of Odoc_model.Comment.paragraph
+
   type t = {
-    attrs : Odoc_model.Comment.heading_attrs;
     label : Ident.label;
-    text : Odoc_model.Comment.paragraph;
+    content : content;
     location : Odoc_model.Location_.span;
+        (** In order to check for ambiguous labels *)
   }
 end =
   Label
@@ -2412,16 +2431,37 @@ module Of_Lang = struct
     in
     { items; removed = []; compiled = sg.compiled; doc = docs ident_map sg.doc }
 
-  and block_element _ b :
+  and nestable_block_element map
+      (b : Odoc_model.Comment.nestable_block_element Comment.with_location) =
+    match b with
+    | { Odoc_model.Location_.value = `Paragraph (label, text); location } ->
+        let label = Ident.Of_Identifier.label label in
+        let para =
+          `Paragraph
+            ({ Label.label; location; content = NestableBlock [] }, text)
+        in
+        Odoc_model.Location_.same b para
+    | { Odoc_model.Location_.value = `List (ord, items); _ } ->
+        let items = List.map (List.map (nestable_block_element map)) items in
+        let l = `List (ord, items) in
+        Odoc_model.Location_.same b l
+    | { value = `Code_block _ | `Math_block _ | `Verbatim _ | `Modules _; _ } as
+      n ->
+        n
+
+  and block_element map b :
       CComment.block_element Odoc_model.Comment.with_location =
     match b with
     | { Odoc_model.Location_.value = `Heading (attrs, label, text); location }
       ->
         let label = Ident.Of_Identifier.label label in
         Odoc_model.Location_.same b
-          (`Heading { Label.attrs; label; text; location })
+          (`Heading
+            (attrs, { Label.label; content = Heading text; location }, text))
     | { value = `Tag _; _ } as t -> t
-    | { value = #Odoc_model.Comment.nestable_block_element; _ } as n -> n
+    | { value = #Odoc_model.Comment.nestable_block_element; _ } as n ->
+        (nestable_block_element map n
+          :> CComment.block_element Odoc_model.Comment.with_location)
 
   and docs ident_map d = List.map (block_element ident_map) d
 

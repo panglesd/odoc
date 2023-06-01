@@ -86,8 +86,7 @@ type heading_attrs = {
 
 type block_element =
   [ nestable_block_element
-  | `Heading of
-    heading_attrs * Identifier.Label.t * inline_element with_location list
+  | `Heading of heading_attrs * Identifier.Label.t * paragraph
   | `Tag of tag ]
 
 type docs = block_element with_location list

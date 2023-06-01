@@ -228,7 +228,7 @@ let add_to_elts kind identifier component env =
     ids = ElementsById.add identifier component env.ids;
   }
 
-let add_label identifier heading env =
+let add_label identifier (heading : Component.Label.t) env =
   assert env.linking;
   let comp = `Label (identifier, heading) in
   let name = Identifier.name identifier in
@@ -263,9 +263,11 @@ let add_docs (docs : Comment.docs) env =
   assert env.linking;
   List.fold_left
     (fun env -> function
-      | { Location_.value = `Heading (attrs, id, text); location } ->
+      | { Location_.value = `Heading (_attrs, id, text); location } ->
           let label = Ident.Of_Identifier.label id in
-          add_label id { Component.Label.attrs; label; text; location } env
+          add_label id
+            { Component.Label.label; content = Heading text; location }
+            env
       | _ -> env)
     env docs
 
@@ -276,7 +278,7 @@ let add_cdocs p (docs : Component.CComment.docs) env =
   List.fold_left
     (fun env element ->
       match element.Location_.value with
-      | `Heading h ->
+      | `Heading (_attrs, h, _text) ->
           let (`LLabel (name, _)) = h.Component.Label.label in
           let label =
             Paths.Identifier.Mk.label (Paths.Identifier.label_parent p, name)

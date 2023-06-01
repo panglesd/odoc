@@ -1039,13 +1039,16 @@ and exception_ map parent id (e : Component.Exception.t) :
     res = Opt.map (type_expr map (parent :> Identifier.Parent.t)) e.res;
   }
 
-and block_element parent
-    (d : Component.CComment.block_element Odoc_model.Location_.with_location) :
-    Odoc_model.Comment.block_element Odoc_model.Location_.with_location =
+and nestable_block_element parent
+    (d :
+      Component.CComment.nestable_block_element
+      Odoc_model.Location_.with_location) :
+    Odoc_model.Comment.nestable_block_element Odoc_model.Location_.with_location
+    =
   let value =
     match d.Odoc_model.Location_.value with
-    | `Heading h ->
-        let { Component.Label.attrs; label; text; location = _ } = h in
+    | `Paragraph (h, text) ->
+        let { Component.Label.label; content = _; location = _ } = h in
         let label =
           try Identifier.Mk.label (parent, Ident.Name.typed_label label)
           with Not_found ->
@@ -1053,11 +1056,38 @@ and block_element parent
               Ident.fmt label;
             raise Not_found
         in
-        `Heading (attrs, label, text)
-    | `Tag t -> `Tag t
-    | #Odoc_model.Comment.nestable_block_element as n -> n
+        `Paragraph (label, text)
+    | `List (ord, li) ->
+        let li =
+          List.map (List.map (fun x -> nestable_block_element parent x)) li
+        in
+        `List (ord, li)
+    | (`Code_block _ | `Math_block _ | `Verbatim _ | `Modules _) as n -> n
   in
   { d with Odoc_model.Location_.value }
+
+and block_element parent
+    (d : Component.CComment.block_element Odoc_model.Location_.with_location) :
+    Odoc_model.Comment.block_element Odoc_model.Location_.with_location =
+  match d.Odoc_model.Location_.value with
+  | `Heading (attrs, h, text) ->
+      let { Component.Label.label; content = _; location = _ } = h in
+      let label =
+        try Identifier.Mk.label (parent, Ident.Name.typed_label label)
+        with Not_found ->
+          Format.fprintf Format.err_formatter "Failed to find id: %a\n"
+            Ident.fmt label;
+          raise Not_found
+      in
+      let value = `Heading (attrs, label, text) in
+      { d with Odoc_model.Location_.value }
+  | `Tag t ->
+      let value = `Tag t in
+      { d with Odoc_model.Location_.value }
+  | #Component.CComment.nestable_block_element as value ->
+      let e = { d with Odoc_model.Location_.value } in
+      (nestable_block_element parent e
+        :> Odoc_model.Comment.block_element Odoc_model.Location_.with_location)
 
 and docs :
     Identifier.LabelParent.t ->

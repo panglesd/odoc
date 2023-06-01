@@ -13,9 +13,10 @@ let locations env id locs =
 (** Equivalent to {!Comment.synopsis}. *)
 let synopsis_from_comment (docs : Component.CComment.docs) =
   match docs with
-  | ({ value = #Comment.nestable_block_element; _ } as e) :: _ ->
-      (* Only the first element is considered. *)
-      Comment.synopsis [ e ]
+  | { value = `Paragraph (_, text); _ } :: _ -> Some text
+  (* | ({ value = #Comment.nestable_block_element; _ } as e) :: _ -> *)
+  (*     (\* Only the first element is considered. *\) *)
+  (*     Comment.synopsis [ e ] *)
   | _ -> None
 
 let synopsis_of_module env (m : Component.Module.t) =
@@ -45,7 +46,7 @@ let ambiguous_label_warning label_name labels =
     Location_.pp_span_start fmt x.Component.Label.location
   in
   Lookup_failures.report_warning
-    "@[<2>Label '%s' is ambiguous. The other occurences are:@ %a@]" label_name
+    "@[<2>Label '%s' is ambiguous. The other occurrences are:@ %a@]" label_name
     (Format.pp_print_list ~pp_sep:Format.pp_force_newline pp_label_loc)
     labels
 
@@ -212,9 +213,11 @@ let rec comment_inline_element :
             match (content, x) with
             | [], `Identifier ({ iv = #Id.Label.t_pv; _ } as i) -> (
                 match Env.lookup_by_id Env.s_label i env with
-                | Some (`Label (_, lbl)) ->
-                    Odoc_model.Comment.link_content_of_inline_elements
-                      lbl.Component.Label.text
+                | Some (`Label (_, lbl)) -> (
+                    match lbl.content with
+                    | Heading text ->
+                        Odoc_model.Comment.link_content_of_inline_elements text
+                    | NestableBlock _ -> [])
                 | None -> [])
             | content, _ -> content
           in
