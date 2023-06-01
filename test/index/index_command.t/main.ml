@@ -55,3 +55,5 @@ module I = struct
 end
 
 include I
+
+include J

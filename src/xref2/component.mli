@@ -456,9 +456,7 @@ end
 
 and Label : sig
   (** In order to generate content for links without content *)
-  type content =
-    | Heading of Odoc_model.Comment.paragraph
-    | NestableBlock of Odoc_model.Comment.paragraph
+  type content = Heading of Odoc_model.Comment.paragraph | NestableBlock
 
   type t = {
     label : Ident.label;

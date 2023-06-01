@@ -4,11 +4,14 @@ It's a simpler case than Dune's wrapping.
 
 $ odoc compile -c module-main -c src-source root.mld
 
+  $ ocamlc -c j.ml -bin-annot -I .
   $ ocamlc -c main.ml -bin-annot -I .
 
+  $ odoc compile -I . j.cmt
   $ odoc compile -I . main.cmt
   $ odoc compile -I . page.mld
 
+  $ odoc link -I . j.odoc
   $ odoc link -I . main.odoc
   $ odoc link -I . page-page.odoc
 
@@ -16,6 +19,91 @@ $ odoc compile -c module-main -c src-source root.mld
 
   $ cat index.json | jq
   [
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "J"
+        }
+      ],
+      "url": "J/index.html",
+      "doc": {
+        "html": "<div><p>a paragraph one</p></div>",
+        "txt": "a paragraph one"
+      },
+      "extra": {
+        "kind": "Module"
+      },
+      "display": {
+        "id": [
+          "J"
+        ],
+        "url": "J/index.html",
+        "kind": "module",
+        "doc": "<div><p>a paragraph one</p></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "J"
+        },
+        {
+          "kind": "Value",
+          "name": "uu"
+        }
+      ],
+      "url": "J/index.html#val-uu",
+      "doc": {
+        "html": "<div></div>",
+        "txt": ""
+      },
+      "extra": {
+        "kind": "Value",
+        "type": "int"
+      },
+      "display": {
+        "rhs": " : int",
+        "id": [
+          "J",
+          "uu"
+        ],
+        "url": "J/index.html#val-uu",
+        "kind": "val",
+        "doc": "<div></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "J"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_2"
+        }
+      ],
+      "url": "J/index.html#search_label_2",
+      "doc": {
+        "html": "<div><p>a paragraph two</p></div>",
+        "txt": "a paragraph two"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Paragraph"
+      },
+      "display": {
+        "id": [
+          "J",
+          "search_label_2"
+        ],
+        "url": "J/index.html#search_label_2",
+        "kind": "doc",
+        "doc": "<div><p>a paragraph two</p></div>"
+      }
+    },
     {
       "id": [
         {
@@ -291,10 +379,10 @@ $ odoc compile -c module-main -c src-source root.mld
         },
         {
           "kind": "Label",
-          "name": "search_label_2"
+          "name": "search_label_20"
         }
       ],
-      "url": "Main/index.html#search_label_2",
+      "url": "Main/index.html#search_label_20",
       "doc": {
         "html": "<div><p>and this is a paragraph</p></div>",
         "txt": "and this is a paragraph"
@@ -306,9 +394,9 @@ $ odoc compile -c module-main -c src-source root.mld
       "display": {
         "id": [
           "Main",
-          "search_label_2"
+          "search_label_20"
         ],
-        "url": "Main/index.html#search_label_2",
+        "url": "Main/index.html#search_label_20",
         "kind": "doc",
         "doc": "<div><p>and this is a paragraph</p></div>"
       }
@@ -1021,6 +1109,67 @@ $ odoc compile -c module-main -c src-source root.mld
         "kind": "val",
         "doc": "<div></div>"
       }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Value",
+          "name": "uu"
+        }
+      ],
+      "url": "Main/index.html#val-uu",
+      "doc": {
+        "html": "<div></div>",
+        "txt": ""
+      },
+      "extra": {
+        "kind": "Value",
+        "type": "int"
+      },
+      "display": {
+        "rhs": " : int",
+        "id": [
+          "Main",
+          "uu"
+        ],
+        "url": "Main/index.html#val-uu",
+        "kind": "val",
+        "doc": "<div></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_20"
+        }
+      ],
+      "url": "Main/index.html#search_label_20",
+      "doc": {
+        "html": "<div><p>a paragraph two</p></div>",
+        "txt": "a paragraph two"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Paragraph"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "search_label_20"
+        ],
+        "url": "Main/index.html#search_label_20",
+        "kind": "doc",
+        "doc": "<div><p>a paragraph two</p></div>"
+      }
     }
   ]
 
@@ -1034,6 +1183,7 @@ The index.js file need to provide a odoc_search command, from a
   $ echo "\nvar idx_fuse = new Fuse(documents, options);" >> index.js
   $ echo "\nonmessage = (m) => {\n  let query = m.data;\n  let result = idx_fuse.search(query);\n  postMessage(result.slice(0,200).map(a => a.item.display));};" >> index.js
 
+  $ odoc html-generate --with-search -o html j.odocl
   $ odoc html-generate --with-search -o html main.odocl
   $ odoc html-generate --with-search -o html page-page.odocl
   $ odoc support-files -o html
@@ -1041,6 +1191,8 @@ The index.js file need to provide a odoc_search command, from a
 
   $ find html | sort
   html
+  html/J
+  html/J/index.html
   html/Main
   html/Main/I
   html/Main/I/index.html

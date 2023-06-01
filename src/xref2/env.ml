@@ -259,7 +259,7 @@ let add_label identifier (heading : Component.Label.t) env =
     ids = ElementsById.add identifier comp env.ids;
   }
 
-let add_docs (docs : Comment.docs) env =
+let rec add_docs (docs : Comment.docs) env =
   assert env.linking;
   List.fold_left
     (fun env -> function
@@ -268,6 +268,22 @@ let add_docs (docs : Comment.docs) env =
           add_label id
             { Component.Label.label; content = Heading text; location }
             env
+      | {
+          Location_.value =
+            ( `Paragraph (id, _)
+            | `Code_block (id, _, _)
+            | `Math_block (id, _)
+            | `Verbatim (id, _) );
+          location;
+        } ->
+          let label = Ident.Of_Identifier.label id in
+          add_label id
+            { Component.Label.label; content = NestableBlock; location }
+            env
+      | { Location_.value = `List (_, l); location = _ } ->
+          List.fold_left
+            (fun env docs -> add_docs (docs :> Comment.docs) env)
+            env l
       | _ -> env)
     env docs
 
