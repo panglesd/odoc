@@ -36,3 +36,15 @@ let lorem3 = 1
 (** lorem 4
   *)
 let lorem4 = 1
+
+module I = struct
+  let x = 1
+
+  (** a paragraph
+
+      and another *)
+
+  let y = 1
+end
+
+include I

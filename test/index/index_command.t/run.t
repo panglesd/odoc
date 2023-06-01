@@ -533,6 +533,309 @@ $ odoc compile -c module-main -c src-source root.mld
         "kind": "val",
         "doc": "<div><p>lorem 4</p></div>"
       }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "I"
+        }
+      ],
+      "url": "Main/I/index.html",
+      "doc": {
+        "html": "<div></div>",
+        "txt": ""
+      },
+      "extra": {
+        "kind": "Module"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "I"
+        ],
+        "url": "Main/I/index.html",
+        "kind": "module",
+        "doc": "<div></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "I"
+        },
+        {
+          "kind": "Value",
+          "name": "x"
+        }
+      ],
+      "url": "Main/I/index.html#val-x",
+      "doc": {
+        "html": "<div></div>",
+        "txt": ""
+      },
+      "extra": {
+        "kind": "Value",
+        "type": "int"
+      },
+      "display": {
+        "rhs": " : int",
+        "id": [
+          "Main",
+          "I",
+          "x"
+        ],
+        "url": "Main/I/index.html#val-x",
+        "kind": "val",
+        "doc": "<div></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "I"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_10"
+        }
+      ],
+      "url": "Main/I/index.html#search_label_10",
+      "doc": {
+        "html": "<div><p>a paragraph</p></div>",
+        "txt": "a paragraph"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Paragraph"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "I",
+          "search_label_10"
+        ],
+        "url": "Main/I/index.html#search_label_10",
+        "kind": "doc",
+        "doc": "<div><p>a paragraph</p></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "I"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_11"
+        }
+      ],
+      "url": "Main/I/index.html#search_label_11",
+      "doc": {
+        "html": "<div><p>and another</p></div>",
+        "txt": "and another"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Paragraph"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "I",
+          "search_label_11"
+        ],
+        "url": "Main/I/index.html#search_label_11",
+        "kind": "doc",
+        "doc": "<div><p>and another</p></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "I"
+        },
+        {
+          "kind": "Value",
+          "name": "y"
+        }
+      ],
+      "url": "Main/I/index.html#val-y",
+      "doc": {
+        "html": "<div></div>",
+        "txt": ""
+      },
+      "extra": {
+        "kind": "Value",
+        "type": "int"
+      },
+      "display": {
+        "rhs": " : int",
+        "id": [
+          "Main",
+          "I",
+          "y"
+        ],
+        "url": "Main/I/index.html#val-y",
+        "kind": "val",
+        "doc": "<div></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Value",
+          "name": "x"
+        }
+      ],
+      "url": "Main/index.html#val-x",
+      "doc": {
+        "html": "<div></div>",
+        "txt": ""
+      },
+      "extra": {
+        "kind": "Value",
+        "type": "int"
+      },
+      "display": {
+        "rhs": " : int",
+        "id": [
+          "Main",
+          "x"
+        ],
+        "url": "Main/index.html#val-x",
+        "kind": "val",
+        "doc": "<div></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "I"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_10"
+        }
+      ],
+      "url": "Main/I/index.html#search_label_10",
+      "doc": {
+        "html": "<div><p>a paragraph</p></div>",
+        "txt": "a paragraph"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Paragraph"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "I",
+          "search_label_10"
+        ],
+        "url": "Main/I/index.html#search_label_10",
+        "kind": "doc",
+        "doc": "<div><p>a paragraph</p></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Module",
+          "name": "I"
+        },
+        {
+          "kind": "Label",
+          "name": "search_label_11"
+        }
+      ],
+      "url": "Main/I/index.html#search_label_11",
+      "doc": {
+        "html": "<div><p>and another</p></div>",
+        "txt": "and another"
+      },
+      "extra": {
+        "kind": "Doc",
+        "subkind": "Paragraph"
+      },
+      "display": {
+        "id": [
+          "Main",
+          "I",
+          "search_label_11"
+        ],
+        "url": "Main/I/index.html#search_label_11",
+        "kind": "doc",
+        "doc": "<div><p>and another</p></div>"
+      }
+    },
+    {
+      "id": [
+        {
+          "kind": "Root",
+          "name": "Main"
+        },
+        {
+          "kind": "Value",
+          "name": "y"
+        }
+      ],
+      "url": "Main/index.html#val-y",
+      "doc": {
+        "html": "<div></div>",
+        "txt": ""
+      },
+      "extra": {
+        "kind": "Value",
+        "type": "int"
+      },
+      "display": {
+        "rhs": " : int",
+        "id": [
+          "Main",
+          "y"
+        ],
+        "url": "Main/index.html#val-y",
+        "kind": "val",
+        "doc": "<div></div>"
+      }
     }
   ]
 
@@ -554,6 +857,8 @@ The index.js file need to provide a odoc_search command, from a
   $ find html | sort
   html
   html/Main
+  html/Main/I
+  html/Main/I/index.html
   html/Main/M
   html/Main/M/index.html
   html/Main/index.html
