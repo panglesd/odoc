@@ -73,17 +73,30 @@ let rec unit env t =
 
 and source_info env si =
   let infos =
+    let open Source_info in
     List.map
       (function
-        | Source_info.Local_jmp (ModulePath p), pos ->
-            let p = module_path env p in
-            (Source_info.Local_jmp (ModulePath p), pos)
-        | Source_info.Local_jmp (TypePath p), pos ->
-            let p = type_path env p in
-            (Source_info.Local_jmp (TypePath p), pos)
-        | Source_info.Local_jmp (ValuePath p), pos ->
-            let p = value_path env p in
-            (Source_info.Local_jmp (ValuePath p), pos)
+        | Source_info.Local_jmp jmp, pos ->
+            let info =
+              match jmp with
+              | ModulePath p ->
+                  let p = module_path env p in
+                  ModulePath p
+              | TypePath p ->
+                  let p = type_path env p in
+                  TypePath p
+              | MtyPath p ->
+                  let p = module_type_path env p in
+                  MtyPath p
+              | ClassPath p ->
+                  let p = class_type_path env p in
+                  ClassPath p
+              | ValuePath p ->
+                  let p = value_path env p in
+                  ValuePath p
+              | i -> i
+            in
+            (Local_jmp info, pos)
         | x -> x)
       si.infos
   in
