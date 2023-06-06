@@ -23,7 +23,7 @@ let render { html_config; source_file = _ } page =
 
 let extra_documents args unit ~syntax =
   match (unit.Lang.Compilation_unit.source_info, args.source_file) with
-  | Some { Lang.Source_info.id; infos }, Some src -> (
+  | { Lang.Source_info.id = Some id; infos }, Some src -> (
       match Fs.File.read src with
       | Error (`Msg msg) ->
           Error.raise_warning
@@ -36,7 +36,7 @@ let extra_documents args unit ~syntax =
             Odoc_document.Renderer.document_of_source ~syntax id infos
               source_code;
           ])
-  | Some { id; _ }, None ->
+  | { id = Some id; _ }, None ->
       let filename = Paths.Identifier.name id in
       Error.raise_warning
         (Error.filename_only
@@ -45,13 +45,13 @@ let extra_documents args unit ~syntax =
             --source-name"
            filename);
       []
-  | None, Some src ->
+  | { id = None; _ }, Some src ->
       Error.raise_warning
         (Error.filename_only
            "--source argument is invalid on compilation unit that were not \
             compiled with --source-parent and --source-name"
            (Fs.File.to_string src));
       []
-  | None, None -> []
+  | { id = None; _ }, None -> []
 
 let renderer = { Odoc_document.Renderer.name = "html"; render; extra_documents }

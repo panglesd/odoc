@@ -68,11 +68,14 @@ let lookup_def lookup_unit id =
       result.uid >>= fun uid ->
       Uid.unpack_uid (Uid.of_shape_uid uid) >>= fun (unit_name, id) ->
       lookup_unit unit_name >>= fun (unit, _) ->
-      unit.Lang.Compilation_unit.source_info >>= fun sources ->
+      unit.Lang.Compilation_unit.source_info.id >>= fun source_id ->
       let anchor_opt = id >>= fun id -> Some (Uid.anchor_of_id id) in
       match anchor_opt with
-      | Some anchor -> Some (Paths.Identifier.Mk.source_location (sources.id,Odoc_model.Names.DefName.make_std anchor))
-      | None -> Some (Paths.Identifier.Mk.source_location_mod sources.id)
+      | Some anchor ->
+          Some (
+            Paths.Identifier.Mk.source_location
+              (source_id, Odoc_model.Names.DefName.make_std anchor))
+      | None -> Some (Paths.Identifier.Mk.source_location_mod source_id)
 
 let of_cmt (cmt : Cmt_format.cmt_infos) = cmt.cmt_impl_shape
 

@@ -72,25 +72,22 @@ let rec unit env t =
   }
 
 and source_info env si =
-  match si with
-  | None -> None
-  | Some si ->
-      let infos =
-        List.map
-          (function
-            | Source_info.Local_jmp (ModulePath p), pos ->
-                let p = module_path env p in
-                (Source_info.Local_jmp (ModulePath p), pos)
-            | Source_info.Local_jmp (TypePath p), pos ->
-                let p = type_path env p in
-                (Source_info.Local_jmp (TypePath p), pos)
-            | Source_info.Local_jmp (ValuePath p), pos ->
-                let p = value_path env p in
-                (Source_info.Local_jmp (ValuePath p), pos)
-            | x -> x)
-          si.infos
-      in
-      Some { si with infos }
+  let infos =
+    List.map
+      (function
+        | Source_info.Local_jmp (ModulePath p), pos ->
+            let p = module_path env p in
+            (Source_info.Local_jmp (ModulePath p), pos)
+        | Source_info.Local_jmp (TypePath p), pos ->
+            let p = type_path env p in
+            (Source_info.Local_jmp (TypePath p), pos)
+        | Source_info.Local_jmp (ValuePath p), pos ->
+            let p = value_path env p in
+            (Source_info.Local_jmp (ValuePath p), pos)
+        | x -> x)
+      si.infos
+  in
+  { si with infos }
 
 and content env id =
   let open Compilation_unit in

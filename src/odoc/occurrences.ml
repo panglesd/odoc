@@ -25,47 +25,37 @@ module H = Hashtbl.Make (Odoc_model.Paths.Identifier)
 let count ~dst ~warnings_options:_ directories =
   let htbl = H.create 100 in
   let f () (unit : Odoc_model.Lang.Compilation_unit.t) =
-    match unit.source_info with
-    | None -> ()
-    | Some info ->
-        let () =
-          List.iter
-            (function
-              | Odoc_model.Lang.Source_info.Local_jmp (Ref (`Resolved ref_)), _
-                ->
-                  let id =
-                    Odoc_model.Paths.Reference.Resolved.identifier ref_
-                  in
-                  let old_value =
-                    match H.find_opt htbl id with Some n -> n | None -> 0
-                  in
-                  H.replace htbl id (old_value + 1)
-              | ( Odoc_model.Lang.Source_info.Local_jmp
-                    (ModulePath (`Resolved p as p')),
-                  _ ) ->
-                  let id =
-                    Odoc_model.Paths.Path.Resolved.(identifier (p :> t))
-                  in
-                  let old_value =
-                    match H.find_opt htbl id with Some n -> n | None -> 0
-                  in
-                  if not Odoc_model.Paths.Path.(is_hidden (p' : Module.t :> t))
-                  then H.replace htbl id (old_value + 1)
-              | ( Odoc_model.Lang.Source_info.Local_jmp
-                    (ValuePath (`Resolved p as p')),
-                  _ ) ->
-                  let id =
-                    Odoc_model.Paths.Path.Resolved.(identifier (p :> t))
-                  in
-                  let old_value =
-                    match H.find_opt htbl id with Some n -> n | None -> 0
-                  in
-                  if not Odoc_model.Paths.Path.(is_hidden (p' : Value.t :> t))
-                  then H.replace htbl id (old_value + 1)
-              | _ -> ())
-            info.infos
-        in
-        ()
+    let () =
+      List.iter
+        (function
+          | Odoc_model.Lang.Source_info.Local_jmp (Ref (`Resolved ref_)), _ ->
+              let id = Odoc_model.Paths.Reference.Resolved.identifier ref_ in
+              let old_value =
+                match H.find_opt htbl id with Some n -> n | None -> 0
+              in
+              H.replace htbl id (old_value + 1)
+          | ( Odoc_model.Lang.Source_info.Local_jmp
+                (ModulePath (`Resolved p as p')),
+              _ ) ->
+              let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
+              let old_value =
+                match H.find_opt htbl id with Some n -> n | None -> 0
+              in
+              if not Odoc_model.Paths.Path.(is_hidden (p' : Module.t :> t)) then
+                H.replace htbl id (old_value + 1)
+          | ( Odoc_model.Lang.Source_info.Local_jmp
+                (ValuePath (`Resolved p as p')),
+              _ ) ->
+              let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
+              let old_value =
+                match H.find_opt htbl id with Some n -> n | None -> 0
+              in
+              if not Odoc_model.Paths.Path.(is_hidden (p' : Value.t :> t)) then
+                H.replace htbl id (old_value + 1)
+          | _ -> ())
+        unit.source_info.infos
+    in
+    ()
   in
   let _ = fold_dirs ~dirs:directories ~f ~init:() in
   Fs.Directory.mkdir_p (Fs.File.dirname dst);

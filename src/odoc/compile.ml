@@ -108,11 +108,12 @@ let resolve_imports resolver imports =
 
 (** Raises warnings and errors. *)
 let resolve_and_substitute ~resolver ~make_root ~source ~hidden
-    (parent : Paths.Identifier.ContainerPage.t option) input_file input_type =
+    ~count_occurrences (parent : Paths.Identifier.ContainerPage.t option)
+    input_file input_type =
   let filename = Fs.File.to_string input_file in
   (* [impl_shape] is used to lookup locations in the implementation. It is
      useless if no source code is given on command line. *)
-  let should_read_impl_shape = source <> None in
+  let should_read_impl = source <> None || count_occurrences in
   let unit, (impl_shape, local_jmp) =
     match input_type with
     | `Cmti ->
@@ -120,8 +121,7 @@ let resolve_and_substitute ~resolver ~make_root ~source ~hidden
           Odoc_loader.read_cmti ~make_root ~parent ~filename
           |> Error.raise_errors_and_warnings
         and cmt_infos =
-          if should_read_impl_shape then
-            lookup_implementation_of_cmti input_file
+          if should_read_impl then lookup_implementation_of_cmti input_file
           else (None, [])
         in
         (unit, cmt_infos)
@@ -137,11 +137,11 @@ let resolve_and_substitute ~resolver ~make_root ~source ~hidden
   in
   let unit = { unit with hidden = hidden || unit.hidden } in
   let source_info =
-    match source with
-    | Some id ->
-        let infos = Odoc_loader.Source_info.of_local_jmp local_jmp in
-        Some { Lang.Source_info.id; infos }
-    | None -> None
+    let infos = Odoc_loader.Source_info.of_local_jmp local_jmp in
+    {
+      Lang.Source_info.id = source;
+      infos = List.rev_append infos unit.source_info.infos;
+    }
   in
   if not unit.Lang.Compilation_unit.interface then
     Printf.eprintf "WARNING: not processing the \"interface\" file.%s\n%!"
@@ -279,7 +279,7 @@ let handle_file_ext = function
       Error (`Msg "Unknown extension, expected one of: cmti, cmt, cmi or mld.")
 
 let compile ~resolver ~parent_cli_spec ~hidden ~children ~output
-    ~warnings_options ~source input =
+    ~count_occurrences ~warnings_options ~source input =
   parent resolver parent_cli_spec >>= fun parent_spec ->
   let ext = Fs.File.get_ext input in
   if ext = ".mld" then
@@ -321,8 +321,8 @@ let compile ~resolver ~parent_cli_spec ~hidden ~children ~output
     let make_root = root_of_compilation_unit ~parent_spec ~hidden ~output in
     let result =
       Error.catch_errors_and_warnings (fun () ->
-          resolve_and_substitute ~resolver ~make_root ~hidden ~source parent
-            input input_type)
+          resolve_and_substitute ~resolver ~make_root ~hidden ~source
+            ~count_occurrences parent input input_type)
     in
     (* Extract warnings to write them into the output file *)
     let _, warnings = Error.unpack_warnings result in

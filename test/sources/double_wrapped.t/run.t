@@ -3,32 +3,24 @@ Similar to the lookup_def_wrapped test.
 
   $ odoc compile -c module-a -c src-source root.mld
 
-  $ printf "a.ml\nmain.ml\nb.ml\nc.ml\n" > source_tree.map
+  $ printf "a.ml\nmain.ml\n" > source_tree.map
   $ odoc source-tree -I . --parent page-root -o src-source.odoc source_tree.map
 
-  $ ocamlc -c -o main__.cmo main__.ml -bin-annot -w -49 -no-alias-deps -I .
-  $ ocamlc -c -open Main__ -o main__A.cmo a.ml -bin-annot -I .
-  $ ocamlc -c -open Main__ -o main__C.cmo c.ml -bin-annot -I .
-  $ ocamlc -c -open Main__ -o main__B.cmo b.ml -bin-annot -I .
+  $ ocamlc -c -o main__A.cmo a.ml -bin-annot -I .
+  $ ocamlc -c -o main__.cmo main__.ml -bin-annot -I .
   $ ocamlc -c -open Main__ main.ml -bin-annot -I .
 
   $ odoc compile --source-name a.ml --source-parent-file src-source.odoc -I . main__A.cmt
-  $ odoc compile --source-name c.ml --source-parent-file src-source.odoc -I . main__C.cmt
-  $ odoc compile --source-name b.ml --source-parent-file src-source.odoc -I . main__B.cmt
   $ odoc compile -I . main__.cmt
   $ odoc compile --source-name main.ml --source-parent-file src-source.odoc -I . main.cmt
 
   $ odoc link -I . main.odoc
   $ odoc link -I . main__A.odoc
-  $ odoc link -I . main__B.odoc
-  $ odoc link -I . main__C.odoc
   $ odoc link -I . main__.odoc
 
   $ odoc html-generate --source main.ml --indent -o html main.odocl
   $ odoc html-generate --hidden --indent -o html main__.odocl
   $ odoc html-generate --source a.ml --hidden --indent -o html main__A.odocl
-  $ odoc html-generate --source b.ml --hidden --indent -o html main__B.odocl
-  $ odoc html-generate --source c.ml --hidden --indent -o html main__C.odocl
 
 Look if all the source files are generated:
 
@@ -37,16 +29,10 @@ Look if all the source files are generated:
   html/Main
   html/Main/A
   html/Main/A/index.html
-  html/Main/B
-  html/Main/B/Z
-  html/Main/B/Z/index.html
-  html/Main/B/index.html
   html/Main/index.html
   html/root
   html/root/source
   html/root/source/a.ml.html
-  html/root/source/b.ml.html
-  html/root/source/c.ml.html
   html/root/source/main.ml.html
 
   $ cat html/Main/A/index.html
@@ -79,17 +65,3 @@ Look if all the source files are generated:
     </div>
    </body>
   </html>
-
-Now count occurrences
-
-  $ odoc count-occurrences -I . -o occurrences.txt
-
-Uses of A and B are counted correctly, since the path is rewritten correctly.
-Uses of C are not counted, since the canonical destination does not exists.
-Uses of values Y.x and Z.y (in b.ml) are not counted since they come from a "local" module.
-Uses of values Main__.C.y and Main__.A.x are not rewritten since we use references instead of paths.
-
-  $ cat occurrences.txt
-  Main.A.x was used 2 times
-  Main.A was used 3 times
-  Main.B was used 1 times
