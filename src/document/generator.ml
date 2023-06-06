@@ -1786,8 +1786,8 @@ module Make (Syntax : SYNTAX) = struct
         | Pack packed -> ([], pack packed)
       in
       let source_anchor =
-        match t.source_info with
-        | Some src -> Some (Source_page.url src.id)
+        match t.source_info.id with
+        | Some id -> Some (Source_page.url id)
         | None -> None
       in
       let page = make_expansion_page ~source_anchor url [ unit_doc ] items in

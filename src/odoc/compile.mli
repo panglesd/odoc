@@ -40,6 +40,7 @@ val compile :
   hidden:bool ->
   children:string list ->
   output:Fs.File.t ->
+  count_occurrences:bool ->
   warnings_options:Odoc_model.Error.warnings_options ->
   source:(Fpath.t * string list) option ->
   Fs.File.t ->

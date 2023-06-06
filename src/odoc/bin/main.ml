@@ -168,7 +168,7 @@ end = struct
 
   let compile hidden directories resolve_fwd_refs dst package_opt
       parent_name_opt open_modules children input warnings_options
-      source_parent_file source_name =
+      source_parent_file source_name count_occurrences =
     let open Or_error in
     let resolver =
       Resolver.create ~important_digests:(not resolve_fwd_refs) ~directories
@@ -200,7 +200,7 @@ end = struct
     source >>= fun source ->
     Fs.Directory.mkdir_p (Fs.File.dirname output);
     Compile.compile ~resolver ~parent_cli_spec ~hidden ~children ~output
-      ~warnings_options ~source input
+      ~warnings_options ~source ~count_occurrences input
 
   let input =
     let doc = "Input $(i,.cmti), $(i,.cmt), $(i,.cmi) or $(i,.mld) file." in
@@ -266,11 +266,16 @@ end = struct
       let doc = "Try resolving forward references." in
       Arg.(value & flag & info ~doc [ "r"; "resolve-fwd-refs" ])
     in
+    let count_occurrences =
+      let doc = "Count occurrences in implementation. Useful for " in
+      Arg.(value & flag & info ~doc [ "count-occurrences" ])
+    in
     Term.(
       const handle_error
       $ (const compile $ hidden $ odoc_file_directories $ resolve_fwd_refs $ dst
        $ package_opt $ parent_opt $ open_modules $ children $ input
-       $ warnings_options $ source_parent_file $ source_name))
+       $ warnings_options $ source_parent_file $ source_name $ count_occurrences
+        ))
 
   let info ~docs =
     let man =

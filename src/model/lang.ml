@@ -36,7 +36,7 @@ module Source_info = struct
 
   type infos = info with_pos list
 
-  type t = { id : Identifier.SourcePage.t; infos : infos }
+  type t = { id : Identifier.SourcePage.t option; infos : infos }
 end
 
 module rec Module : sig
@@ -495,7 +495,7 @@ module rec Compilation_unit : sig
     expansion : Signature.t option;
     linked : bool;  (** Whether this unit has been linked. *)
     canonical : Path.Module.t option;
-    source_info : Source_info.t option;
+    source_info : Source_info.t;
   }
 end =
   Compilation_unit

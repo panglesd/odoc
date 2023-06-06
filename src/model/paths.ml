@@ -101,6 +101,7 @@ module Identifier = struct
         DefName.to_string name :: full_name_aux (parent :> t)
     | `SourceLocationMod name -> full_name_aux (name :> t)
     | `SourcePage (parent, name) -> name :: full_name_aux (parent :> t)
+    | `AssetFile (parent, name) -> name :: full_name_aux (parent :> t)
 
   let fullname : [< t_pv ] id -> string list =
    fun n -> List.rev @@ full_name_aux (n :> t)

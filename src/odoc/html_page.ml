@@ -27,7 +27,7 @@ let render { html_config; source_file = _; assets = _ } page =
 
 let source_documents source_info source_file ~syntax =
   match (source_info, source_file) with
-  | Some { Lang.Source_info.id; infos }, Some src -> (
+  | { Lang.Source_info.id = Some id; infos }, Some src -> (
       match Fs.File.read src with
       | Error (`Msg msg) ->
           Error.raise_warning
@@ -40,7 +40,7 @@ let source_documents source_info source_file ~syntax =
             Odoc_document.Renderer.document_of_source ~syntax id infos
               source_code;
           ])
-  | Some { id; _ }, None ->
+  | { id = Some id; _ }, None ->
       let filename = Paths.Identifier.name id in
       Error.raise_warning
         (Error.filename_only
@@ -49,14 +49,14 @@ let source_documents source_info source_file ~syntax =
             --source-name"
            filename);
       []
-  | None, Some src ->
+  | { id = None; _ }, Some src ->
       Error.raise_warning
         (Error.filename_only
            "--source argument is invalid on compilation unit that were not \
             compiled with --source-parent and --source-name"
            (Fs.File.to_string src));
       []
-  | None, None -> []
+  | { id = None; _ }, None -> []
 
 let list_filter_map f lst =
   List.rev

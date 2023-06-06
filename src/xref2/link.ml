@@ -377,34 +377,31 @@ let rec unit env t =
       | Pack _ as p -> p
   in
   let source_info =
-    match t.source_info with
-    | None -> None
-    | Some si ->
-        let infos =
-          List.map
-            (function
-              | Source_info.Local_jmp (Ref r), pos ->
-                  let r =
-                    match
-                      Ref_tools.resolve_reference env r |> Error.raise_warnings
-                    with
-                    | Ok r -> `Resolved r
-                    | Error _ -> r
-                  in
-                  (Source_info.Local_jmp (Ref r), pos)
-              | Source_info.Local_jmp (ValuePath p), pos ->
-                  let p = value_path env p in
-                  (Source_info.Local_jmp (ValuePath p), pos)
-              | Source_info.Local_jmp (ModulePath p), pos ->
-                  let p = module_path env p in
-                  (Source_info.Local_jmp (ModulePath p), pos)
-              | Source_info.Local_jmp (TypePath p), pos ->
-                  let p = type_path env p in
-                  (Source_info.Local_jmp (TypePath p), pos)
-              | x -> x)
-            si.infos
-        in
-        Some { si with infos }
+    let infos =
+      List.map
+        (function
+          | Source_info.Local_jmp (Ref r), pos ->
+              let r =
+                match
+                  Ref_tools.resolve_reference env r |> Error.raise_warnings
+                with
+                | Ok r -> `Resolved r
+                | Error _ -> r
+              in
+              (Source_info.Local_jmp (Ref r), pos)
+          | Source_info.Local_jmp (ValuePath p), pos ->
+              let p = value_path env p in
+              (Source_info.Local_jmp (ValuePath p), pos)
+          | Source_info.Local_jmp (ModulePath p), pos ->
+              let p = module_path env p in
+              (Source_info.Local_jmp (ModulePath p), pos)
+          | Source_info.Local_jmp (TypePath p), pos ->
+              let p = type_path env p in
+              (Source_info.Local_jmp (TypePath p), pos)
+          | x -> x)
+        t.source_info.infos
+    in
+    { t.source_info with infos }
   in
   { t with content; linked = true; source_info }
 
