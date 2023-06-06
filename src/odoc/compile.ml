@@ -43,7 +43,7 @@ let lookup_implementation_of_cmti intf_file =
       (Error.filename_only
          "No implementation file found for the given interface"
          (Fs.File.to_string intf_file));
-    None)
+    (None, []))
 
 (** Used to disambiguate child references. *)
 let is_module_name n = String.length n > 0 && Char.Ascii.is_upper n.[0]
@@ -116,7 +116,7 @@ let resolve_and_substitute ~resolver ~make_root ~source ~hidden
   (* [impl_shape] is used to lookup locations in the implementation. It is
      useless if no source code is given on command line. *)
   let should_read_impl_shape = source <> None in
-  let unit, cmt_infos =
+  let unit, (impl_shape, local_jmp) =
     match input_type with
     | `Cmti ->
         let unit =
@@ -125,7 +125,7 @@ let resolve_and_substitute ~resolver ~make_root ~source ~hidden
         and cmt_infos =
           if should_read_impl_shape then
             lookup_implementation_of_cmti input_file
-          else None
+          else (None, [])
         in
         (unit, cmt_infos)
     | `Cmt ->
@@ -136,21 +136,13 @@ let resolve_and_substitute ~resolver ~make_root ~source ~hidden
           Odoc_loader.read_cmi ~make_root ~parent ~filename
           |> Error.raise_errors_and_warnings
         in
-        (unit, None)
+        (unit, (None, []))
   in
   let unit = { unit with hidden = hidden || unit.hidden } in
-  let impl_shape =
-    match cmt_infos with Some (shape, _) -> Some shape | None -> None
-  in
   let source_info =
     match source with
     | Some id ->
-        let infos =
-          match cmt_infos with
-          | Some (_, local_jmp) ->
-              Odoc_loader.Source_info.of_local_jmp local_jmp
-          | _ -> []
-        in
+        let infos = Odoc_loader.Source_info.of_local_jmp local_jmp in
         Some { Lang.Source_info.id; infos }
     | None -> None
   in
