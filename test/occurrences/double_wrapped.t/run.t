@@ -1,5 +1,4 @@
 This is what happens when a dune user write a toplevel module.
-Similar to the lookup_def_wrapped test.
 
   $ odoc compile -c module-a -c src-source root.mld
 
@@ -21,54 +20,7 @@ Similar to the lookup_def_wrapped test.
   $ odoc link -I . main__C.odoc
   $ odoc link -I . main__.odoc
 
-  $ odoc html-generate --indent -o html main.odocl
-  $ odoc html-generate --hidden --indent -o html main__.odocl
-  $ odoc html-generate --hidden --indent -o html main__A.odocl
-  $ odoc html-generate --hidden --indent -o html main__B.odocl
-  $ odoc html-generate --hidden --indent -o html main__C.odocl
-
-Look if all the source files are generated:
-
-  $ find html | sort
-  html
-  html/Main
-  html/Main/A
-  html/Main/A/index.html
-  html/Main/B
-  html/Main/B/Z
-  html/Main/B/Z/index.html
-  html/Main/B/index.html
-  html/Main/index.html
-
-  $ cat html/Main/A/index.html
-  <!DOCTYPE html>
-  <html xmlns="http://www.w3.org/1999/xhtml">
-   <head><title>A (Main.A)</title>
-    <link rel="stylesheet" href="../../odoc.css"/><meta charset="utf-8"/>
-    <meta name="generator" content="odoc %%VERSION%%"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-    <script src="../../highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-   </head>
-   <body class="odoc">
-    <nav class="odoc-nav"><a href="../index.html">Up</a> – 
-     <a href="../index.html">Main</a> &#x00BB; A
-    </nav>
-    <header class="odoc-preamble">
-     <h1>Module <code><span>Main.A</span></code></h1>
-    </header>
-    <div class="odoc-content">
-     <div class="odoc-spec">
-      <div class="spec value anchored" id="val-x">
-       <a href="#val-x" class="anchor"></a>
-       <code><span><span class="keyword">val</span> x : int</span></code>
-      </div>
-     </div>
-    </div>
-   </body>
-  </html>
-
-Now count occurrences
+Count occurrences
 
   $ odoc count-occurrences -I . -o occurrences.txt
 
@@ -79,5 +31,7 @@ Uses of values Main__.C.y and Main__.A.x are not rewritten since we use referenc
 
   $ cat occurrences.txt
   Main.A.x was used 2 times
+  Main.A.t was used 1 times
   Main.A was used 3 times
+  Main.A.M was used 2 times
   Main.B was used 1 times

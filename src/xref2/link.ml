@@ -377,27 +377,31 @@ let rec unit env t =
       | Pack _ as p -> p
   in
   let source_info =
+    let open Source_info in
     let infos =
       List.map
         (function
-          | Source_info.Local_jmp (Ref r), pos ->
-              let r =
-                match
-                  Ref_tools.resolve_reference env r |> Error.raise_warnings
-                with
-                | Ok r -> `Resolved r
-                | Error _ -> r
+          | Local_jmp jmp, pos ->
+              let info =
+                match jmp with
+                | ValuePath p ->
+                    let p = value_path env p in
+                    ValuePath p
+                | ModulePath p ->
+                    let p = module_path env p in
+                    ModulePath p
+                | MtyPath p ->
+                    let p = module_type_path env p in
+                    MtyPath p
+                | ClassPath p ->
+                    let p = class_type_path env p in
+                    ClassPath p
+                | TypePath p ->
+                    let p = type_path env p in
+                    TypePath p
+                | i -> i
               in
-              (Source_info.Local_jmp (Ref r), pos)
-          | Source_info.Local_jmp (ValuePath p), pos ->
-              let p = value_path env p in
-              (Source_info.Local_jmp (ValuePath p), pos)
-          | Source_info.Local_jmp (ModulePath p), pos ->
-              let p = module_path env p in
-              (Source_info.Local_jmp (ModulePath p), pos)
-          | Source_info.Local_jmp (TypePath p), pos ->
-              let p = type_path env p in
-              (Source_info.Local_jmp (TypePath p), pos)
+              (Local_jmp info, pos)
           | x -> x)
         t.source_info.infos
     in
