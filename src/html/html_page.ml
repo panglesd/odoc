@@ -189,7 +189,9 @@ let page_creator ~config ~url ~uses_katex ~with_search header breadcrumbs toc
 
   let body =
     html_of_breadcrumbs breadcrumbs
-    @ [ Html.header ~a:[ Html.a_class [ "odoc-preamble" ] ] (header @ search_bar) ]
+    @ [
+        Html.header ~a:[ Html.a_class [ "odoc-preamble" ] ] (search_bar @ header);
+      ]
     @ sidebar toc
     @ [ Html.div ~a:[ Html.a_class [ "odoc-content" ] ] content ]
   in

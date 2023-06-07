@@ -918,8 +918,11 @@ td.def-doc *:first-child {
 
 .odoc-search .search-entry pre code {
   font-size: 1em;
+  background-color: var(--li-code-background);
+  color: var(--li-code-color);
+  border-radius: 3px;
+  padding: 0 0.3ex;
 }
-
 
 .odoc-search .search-entry .entry-title {
   padding-right: 10px;
