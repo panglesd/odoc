@@ -127,7 +127,87 @@
 
 /* Reset a few things. */
 
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
   padding: 0;
   border: 0;
   font: inherit;
@@ -140,7 +220,9 @@ table {
   border-spacing: 0;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
@@ -183,7 +265,8 @@ nav {
 
 /* Basic markup elements */
 
-b, strong {
+b,
+strong {
   font-weight: bold;
 }
 
@@ -191,11 +274,13 @@ i {
   font-style: italic;
 }
 
-em, i em.odd{
+em,
+i em.odd {
   font-style: italic;
 }
 
-em.odd, i em {
+em.odd,
+i em {
   font-style: normal;
 }
 
@@ -207,13 +292,15 @@ sub {
   vertical-align: sub;
 }
 
-sup, sub {
+sup,
+sub {
   font-size: 12px;
   line-height: 0;
   margin-left: 0.2ex;
 }
 
-ul, ol {
+ul,
+ol {
   list-style-position: outside
 }
 
@@ -265,7 +352,7 @@ a:hover {
   border-radius: 1px;
 }
 
-*:hover > a.anchor {
+*:hover>a.anchor {
   visibility: visible;
 }
 
@@ -293,7 +380,7 @@ a.anchor {
   color: var(--anchor-color);
 }
 
-.spec > a.anchor {
+.spec>a.anchor {
   margin-left: -2.3em;
   padding-right: 0.9em;
 }
@@ -301,6 +388,7 @@ a.anchor {
 .xref-unresolved {
   color: #2C94BD;
 }
+
 .xref-unresolved:hover {
   box-shadow: 0 1px 0 0 var(--xref-shadow);
 }
@@ -317,7 +405,16 @@ a.source_link {
    Until at least 4.03 many of the modules of the stdlib start at .h7,
    we restart the sequence there like h2  */
 
-h1, h2, h3, h4, h5, h6, .h7, .h8, .h9, .h10 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h7,
+.h8,
+.h9,
+.h10 {
   font-family: "Fira Sans", Helvetica, Arial, sans-serif;
   font-weight: 400;
   padding-top: 0.1em;
@@ -344,26 +441,31 @@ h3 {
   font-size: 1.25em;
 }
 
-small, .font_small {
+small,
+.font_small {
   font-size: 0.8em;
 }
 
-h1 code, h1 tt {
+h1 code,
+h1 tt {
   font-size: inherit;
   font-weight: inherit;
 }
 
-h2 code, h2 tt {
+h2 code,
+h2 tt {
   font-size: inherit;
   font-weight: inherit;
 }
 
-h3 code, h3 tt {
+h3 code,
+h3 tt {
   font-size: inherit;
   font-weight: inherit;
 }
 
-h3 code, h3 tt {
+h3 code,
+h3 tt {
   font-size: inherit;
   font-weight: inherit;
 }
@@ -391,7 +493,9 @@ h4 {
 
 /* Preformatted and code */
 
-tt, code, pre {
+tt,
+code,
+pre {
   font-family: "Fira Mono", courier;
   font-weight: 400;
 }
@@ -411,7 +515,8 @@ tt, code, pre {
   padding: 0 0.3ex;
 }
 
-p a > code, li a > code {
+p a>code,
+li a>code {
   color: var(--link-color);
 }
 
@@ -431,7 +536,9 @@ p a > code, li a > code {
   font-weight: 500;
 }
 
-.arrow { white-space: nowrap }
+.arrow {
+  white-space: nowrap
+}
 
 /* Module member specification */
 
@@ -443,20 +550,23 @@ p a > code, li a > code {
   padding: 0.35em 0.5em;
 }
 
-li:not(:last-child) > .def-doc {
+li:not(:last-child)>.def-doc {
   margin-bottom: 15px;
 }
 
 /* Spacing between items */
-div.odoc-spec,.odoc-include {
+div.odoc-spec,
+.odoc-include {
   margin-bottom: 2em;
 }
 
-.spec.type .variant p, .spec.type .record p {
+.spec.type .variant p,
+.spec.type .record p {
   margin: 5px;
 }
 
-.spec.type .variant, .spec.type .record {
+.spec.type .variant,
+.spec.type .record {
   margin-left: 2ch;
   list-style: none;
   display: flex;
@@ -464,21 +574,23 @@ div.odoc-spec,.odoc-include {
   row-gap: 4px;
 }
 
-.spec.type .record > code, .spec.type .variant > code {
+.spec.type .record>code,
+.spec.type .variant>code {
   min-width: 40%;
 }
 
-.spec.type > ol {
+.spec.type>ol {
   margin-top: 0;
   margin-bottom: 0;
 }
 
-.spec.type .record > .def-doc, .spec.type .variant > .def-doc {
-  min-width:50%;
+.spec.type .record>.def-doc,
+.spec.type .variant>.def-doc {
+  min-width: 50%;
   padding: 0.25em 0.5em;
   margin-left: 10%;
   border-radius: 3px;
-  flex-grow:1;
+  flex-grow: 1;
   background: var(--main-background);
   box-shadow: 2px 2px 4px lightgrey;
 }
@@ -556,35 +668,75 @@ td.def-doc *:first-child {
 
 /* Lists of @tags */
 
-.at-tags { list-style-type: none; margin-left: -3ex; }
-.at-tags li { padding-left: 3ex; text-indent: -3ex; }
-.at-tags .at-tag { text-transform: capitalize }
+.at-tags {
+  list-style-type: none;
+  margin-left: -3ex;
+}
+
+.at-tags li {
+  padding-left: 3ex;
+  text-indent: -3ex;
+}
+
+.at-tags .at-tag {
+  text-transform: capitalize
+}
 
 /* Alert emoji */
 
-.alert::before, .deprecated::before {
+.alert::before,
+.deprecated::before {
   content: '⚠️ ';
 }
 
 /* Lists of modules */
 
-.modules { list-style-type: none; margin-left: -3ex; }
-.modules li { padding-left: 3ex; text-indent: -3ex; margin-top: 5px }
-.modules .synopsis { padding-left: 1ch; }
+.modules {
+  list-style-type: none;
+  margin-left: -3ex;
+}
+
+.modules li {
+  padding-left: 3ex;
+  text-indent: -3ex;
+  margin-top: 5px
+}
+
+.modules .synopsis {
+  padding-left: 1ch;
+}
 
 /* Odig package index */
 
-.packages { list-style-type: none; margin-left: -3ex; }
-.packages li { padding-left: 3ex; text-indent: -3ex }
-.packages li a.anchor { padding-right: 0.5ch; padding-left: 3ch; }
-.packages .version { font-size: 10px; color: var(--by-name-version-color); }
-.packages .synopsis { padding-left: 1ch }
+.packages {
+  list-style-type: none;
+  margin-left: -3ex;
+}
+
+.packages li {
+  padding-left: 3ex;
+  text-indent: -3ex
+}
+
+.packages li a.anchor {
+  padding-right: 0.5ch;
+  padding-left: 3ch;
+}
+
+.packages .version {
+  font-size: 10px;
+  color: var(--by-name-version-color);
+}
+
+.packages .synopsis {
+  padding-left: 1ch
+}
 
 .by-name nav a {
   text-transform: uppercase;
   font-size: 18px;
   margin-right: 1ex;
-  color: var(--by-name-nav-link-color,);
+  color: var(--by-name-nav-link-color, );
   display: inline-block;
 }
 
@@ -594,9 +746,18 @@ td.def-doc *:first-child {
   display: inline-block;
 }
 
-.by-tag ol { list-style-type: none; }
-.by-tag ol.tags li { margin-left: 1ch; display: inline-block }
-.by-tag td:first-child { text-transform: uppercase; }
+.by-tag ol {
+  list-style-type: none;
+}
+
+.by-tag ol.tags li {
+  margin-left: 1ch;
+  display: inline-block
+}
+
+.by-tag td:first-child {
+  text-transform: uppercase;
+}
 
 /* Odig package page */
 
@@ -631,7 +792,8 @@ td.def-doc *:first-child {
   margin-right: 1ex;
 }
 
-#info-authors li, #info-maintainers li {
+#info-authors li,
+#info-maintainers li {
   display: block;
 }
 
@@ -640,17 +802,6 @@ td.def-doc *:first-child {
 .odoc-toc:before {
   display: block;
   content: "Contents";
-  text-transform: uppercase;
-  font-size: 1em;
-  margin: 1.414em 0 0.5em;
-  font-weight: 500;
-  color: var(--toc-before-color);
-  line-height: 1.2;
-}
-
-.odoc-search:before {
-  display: block;
-  content: "Search";
   text-transform: uppercase;
   font-size: 1em;
   margin: 1.414em 0 0.5em;
@@ -688,25 +839,29 @@ td.def-doc *:first-child {
   text-decoration: underline;
 }
 
-.odoc-sidebar .odoc-search {}
-
-.odoc-sidebar .odoc-search.active {
-
-  position: fixed;
-  background: var(--toc-background);
-  border: 1px solid;
-  left: 5%;
-  right: 5%;
-  padding-left: calc(10vw + 20ex - 5%);
-  padding-right: calc(100% - 5% - 10vw - 20ex - 100ex);
-  bottom: 5%;
-  top: 2%;
-  overflow: scroll;
+.odoc-search {
+  position: relative;
 }
 
-.search-active-add,
-.search-active-remove {
-  display: none;
+.odoc-search .search-result:empty {
+  display : none;
+}
+
+.odoc-search .search-result {
+  position: absolute;
+  background: var(--toc-background);
+  overflow: scroll;
+  left: 0;
+  right: 0;
+  max-height: 40rem;
+  border:solid;
+  border-color: var(--pre-border-color);
+  border-color: var(--pre-border-color);
+  border-width: 1px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 2px;
+  box-shadow: 5px 5px 5px var(--toc-background);
 }
 
 .search-bar {
@@ -717,16 +872,7 @@ td.def-doc *:first-child {
   display: flex;
 }
 
-.odoc-sidebar .odoc-search:not(.active) .search-bar+.search-active-add {
-  display: inline-block;
-}
-
-.active .search-active-remove {
-  display: inline-block;
-}
-
-
-.odoc-sidebar .odoc-search .search-entry {
+.odoc-search .search-entry {
   color: var(--color);
   display: block;
   margin-top: 10px;
@@ -734,18 +880,21 @@ td.def-doc *:first-child {
   /* border: 3px ridge pink */
   border-left: 2px solid transparent;
 }
+.odoc-search .search-entry p {
+  margin:0;
+}
 
-.odoc-sidebar .odoc-search .search-entry:hover {
+.odoc-search .search-entry:hover {
   border: none;
   box-shadow: none;
   border-left: 2px solid var(--link-color);
 }
 
-.odoc-sidebar .odoc-search .search-entry.value {
+.odoc-search .search-entry.value {
   /* border: 3px ridge red */
 }
 
-.odoc-sidebar .odoc-search .search-entry .entry-title .entry-kind {
+.odoc-search .search-entry .entry-title .entry-kind {
   font-size: 0.75em;
   font-weight: 900;
   border: 1px solid;
@@ -757,31 +906,43 @@ td.def-doc *:first-child {
   padding-left: 0.25em;
 }
 
-.odoc-sidebar .odoc-search .search-entry .entry-title {
+.odoc-search .search-entry pre {
+  border:none;
+  margin:0;
+}
+
+.odoc-search .search-entry pre code {
+  font-size: 1em;
+}
+
+
+.odoc-search .search-entry .entry-title {
   padding-right: 10px;
   background-color: var(--toc-background-emph);
   width: 100%;
   display: block;
 }
 
-.odoc-sidebar .odoc-search.active .search-entry .entry-name {
+.odoc-search.active .search-entry .entry-name {
   font-size: 1.2em;
-}
-.odoc-sidebar .odoc-search.active .search-entry .prefix-name {
-  font-size: 1.2em;
-}
-.odoc-sidebar .odoc-search .search-entry .prefix-name {
-opacity: 0.5;
 }
 
-.odoc-sidebar .odoc-search .search-entry .entry-comment {
+.odoc-search.active .search-entry .prefix-name {
+  font-size: 1.2em;
+}
+
+.odoc-search .search-entry .prefix-name {
+  opacity: 0.5;
+}
+
+.odoc-search .search-entry .entry-comment {
   margin-left: 10px;
   max-height: 100px;
   overflow: scroll;
   font-size: 0.8em;
 }
 
-.odoc-sidebar .odoc-search.active .search-entry .entry-comment {
+.odoc-search.active .search-entry .entry-comment {
   max-height: 300px;
   font-size: 1rem;
 }
@@ -803,6 +964,7 @@ opacity: 0.5;
 .odoc-toc ul li {
   margin: 0;
 }
+
 .odoc-toc>ul>li {
   margin-bottom: 0.3em;
 }
@@ -819,6 +981,7 @@ opacity: 0.5;
   body {
     margin: 2em;
   }
+
   .odoc-toc {
     position: static;
     width: auto;
@@ -838,6 +1001,7 @@ opacity: 0.5;
     color: black;
     background: white;
   }
+
   body nav:first-child {
     visibility: hidden;
   }
@@ -957,23 +1121,74 @@ opacity: 0.5;
   text-decoration: underline;
 }
 
-.VAL, .TYPE, .LET, .REC, .IN, .OPEN, .NONREC, .MODULE, .METHOD, .LETOP, .INHERIT, .INCLUDE, .FUNCTOR, .EXTERNAL, .CONSTRAINT, .ASSERT, .AND, .END, .CLASS, .STRUCT, .SIG {
-  color: #859900;;
+.VAL,
+.TYPE,
+.LET,
+.REC,
+.IN,
+.OPEN,
+.NONREC,
+.MODULE,
+.METHOD,
+.LETOP,
+.INHERIT,
+.INCLUDE,
+.FUNCTOR,
+.EXTERNAL,
+.CONSTRAINT,
+.ASSERT,
+.AND,
+.END,
+.CLASS,
+.STRUCT,
+.SIG {
+  color: #859900;
+  ;
 }
 
-.WITH, .WHILE, .WHEN, .VIRTUAL, .TRY, .TO, .THEN, .PRIVATE, .OF, .NEW, .MUTABLE, .MATCH, .LAZY, .IF, .FUNCTION, .FUN, .FOR, .EXCEPTION, .ELSE, .TO, .DOWNTO, .DO, .DONE, .BEGIN, .AS {
+.WITH,
+.WHILE,
+.WHEN,
+.VIRTUAL,
+.TRY,
+.TO,
+.THEN,
+.PRIVATE,
+.OF,
+.NEW,
+.MUTABLE,
+.MATCH,
+.LAZY,
+.IF,
+.FUNCTION,
+.FUN,
+.FOR,
+.EXCEPTION,
+.ELSE,
+.TO,
+.DOWNTO,
+.DO,
+.DONE,
+.BEGIN,
+.AS {
   color: #cb4b16;
 }
 
-.TRUE, .FALSE {
+.TRUE,
+.FALSE {
   color: #b58900;
 }
 
-.failwith, .INT, .SEMISEMI, .LIDENT {
+.failwith,
+.INT,
+.SEMISEMI,
+.LIDENT {
   color: #2aa198;
 }
 
-.STRING, .CHAR, .UIDENT {
+.STRING,
+.CHAR,
+.UIDENT {
   color: #b58900;
 }
 

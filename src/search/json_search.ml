@@ -93,7 +93,7 @@ let of_entry ({ id; doc; extra } as entry : Entry.t) : Odoc_html.Json.json =
   let extra =
     let return kind arr = `Object (("kind", `String kind) :: arr) in
     match extra with
-    | TypeDecl { canonical = _; equation; representation = _; txt=_ } ->
+    | TypeDecl { canonical = _; equation; representation = _; txt = _ } ->
         let {
           Odoc_model.Lang.TypeDecl.Equation.params = _;
           private_;
@@ -121,10 +121,10 @@ let of_entry ({ id; doc; extra } as entry : Entry.t) : Odoc_html.Json.json =
         in
         return "TypeDecl"
           [
-              ("private", private_);
-              ("manifest", manifest);
-              ("constraints", constraints);
-            ]
+            ("private", private_);
+            ("manifest", manifest);
+            ("constraints", constraints);
+          ]
     | Module -> return "Module" []
     | Value { value = _; type_ } ->
         return "Value" [ ("type", `String (Render.text_of_type type_)) ]

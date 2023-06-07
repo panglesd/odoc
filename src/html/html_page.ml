@@ -31,46 +31,25 @@ let html_of_toc toc =
 
 let html_of_search () =
   let search_bar =
-    let fullscreen_button action =
-      let action, icon =
-        match action with `Add -> ("add", "⇲") | `Remove -> ("remove", "⇱")
-      in
-      Html.button
-        ~a:
-          [
-            Html.a_onclick
-              ({|document.querySelector(".odoc-search").classList.|} ^ action
-             ^ {|("active");|});
-            Html.a_class [ "search-active-" ^ action ];
-          ]
-        [ Html.txt icon ]
-    in
     Html.div
       ~a:[ Html.a_class [ "search-bar-container" ] ]
       [
         Html.input
           ~a:[ Html.a_class [ "search-bar" ]; Html.a_placeholder "🔎 Search..." ]
           ();
-        fullscreen_button `Add;
-        fullscreen_button `Remove;
       ]
   in
   let search_result = Html.div ~a:[ Html.a_class [ "search-result" ] ] [] in
   [ search_bar; search_result ]
 
-let sidebar toc with_search =
+let sidebar toc =
   let toc, has_toc =
     match toc with
     | [] -> ([], false)
     | _ ->
         ([ Html.nav ~a:[ Html.a_class [ "odoc-toc" ] ] (html_of_toc toc) ], true)
   in
-  if with_search then
-    let search =
-      Html.div ~a:[ Html.a_class [ "odoc-search" ] ] (html_of_search ())
-    in
-    [ Html.div ~a:[ Html.a_class [ "odoc-sidebar" ] ] (search :: toc) ]
-  else if has_toc then [ Html.div ~a:[ Html.a_class [ "odoc-sidebar" ] ] toc ]
+  if has_toc then [ Html.div ~a:[ Html.a_class [ "odoc-sidebar" ] ] toc ]
   else []
 
 let html_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) =
@@ -202,10 +181,16 @@ let page_creator ~config ~url ~uses_katex ~with_search header breadcrumbs toc
     Html.head (Html.title (Html.txt title_string)) meta_elements
   in
 
+  let search_bar =
+    if with_search then
+      [ Html.div ~a:[ Html.a_class [ "odoc-search" ] ] (html_of_search ()) ]
+    else []
+  in
+
   let body =
     html_of_breadcrumbs breadcrumbs
-    @ [ Html.header ~a:[ Html.a_class [ "odoc-preamble" ] ] header ]
-    @ sidebar toc with_search
+    @ [ Html.header ~a:[ Html.a_class [ "odoc-preamble" ] ] (header @ search_bar) ]
+    @ sidebar toc
     @ [ Html.div ~a:[ Html.a_class [ "odoc-content" ] ] content ]
   in
 
