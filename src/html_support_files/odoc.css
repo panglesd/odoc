@@ -843,6 +843,11 @@ td.def-doc *:first-child {
   position: relative;
 }
 
+
+.odoc-search:not(:focus-within) .search-result {
+  display : none;
+}
+
 .odoc-search .search-result:empty {
   display : none;
 }
