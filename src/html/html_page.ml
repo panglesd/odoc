@@ -111,17 +111,22 @@ let page_creator ~config ~url ~uses_katex ~with_search header breadcrumbs toc
 
     let odoc_css_uri = file_uri theme_uri "odoc.css" in
     let highlight_js_uri = file_uri support_uri "highlight.pack.js" in
+    let search_urls =
+      let search_url name = Printf.sprintf "'%s'" (file_uri support_uri name) in
+      let search_urls = List.map search_url (Config.search_files config) in
+      "[" ^ String.concat "," search_urls ^ "]"
+    in
     let search_scripts =
       if Config.with_search config then
         [
           Html.script ~a:[]
             (Html.txt
-               (Printf.sprintf "let base_url = '%s'; let search_url = '%s';"
+               (Format.asprintf "let base_url = '%s'; let search_urls = %s;"
                   (let page =
                      Url.Path.{ kind = `File; parent = None; name = "" }
                    in
                    Link.href ~config ~resolve:(Current url) (Url.from_path page))
-                  (file_uri support_uri "index.js")));
+                  search_urls));
           Html.script
             ~a:
               [

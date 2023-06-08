@@ -1,7 +1,10 @@
 function createWebWorker() {
-  var parts = document.location.href.split("/");
-  parts[parts.length - 1] = search_url;
-  var blobContents = ['importScripts("' + parts.join("/") + '");'];
+  var searchs = search_urls.map((search_url) => {
+    let parts = document.location.href.split("/");
+    parts[parts.length - 1] = search_url;
+    return parts.join("/");
+  });
+  blobContents = ['importScripts("' + searchs.join(",") + '");'];
   var blob = new Blob(blobContents, { type: "application/javascript" });
   var blobUrl = URL.createObjectURL(blob);
 
@@ -16,7 +19,6 @@ var worker = createWebWorker();
 document.querySelector(".search-bar").addEventListener("input", (ev) => {
   worker.postMessage(ev.target.value);
 });
-
 
 worker.onmessage = (e) => {
   let results = e.data;

@@ -11,10 +11,11 @@ type t = {
   open_details : bool;
   as_json : bool;
   with_search : bool; (* Include search bar *)
+  search_files : string list; (* names of JS files to include in the webworker *)
 }
 
 let v ?(search_result = false) ?theme_uri ?support_uri ~semantic_uris ~indent
-    ~flat ~open_details ~as_json ~with_search () =
+    ~flat ~open_details ~as_json ~with_search ~search_files () =
   {
     semantic_uris;
     indent;
@@ -25,6 +26,7 @@ let v ?(search_result = false) ?theme_uri ?support_uri ~semantic_uris ~indent
     as_json;
     with_search;
     search_result;
+    search_files;
   }
 
 let theme_uri config =
@@ -46,3 +48,5 @@ let as_json config = config.as_json
 let with_search config = config.with_search
 
 let search_result config = config.search_result
+
+let search_files config = config.search_files

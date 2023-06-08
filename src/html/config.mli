@@ -12,6 +12,7 @@ val v :
   open_details:bool ->
   as_json:bool ->
   with_search:bool ->
+  search_files:string list ->
   unit ->
   t
 
@@ -32,3 +33,5 @@ val as_json : t -> bool
 val with_search : t -> bool
 
 val search_result : t -> bool
+
+val search_files : t -> string list

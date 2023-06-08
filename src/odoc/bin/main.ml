@@ -737,6 +737,13 @@ module Odoc_html_args = struct
     in
     Arg.(value & flag & info ~doc [ "with-search" ])
 
+  let search_files =
+    let doc =
+      "The name of a javascript file to use for search. Will be run in a \
+       webworker"
+    in
+    Arg.(value & opt_all string [] & info ~doc [ "search-file" ])
+
   let source_file =
     let doc =
       "Source code for the compilation unit. It must have been compiled with \
@@ -749,17 +756,17 @@ module Odoc_html_args = struct
 
   let extra_args =
     let config semantic_uris closed_details indent theme_uri support_uri flat
-        as_json with_search source_file =
+        as_json with_search source_file search_files =
       let open_details = not closed_details in
       let html_config =
         Odoc_html.Config.v ~theme_uri ~support_uri ~semantic_uris ~indent ~flat
-          ~open_details ~as_json ~with_search ()
+          ~open_details ~as_json ~with_search ~search_files ()
       in
       { Html_page.html_config; source_file }
     in
     Term.(
       const config $ semantic_uris $ closed_details $ indent $ theme_uri
-      $ support_uri $ flat $ as_json $ with_search $ source_file)
+      $ support_uri $ flat $ as_json $ with_search $ source_file $ search_files)
 end
 
 module Odoc_html = Make_renderer (Odoc_html_args)
