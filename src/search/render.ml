@@ -126,8 +126,7 @@ let text_of_doc doc = Of_comments.string_of_doc doc
 
 let config =
   Odoc_html.Config.v ~search_result:true ~semantic_uris:false ~indent:false
-    ~flat:false ~open_details:false ~as_json:false ~with_search:false
-    ~search_files:[] ()
+    ~flat:false ~open_details:false ~as_json:false ~search_files:[] ()
 
 let html_of_doc doc =
   Tyxml.Html.div ~a:[]

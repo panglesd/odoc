@@ -11,7 +11,6 @@ val v :
   flat:bool ->
   open_details:bool ->
   as_json:bool ->
-  with_search:bool ->
   search_files:string list ->
   unit ->
   t
@@ -29,8 +28,6 @@ val flat : t -> bool
 val open_details : t -> bool
 
 val as_json : t -> bool
-
-val with_search : t -> bool
 
 val search_result : t -> bool
 
