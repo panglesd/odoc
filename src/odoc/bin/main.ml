@@ -401,14 +401,23 @@ module Indexing = struct
 end
 
 module Support_files_command = struct
-  let support_files without_theme output_dir =
-    Support_files.write ~without_theme output_dir
+  let support_files without_theme search_files output_dir =
+    Support_files.write ~without_theme ~search_files output_dir
 
   let without_theme =
     let doc = "Don't copy the default theme to output directory." in
     Arg.(value & flag & info ~doc [ "without-theme" ])
 
-  let cmd = Term.(const support_files $ without_theme $ dst ~create:true ())
+  let search_files =
+    let doc =
+      "Path to the search files. The name must match one given in \
+       $(i,--search-file) from the $(i,html-generate) command."
+    in
+    Arg.(value & opt_all convert_fpath [] & info ~doc [ "search-file" ])
+
+  let cmd =
+    Term.(
+      const support_files $ without_theme $ search_files $ dst ~create:true ())
 
   let info ~docs =
     let doc =
@@ -979,11 +988,14 @@ module Targets = struct
   end
 
   module Support_files = struct
-    let list_targets without_theme output_directory =
-      Support_files.print_filenames ~without_theme output_directory
+    let list_targets without_theme search_files output_directory =
+      Support_files.print_filenames ~without_theme ~search_files
+        output_directory
 
     let cmd =
-      Term.(const list_targets $ Support_files_command.without_theme $ dst ())
+      Term.(
+        const list_targets $ Support_files_command.without_theme
+        $ Support_files_command.search_files $ dst ())
 
     let info ~docs =
       Term.info "support-files-targets" ~docs

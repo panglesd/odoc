@@ -1186,8 +1186,7 @@ The index.js file need to provide a odoc_search command, from a
   $ odoc html-generate --search-file index.js -o html j.odocl
   $ odoc html-generate --search-file index.js -o html main.odocl
   $ odoc html-generate --search-file index.js -o html page-page.odocl
-  $ odoc support-files -o html
-  $ cp index.js html/index.js
+  $ odoc support-files --search-file index.js -o html
 
   $ find html | sort
   html
