@@ -179,7 +179,9 @@ let entries_of_item (x : Odoc_model.Fold.item) =
       match te.constructors with
       | [] -> []
       | c :: _ ->
-          (* Type extension do not have an ID yet... we use the first constructor for the url. *)
+          (* Type extension do not have an ID yet... we use the first
+             constructor for the url. Unfortunately, this breaks the uniqueness
+             of the ID in the search index... *)
           let type_entry =
             let extra =
               TypeExtension

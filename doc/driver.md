@@ -17,7 +17,7 @@ First, we need to initialise MDX with some libraries and helpful values:
 (* Prelude *)
 #require "bos";;
 #install_printer Fpath.pp;;
-#print_length 100;;
+#print_length 1000;;
 #print_depth 10;;
 open Bos;;
 let (>>=) = Result.bind;;
@@ -217,10 +217,15 @@ let link ?(ignore_output = false) file =
   if not ignore_output then
     add_prefixed_output cmd link_output (Fpath.to_string file) lines
 
-let html_generate ?(ignore_output = false) ?(with_search = true) file source =
+let html_generate ?(ignore_output = false) ?(search_files = []) file source =
   let open Cmd in
   let source = match source with None -> empty | Some source -> v "--source" % p source in
-  let search = if with_search then v "--with-search" else empty in
+  let search =
+    List.fold_left
+      (fun acc filename -> acc % "--search-file" % filename)
+      empty
+      (List.map Fpath.filename search_files)
+  in
   let cmd =
     odoc % "html-generate" %% source % p file %% search % "-o" % "html" % "--theme-uri" % "odoc"
     % "--support-uri" % "odoc"
@@ -229,8 +234,9 @@ let html_generate ?(ignore_output = false) ?(with_search = true) file source =
   if not ignore_output then
     add_prefixed_output cmd generate_output (Fpath.to_string file) lines
 
-let support_files () =
+let support_files  ?(search_files = []) () =
   let open Cmd in
+  let search = List.fold_left (fun acc f -> acc % "--search-file" % p f) empty search_files in
   let cmd = odoc % "support-files" % "-o" % "html/odoc" in
   run cmd
 ```
@@ -583,12 +589,16 @@ let link_all odoc_files =
 
 Now we simply run `odoc html-generate` over all of the resulting `odocl` files.
 This will generate sources, as well as documentation for non-hidden units.
+We notify the generator that the javascript file to use for search is `index.js`.
 
 ```ocaml env=e1
 let generate_all odocl_files =
+  let search_files = [ Fpath.v "index.js" ] in
   let relativize_opt = function None -> None | Some file -> Some (relativize file) in
-  List.iter (fun (f, source) -> ignore(html_generate f (relativize_opt source))) odocl_files;
-  support_files ()
+  List.iter
+    (fun (f, source) -> ignore(html_generate ~search_files f (relativize_opt source)))
+     odocl_files;
+  support_files ~search_files ()
 ```
 
 Finally, we generate an index of all values, types, ... This index is meant to be consumed by search engines, to create their own index. It consists of a JSON array, containing entries with the name, full name, associated comment, link and anchor, and kind.
@@ -621,22 +631,19 @@ let documents =
 ;
 
 let miniSearch = new MiniSearch({
-  fields: ['id', 'doc.txt'], // fields to index for full-text search
+  fields: ['id', 'doc'], // fields to index for full-text search
   storeFields: ['display'], // fields to return with search results
   extractField: (document, fieldName) => {
     if (fieldName === 'id') {
       return document.id.map(e => e.kind + "-" + e.name).join('.')
-    }
-    if (fieldName === 'doc.txt') {
-      return document.doc.txt
     }
     return document[fieldName]
   }
 })
 
 
-// Index all documents
-miniSearch.addAll(documents);
+// Index all documents (except Type extensions which don't have a unique ID)
+miniSearch.addAll(documents.filter(entry => entry.extra.kind != "TypeExtension"));
 
 onmessage = (m) => {
   let query = m.data;

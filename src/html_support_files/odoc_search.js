@@ -27,39 +27,7 @@ worker.onmessage = (e) => {
   let f = (entry) => {
     let container = document.createElement("a");
     container.href = base_url + entry.url;
-    container.classList.add("search-entry", entry.kind.replace(" ", "-"));
-    let title = document.createElement("code");
-    title.classList.add("entry-title");
-    let kind = document.createElement("span");
-    kind.innerText = entry.kind;
-    kind.classList.add("entry-kind");
-    let prefixname = document.createElement("span");
-    prefixname.classList.add("prefix-name");
-    prefixname.innerText =
-      entry.id
-        .slice(0, entry.id.length - 1)
-        .join(".") + (entry.id.length > 1 && entry.name != "" ? "." : "");
-
-    title.appendChild(kind);
-    title.appendChild(prefixname);
-
-    let name = document.createElement("span");
-    name.classList.add("entry-name");
-    name.innerText = entry.id[entry.id.length - 1];
-    title.appendChild(name);
-    if (typeof entry.rhs !== typeof undefined) {
-      let rhs = document.createElement("code");
-      rhs.classList.add("entry-rhs");
-      rhs.innerHTML = entry.rhs
-      title.appendChild(rhs);
-    }
-    let comment = document.createElement("div");
-    comment.innerHTML = entry.doc;
-    comment.classList.add("entry-comment");
-
-    container.appendChild(title);
-    container.appendChild(comment);
-
+    container.innerHTML = entry.html;
     search_result.appendChild(container);
   };
   results.map(f);

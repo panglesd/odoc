@@ -78,15 +78,9 @@ let of_id n = `Array (List.rev @@ of_id (n :> Odoc_model.Paths.Identifier.t))
 
 let of_doc (doc : Odoc_model.Comment.docs) =
   let txt = Render.text_of_doc doc in
-  let html = Render.html_of_doc doc in
-  `Object
-    [
-      ("html", `String (Format.asprintf "%a" (Tyxml.Html.pp_elt ()) html));
-      ("txt", `String txt);
-    ]
+  `String txt
 
 let of_entry ({ id; doc; extra } as entry : Entry.t) : Odoc_html.Json.json =
-  let j_url = `String (Render.url id) in
   let j_id = of_id id in
   let doc = of_doc doc in
   let display = Json_display.of_entry entry in
@@ -176,14 +170,7 @@ let of_entry ({ id; doc; extra } as entry : Entry.t) : Odoc_html.Json.json =
             ("parent_type", `String (Render.text_of_type parent_type));
           ]
   in
-  `Object
-    [
-      ("id", j_id);
-      ("url", j_url);
-      ("doc", doc);
-      ("extra", extra);
-      ("display", display);
-    ]
+  `Object [ ("id", j_id); ("doc", doc); ("extra", extra); ("display", display) ]
 
 let output_json ppf first entries =
   let output_json json =

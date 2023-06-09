@@ -14,6 +14,8 @@ module Of_document = struct
     let one o =
       match o.Odoc_document.Types.Inline.desc with
       | Text t -> t
+      | Entity "#45" -> "-"
+      | Entity "gt" -> ">"
       | Entity e -> "&" ^ e
       | Linebreak -> "\n"
       | Styled (_, t) -> inline t
