@@ -28,12 +28,6 @@ let count ~dst ~warnings_options:_ directories =
     let () =
       List.iter
         (function
-          | Odoc_model.Lang.Source_info.Local_jmp (Ref (`Resolved ref_)), _ ->
-              let id = Odoc_model.Paths.Reference.Resolved.identifier ref_ in
-              let old_value =
-                match H.find_opt htbl id with Some n -> n | None -> 0
-              in
-              H.replace htbl id (old_value + 1)
           | ( Odoc_model.Lang.Source_info.Local_jmp
                 (ModulePath (`Resolved p as p')),
               _ ) ->
@@ -43,35 +37,28 @@ let count ~dst ~warnings_options:_ directories =
               in
               if not Odoc_model.Paths.Path.(is_hidden (p' : Module.t :> t)) then
                 H.replace htbl id (old_value + 1)
-          | ( Odoc_model.Lang.Source_info.Local_jmp
-                (ValuePath (`Resolved p as p')),
-              _ ) ->
+          | Local_jmp (ValuePath (`Resolved p as p')), _ ->
               let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
               let old_value =
                 match H.find_opt htbl id with Some n -> n | None -> 0
               in
               if not Odoc_model.Paths.Path.(is_hidden (p' : Value.t :> t)) then
                 H.replace htbl id (old_value + 1)
-          | ( Odoc_model.Lang.Source_info.Local_jmp
-                (ClassPath (`Resolved p as p')),
-              _ ) ->
+          | Local_jmp (ClassPath (`Resolved p as p')), _ ->
               let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
               let old_value =
                 match H.find_opt htbl id with Some n -> n | None -> 0
               in
               if not Odoc_model.Paths.Path.(is_hidden (p' : ClassType.t :> t))
               then H.replace htbl id (old_value + 1)
-          | ( Odoc_model.Lang.Source_info.Local_jmp (MtyPath (`Resolved p as p')),
-              _ ) ->
+          | Local_jmp (MtyPath (`Resolved p as p')), _ ->
               let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
               let old_value =
                 match H.find_opt htbl id with Some n -> n | None -> 0
               in
               if not Odoc_model.Paths.Path.(is_hidden (p' : ModuleType.t :> t))
               then H.replace htbl id (old_value + 1)
-          | ( Odoc_model.Lang.Source_info.Local_jmp
-                (TypePath (`Resolved p as p')),
-              _ ) ->
+          | Local_jmp (TypePath (`Resolved p as p')), _ ->
               let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
               let old_value =
                 match H.find_opt htbl id with Some n -> n | None -> 0
@@ -83,7 +70,7 @@ let count ~dst ~warnings_options:_ directories =
     in
     ()
   in
-  let _ = fold_dirs ~dirs:directories ~f ~init:() in
+  fold_dirs ~dirs:directories ~f ~init:() >>= fun () ->
   Fs.Directory.mkdir_p (Fs.File.dirname dst);
   let oc = open_out_bin (Fs.File.to_string dst) in
   H.iter
@@ -92,4 +79,6 @@ let count ~dst ~warnings_options:_ directories =
       Printf.fprintf oc "%s was used %d times\n" id occ)
     htbl;
   close_out oc;
+  let oc = open_out_bin (Fs.File.to_string dst ^ ".bin") in
+  Marshal.to_channel oc htbl [];
   Ok ()
