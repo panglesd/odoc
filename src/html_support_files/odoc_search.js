@@ -1,3 +1,7 @@
+
+/* The browsers interpretation of the CORS origin policy prevents to run
+   webworkers from javascript files fetched from the file:// protocol. This hack
+   is to workaround this restriction. */
 function createWebWorker() {
   var searchs = search_urls.map((search_url) => {
     let parts = document.location.href.split("/");

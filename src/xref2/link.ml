@@ -14,9 +14,6 @@ let locations env id locs =
 let synopsis_from_comment (docs : Component.CComment.docs) =
   match docs with
   | { value = `Paragraph (_, text); _ } :: _ -> Some text
-  (* | ({ value = #Comment.nestable_block_element; _ } as e) :: _ -> *)
-  (*     (\* Only the first element is considered. *\) *)
-  (*     Comment.synopsis [ e ] *)
   | _ -> None
 
 let synopsis_of_module env (m : Component.Module.t) =
