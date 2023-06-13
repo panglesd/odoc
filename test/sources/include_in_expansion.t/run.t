@@ -24,13 +24,13 @@ source parent of value y should be left to B.
 
   $ grep source_link html/Main/A/index.html -C 1
      <h1>Module <code><span>Main.A</span></code>
-      <a href="../../root/source/a.ml.html" class="source_link">Source</a>
-     </h1>
+      <a href="../../root/source/a.ml/index.html" class="source_link">Source
+      </a>
   --
          <a href="#val-y" class="anchor"></a>
-         <a href="../../root/source/b.ml.html#def-0" class="source_link">Source
-         </a><code><span><span class="keyword">val</span> y : int</span></code>
+         <a href="../../root/source/b.ml/index.html#def-0" class="source_link">
+          Source
   --
        <a href="#val-x" class="anchor"></a>
-       <a href="../../root/source/a.ml.html#def-0" class="source_link">Source
-       </a><code><span><span class="keyword">val</span> x : int</span></code>
+       <a href="../../root/source/a.ml/index.html#def-0" class="source_link">
+        Source

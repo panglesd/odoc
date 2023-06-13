@@ -38,48 +38,52 @@ Verify the behavior on functors.
   html/S/module-type-S/index.html
   html/root
   html/root/source
-  html/root/source/a.ml.html
-  html/root/source/b.ml.html
-  html/root/source/s.ml.html
+  html/root/source/a.ml
+  html/root/source/a.ml/index.html
+  html/root/source/b.ml
+  html/root/source/b.ml/index.html
+  html/root/source/s.ml
+  html/root/source/s.ml/index.html
 
 In this test, the functor expansion contains the right link.
 
   $ cat html/A/F/index.html | grep source_link --context=1
      <h1>Module <code><span>A.F</span></code>
-      <a href="../../root/source/a.ml.html#def-3" class="source_link">Source
-      </a>
+      <a href="../../root/source/a.ml/index.html#def-3" class="source_link">
+       Source
   --
        <a href="#type-t" class="anchor"></a>
-       <a href="../../root/source/a.ml.html#def-1" class="source_link">Source
-       </a>
+       <a href="../../root/source/a.ml/index.html#def-1" class="source_link">
+        Source
   --
        <a href="#val-y" class="anchor"></a>
-       <a href="../../root/source/a.ml.html#def-2" class="source_link">Source
-       </a>
+       <a href="../../root/source/a.ml/index.html#def-2" class="source_link">
+        Source
 
   $ cat html/root/source/a.ml.html | grep L3
-  <a id="L3" class="source_line" href="#L3">3</a>
+  cat: html/root/source/a.ml.html: No such file or directory
+  [1]
 
 However, on functor results, there is a link to source in the file:
 
   $ cat html/B/R/index.html | grep source_link --context=2
     <header class="odoc-preamble">
      <h1>Module <code><span>B.R</span></code>
-      <a href="../../root/source/b.ml.html#def-3" class="source_link">Source
+      <a href="../../root/source/b.ml/index.html#def-3" class="source_link">
+       Source
       </a>
-     </h1>
   --
       <div class="spec type anchored" id="type-t">
        <a href="#type-t" class="anchor"></a>
-       <a href="../../root/source/a.ml.html#def-1" class="source_link">Source
+       <a href="../../root/source/a.ml/index.html#def-1" class="source_link">
+        Source
        </a>
-       <code><span><span class="keyword">type</span> t</span>
   --
       <div class="spec value anchored" id="val-y">
        <a href="#val-y" class="anchor"></a>
-       <a href="../../root/source/a.ml.html#def-2" class="source_link">Source
+       <a href="../../root/source/a.ml/index.html#def-2" class="source_link">
+        Source
        </a>
-       <code>
 
 Source links in functor parameters might not make sense. Currently we generate none:
 

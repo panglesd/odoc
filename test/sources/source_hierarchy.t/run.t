@@ -43,13 +43,16 @@ Source pages and source directory pages are generated:
   html/root/source/index.html
   html/root/source/lib
   html/root/source/lib/a
-  html/root/source/lib/a/a.ml.html
+  html/root/source/lib/a/a.ml
+  html/root/source/lib/a/a.ml/index.html
   html/root/source/lib/a/index.html
   html/root/source/lib/b
-  html/root/source/lib/b/b.ml.html
+  html/root/source/lib/b/b.ml
+  html/root/source/lib/b/b.ml/index.html
   html/root/source/lib/b/index.html
   html/root/source/lib/index.html
-  html/root/source/lib/main.ml.html
+  html/root/source/lib/main.ml
+  html/root/source/lib/main.ml/index.html
 
 A directory simply list its children:
 
@@ -68,11 +71,12 @@ A directory simply list its children:
      <a href="../../index.html">root</a> &#x00BB; 
      <a href="../index.html">source</a> &#x00BB; lib
     </nav><header class="odoc-preamble"></header>
-    <div class="odoc-content"><h1>./lib/</h1>
+    <div class="odoc-content"><h1>lib</h1>
      <ul class="odoc-folder-list">
       <li><span class="odoc-directory"><a href="a/index.html">a</a></span></li>
       <li><span class="odoc-directory"><a href="b/index.html">b</a></span></li>
-      <li><span class="odoc-file"><a href="main.ml.html">main.ml</a></span>
+      <li>
+       <span class="odoc-file"><a href="main.ml/index.html">main.ml</a></span>
       </li>
      </ul>
     </div>
