@@ -27,6 +27,7 @@
  (deps
   (:x driver.mld)
   (glob_files *.ml*)
+  (glob_files *.js)
   (glob_files *.png)
   (glob_files library_mlds/*.mld)
   (package odoc))
