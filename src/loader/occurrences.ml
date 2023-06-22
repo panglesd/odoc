@@ -9,7 +9,7 @@ module Global_analysis = struct
     | Pident id ->
         let id_s = Ident.name id in
         if Ident.persistent id then Some (`Root id_s)
-        else Some (`Dot (`Root modname, id_s))
+        else (* Some (`Dot (`Root modname, id_s)) *) None
     | Pdot (i, l) -> (
         match docparent_of_path modname i with
         | None -> None
@@ -27,6 +27,15 @@ module Global_analysis = struct
         | Some i -> Some (`Dot (i, l)))
     | Papply (i, _) -> classpath_of_path modname i
 
+  let rec valuepath_of_path modname (path : Path.t) =
+    match path with
+    | Pident _ -> None (* is never persistent *)
+    | Pdot (i, l) -> (
+        match docparent_of_path modname i with
+        | None -> None
+        | Some i -> Some (`Dot (i, l)))
+    | Papply (i, _) -> valuepath_of_path modname i
+
   let rec mtypath_of_path modname (path : Path.t) =
     match path with
     | Pident _ -> None (* is never persistent *)
@@ -35,6 +44,14 @@ module Global_analysis = struct
         | None -> None
         | Some i -> Some (`Dot (i, l)))
     | Papply (i, _) -> mtypath_of_path modname i
+
+  let expr modname poses expr =
+    match expr with
+    | { Typedtree.exp_desc = Texp_ident (p, _, _); exp_loc; _ } -> (
+        match valuepath_of_path modname p with
+        | None -> ()
+        | Some ref_ -> poses := (ValuePath ref_, pos_of_loc exp_loc) :: !poses)
+    | _ -> ()
 
   let module_expr modname poses mod_expr =
     match mod_expr with
@@ -79,11 +96,17 @@ let of_cmt (cmt : Cmt_format.cmt_infos) =
         Global_analysis.module_expr modname poses mod_expr;
         Tast_iterator.default_iterator.module_expr iterator mod_expr
       in
+      let expr iterator e =
+        Global_analysis.expr modname poses e;
+        Tast_iterator.default_iterator.expr iterator e
+      in
       let typ iterator ctyp_expr =
         Global_analysis.core_type modname poses ctyp_expr;
         Tast_iterator.default_iterator.typ iterator ctyp_expr
       in
-      let iterator = { Tast_iterator.default_iterator with module_expr; typ } in
+      let iterator =
+        { Tast_iterator.default_iterator with expr; module_expr; typ }
+      in
       iterator.structure iterator structure;
       !poses
   | _ -> []

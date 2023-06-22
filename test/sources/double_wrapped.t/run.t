@@ -90,7 +90,6 @@ Uses of values Y.x and Z.y (in b.ml) are not counted since they come from a "loc
 Uses of values Main__.C.y and Main__.A.x are not rewritten since we use references instead of paths.
 
   $ cat occurrences.txt
-  Main.A was used 2 times
-  Main__.C.y was used 1 times
-  Main__.A.x was used 1 times
+  Main.A.x was used 2 times
+  Main.A was used 3 times
   Main.B was used 1 times
