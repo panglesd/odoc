@@ -135,8 +135,11 @@ let resolve_and_substitute ~resolver ~make_root ~source ~hidden
         let unit =
           Odoc_loader.read_cmi ~make_root ~parent ~filename
           |> Error.raise_errors_and_warnings
+        and cmt_infos =
+          if should_read_impl then lookup_implementation_of_cmti input_file
+          else (None, [])
         in
-        (unit, (None, []))
+        (unit, cmt_infos)
   in
   let unit = { unit with hidden = hidden || unit.hidden } in
   let source_info =
