@@ -441,9 +441,7 @@ and CComment : sig
       * nestable_block_element Odoc_model.Comment.with_location list option
     | `Math_block of Label.t * string
     | `Verbatim of Label.t * string
-    | `Table of
-      Odoc_model.Comment.nestable_block_element
-      Odoc_model.Comment.abstract_table
+    | `Table of nestable_block_element Odoc_model.Comment.abstract_table
     | `Modules of Odoc_model.Comment.module_reference list
     | `List of
       [ `Unordered | `Ordered ]

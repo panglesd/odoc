@@ -1076,7 +1076,14 @@ and nestable_block_element parent
         in
         `List (ord, li)
     | `Modules _ as n -> n
-    | `Table _ as n -> n
+    | `Table { data; align } ->
+        let data =
+          List.map
+            (List.map (fun (be, typ) ->
+                 (List.map (nestable_block_element parent) be, typ)))
+            data
+        in
+        `Table { Odoc_model.Comment.data; align }
   in
   { d with Odoc_model.Location_.value }
 

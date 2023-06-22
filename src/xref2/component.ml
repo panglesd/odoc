@@ -471,9 +471,7 @@ and CComment : sig
       * nestable_block_element Odoc_model.Comment.with_location list option
     | `Math_block of Label.t * string
     | `Verbatim of Label.t * string
-    | `Table of
-      Odoc_model.Comment.nestable_block_element
-      Odoc_model.Comment.abstract_table
+    | `Table of nestable_block_element Odoc_model.Comment.abstract_table
     | `Modules of Odoc_model.Comment.module_reference list
     | `List of
       [ `Unordered | `Ordered ]
@@ -2476,7 +2474,15 @@ module Of_Lang = struct
         let l = `List (ord, items) in
         Odoc_model.Location_.same b l
     | { value = `Modules _; _ } as n -> n
-    | { value = `Table _; _ } as n -> n
+    | { value = `Table { data; align }; _ } ->
+        let data =
+          List.map
+            (List.map (fun (be, typ) ->
+                 (List.map (nestable_block_element map) be, typ)))
+            data
+        in
+        let t = `Table { Odoc_model.Comment.data; align } in
+        Odoc_model.Location_.same b t
 
   and block_element map b :
       CComment.block_element Odoc_model.Comment.with_location =
