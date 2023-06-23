@@ -23,7 +23,6 @@ module Source_info = struct
   type jmp_to_def =
     | Occurence of anchor
     | Def of string
-    | Ref of Reference.t
     | ValuePath of Path.Value.t
     | ModulePath of Path.Module.t
     | ClassPath of Path.ClassType.t

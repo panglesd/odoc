@@ -251,23 +251,23 @@ module Make (Syntax : SYNTAX) = struct
       | Local_jmp (Occurence { anchor }) ->
           Some (Link (Url.Anchor.source_anchor url anchor))
       | Local_jmp (Def string) -> Some (Anchor string)
-      | Local_jmp (Ref (`Resolved ref_)) -> (
-          let id = Paths.Reference.Resolved.identifier ref_ in
-          match Url.from_identifier ~stop_before:false id with
-          | Ok link -> Some (Link link)
-          | _ -> None)
-      | Local_jmp (Ref _) -> None
-      | Local_jmp (ModulePath (`Resolved p)) -> (
+      | Local_jmp (ModulePath (`Resolved p))
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
           let id = Paths.Path.Resolved.(identifier (p :> t)) in
           match Url.from_identifier ~stop_before:false id with
           | Ok link -> Some (Link link)
           | _ -> None)
-      | Local_jmp (TypePath (`Resolved p)) -> (
+      | Local_jmp (TypePath (`Resolved p))
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
           let id = Paths.Path.Resolved.(identifier (p :> t)) in
           match Url.from_identifier ~stop_before:false id with
           | Ok link -> Some (Link link)
           | _ -> None)
-      | Local_jmp (ValuePath (`Resolved p)) -> (
+      | Local_jmp (ValuePath (`Resolved p))
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
           let id = Paths.Path.Resolved.(identifier (p :> t)) in
           match Url.from_identifier ~stop_before:false id with
           | Ok link -> Some (Link link)

@@ -8,25 +8,30 @@ module Global_analysis = struct
     match path with
     | Pident id ->
         let id_s = Ident.name id in
-        if Ident.persistent id then Some (`Root id_s)
-        else (* Some (`Dot (`Root modname, id_s)) *) None
+        if Ident.persistent id then Some (`Root id_s) else None
     | Pdot (i, l) -> (
         match docparent_of_path i with
         | None -> None
         | Some i -> Some (`Dot (i, l)))
-    | Papply (i, _) -> docparent_of_path i
+    | Papply (_, _) ->
+        (* When resolving Path, [odoc] currently assert it contains no functor. So we cannot use:
+           [docparent_of_path i] *)
+        None
 
   (* Types path (for instance) cannot be just `Root _, it needs to be `Dot. An
      ocaml path to a type whose ident is persistent will always start with a
      `Dot, but the typer does not know that. So, we need this function. *)
-  let rec childpath_of_path (path : Path.t) =
+  let childpath_of_path (path : Path.t) =
     match path with
     | Pident _ -> None (* is never persistent *)
     | Pdot (i, l) -> (
         match docparent_of_path i with
         | None -> None
         | Some i -> Some (`Dot (i, l)))
-    | Papply (i, _) -> childpath_of_path i
+    | Papply (_i, _) ->
+        (* When resolving Path, [odoc] currently assert it contains no functor. So we cannot use:
+           [childpath_of_path i] *)
+        None
 
   let expr poses expr =
     match expr with
