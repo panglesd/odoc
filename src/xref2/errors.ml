@@ -83,6 +83,17 @@ module Tools_error = struct
       (* Could not find the module in the environment *)
     | `Parent of parent_lookup_error ]
 
+  and simple_constructor_lookup_error =
+    [ `LocalConstructor of
+      Env.t * Ident.constructor
+      (* Internal error: Found local path during lookup *)
+    | `Find_failure
+      (* Internal error: the type was not found in the parent signature *)
+    | `Lookup_failureC of
+      Identifier.Path.Constructor.t
+      (* Could not find the module in the environment *)
+    | `Parent of parent_lookup_error ]
+
   and parent_lookup_error =
     [ `Parent_sig of
       expansion_of_module_error
