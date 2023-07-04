@@ -1770,10 +1770,30 @@ module Of_Lang = struct
     | `ClassType (p, name) ->
         `ClassType (`Module (resolved_module_path ident_map p), name)
 
+  and resolved_datatype_path :
+      _ -> Odoc_model.Paths.Path.Resolved.DataType.t -> Cpath.Resolved.datatype
+      =
+   fun ident_map p ->
+    match p with
+    | `Identifier i -> (
+        match identifier Maps.Type.find ident_map.types i with
+        | `Local l -> `Local l
+        | `Identifier _ -> `Gpath p)
+    | `CanonicalType (p1, p2) ->
+        `CanonicalType (resolved_type_path ident_map p1, p2)
+    | `Type (p, name) -> `Type (`Module (resolved_module_path ident_map p), name)
+
   and resolved_value_path :
       _ -> Odoc_model.Paths.Path.Resolved.Value.t -> Cpath.Resolved.value =
    fun ident_map (`Value (p, name)) ->
     `Value (`Module (resolved_module_path ident_map p), name)
+
+  and resolved_constructor_path :
+      _ ->
+      Odoc_model.Paths.Path.Resolved.Constructor.t ->
+      Cpath.Resolved.constructor =
+   fun ident_map (`Constructor (p, name)) ->
+    `Constructor (resolved_datatype_path ident_map p, name)
 
   and resolved_class_type_path :
       _ ->
@@ -1832,6 +1852,23 @@ module Of_Lang = struct
     match p with
     | `Resolved r -> `Resolved (resolved_value_path ident_map r)
     | `Dot (path', x) -> `Dot (module_path ident_map path', x)
+
+  and datatype : _ -> Odoc_model.Paths.Path.DataType.t -> Cpath.datatype =
+   fun ident_map p ->
+    match p with
+    | `Resolved r -> `Resolved (resolved_datatype_path ident_map r)
+    | `Identifier (i, b) -> (
+        match identifier Maps.Type.find ident_map.types i with
+        | `Identifier i -> `Identifier (i, b)
+        | `Local i -> `Local (i, b))
+    | `Dot (path', x) -> `Dot (module_path ident_map path', x)
+
+  and constructor_path :
+      _ -> Odoc_model.Paths.Path.Constructor.t -> Cpath.constructor =
+   fun ident_map p ->
+    match p with
+    | `Resolved r -> `Resolved (resolved_constructor_path ident_map r)
+    | `Dot (path', x) -> `Dot (datatype ident_map path', x)
 
   and class_type_path :
       _ -> Odoc_model.Paths.Path.ClassType.t -> Cpath.class_type =
