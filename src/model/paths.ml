@@ -358,6 +358,22 @@ module Identifier = struct
       let compare = compare
     end
 
+    module DataType = struct
+      type t = Id.path_datatype
+      type t_pv = Id.path_datatype_pv
+      let equal = equal
+      let hash = hash
+      let compare = compare
+    end
+
+    module Constructor = struct
+      type t = Id.path_constructor
+      type t_pv = Id.constructor_pv
+      let equal = equal
+      let hash = hash
+      let compare = compare
+    end
+
     module Value = struct
       type t = Id.path_value
       type t_pv = Id.value_pv
@@ -675,6 +691,14 @@ module Path = struct
       type t = Paths_types.Resolved_path.type_
     end
 
+    module DataType = struct
+      type t = Paths_types.Resolved_path.datatype
+    end
+
+    module Constructor = struct
+      type t = Paths_types.Resolved_path.constructor
+    end
+
     module Value = struct
       type t = Paths_types.Resolved_path.value
     end
@@ -728,6 +752,14 @@ module Path = struct
 
   module Type = struct
     type t = Paths_types.Path.type_
+  end
+
+  module DataType = struct
+    type t = Paths_types.Path.datatype
+  end
+
+  module Constructor = struct
+    type t = Paths_types.Path.constructor
   end
 
   module Value = struct
