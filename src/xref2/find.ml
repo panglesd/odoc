@@ -127,6 +127,8 @@ type careful_module_type =
 
 type careful_type = [ type_ | removed_type ]
 
+type careful_datatype = [ datatype | removed_type ]
+
 type careful_class = [ class_ | removed_type ]
 
 let careful_module_in_sig sg name =
@@ -181,6 +183,18 @@ let careful_class_in_sig sg name =
   match class_in_sig_unambiguous sg name with
   | Some _ as x -> x
   | None -> removed_type_in_sig sg name
+
+let constructor_in_type (typ : TypeDecl.t) name =
+  let rec find_cons = function
+    | ({ TypeDecl.Constructor.name = name'; _ } as cons) :: _ when name' = name
+      ->
+        Some (`FConstructor cons)
+    | _ :: tl -> find_cons tl
+    | [] -> None
+  in
+  match typ.representation with
+  | Some (Variant cons) -> find_cons cons
+  | Some (Record _) | Some Extensible | None -> None
 
 let any_in_type (typ : TypeDecl.t) name =
   let rec find_cons = function

@@ -409,6 +409,7 @@ and Resolved_path : sig
     | `CanonicalType of type_ * Path.type_
     | `CanonicalDataType of datatype * Path.datatype
     | `Type of module_ * TypeName.t
+    | `Constructor of datatype * ConstructorName.t
     | `Class of module_ * ClassName.t
     | `ClassType of module_ * ClassTypeName.t
     | `Class of module_ * ClassName.t

@@ -29,6 +29,9 @@ module Path : sig
 
   val resolved_type : maps -> Cpath.Resolved.type_ -> Path.Resolved.Type.t
 
+  val resolved_datatype :
+    maps -> Cpath.Resolved.datatype -> Path.Resolved.DataType.t
+
   val resolved_value : maps -> Cpath.Resolved.value -> Path.Resolved.Value.t
 
   val resolved_constructor :

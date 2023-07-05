@@ -71,6 +71,8 @@ val extension_in_sig : Signature.t -> string -> extension option
 
 val any_in_type : TypeDecl.t -> string -> any_in_type option
 
+val constructor_in_type : TypeDecl.t -> string -> constructor option
+
 val any_in_typext : Extension.t -> string -> extension option
 
 val method_in_class_signature : ClassSignature.t -> string -> method_ option

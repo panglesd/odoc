@@ -3,8 +3,7 @@ open Odoc_model.Lang.Source_info
 let pos_of_loc loc = (loc.Location.loc_start.pos_cnum, loc.loc_end.pos_cnum)
 
 module Global_analysis = struct
-  let rec docparent_of_path (path : Path.t) :
-      Odoc_model.Paths.Path.Module.t option =
+  let rec docparent_of_path (path : Path.t) : _ option =
     match path with
     | Pident id ->
         let id_s = Ident.name id in
@@ -39,6 +38,22 @@ module Global_analysis = struct
         match childpath_of_path p with
         | None -> ()
         | Some ref_ -> poses := (ValuePath ref_, pos_of_loc exp_loc) :: !poses)
+    | {
+     Typedtree.exp_desc = Texp_construct (l, { cstr_res; _ }, _);
+     exp_loc;
+     _;
+    } -> (
+        let desc = Types.get_desc cstr_res in
+        match desc with
+        | Types.Tconstr (p, _, _) -> (
+            match childpath_of_path p with
+            | None -> ()
+            | Some ref_ ->
+                poses :=
+                  ( ConstructorPath (`Dot (ref_, Longident.last l.txt)),
+                    pos_of_loc exp_loc )
+                  :: !poses)
+        | _ -> ())
     | _ -> ()
 
   let module_expr poses mod_expr =

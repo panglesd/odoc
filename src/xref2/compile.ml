@@ -105,6 +105,9 @@ and source_info env si =
               | ValuePath p ->
                   let p = value_path env p in
                   ValuePath p
+              | ConstructorPath p ->
+                  let p = constructor_path env p in
+                  ConstructorPath p
               | i -> i
             in
             (Local_jmp info, pos)

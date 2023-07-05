@@ -600,6 +600,7 @@ module Path = struct
       | `Type (p, _) -> inner (p : module_ :> any)
       | `Value (_, t) when Names.ValueName.is_internal t -> true
       | `Value (p, _) -> inner (p : module_ :> any)
+      | `Constructor (p, _) -> inner (p : datatype :> any)
       | `Class (p, _) -> inner (p : module_ :> any)
       | `ClassType (p, _) -> inner (p : module_ :> any)
       | `Alias (dest, `Resolved src) ->
@@ -614,6 +615,8 @@ module Path = struct
       | `CanonicalModuleType (x, _) -> inner (x : module_type :> any)
       | `CanonicalType (_, `Resolved _) -> false
       | `CanonicalType (x, _) -> inner (x : type_ :> any)
+      | `CanonicalDataType (_, `Resolved _) -> false
+      | `CanonicalDataType (x, _) -> inner (x : datatype :> any)
       | `OpaqueModule m -> inner (m :> any)
       | `OpaqueModuleType mt -> inner (mt :> any)
     in
@@ -676,6 +679,14 @@ module Path = struct
       | `Alias (dest, _src) -> parent_module_identifier dest
       | `OpaqueModule m -> parent_module_identifier m
 
+    and parent_datatype_identifier :
+        Paths_types.Resolved_path.datatype -> Identifier.DataType.t = function
+      | `Identifier id ->
+          (id : Identifier.Path.DataType.t :> Identifier.DataType.t)
+      | `CanonicalDataType (_, `Resolved p) -> parent_datatype_identifier p
+      | `CanonicalDataType (p, _) -> parent_datatype_identifier p
+      | `Type (m, n) -> Identifier.Mk.type_ (parent_module_identifier m, n)
+
     module Module = struct
       type t = Paths_types.Resolved_path.module_
 
@@ -717,6 +728,8 @@ module Path = struct
       | `Apply (m, _) -> identifier (m :> t)
       | `Type (m, n) -> Identifier.Mk.type_ (parent_module_identifier m, n)
       | `Value (m, n) -> Identifier.Mk.value (parent_module_identifier m, n)
+      | `Constructor (m, n) ->
+          Identifier.Mk.constructor (parent_datatype_identifier m, n)
       | `ModuleType (m, n) ->
           Identifier.Mk.module_type (parent_module_identifier m, n)
       | `Class (m, n) -> Identifier.Mk.class_ (parent_module_identifier m, n)
@@ -736,6 +749,8 @@ module Path = struct
       | `CanonicalModuleType (p, _) -> identifier (p :> t)
       | `CanonicalType (_, `Resolved p) -> identifier (p :> t)
       | `CanonicalType (p, _) -> identifier (p :> t)
+      | `CanonicalDataType (_, `Resolved p) -> identifier (p :> t)
+      | `CanonicalDataType (p, _) -> identifier (p :> t)
       | `OpaqueModule m -> identifier (m :> t)
       | `OpaqueModuleType mt -> identifier (mt :> t)
 

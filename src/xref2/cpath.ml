@@ -102,7 +102,7 @@ and Cpath : sig
   and constructor =
     [ `Resolved of Resolved.constructor
     | `Dot of datatype * string
-    | `Value of Resolved.datatype * ValueName.t ]
+    | `Constructor of Resolved.datatype * ConstructorName.t ]
 
   and class_type =
     [ `Resolved of Resolved.class_type

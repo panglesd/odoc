@@ -265,7 +265,7 @@ and TypeDecl : sig
   type t = {
     locs : Odoc_model.Paths.Identifier.SourceLocation.t option;
     doc : CComment.docs;
-    canonical : Odoc_model.Paths.Path.DataType.t option;
+    canonical : Odoc_model.Paths.Path.Type.t option;
     equation : Equation.t;
     representation : Representation.t option;
   }
@@ -590,6 +590,8 @@ module Fmt : sig
 
   val value_path : Format.formatter -> Cpath.value -> unit
 
+  val constructor_path : Format.formatter -> Cpath.constructor -> unit
+
   val resolved_class_type_path :
     Format.formatter -> Cpath.Resolved.class_type -> unit
 
@@ -670,6 +672,8 @@ module Of_Lang : sig
     map -> Odoc_model.Paths.Path.ModuleType.t -> Cpath.module_type
 
   val type_path : map -> Odoc_model.Paths.Path.Type.t -> Cpath.type_
+
+  val datatype : map -> Odoc_model.Paths.Path.DataType.t -> Cpath.datatype
 
   val value_path : map -> Odoc_model.Paths.Path.Value.t -> Cpath.value
 
