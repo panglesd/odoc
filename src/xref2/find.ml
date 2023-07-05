@@ -111,6 +111,12 @@ let type_in_sig sg name =
         Some (`FClassType (N.class_type' id, c))
     | _ -> None)
 
+let datatype_in_sig sg name =
+  find_in_sig sg (function
+    | Signature.Type (id, _, m) when N.type_ id = name ->
+        Some (`FType (N.type' id, Delayed.get m))
+    | _ -> None)
+
 type removed_type =
   [ `FType_removed of TypeName.t * TypeExpr.t * TypeDecl.Equation.t ]
 
@@ -156,11 +162,10 @@ let careful_type_in_sig sg name =
   | Some _ as x -> x
   | None -> removed_type_in_sig sg name
 
-let datatype_in_sig sg name =
-  find_in_sig sg (function
-    | Signature.Type (id, _, t) when N.type_ id = name ->
-        Some (`FType (N.type' id, Component.Delayed.get t))
-    | _ -> None)
+let careful_datatype_in_sig sg name =
+  match datatype_in_sig sg name with
+  | Some _ as x -> x
+  | None -> removed_type_in_sig sg name
 
 let class_in_sig sg name =
   filter_in_sig sg (function

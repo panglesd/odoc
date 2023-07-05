@@ -72,6 +72,21 @@ module Tools_error = struct
       (* Could not find the module in the environment *)
     | `Parent of parent_lookup_error ]
 
+  and simple_datatype_lookup_error =
+    [ `LocalDataType of
+      Env.t * Ident.path_datatype
+      (* Internal error: Found local path during lookup *)
+    | `Class_replaced
+      (* Class was replaced with a destructive substitution and we're not sure
+          what to do now *)
+    | `OpaqueClass (* Couldn't resolve class signature. *)
+    | `Find_failure
+      (* Internal error: the type was not found in the parent signature *)
+    | `Lookup_failureT of
+      Identifier.Path.Type.t
+      (* Could not find the module in the environment *)
+    | `Parent of parent_lookup_error ]
+
   and simple_value_lookup_error =
     [ `LocalValue of
       Env.t * Ident.path_value

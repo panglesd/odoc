@@ -377,7 +377,7 @@ and Resolved_path : sig
 
   type datatype =
     [ `Identifier of Identifier.datatype
-    | `CanonicalType of datatype * Path.datatype
+    | `CanonicalDataType of datatype * Path.datatype
     | `Type of module_ * TypeName.t ]
   (** @canonical Odoc_model.Paths.Path.Resolved.DataType.t *)
 
@@ -407,6 +407,7 @@ and Resolved_path : sig
     | `SubstT of module_type * module_type
     | `OpaqueModuleType of module_type
     | `CanonicalType of type_ * Path.type_
+    | `CanonicalDataType of datatype * Path.datatype
     | `Type of module_ * TypeName.t
     | `Class of module_ * ClassName.t
     | `ClassType of module_ * ClassTypeName.t

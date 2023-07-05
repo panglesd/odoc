@@ -114,6 +114,8 @@ type careful_module_type =
 
 type careful_type = [ type_ | removed_type ]
 
+type careful_datatype = [ datatype | removed_type ]
+
 type careful_class = [ class_ | removed_type ]
 
 val careful_module_in_sig : Signature.t -> string -> careful_module option
@@ -122,5 +124,7 @@ val careful_module_type_in_sig :
   Signature.t -> string -> careful_module_type option
 
 val careful_type_in_sig : Signature.t -> string -> careful_type option
+
+val careful_datatype_in_sig : Signature.t -> string -> careful_datatype option
 
 val careful_class_in_sig : Signature.t -> string -> careful_class option

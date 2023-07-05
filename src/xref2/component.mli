@@ -265,7 +265,7 @@ and TypeDecl : sig
   type t = {
     locs : Odoc_model.Paths.Identifier.SourceLocation.t option;
     doc : CComment.docs;
-    canonical : Odoc_model.Paths.Path.Type.t option;
+    canonical : Odoc_model.Paths.Path.DataType.t option;
     equation : Equation.t;
     representation : Representation.t option;
   }

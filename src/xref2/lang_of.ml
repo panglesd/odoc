@@ -207,7 +207,8 @@ module Path = struct
     match p with
     | `Gpath y -> y
     | `Local id -> `Identifier (Component.TypeMap.find id map.type_)
-    | `CanonicalType (t1, t2) -> `CanonicalType (resolved_datatype map t1, t2)
+    | `CanonicalDataType (t1, t2) ->
+        `CanonicalDataType (resolved_datatype map t1, t2)
     | `Type (p, name) -> `Type (resolved_parent map p, name)
     | `Substituted s -> resolved_datatype map s
 

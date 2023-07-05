@@ -42,7 +42,7 @@ module rec Resolved : sig
     [ `Local of Ident.path_datatype
     | `Gpath of Path.Resolved.DataType.t
     | `Substituted of datatype
-    | `CanonicalType of datatype * Path.DataType.t
+    | `CanonicalDataType of datatype * Path.DataType.t
     | `Type of parent * TypeName.t ]
 
   and constructor = [ `Constructor of datatype * ConstructorName.t ]
