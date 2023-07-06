@@ -28,6 +28,7 @@ module Source_info = struct
     | ClassPath of Path.ClassType.t
     | MtyPath of Path.ModuleType.t
     | TypePath of Path.Type.t
+    | ConstructorPath of Path.Constructor.t
 
   type info = Syntax of string | Local_jmp of jmp_to_def
 

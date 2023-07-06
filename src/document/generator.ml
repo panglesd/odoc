@@ -272,11 +272,19 @@ module Make (Syntax : SYNTAX) = struct
           match Url.from_identifier ~stop_before:false id with
           | Ok link -> Some (Link link)
           | _ -> None)
+      | Local_jmp (ConstructorPath (`Resolved p))
+        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
+        -> (
+          let id = Paths.Path.Resolved.(identifier (p :> t)) in
+          match Url.from_identifier ~stop_before:false id with
+          | Ok link -> Some (Link link)
+          | _ -> None)
       | Local_jmp (ModulePath _) -> None
       | Local_jmp (ClassPath _) -> None
       | Local_jmp (TypePath _) -> None
       | Local_jmp (MtyPath _) -> None
       | Local_jmp (ValuePath _) -> None
+      | Local_jmp (ConstructorPath _) -> None
 
     let source id infos source_code =
       let url = path id in

@@ -431,6 +431,9 @@ let rec unit env t =
                 | TypePath p ->
                     let p = type_path env p in
                     TypePath p
+                | ConstructorPath p ->
+                    let p = constructor_path env p in
+                    ConstructorPath p
                 | i -> i
               in
               (Local_jmp info, pos)
