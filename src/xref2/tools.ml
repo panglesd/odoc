@@ -1023,7 +1023,7 @@ and lookup_constructor :
   | `FType (_, t) ->
       handle_constructor_lookup env (ConstructorName.to_string name) parent t
       >>= fun (_, x) -> Ok x
-  | `FType_removed _ -> failwith "Error"
+  | `FType_removed _ -> Error `Find_failure (* failwith "Error" *)
 
 (* handle_value_lookup env (ValueName.to_string id) p sg *)
 (* >>= fun (_, `FValue (name, c)) -> Ok (`FValue (name, Subst.value sub c)) *)
@@ -1373,13 +1373,13 @@ and resolve_constructor :
       | `FType (_, t) ->
           handle_constructor_lookup env id p t >>= fun (p', `FConstructor c) ->
           Ok (p', `FConstructor c)
-      | `FType_removed _ -> failwith "error")
+      | `FType_removed _ -> Error `Find_failure (* failwith "error" *))
   | `Constructor (parent, id) -> (
       lookup_datatype env parent
       |> map_error (fun e -> (`ParentC e :> simple_constructor_lookup_error))
       >>= fun parent_type ->
       match parent_type with
-      | `FType_removed _ -> failwith "error"
+      | `FType_removed _ -> (* failwith "error" *) Error `Find_failure
       | `FType (_, t) ->
           handle_constructor_lookup env (ConstructorName.to_string id) parent t
       (* let result = *)
