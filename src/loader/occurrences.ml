@@ -56,6 +56,25 @@ module Global_analysis = struct
         | _ -> ())
     | _ -> ()
 
+  let pat poses (type a) : a Typedtree.general_pattern -> unit = function
+    | {
+        Typedtree.pat_desc = Tpat_construct (l, { cstr_res; _ }, _, _);
+        pat_loc;
+        _;
+      } -> (
+        let desc = Types.get_desc cstr_res in
+        match desc with
+        | Types.Tconstr (p, _, _) -> (
+            match childpath_of_path p with
+            | None -> ()
+            | Some ref_ ->
+                poses :=
+                  ( ConstructorPath (`Dot (ref_, Longident.last l.txt)),
+                    pos_of_loc pat_loc )
+                  :: !poses)
+        | _ -> ())
+    | _ -> ()
+
   let module_expr poses mod_expr =
     match mod_expr with
     | { Typedtree.mod_desc = Tmod_ident (p, _); mod_loc; _ } -> (
@@ -102,6 +121,10 @@ let of_cmt (cmt : Cmt_format.cmt_infos) =
         Global_analysis.expr poses e;
         Tast_iterator.default_iterator.expr iterator e
       in
+      let pat iterator e =
+        Global_analysis.pat poses e;
+        Tast_iterator.default_iterator.pat iterator e
+      in
       let typ iterator ctyp_expr =
         Global_analysis.core_type poses ctyp_expr;
         Tast_iterator.default_iterator.typ iterator ctyp_expr
@@ -118,6 +141,7 @@ let of_cmt (cmt : Cmt_format.cmt_infos) =
         {
           Tast_iterator.default_iterator with
           expr;
+          pat;
           module_expr;
           typ;
           module_type;
