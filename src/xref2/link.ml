@@ -186,10 +186,6 @@ let constructor_path :
             `Resolved Lang_of.(Path.resolved_constructor (empty ()) result)
         | Error e ->
             Errors.report ~what:(`Constructor_path cp) ~tools_error:e `Lookup;
-            let _ =
-              ignore e;
-              failwith "todo"
-            in
             p)
 
 let class_type_path : Env.t -> Paths.Path.ClassType.t -> Paths.Path.ClassType.t
