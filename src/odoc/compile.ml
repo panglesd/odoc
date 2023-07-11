@@ -110,7 +110,7 @@ let resolve_imports resolver imports =
     imports
 
 (** Raises warnings and errors. *)
-let resolve_and_substitute ~resolver ~make_root ~source ~hidden
+let resolve_and_substitute ~resolver ~make_root ~source ~hidden ~search_asset
     (parent : Paths.Identifier.ContainerPage.t option) input_file input_type =
   let filename = Fs.File.to_string input_file in
   (* [impl_shape] is used to lookup locations in the implementation. It is
@@ -120,7 +120,7 @@ let resolve_and_substitute ~resolver ~make_root ~source ~hidden
     match input_type with
     | `Cmti ->
         let unit =
-          Odoc_loader.read_cmti ~make_root ~parent ~filename
+          Odoc_loader.read_cmti ~make_root ~parent ~filename ~search_asset
           |> Error.raise_errors_and_warnings
         and cmt_infos =
           if should_read_impl_shape then
@@ -129,11 +129,11 @@ let resolve_and_substitute ~resolver ~make_root ~source ~hidden
         in
         (unit, cmt_infos)
     | `Cmt ->
-        Odoc_loader.read_cmt ~make_root ~parent ~filename
+        Odoc_loader.read_cmt ~make_root ~parent ~filename ~search_asset
         |> Error.raise_errors_and_warnings
     | `Cmi ->
         let unit =
-          Odoc_loader.read_cmi ~make_root ~parent ~filename
+          Odoc_loader.read_cmi ~make_root ~parent ~filename ~search_asset
           |> Error.raise_errors_and_warnings
         in
         (unit, None)
@@ -290,8 +290,13 @@ let handle_file_ext = function
       Error (`Msg "Unknown extension, expected one of: cmti, cmt, cmi or mld.")
 
 let compile ~resolver ~parent_cli_spec ~hidden ~children ~output
-    ~warnings_options ~source input =
+    ~warnings_options ~source ~search_asset input =
   parent resolver parent_cli_spec >>= fun parent_spec ->
+  let search_asset =
+    match search_asset with
+    | Some s -> Odoc_model.Lang.Compilation_unit.String s
+    | None -> No
+  in
   let ext = Fs.File.get_ext input in
   if ext = ".mld" then
     check_is_none "Not expecting source (--source) when compiling pages." source
@@ -332,8 +337,8 @@ let compile ~resolver ~parent_cli_spec ~hidden ~children ~output
     let make_root = root_of_compilation_unit ~parent_spec ~hidden ~output in
     let result =
       Error.catch_errors_and_warnings (fun () ->
-          resolve_and_substitute ~resolver ~make_root ~hidden ~source parent
-            input input_type)
+          resolve_and_substitute ~resolver ~make_root ~hidden ~source
+            ~search_asset parent input input_type)
     in
     (* Extract warnings to write them into the output file *)
     let _, warnings = Error.unpack_warnings result in
