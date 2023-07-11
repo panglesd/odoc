@@ -92,10 +92,10 @@ let prepare_preamble comment items =
   in
   (Comment.standalone preamble, Comment.standalone first_comment @ items)
 
-let make_expansion_page ~source_anchor url comments items =
+let make_expansion_page ~source_anchor ~search_asset url comments items =
   let comment = List.concat comments in
   let preamble, items = prepare_preamble comment items in
-  { Page.preamble; items; url; source_anchor }
+  { Page.preamble; items; url; source_anchor; search_asset }
 
 include Generator_signatures
 
@@ -1124,8 +1124,8 @@ module Make (Syntax : SYNTAX) = struct
             let expansion_doc, items = class_signature csig in
             let url = Url.Path.from_identifier t.id in
             let page =
-              make_expansion_page ~source_anchor url [ t.doc; expansion_doc ]
-                items
+              make_expansion_page ~search_asset:None ~source_anchor url
+                [ t.doc; expansion_doc ] items
             in
             ( O.documentedSrc @@ path url [ inline @@ Text name ],
               Some page,
@@ -1162,8 +1162,8 @@ module Make (Syntax : SYNTAX) = struct
             let url = Url.Path.from_identifier t.id in
             let expansion_doc, items = class_signature csig in
             let page =
-              make_expansion_page ~source_anchor url [ t.doc; expansion_doc ]
-                items
+              make_expansion_page ~search_asset:None ~source_anchor url
+                [ t.doc; expansion_doc ] items
             in
             ( O.documentedSrc @@ path url [ inline @@ Text name ],
               Some page,
@@ -1289,8 +1289,8 @@ module Make (Syntax : SYNTAX) = struct
             let modname = path url [ inline @@ Text name ] in
             let type_with_expansion =
               let content =
-                make_expansion_page ~source_anchor:None url [ expansion_doc ]
-                  items
+                make_expansion_page ~search_asset:None ~source_anchor:None url
+                  [ expansion_doc ] items
               in
               let summary = O.render modtyp in
               let status = `Default in
@@ -1430,8 +1430,8 @@ module Make (Syntax : SYNTAX) = struct
             let url = Url.Path.from_identifier t.id in
             let link = path url [ inline @@ Text modname ] in
             let page =
-              make_expansion_page ~source_anchor url [ t.doc; expansion_doc ]
-                items
+              make_expansion_page ~search_asset:None ~source_anchor url
+                [ t.doc; expansion_doc ] items
             in
             (link, status, Some page, Some expansion_doc)
       in
@@ -1491,8 +1491,8 @@ module Make (Syntax : SYNTAX) = struct
             let url = Url.Path.from_identifier id in
             let link = path url [ inline @@ Text modname ] in
             let page =
-              make_expansion_page ~source_anchor url [ doc; expansion_doc ]
-                items
+              make_expansion_page ~search_asset:None ~source_anchor url
+                [ doc; expansion_doc ] items
             in
             (link, Some page, Some expansion_doc)
       in
@@ -1781,7 +1781,15 @@ module Make (Syntax : SYNTAX) = struct
         | Some src -> Some (Source_page.url src.id)
         | None -> None
       in
-      let page = make_expansion_page ~source_anchor url [ unit_doc ] items in
+      let search_asset =
+        match t.search_asset with
+        | No -> None
+        | String _ -> None
+        | Id i -> Some (Url.Path.from_identifier i)
+      in
+      let page =
+        make_expansion_page ~search_asset ~source_anchor url [ unit_doc ] items
+      in
       Document.Page page
 
     let page (t : Odoc_model.Lang.Page.t) =
@@ -1792,7 +1800,8 @@ module Make (Syntax : SYNTAX) = struct
       let url = Url.Path.from_identifier t.name in
       let preamble, items = Sectioning.docs t.content in
       let source_anchor = None in
-      Document.Page { Page.preamble; items; url; source_anchor }
+      Document.Page
+        { Page.preamble; items; url; source_anchor; search_asset = None }
 
     let source_tree t =
       let dir_pages = t.Odoc_model.Lang.SourceTree.source_children in
@@ -1877,7 +1886,13 @@ module Make (Syntax : SYNTAX) = struct
           :: [ text ~attr:[ "odoc-folder-list" ] @@ list list_of_children ]
         in
         Document.Page
-          { Types.Page.preamble = []; items; url; source_anchor = None }
+          {
+            Types.Page.preamble = [];
+            items;
+            url;
+            source_anchor = None;
+            search_asset = None;
+          }
       in
       M.fold (fun dir children acc -> page_of_dir dir children :: acc) mmap []
   end
