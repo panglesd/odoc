@@ -986,7 +986,7 @@ The index.js file need to provide a odoc_search command, from a
   html/page/index.js
 
 Run
-  $ firefox html/page/Main/index.html
+$ firefox html/page/Main/index.html
 Gtk-Message: 10:17:52.822: Failed to load module "xapp-gtk3-module"
 Gtk-Message: 10:17:52.823: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
 to manually test the search
