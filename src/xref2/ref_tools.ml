@@ -812,3 +812,54 @@ let resolve_module_reference env m =
 
 let resolve_reference env m =
   Odoc_model.Error.catch_warnings (fun () -> resolve_reference env m)
+
+let resolve_page_reference env (r : Reference.Page.t) =
+  match r with
+  | `Resolved _ -> failwith "unimplemented"
+  | `Dot (_, name) | `Root (name, _) -> Page.in_env env name
+
+let resolve_asset_reference env (m : Reference.Asset.t) =
+  let has_asset children asset =
+    List.exists
+      (function
+        | Odoc_model.Lang.Page.Asset_child a -> String.equal a asset
+        | _ -> false)
+      children
+  in
+  let rec find_in_page (page : Identifier.Page.t option) asset_name :
+      (Reference.Asset.t, _) result =
+    match page with
+    | Some page -> (
+        match page.Identifier.iv with
+        | `Page (parent, page) -> (
+            match Env.lookup_page (PageName.to_string page) env with
+            | Some { children; name; _ } when has_asset children asset_name ->
+                Ok
+                  (`Resolved
+                    (`Identifier (Identifier.Mk.asset_file (name, asset_name))))
+            | _ ->
+                let parent = (parent :> Identifier.Page.t option) in
+                find_in_page parent asset_name)
+        | `LeafPage (parent, page) -> (
+            match Env.lookup_page (PageName.to_string page) env with
+            | Some { children; name; _ } when has_asset children asset_name ->
+                Ok
+                  (`Resolved
+                    (`Identifier (Identifier.Mk.asset_file (name, asset_name))))
+            | _ ->
+                let parent = (parent :> Identifier.Page.t option) in
+                find_in_page parent asset_name))
+    | None -> Error (`Lookup_by_name (`Asset, asset_name))
+  in
+  match m with
+  | `Resolved _ as r -> Ok r
+  | `Root (name, _) -> (
+      match Env.parent_page env with
+      | None -> Error (`Lookup_by_name (`Asset, name))
+      | Some parent_page -> find_in_page (Some parent_page) name)
+  | `Asset (parent_page, name) ->
+      resolve_page_reference env parent_page >>= fun (_, { name = p; _ }) ->
+      find_in_page (Some p) (AssetName.to_string name)
+
+let resolve_asset_reference env m =
+  Odoc_model.Error.catch_warnings (fun () -> resolve_asset_reference env m)

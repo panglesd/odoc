@@ -9,7 +9,8 @@ module Tools_error = struct
       [ `Module of Cpath.module_ ]
       (* Failed to resolve a module path when applying a fragment item *) ]
 
-  type reference_kind = [ `S | `T | `C | `CT | `Page | `Cons | `Field | `Label ]
+  type reference_kind =
+    [ `S | `T | `C | `CT | `Page | `Cons | `Field | `Label | `Asset ]
 
   type expansion_of_module_error =
     [ `OpaqueModule (* The module does not have an expansion *)
@@ -115,6 +116,7 @@ module Tools_error = struct
       | `Cons -> "constructor"
       | `Field -> "field"
       | `Label -> "label"
+      | `Asset -> "asset"
     in
     Format.pp_print_string fmt k
 
@@ -291,7 +293,8 @@ type what =
   | `Module_type_u_expr of Component.ModuleType.U.expr
   | `Child_module of string
   | `Child_page of string
-  | `Reference of Reference.t ]
+  | `Reference of Reference.t
+  | `Asset_reference of Reference.Asset.t ]
 
 let report ~(what : what) ?tools_error action =
   let action =
@@ -340,6 +343,7 @@ let report ~(what : what) ?tools_error action =
     | `Child_module rf -> r "child module" Astring.String.pp rf
     | `Child_page rf -> r "child page" Astring.String.pp rf
     | `Reference ref -> r "reference" model_reference ref
+    | `Asset_reference ref -> r "asset reference" model_asset_reference ref
   in
   match kind_of_error ~what tools_error with
   | Some (`Root name) -> Lookup_failures.report_root ~name
