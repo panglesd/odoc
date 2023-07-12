@@ -101,4 +101,3 @@ module DefName : SimpleName
 module LocalName : SimpleName
 
 module AssetName : SimpleName
-
