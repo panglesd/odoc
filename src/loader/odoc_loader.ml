@@ -62,7 +62,7 @@ let read_cmt_infos ~filename () =
       | _ -> raise Not_an_implementation)
 
 let make_compilation_unit ~make_root ~imports ~interface ?sourcefile ~name ~id
-    ?canonical ~search_asset content =
+    ?canonical ~search_assets content =
   let open Odoc_model.Lang.Compilation_unit in
   let interface, digest =
     match interface with
@@ -99,7 +99,7 @@ let make_compilation_unit ~make_root ~imports ~interface ?sourcefile ~name ~id
     linked = false;
     canonical;
     source_info = None;
-    search_asset;
+    search_assets;
   }
 
 let compilation_unit_of_sig ~make_root ~imports ~interface ?sourcefile ~name ~id
@@ -108,7 +108,7 @@ let compilation_unit_of_sig ~make_root ~imports ~interface ?sourcefile ~name ~id
   make_compilation_unit ~make_root ~imports ~interface ?sourcefile ~name ~id
     ?canonical content
 
-let read_cmti ~make_root ~parent ~search_asset ~filename () =
+let read_cmti ~make_root ~parent ~search_assets ~filename () =
   let cmt_info = Cmt_format.read_cmt filename in
   match cmt_info.cmt_annots with
   | Interface intf -> (
@@ -123,10 +123,10 @@ let read_cmti ~make_root ~parent ~search_asset ~filename () =
           in
           let id, sg, canonical = Cmti.read_interface parent name intf in
           compilation_unit_of_sig ~make_root ~imports:cmt_info.cmt_imports
-            ~interface ~sourcefile ~name ~id ?canonical ~search_asset sg)
+            ~interface ~sourcefile ~name ~id ?canonical ~search_assets sg)
   | _ -> raise Not_an_interface
 
-let read_cmt ~make_root ~parent ~filename ~search_asset () =
+let read_cmt ~make_root ~parent ~filename ~search_assets () =
   match Cmt_format.read_cmt filename with
   | exception Cmi_format.Error (Not_an_interface _) ->
       raise Not_an_implementation
@@ -166,12 +166,12 @@ let read_cmt ~make_root ~parent ~filename ~search_asset () =
           in
           let content = Odoc_model.Lang.Compilation_unit.Pack items in
           ( make_compilation_unit ~make_root ~imports ~interface ~sourcefile
-              ~name ~id ~search_asset content,
+              ~name ~id ~search_assets content,
             None )
       | Implementation impl ->
           let id, sg, canonical = Cmt.read_implementation parent name impl in
           ( compilation_unit_of_sig ~make_root ~imports ~interface ~sourcefile
-              ~name ~id ?canonical ~search_asset sg,
+              ~name ~id ?canonical ~search_assets sg,
             read_cmt_infos' cmt_info )
       | _ -> raise Not_an_implementation)
 
@@ -201,13 +201,13 @@ let wrap_errors ~filename f =
 
 let read_cmt_infos ~filename = wrap_errors ~filename (read_cmt_infos ~filename)
 
-let read_cmti ~make_root ~parent ~filename ~search_asset =
-  wrap_errors ~filename (read_cmti ~make_root ~parent ~filename ~search_asset)
+let read_cmti ~make_root ~parent ~filename ~search_assets =
+  wrap_errors ~filename (read_cmti ~make_root ~parent ~filename ~search_assets)
 
-let read_cmt ~make_root ~parent ~filename ~search_asset =
-  wrap_errors ~filename (read_cmt ~make_root ~parent ~filename ~search_asset)
+let read_cmt ~make_root ~parent ~filename ~search_assets =
+  wrap_errors ~filename (read_cmt ~make_root ~parent ~filename ~search_assets)
 
-let read_cmi ~make_root ~parent ~filename ~search_asset =
-  wrap_errors ~filename (read_cmi ~make_root ~parent ~filename ~search_asset)
+let read_cmi ~make_root ~parent ~filename ~search_assets =
+  wrap_errors ~filename (read_cmi ~make_root ~parent ~filename ~search_assets)
 
 let read_location = Doc_attr.read_location

@@ -7,7 +7,7 @@ $ odoc compile -c module-main -c src-source root.mld
   $ ocamlc -c j.ml -bin-annot -I .
   $ ocamlc -c main.ml -bin-annot -I .
 
-  $ odoc compile --search-asset index.js -I . --child asset-index.js --child module-main --child module-j page.mld
+  $ odoc compile --search-asset index.js -I . --child asset-index.js --child asset-fuse.js.js --child module-main --child module-j page.mld
 
 Search scripts are given as a reference to an asset.
 
@@ -18,8 +18,8 @@ An example with an error during the resolving of the reference:
   Warning: Failed to resolve asset reference unresolvedroot(index2.js) Couldn't find asset "index2.js"
 
 Without error during resolving
-  $ odoc compile --parent page --search-asset index.js -I . j.cmt
-  $ odoc compile --parent page --search-asset index.js -I . main.cmt
+  $ odoc compile --parent page --search-asset fuse.js.js --search-asset index.js -I . j.cmt
+  $ odoc compile --parent page --search-asset fuse.js.js --search-asset index.js -I . main.cmt
 
   $ odoc link -I . j.odoc
   $ odoc link -I . main.odoc
@@ -921,8 +921,7 @@ Without error during resolving
 
 The index.js file need to provide a odoc_search command, from a 
 
-  $ cat fuse.js.js > index.js
-  $ echo "\n\nlet documents = " >> index.js
+  $ echo "\n\nlet documents = " > index.js
   $ cat index.json >> index.js
 
   $ echo "\n\nconst options = { keys: ['id', 'doc'] };" >> index.js
@@ -931,8 +930,8 @@ The index.js file need to provide a odoc_search command, from a
 
   $ odoc html-generate -o html j.odocl
   $ odoc html-generate -o html main.odocl
-  $ odoc html-generate --asset index.js -o html page-page.odocl
-  $ odoc support-files --search-file index.js -o html
+  $ odoc html-generate --asset index.js --asset fuse.js.js -o html page-page.odocl
+  $ odoc support-files -o html
 
   $ find html | sort
   html
@@ -987,7 +986,7 @@ The index.js file need to provide a odoc_search command, from a
   html/page/index.js
 
 Run
-$ firefox html/page/Main/index.html
+  $ firefox html/page/Main/index.html
 Gtk-Message: 10:17:52.822: Failed to load module "xapp-gtk3-module"
 Gtk-Message: 10:17:52.823: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
 to manually test the search

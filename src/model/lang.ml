@@ -488,7 +488,7 @@ module rec Compilation_unit : sig
     linked : bool;  (** Whether this unit has been linked. *)
     canonical : Path.Module.t option;
     source_info : Source_info.t option;
-    search_asset : Reference.Asset.t option;
+    search_assets : Reference.Asset.t list;
   }
 end =
   Compilation_unit
