@@ -290,6 +290,8 @@ module Identifier = struct
   type reference_label = label
 
   type reference_page = page
+
+  type reference_asset = asset_file
 end
 
 module rec Path : sig
@@ -516,6 +518,7 @@ module rec Reference : sig
     | `TInstanceVariable
     | `TLabel
     | `TPage
+    | `TAsset
     | `TChildPage
     | `TChildModule
     | `TUnknown ]
@@ -704,8 +707,16 @@ module rec Reference : sig
     | `ClassType of signature * ClassTypeName.t
     | `Method of class_signature * MethodName.t
     | `InstanceVariable of class_signature * InstanceVariableName.t
-    | `Label of label_parent * LabelName.t ]
+    | `Label of label_parent * LabelName.t
+    | `Asset of page * AssetName.t ]
   (** @canonical Odoc_model.Paths.Reference.t *)
+
+  type asset =
+    [ `Resolved of Resolved_reference.asset
+    | `Root of string * [ `TAsset ]
+    | `Dot of label_parent * string
+    | `Asset of page * AssetName.t ]
+  (** @canonical Odoc_model.Paths.Reference.Asset.t *)
 end =
   Reference
 
@@ -859,5 +870,8 @@ and Resolved_reference : sig
     | `InstanceVariable of class_signature * InstanceVariableName.t
     | `Label of label_parent * LabelName.t ]
   (** @canonical Odoc_model.Paths.Reference.Resolved.t *)
+
+  type asset = [ `Identifier of Identifier.reference_asset ]
+  (** @canonical Odoc_model.Paths.Reference.Resolved.Asset.t *)
 end =
   Resolved_reference

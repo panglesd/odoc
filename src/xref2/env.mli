@@ -178,3 +178,5 @@ val len : int ref
 val n : int ref
 
 val verify_lookups : t -> LookupTypeSet.t -> bool
+
+val parent_page : t -> Identifier.Page.t option
