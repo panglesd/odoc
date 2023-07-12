@@ -292,10 +292,11 @@ let handle_file_ext = function
 let compile ~resolver ~parent_cli_spec ~hidden ~children ~output
     ~warnings_options ~source ~search_asset input =
   parent resolver parent_cli_spec >>= fun parent_spec ->
-  let search_asset =
-    match search_asset with
-    | Some s -> Odoc_model.Lang.Compilation_unit.String s
-    | None -> No
+  let search_asset : Paths.Reference.Asset.t option =
+    match search_asset with None -> None | Some s -> Some (`Root (s, `TAsset))
+    (* Assets references are considered as "simple" reference, no way to specify
+       the parent page of an asset. Therefore, seach assets need to be children
+       of a page ancestor. *)
   in
   let ext = Fs.File.get_ext input in
   if ext = ".mld" then

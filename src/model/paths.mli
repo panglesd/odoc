@@ -500,6 +500,10 @@ module rec Reference : sig
       type t = Paths_types.Resolved_reference.page
     end
 
+    module Asset : sig
+      type t = Paths_types.Resolved_reference.asset
+    end
+
     type t = Paths_types.Resolved_reference.any
 
     val identifier : t -> Identifier.t
@@ -579,6 +583,10 @@ module rec Reference : sig
 
   module Page : sig
     type t = Paths_types.Reference.page
+  end
+
+  module Asset : sig
+    type t = Paths_types.Reference.asset
   end
 
   type t = Paths_types.Reference.any

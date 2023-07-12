@@ -993,6 +993,10 @@ module Reference = struct
     module Page = struct
       type t = Paths_types.Resolved_reference.page
     end
+
+    module Asset = struct
+      type t = Paths_types.Resolved_reference.asset
+    end
   end
 
   type t = Paths_types.Reference.any
@@ -1073,5 +1077,9 @@ module Reference = struct
 
   module Page = struct
     type t = Paths_types.Reference.page
+  end
+
+  module Asset = struct
+    type t = Paths_types.Reference.asset
   end
 end

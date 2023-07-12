@@ -475,8 +475,6 @@ module rec Compilation_unit : sig
 
   type content = Module of Signature.t | Pack of Packed.t
 
-  type search_asset = No | String of string | Id of Identifier.AssetFile.t
-
   type t = {
     id : Identifier.RootModule.t;
     root : Root.t;
@@ -490,7 +488,7 @@ module rec Compilation_unit : sig
     linked : bool;  (** Whether this unit has been linked. *)
     canonical : Path.Module.t option;
     source_info : Source_info.t option;
-    search_asset : search_asset;
+    search_asset : Reference.Asset.t option;
   }
 end =
   Compilation_unit

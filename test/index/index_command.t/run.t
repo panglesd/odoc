@@ -8,6 +8,16 @@ $ odoc compile -c module-main -c src-source root.mld
   $ ocamlc -c main.ml -bin-annot -I .
 
   $ odoc compile --search-asset index.js -I . --child asset-index.js --child module-main --child module-j page.mld
+
+Search scripts are given as a reference to an asset.
+
+An example with an error during the resolving of the reference:
+  $ odoc compile --parent page --search-asset index2.js -I . j.cmt
+  $ odoc link -I . j.odoc
+  File "j.odoc":
+  Warning: Failed to resolve asset reference unresolvedroot(index2.js) Couldn't find asset "index2.js"
+
+Without error during resolving
   $ odoc compile --parent page --search-asset index.js -I . j.cmt
   $ odoc compile --parent page --search-asset index.js -I . main.cmt
 
@@ -977,7 +987,7 @@ The index.js file need to provide a odoc_search command, from a
   html/page/index.js
 
 Run
-  $ firefox html/page/Main/index.html
-  Gtk-Message: 10:17:52.822: Failed to load module "xapp-gtk3-module"
-  Gtk-Message: 10:17:52.823: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+$ firefox html/page/Main/index.html
+Gtk-Message: 10:17:52.822: Failed to load module "xapp-gtk3-module"
+Gtk-Message: 10:17:52.823: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
 to manually test the search
