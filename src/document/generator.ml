@@ -1884,8 +1884,6 @@ module Make (Syntax : SYNTAX) = struct
 
   let type_expr = type_expr
 
-  let type_decl = type_decl
-
   let record = record
 
   let source_page id infos source_code =
