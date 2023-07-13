@@ -1763,7 +1763,7 @@ module Make (Syntax : SYNTAX) = struct
         | None -> None
       in
       let search_assets =
-        List.filter_map
+        Utils.filter_map
           (function
             | `Resolved (`Identifier id) ->
                 Some Url.(from_path @@ Path.from_identifier id)
