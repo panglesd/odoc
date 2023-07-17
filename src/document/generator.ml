@@ -288,12 +288,12 @@ module Make (Syntax : SYNTAX) = struct
 
     let source id infos source_code =
       let url = path id in
-      let mapper (info, loc) =
+      let mapper (info, locs) =
         match info_of_info url info with
-        | Some info -> Some (info, loc)
-        | None -> None
+        | Some info -> List.map (fun loc -> (info, loc)) locs
+        | None -> []
       in
-      let infos = List.filter_map mapper infos in
+      let infos = List.concat_map mapper infos in
       let contents = Impl.impl ~infos source_code in
       { Source_page.url; contents }
   end

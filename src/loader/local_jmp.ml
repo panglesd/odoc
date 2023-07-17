@@ -12,7 +12,7 @@ module Local_analysis = struct
     | { Typedtree.exp_desc = Texp_ident (Pident id, _, _); exp_loc; _ }
       when not exp_loc.loc_ghost ->
         let anchor = Ident.unique_name id in
-        poses := (Occurence { anchor }, pos_of_loc exp_loc) :: !poses
+        poses := (Occurence { anchor }, [pos_of_loc exp_loc]) :: !poses
     | _ -> ()
   let pat poses (type a) : a Typedtree.general_pattern -> unit = function
     | {
@@ -22,7 +22,7 @@ module Local_analysis = struct
       }
       when not pat_loc.loc_ghost ->
         let uniq = Ident.unique_name id in
-        poses := (Def uniq, pos_of_loc pat_loc) :: !poses
+        poses := (Def uniq, [pos_of_loc pat_loc]) :: !poses
     | _ -> ()
 end
 
@@ -37,7 +37,7 @@ module Global_analysis = struct
     Shape.Uid.Tbl.iter
       (fun uid t ->
         let= s = anchor_of_uid uid in
-        poses := (Def s, pos_of_loc t) :: !poses)
+        poses := (Def s, [pos_of_loc t]) :: !poses)
       uid_to_loc
 
   let expr poses uid_to_loc expr =
@@ -47,7 +47,7 @@ module Global_analysis = struct
         (* Only generate link to anchor if the uid is in the location table. *)
         let= _ = Shape.Uid.Tbl.find_opt uid_to_loc value_description.val_uid in
         let= anchor = anchor_of_uid value_description.val_uid in
-        poses := (Occurence { anchor }, pos_of_loc exp_loc) :: !poses
+        poses := (Occurence { anchor }, [pos_of_loc exp_loc]) :: !poses
     | _ -> ()
 end
 

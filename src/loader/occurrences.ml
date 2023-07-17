@@ -2,6 +2,10 @@ open Odoc_model.Lang.Source_info
 
 let pos_of_loc loc = (loc.Location.loc_start.pos_cnum, loc.loc_end.pos_cnum)
 
+let replace h v l =
+  let rest = match Hashtbl.find_opt h l with None -> [] | Some x -> x in
+  Hashtbl.replace h l (v :: rest)
+
 module Global_analysis = struct
   let rec docparent_of_path (path : Path.t) : _ option =
     match path with
@@ -37,7 +41,9 @@ module Global_analysis = struct
     | { Typedtree.exp_desc = Texp_ident (p, _, _); exp_loc; _ } -> (
         match childpath_of_path p with
         | None -> ()
-        | Some ref_ -> poses := (ValuePath ref_, pos_of_loc exp_loc) :: !poses)
+        | Some ref_ ->
+            (* poses := (ValuePath ref_, [ pos_of_loc exp_loc ]) :: !poses) *)
+            replace poses (pos_of_loc exp_loc) (ValuePath ref_))
     | {
      Typedtree.exp_desc = Texp_construct (l, { cstr_res; _ }, _);
      exp_loc;
@@ -49,10 +55,12 @@ module Global_analysis = struct
             match childpath_of_path p with
             | None -> ()
             | Some ref_ ->
-                poses :=
-                  ( ConstructorPath (`Dot (ref_, Longident.last l.txt)),
-                    pos_of_loc exp_loc )
-                  :: !poses)
+                (* poses := *)
+                (*   ( ConstructorPath (`Dot (ref_, Longident.last l.txt)), *)
+                (*     [ pos_of_loc exp_loc ] ) *)
+                (*   :: !poses *)
+                replace poses (pos_of_loc exp_loc)
+                  (ConstructorPath (`Dot (ref_, Longident.last l.txt))))
         | _ -> ())
     | _ -> ()
 
@@ -68,10 +76,12 @@ module Global_analysis = struct
             match childpath_of_path p with
             | None -> ()
             | Some ref_ ->
-                poses :=
-                  ( ConstructorPath (`Dot (ref_, Longident.last l.txt)),
-                    pos_of_loc pat_loc )
-                  :: !poses)
+                (* poses := *)
+                (*   ( ConstructorPath (`Dot (ref_, Longident.last l.txt)), *)
+                (*     [ pos_of_loc pat_loc ] ) *)
+                (*   :: !poses *)
+                replace poses (pos_of_loc pat_loc)
+                  (ConstructorPath (`Dot (ref_, Longident.last l.txt))))
         | _ -> ())
     | _ -> ()
 
@@ -80,7 +90,9 @@ module Global_analysis = struct
     | { Typedtree.mod_desc = Tmod_ident (p, _); mod_loc; _ } -> (
         match docparent_of_path p with
         | None -> ()
-        | Some ref_ -> poses := (ModulePath ref_, pos_of_loc mod_loc) :: !poses)
+        | Some ref_ ->
+            (* poses := (ModulePath ref_, [ pos_of_loc mod_loc ]) :: !poses *)
+            replace poses (pos_of_loc mod_loc) (ModulePath ref_))
     | _ -> ()
 
   let class_type poses cltyp =
@@ -88,7 +100,9 @@ module Global_analysis = struct
     | { Typedtree.cltyp_desc = Tcty_constr (p, _, _); cltyp_loc; _ } -> (
         match childpath_of_path p with
         | None -> ()
-        | Some p -> poses := (ClassPath p, pos_of_loc cltyp_loc) :: !poses)
+        | Some p ->
+            (* poses := (ClassPath p, [ pos_of_loc cltyp_loc ]) :: !poses *)
+            replace poses (pos_of_loc cltyp_loc) (ClassPath p))
     | _ -> ()
 
   let module_type poses mty_expr =
@@ -96,7 +110,9 @@ module Global_analysis = struct
     | { Typedtree.mty_desc = Tmty_ident (p, _); mty_loc; _ } -> (
         match childpath_of_path p with
         | None -> ()
-        | Some p -> poses := (MtyPath p, pos_of_loc mty_loc) :: !poses)
+        | Some p ->
+            (* poses := (MtyPath p, [ pos_of_loc mty_loc ]) :: !poses *)
+            replace poses (pos_of_loc mty_loc) (MtyPath p))
     | _ -> ()
 
   let core_type poses ctyp_expr =
@@ -104,7 +120,9 @@ module Global_analysis = struct
     | { Typedtree.ctyp_desc = Ttyp_constr (p, _, _); ctyp_loc; _ } -> (
         match childpath_of_path p with
         | None -> ()
-        | Some p -> poses := (TypePath p, pos_of_loc ctyp_loc) :: !poses)
+        | Some p ->
+            (* poses := (TypePath p, [ pos_of_loc ctyp_loc ]) :: !poses *)
+            replace poses (pos_of_loc ctyp_loc) (TypePath p))
     | _ -> ()
 end
 
@@ -112,7 +130,7 @@ let of_cmt (cmt : Cmt_format.cmt_infos) =
   let ttree = cmt.cmt_annots in
   match ttree with
   | Cmt_format.Implementation structure ->
-      let poses = ref [] in
+      let poses = Hashtbl.create 100 in
       let module_expr iterator mod_expr =
         Global_analysis.module_expr poses mod_expr;
         Tast_iterator.default_iterator.module_expr iterator mod_expr
@@ -149,5 +167,6 @@ let of_cmt (cmt : Cmt_format.cmt_infos) =
         }
       in
       iterator.structure iterator structure;
-      !poses
+      Hashtbl.fold (fun key value acc -> (key, value) :: acc) poses []
+      (* !poses *)
   | _ -> []

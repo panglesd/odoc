@@ -32,7 +32,7 @@ module Source_info = struct
 
   type info = Syntax of string | Local_jmp of jmp_to_def
 
-  type 'a with_pos = 'a * (int * int)
+  type 'a with_pos = 'a * (int * int) list
 
   type infos = info with_pos list
 
