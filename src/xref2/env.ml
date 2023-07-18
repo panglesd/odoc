@@ -816,6 +816,7 @@ let open_page page env = add_docs page.Lang.Page.content env
 
 let env_of_page page resolver =
   let initial_env = open_page page empty in
+  let initial_env = { initial_env with parent_page = Some page.name } in
   set_resolver initial_env resolver |> open_units resolver
 
 let env_for_reference resolver =
