@@ -75,6 +75,7 @@ let match_extra_odoc_reference_kind (_location as loc) s :
       Some `TLabel
   | Some "module-type" -> Some `TModuleType
   | Some "page" -> Some `TPage
+  | Some "asset" -> Some `TAsset
   | Some "value" ->
       d loc "value" "val";
       Some `TValue
