@@ -189,6 +189,19 @@ let reference_token start target =
   | "{{:" -> `Begin_link_with_replacement_text target
   | _ -> assert false
 
+let img_token start target =
+  let target, alt =
+    match String.split_on_char ' ' target with
+    | [] -> assert false
+    | h :: q -> h, List.concat " " q
+  in
+  match start with
+  | "{img!" -> `Img_reference (target, alt)
+  | "{image!" -> `Image_reference (target, alt)
+  | "{img:" -> `Img_link (target, alt)
+  | "{image:" -> `Image_link (target, alt)
+  | _ -> assert false
+
 let trim_leading_space_or_accept_whitespace input start_offset text =
   match text.[0] with
   | ' ' -> String.sub text 1 (String.length text - 1)
@@ -266,6 +279,12 @@ let newline =
 
 let reference_start =
   "{!" | "{{!" | "{:" | "{{:"
+
+let img_start =
+  "{img!" | "{img:"
+
+let image_start =
+  "{image!" | "{image:"
 
 let raw_markup =
   ([^ '%'] | '%'+ [^ '%' '}'])* '%'*
@@ -409,6 +428,15 @@ and token input = parse
         reference_content input start start_offset (Buffer.create 16) lexbuf
       in
       let token = (reference_token start target) in
+      emit ~start_offset input token }
+
+  | (img_start as start)
+    {
+      let start_offset = Lexing.lexeme_start lexbuf in
+      let target =
+        reference_content input start start_offset (Buffer.create 16) lexbuf
+      in
+      let token = (img_token start target) in
       emit ~start_offset input token }
 
   | "{["

@@ -62,6 +62,10 @@ type t =
   | `Begin_reference_with_replacement_text of string
   | `Simple_link of string
   | `Begin_link_with_replacement_text of string
+  | `Img_reference of string * string
+  | `Img_link of string * string
+  | `Image_reference of string * string
+  | `Image_link of string * string
   | (* Leaf block element markup. *)
     `Code_block of
     (string Loc.with_location * string Loc.with_location option) option
@@ -142,6 +146,7 @@ let describe : [< t | `Comment ] -> string = function
   | `Begin_style `Subscript -> "'{_...}' (subscript)"
   | `Math_span _ -> "'{m ...}' (math span)"
   | `Math_block _ -> "'{math ...}' (math block)"
+  | `Img_reference _ -> "'{img!...}' (cross-reference)"
   | `Simple_reference _ -> "'{!...}' (cross-reference)"
   | `Begin_reference_with_replacement_text _ ->
       "'{{!...} ...}' (cross-reference)"
