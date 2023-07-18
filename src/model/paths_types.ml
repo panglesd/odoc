@@ -518,6 +518,7 @@ module rec Reference : sig
     | `TInstanceVariable
     | `TLabel
     | `TPage
+    | `TAsset
     | `TChildPage
     | `TChildModule
     | `TUnknown ]
@@ -706,7 +707,8 @@ module rec Reference : sig
     | `ClassType of signature * ClassTypeName.t
     | `Method of class_signature * MethodName.t
     | `InstanceVariable of class_signature * InstanceVariableName.t
-    | `Label of label_parent * LabelName.t ]
+    | `Label of label_parent * LabelName.t
+    | `Asset of page * AssetName.t ]
   (** @canonical Odoc_model.Paths.Reference.t *)
 
   type asset =

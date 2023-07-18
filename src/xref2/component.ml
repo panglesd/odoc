@@ -1514,6 +1514,10 @@ module Fmt = struct
         Format.fprintf ppf "%a.%s" model_reference
           (parent :> t)
           (LabelName.to_string name)
+    | `Asset (parent, name) ->
+        Format.fprintf ppf "%a.%s" model_reference
+          (parent :> t)
+          (AssetName.to_string name)
 
   and model_asset_reference ppf (r : Odoc_model.Paths.Reference.Asset.t) =
     let open Odoc_model.Paths.Reference in
