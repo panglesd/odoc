@@ -1,7 +1,8 @@
 (** Humpf, let's try accessing the asset:
-  {%html: <img src="../img.jpg" />%}
+  {%html: <img src="../caml.gif" />%}
+
+    And with a {{!asset-"caml.gif"}reference}
   *)
 
-(** Nevermind *)
 type t
-
+(** Nevermind *)

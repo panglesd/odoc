@@ -1,4 +1,6 @@
 {0 Package page}
 
 Some image:
-{%html: <img src="img.jpg" />%}
+{%html: <img src="caml.gif" />%}
+
+With the correct {{!asset-"caml.gif"}reference}

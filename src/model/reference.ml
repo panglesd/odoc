@@ -324,7 +324,7 @@ let parse whole_reference_location s :
             |> Error.raise_exception)
   in
 
-  let rec page (kind, identifier, location) tokens : Page.t =
+  let page (kind, identifier, location) tokens : Page.t =
     let kind = match_reference_kind location kind in
     match tokens with
     | [] -> (
