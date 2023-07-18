@@ -517,6 +517,7 @@ module rec Reference : sig
     | `TInstanceVariable
     | `TLabel
     | `TPage
+    | `TAsset
     | `TChildPage
     | `TChildModule
     | `TUnknown ]
