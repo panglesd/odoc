@@ -360,7 +360,7 @@ let rec unit env t =
 
 and search_asset env asset =
   match Ref_tools.resolve_asset_reference env asset |> Error.raise_warnings with
-  | Ok e -> e
+  | Ok e -> `Resolved e
   | Error e ->
       Errors.report ~what:(`Asset_reference asset) ~tools_error:(`Reference e)
         `Resolve;
