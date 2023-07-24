@@ -241,6 +241,9 @@ let strip l =
     | h :: t -> (
         match h.Inline.desc with
         | Text _ | Entity _ | Raw_markup _ | Math _ -> loop (h :: acc) t
+        | Image { target = _; alt } ->
+            let h = { h with desc = Text alt } in
+            loop (h :: acc) t
         | Linebreak -> loop acc t
         | Styled (sty, content) ->
             let h =
@@ -290,6 +293,7 @@ and inline (l : Inline.t) =
   | [] -> noop
   | i :: rest -> (
       match i.desc with
+      | Image { target = _; alt } -> str "[image: %s]" alt ++ inline rest
       | Text "" -> inline rest
       | Text _ ->
           let l, _, rest =
@@ -364,6 +368,7 @@ let rec block (l : Block.t) =
   | b :: rest -> (
       let continue r = if r = [] then noop else vspace ++ block r in
       match b.desc with
+      | Image { target = _; alt } -> str "[image: %s]" alt ++ continue rest
       | Inline i -> inline i ++ continue rest
       | Paragraph i -> inline i ++ continue rest
       | List (list_typ, l) ->

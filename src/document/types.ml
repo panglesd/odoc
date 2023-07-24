@@ -33,6 +33,13 @@ and Math : sig
 end =
   Math
 
+and Image : sig
+  type target = Internal of Url.t | External of string | Broken of string
+
+  type t = { target : target; alt : string }
+end =
+  Image
+
 and Inline : sig
   type entity = string
 
@@ -52,6 +59,7 @@ and Inline : sig
     | Source of Source.t
     | Math of Math.t
     | Raw_markup of Raw_markup.t
+    | Image of Image.t
 end =
   Inline
 
@@ -90,6 +98,7 @@ and Block : sig
     | Verbatim of string
     | Raw_markup of Raw_markup.t
     | Table of t Table.t
+    | Image of Image.t
 
   and list_type = Ordered | Unordered
 end =

@@ -61,6 +61,7 @@ end = struct
     |> List.map (fun one ->
            let return desc = [ { one with desc } ] in
            match one.desc with
+           | Image _ as t -> return t
            | Text _ as t -> return t
            | Entity _ as t -> return t
            | Linebreak as t -> return t
@@ -388,7 +389,7 @@ end = struct
           List.exists (List.exists (fun (cell, _) -> block cell)) data
       | Description x -> description x
       | Math _ -> true
-      | Source _ | Verbatim _ | Raw_markup _ -> false
+      | Image _ | Source _ | Verbatim _ | Raw_markup _ -> false
     in
     List.exists block_ x
 
@@ -403,7 +404,8 @@ end = struct
       | Link (_, x) -> inline x
       | InternalLink x -> inline x.content
       | Math _ -> true
-      | Text _ | Entity _ | Linebreak | Source _ | Raw_markup _ -> false
+      | Image _ | Text _ | Entity _ | Linebreak | Source _ | Raw_markup _ ->
+          false
     in
     List.exists inline_ x
 

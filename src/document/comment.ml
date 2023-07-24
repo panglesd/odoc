@@ -130,6 +130,15 @@ let leaf_inline_element : Comment.leaf_inline_element -> Inline.one = function
   | `Word s -> inline @@ Text s
   | `Code_span s -> inline @@ Source (source_of_code s)
   | `Math_span s -> inline @@ Math s
+  | `Img (`Reference (`Resolved r), alt) -> (
+      let id = Odoc_model.Paths.Reference.Resolved.identifier r in
+      match Url.from_identifier ~stop_before:false id with
+      | Ok url -> inline @@ Image { target = Internal url; alt }
+      | Error _ -> inline @@ Text alt)
+  | `Img (`Reference _, alt) -> inline @@ Text alt
+  | `Img (`Link url, alt) -> inline @@ Image { target = External url; alt }
+  | `Img (`Broken reason, alt) ->
+      inline @@ Image { target = Broken reason; alt }
   | `Raw_markup (target, s) -> inline @@ Raw_markup (target, s)
 
 let rec non_link_inline_element : Comment.non_link_inline_element -> Inline.one
@@ -196,6 +205,16 @@ let rec nestable_block_element :
     Comment.nestable_block_element -> Block.one list =
  fun content ->
   match content with
+  | `Image (`Reference (`Resolved r), alt) -> (
+      let id = Odoc_model.Paths.Reference.Resolved.identifier r in
+      match Url.from_identifier ~stop_before:false id with
+      | Ok url -> [ block @@ Image { target = Internal url; alt } ]
+      | Error _ -> [ block @@ Image { target = Broken "broken ref"; alt } ])
+  | `Image (`Reference _, alt) ->
+      [ block @@ Image { target = Broken "unresolved_ref"; alt } ]
+  | `Image (`Link url, alt) -> [ block @@ Image { target = External url; alt } ]
+  | `Image (`Broken reason, alt) ->
+      [ block @@ Image { target = Broken reason; alt } ]
   | `Paragraph p -> [ paragraph p ]
   | `Code_block (lang_tag, code, outputs) ->
       let lang_tag =

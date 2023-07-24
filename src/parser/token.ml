@@ -147,6 +147,9 @@ let describe : [< t | `Comment ] -> string = function
   | `Math_span _ -> "'{m ...}' (math span)"
   | `Math_block _ -> "'{math ...}' (math block)"
   | `Img_reference _ -> "'{img!...}' (cross-reference)"
+  | `Img_link _ -> "'{img:...}' (cross-reference)"
+  | `Image_reference _ -> "'{image!...}' (cross-reference)"
+  | `Image_link _ -> "'{image:...}' (cross-reference)"
   | `Simple_reference _ -> "'{!...}' (cross-reference)"
   | `Begin_reference_with_replacement_text _ ->
       "'{{!...} ...}' (cross-reference)"

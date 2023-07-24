@@ -9,6 +9,7 @@ type general_inline_element =
   [ `Space
   | `Word of string
   | `Code_span of string
+  | `Img of img_target * string
   | `Math_span of string
   | `Raw_markup of raw_markup_target * string
   | `Styled of style * general_inline_element with_location list
@@ -29,6 +30,7 @@ type general_block_element =
   | `List of
     [ `Unordered | `Ordered ] * general_block_element with_location list list
   | `Table of general_block_element abstract_table
+  | `Image of img_target * string
   | `Heading of
     Comment.heading_attrs * Identifier.Label.t * general_link_content
   | `Tag of general_tag ]
@@ -46,9 +48,18 @@ and general_tag =
   | `Since of string
   | `Before of string * general_docs
   | `Version of string
+  | `Img of img_target * string
+  | `Image of img_target * string
   | `Alert of string * string option ]
 
 and general_docs = general_block_element with_location list
+
+let img_target =
+  Variant
+    (function
+    | `Reference r -> C ("`Reference", r, reference)
+    | `Link l -> C ("`Link", l, string)
+    | `Broken s -> C ("`Broken", s, string))
 
 let rec inline_element : general_inline_element t =
   let style =
@@ -66,6 +77,7 @@ let rec inline_element : general_inline_element t =
     | `Word x -> C ("`Word", x, string)
     | `Code_span x -> C ("`Code_span", x, string)
     | `Math_span x -> C ("`Math_span", x, string)
+    | `Img (s, alt) -> C ("`Img", (s, alt), Pair (img_target, string))
     | `Raw_markup (x1, x2) -> C ("`Raw_markup", (x1, x2), Pair (string, string))
     | `Styled (x1, x2) -> C ("`Styled", (x1, x2), Pair (style, link_content))
     | `Reference (x1, x2) ->
@@ -134,6 +146,7 @@ let rec block_element : general_block_element t =
         let table_desc = Pair (data_desc, Option align_desc) in
         C ("`Table", (data, align), table_desc)
     | `Heading h -> C ("`Heading", h, heading)
+    | `Image (s, alt) -> C ("`Image", (s, alt), Pair (img_target, string))
     | `Tag x -> C ("`Tag", x, tag))
 
 and tag : general_tag t =
@@ -158,6 +171,8 @@ and tag : general_tag t =
     | `Since x -> C ("`Since", x, string)
     | `Before (x1, x2) -> C ("`Before", (x1, x2), Pair (string, docs))
     | `Version x -> C ("`Version", x, string)
+    | `Img (s, alt) -> C ("`Img", (s, alt), Pair (img_target, string))
+    | `Image (s, alt) -> C ("`Image", (s, alt), Pair (img_target, string))
     | `Alert (x1, x2) -> C ("`Alert", (x1, x2), Pair (string, Option string)))
 
 and docs : general_docs t = List (Indirect (ignore_loc, block_element))

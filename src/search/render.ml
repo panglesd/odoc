@@ -13,6 +13,7 @@ module Of_document = struct
   and inline i =
     let one o =
       match o.Odoc_document.Types.Inline.desc with
+      | Image { alt; _ } -> alt
       | Text t -> t
       | Entity "#45" -> "-"
       | Entity "gt" -> ">"
@@ -62,6 +63,7 @@ module Of_comments = struct
     | `Verbatim v -> v
     | `Math_block m -> m
     | `Table _ -> (* TODO *) ""
+    | _ -> assert false
 
   and nestable (n : Odoc_model.Comment.nestable_block_element) =
     s_of_block_element (n :> Odoc_model.Comment.block_element)
@@ -79,6 +81,7 @@ module Of_comments = struct
     | `Link (_, c) -> link_content c
     | `Styled (_, b) -> inlines b
     | `Raw_markup (_, _) -> ""
+    | _ -> assert false
 
   and link_content l =
     l |> List.map get_value

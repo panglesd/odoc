@@ -193,7 +193,7 @@ let img_token start target =
   let target, alt =
     match String.split_on_char ' ' target with
     | [] -> assert false
-    | h :: q -> h, List.concat " " q
+    | h :: q -> h, String.concat " " q
   in
   match start with
   | "{img!" -> `Img_reference (target, alt)
@@ -281,10 +281,7 @@ let reference_start =
   "{!" | "{{!" | "{:" | "{{:"
 
 let img_start =
-  "{img!" | "{img:"
-
-let image_start =
-  "{image!" | "{image:"
+  "{img!" | "{img:" |  "{image!" | "{image:"
 
 let raw_markup =
   ([^ '%'] | '%'+ [^ '%' '}'])* '%'*
@@ -387,6 +384,15 @@ and token input = parse
   | '+'
     { emit input `Plus }
 
+  | (img_start as start)
+    {
+      let start_offset = Lexing.lexeme_start lexbuf in
+      let target =
+        reference_content input start start_offset (Buffer.create 16) lexbuf
+      in
+      let token = (img_token start target) in
+      emit ~start_offset input token }
+
   | "{b"
     { emit input (`Begin_style `Bold) }
 
@@ -428,15 +434,6 @@ and token input = parse
         reference_content input start start_offset (Buffer.create 16) lexbuf
       in
       let token = (reference_token start target) in
-      emit ~start_offset input token }
-
-  | (img_start as start)
-    {
-      let start_offset = Lexing.lexeme_start lexbuf in
-      let target =
-        reference_content input start start_offset (Buffer.create 16) lexbuf
-      in
-      let token = (img_token start target) in
       emit ~start_offset input token }
 
   | "{["

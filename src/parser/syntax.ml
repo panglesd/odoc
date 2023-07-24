@@ -156,6 +156,8 @@ type token_that_always_begins_an_inline_element =
   | `Code_span of string
   | `Raw_markup of string option * string
   | `Begin_style of style
+  | `Img_reference of string * string
+  | `Img_link of string * string
   | `Simple_reference of string
   | `Begin_reference_with_replacement_text of string
   | `Simple_link of string
@@ -240,6 +242,14 @@ let rec inline_element :
       let r = Loc.at r_location r in
 
       Loc.at location (`Reference (`Simple, r, []))
+  | `Img_reference (r, alt) ->
+      junk input;
+
+      Loc.at location (`Img (`Reference r, alt))
+  | `Img_link (r, alt) ->
+      junk input;
+
+      Loc.at location (`Img (`Link r, alt))
   | `Begin_reference_with_replacement_text r as parent_markup ->
       junk input;
 
@@ -903,6 +913,22 @@ let rec block_element_list :
 
         junk input;
         let block = accepted_in_all_contexts context token in
+        let block = Loc.at location block in
+        let acc = block :: acc in
+        consume_block_elements ~parsed_a_tag `After_text acc
+    | {
+        value = (`Image_reference (_, alt) | `Image_link (_, alt)) as token;
+        location;
+      } as next_token ->
+        warn_if_after_tags next_token;
+        warn_if_after_text next_token;
+        junk input;
+        let kind =
+          match token with
+          | `Image_reference (s, _) -> `Reference s
+          | `Image_link (s, _) -> `Link s
+        in
+        let block = accepted_in_all_contexts context (`Image (kind, alt)) in
         let block = Loc.at location block in
         let acc = block :: acc in
         consume_block_elements ~parsed_a_tag `After_text acc

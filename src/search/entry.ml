@@ -147,6 +147,7 @@ and entries_of_doc id d =
   | `Verbatim _ -> [ entry ~id ~doc:[ d ] ~kind:(Doc Verbatim) ]
   | `Math_block _ -> [ entry ~id ~doc:[ d ] ~kind:(Doc MathBlock) ]
   | `Table _ -> []
+  | _ -> assert false
 
 let entries_of_item id (x : Odoc_model.Fold.item) =
   match x with

@@ -10,9 +10,13 @@ type alignment = [ `Left | `Center | `Right ]
 
 type raw_markup_target = string
 
+type img_target =
+  [ `Reference of Reference.t | `Link of string | `Broken of string ]
+
 type leaf_inline_element =
   [ `Space
   | `Word of string
+  | `Img of img_target * string
   | `Code_span of string
   | `Math_span of string
   | `Raw_markup of raw_markup_target * string ]
@@ -60,6 +64,7 @@ type nestable_block_element =
     * nestable_block_element with_location list option
   | `Math_block of string
   | `Verbatim of string
+  | `Image of img_target * string
   | `Modules of module_reference list
   | `Table of nestable_block_element abstract_table
   | `List of

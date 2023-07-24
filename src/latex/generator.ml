@@ -244,6 +244,7 @@ let rec internalref ~verbatim ~in_source (t : InternalLink.t) =
 and inline ~in_source ~verbatim (l : Inline.t) =
   let one (t : Inline.one) =
     match t.desc with
+    | Image { target = _; alt } -> txt ~in_source ~verbatim [ alt ]
     | Text _s -> assert false
     | Linebreak -> [ Break Line ]
     | Styled (style, c) -> [ Style (style, inline ~verbatim ~in_source c) ]
@@ -291,6 +292,9 @@ let non_empty_code_fragment c =
 let rec block ~in_source (l : Block.t) =
   let one (t : Block.one) =
     match t.desc with
+    | Image { target = _; alt } ->
+        (Break Paragraph :: txt ~in_source ~verbatim:false [ alt ])
+        @ [ Break Paragraph ]
     | Inline i -> inline ~verbatim:false ~in_source:false i
     | Paragraph i ->
         inline ~in_source:false ~verbatim:false i

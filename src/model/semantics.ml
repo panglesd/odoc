@@ -114,9 +114,12 @@ let describe_element = function
 
 type 'a with_location = 'a Location.with_location
 
+type img_kind = [ `Link of string | `Reference of string ]
+
 type ast_leaf_inline_element =
   [ `Space of string
   | `Word of string
+  | `Img of img_kind * string
   | `Code_span of string
   | `Math_span of string
   | `Raw_markup of string option * string ]
@@ -139,6 +142,17 @@ let leaf_inline_element :
   match element with
   | { value = `Word _ | `Code_span _ | `Math_span _; _ } as element -> element
   | { value = `Space _; _ } -> Location.same element `Space
+  | { value = `Img (`Link l, alt); _ } ->
+      `Img (`Link l, alt) |> Location.same element
+  | { value = `Img (`Reference l, alt); location } -> (
+      let target = l and target_location = location in
+      match Reference.parse target_location target |> Error.raise_warnings with
+      | Result.Ok target ->
+          `Img (`Reference target, alt) |> Location.same element
+      | Result.Error error ->
+          Error.raise_warning error;
+          let placeholder = `Img (`Broken "", alt) in
+          Location.at location placeholder)
   | { value = `Raw_markup (target, s); location } -> (
       match target with
       | Some invalid_target
@@ -229,6 +243,16 @@ let rec nestable_block_element :
   match element with
   | { value = `Paragraph content; location } ->
       Location.at location (`Paragraph (inline_elements status content))
+  | { value = `Image (`Link l, alt); _ } ->
+      `Image (`Link l, alt) |> Location.same element
+  | { value = `Image (`Reference l, alt); location } -> (
+      let target = l and target_location = location in
+      match Error.raise_warnings (Reference.parse target_location target) with
+      | Result.Ok target ->
+          `Image (`Reference target, alt) |> Location.same element
+      | Result.Error error ->
+          Error.raise_warning error;
+          `Image (`Broken "", alt) |> Location.same element)
   | { value = `Code_block { meta; delimiter = _; content; output }; location }
     ->
       let lang_tag =
@@ -355,6 +379,7 @@ let generate_heading_label : Comment.inline_element with_location list -> string
               anchor
           | `Styled (_, content) ->
               content |> strip_locs |> scan_inline_elements anchor
+          | `Img _ -> anchor
           | `Reference (_, content) ->
               content |> strip_locs
               |> List.map (fun (ele : Comment.non_link_inline_element) ->

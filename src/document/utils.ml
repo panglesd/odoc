@@ -46,6 +46,7 @@ and compute_length_inline (t : Types.Inline.t) : int =
     | Source s -> acc + compute_length_source s
     | Math _ -> assert false
     | Raw_markup _ -> assert false
+    | Image _ -> assert false
     (* TODO *)
   in
   List.fold_left f 0 t

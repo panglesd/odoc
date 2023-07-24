@@ -224,6 +224,13 @@ let rec comment_inline_element :
           Errors.report ~what:(`Reference r) ~tools_error:(`Reference e)
             `Resolve;
           orig)
+  | `Img (`Reference r, alt) as orig -> (
+      match Ref_tools.resolve_reference env r |> Error.raise_warnings with
+      | Ok x -> `Img (`Reference (`Resolved x), alt)
+      | Error e ->
+          Errors.report ~what:(`Reference r) ~tools_error:(`Reference e)
+            `Resolve;
+          orig)
   | y -> y
 
 and paragraph env elts =
@@ -236,6 +243,14 @@ and resolve_external_synopsis env synopsis =
 and comment_nestable_block_element env parent ~loc:_
     (x : Comment.nestable_block_element) =
   match x with
+  | `Image (`Reference r, alt) as orig -> (
+      match Ref_tools.resolve_reference env r |> Error.raise_warnings with
+      | Ok x -> `Image (`Reference (`Resolved x), alt)
+      | Error e ->
+          Errors.report ~what:(`Reference r) ~tools_error:(`Reference e)
+            `Resolve;
+          orig)
+  | `Image _ as orig -> orig
   | `Paragraph elts -> `Paragraph (paragraph env elts)
   | (`Code_block _ | `Math_block _ | `Verbatim _) as x -> x
   | `List (x, ys) ->

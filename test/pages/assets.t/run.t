@@ -7,6 +7,13 @@ Blablabla
   {%html: <img src="caml.gif" />%}
   
   With the correct {{!asset-"caml.gif"}reference}
+  
+  
+  Directly with an image tag {img!asset-"caml.gif" reference}  {img:https://picsum.photos/200/300 reference}
+  
+  {image!asset-"caml.gif" reference}
+  
+  {image:https://picsum.photos/200/300 reference}
 
 And we'll have a module that we'll put underneath this package page.
 
@@ -15,6 +22,13 @@ And we'll have a module that we'll put underneath this package page.
     {%html: <img src="../caml.gif" />%}
   
       And with a {{!asset-"caml.gif"}reference}
+  
+      Directly with an image tag {img!asset-"caml.gif" reference}  {img:https://picsum.photos/200/300 reference}
+  
+  
+      {image!asset-"caml.gif" reference}
+  
+      {image:https://picsum.photos/200/300 reference}
     *)
   
   type t
@@ -56,6 +70,9 @@ Trying to pass an asset which doesn't exist:
 
   $ odoc html-generate page-index.odocl --asset caml.gif -o html 2>&1 | \
   > sed 's/…/.../' | sed "s/\`/'/g"
+  odoc: option '--asset': no 'caml.gif' file or directory
+  Usage: odoc html-generate [OPTION]... FILE.odocl
+  Try 'odoc html-generate --help' or 'odoc --help' for more information.
 
 Passing the asset alongside an incorrect one:
 
