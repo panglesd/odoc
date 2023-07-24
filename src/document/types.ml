@@ -34,7 +34,7 @@ end =
   Math
 
 and Image : sig
-  type target = Internal of Url.t | External of string | Broken of string
+  type target = Internal of Url.t | External of string | Broken
 
   type t = { target : target; alt : string }
 end =

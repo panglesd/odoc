@@ -137,8 +137,6 @@ let leaf_inline_element : Comment.leaf_inline_element -> Inline.one = function
       | Error _ -> inline @@ Text alt)
   | `Img (`Reference _, alt) -> inline @@ Text alt
   | `Img (`Link url, alt) -> inline @@ Image { target = External url; alt }
-  | `Img (`Broken reason, alt) ->
-      inline @@ Image { target = Broken reason; alt }
   | `Raw_markup (target, s) -> inline @@ Raw_markup (target, s)
 
 let rec non_link_inline_element : Comment.non_link_inline_element -> Inline.one
@@ -209,12 +207,15 @@ let rec nestable_block_element :
       let id = Odoc_model.Paths.Reference.Resolved.identifier r in
       match Url.from_identifier ~stop_before:false id with
       | Ok url -> [ block @@ Image { target = Internal url; alt } ]
-      | Error _ -> [ block @@ Image { target = Broken "broken ref"; alt } ])
-  | `Image (`Reference _, alt) ->
-      [ block @@ Image { target = Broken "unresolved_ref"; alt } ]
+      | Error exn ->
+          (* FIXME: better error message *)
+          Printf.eprintf "Id.href failed: %S\n%!" (Url.Error.to_string exn);
+          [ block @@ Image { target = Broken; alt } ])
+  | `Image (`Reference r, alt) ->
+      Printf.eprintf "Unresolved reference as image source: %S\n%!"
+        (Reference.render_unresolved r);
+      [ block @@ Image { target = Broken; alt } ]
   | `Image (`Link url, alt) -> [ block @@ Image { target = External url; alt } ]
-  | `Image (`Broken reason, alt) ->
-      [ block @@ Image { target = Broken reason; alt } ]
   | `Paragraph p -> [ paragraph p ]
   | `Code_block (lang_tag, code, outputs) ->
       let lang_tag =

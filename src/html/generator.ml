@@ -127,8 +127,8 @@ and inline ~config ?(emph_level = 0) ~resolve (l : Inline.t) :
         [ Html.img ~src ~alt () ]
     | Image { target = External target; alt } ->
         [ Html.img ~src:target ~alt () ]
-    | Image { target = Broken src; alt } ->
-        [ Html.img ~src ~alt () ]
+    | Image { target = Broken; alt } ->
+        [ Html.img ~src:"" ~alt () ]
         (* TODO: the Broken reason and src have nothing to do! *)
     | Text "" -> []
     | Text s ->
@@ -161,7 +161,7 @@ and inline_nolink ?(emph_level = 0) (l : Inline.t) :
     | Image { target = Internal _target; alt } -> [ Html.img ~src:"" ~alt () ]
     | Image { target = External target; alt } ->
         [ Html.img ~src:target ~alt () ]
-    | Image { target = Broken src; alt } -> [ Html.img ~src ~alt () ]
+    | Image { target = Broken; alt } -> [ Html.img ~src:"" ~alt () ]
     | Text "" -> []
     | Text s ->
         if a = [] then [ Html.txt s ] else [ Html.span ~a [ Html.txt s ] ]
@@ -220,8 +220,8 @@ let rec block ~config ~resolve (l : Block.t) : flow Html.elt list =
         [ Html.div [ Html.img ~src ~alt () ] ]
     | Image { target = External target; alt } ->
         [ Html.div [ Html.img ~src:target ~alt () ] ]
-    | Image { target = Broken src; alt } ->
-        [ Html.div [ Html.img ~src ~alt () ] ]
+    | Image { target = Broken; alt } ->
+        [ Html.div [ Html.img ~src:"" ~alt () ] ]
     | Inline i ->
         if t.attr = [] then as_flow @@ inline ~config ~resolve i
         else mk_block Html.span (inline ~config ~resolve i)

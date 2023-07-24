@@ -151,7 +151,7 @@ let leaf_inline_element :
           `Img (`Reference target, alt) |> Location.same element
       | Result.Error error ->
           Error.raise_warning error;
-          let placeholder = `Img (`Broken "", alt) in
+          let placeholder = `Code_span alt in
           Location.at location placeholder)
   | { value = `Raw_markup (target, s); location } -> (
       match target with
@@ -252,7 +252,10 @@ let rec nestable_block_element :
           `Image (`Reference target, alt) |> Location.same element
       | Result.Error error ->
           Error.raise_warning error;
-          `Image (`Broken "", alt) |> Location.same element)
+          let placeholder =
+            `Paragraph [ `Code_span alt |> Location.same element ]
+          in
+          Location.same element placeholder)
   | { value = `Code_block { meta; delimiter = _; content; output }; location }
     ->
       let lang_tag =

@@ -10,8 +10,7 @@ type alignment = [ `Left | `Center | `Right ]
 
 type raw_markup_target = string
 
-type img_target =
-  [ `Reference of Reference.t | `Link of string | `Broken of string ]
+type img_target = [ `Reference of Reference.t | `Link of string ]
 
 type leaf_inline_element =
   [ `Space
