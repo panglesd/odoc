@@ -245,7 +245,13 @@ and comment_nestable_block_element env parent ~loc:_
   match x with
   | `Image (`Reference r, alt) as orig -> (
       match Ref_tools.resolve_reference env r |> Error.raise_warnings with
-      | Ok x -> `Image (`Reference (`Resolved x), alt)
+      | Ok
+          (`Identifier { iv = #Odoc_model.Paths.Identifier.AssetFile.t_pv; _ }
+          as r) ->
+          `Image (`Reference (`Resolved r), alt)
+      | Ok _ ->
+          Lookup_failures.report_warning "";
+          orig
       | Error e ->
           Errors.report ~what:(`Reference r) ~tools_error:(`Reference e)
             `Resolve;
