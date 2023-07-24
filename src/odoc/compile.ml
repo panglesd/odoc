@@ -218,7 +218,7 @@ let page_name_of_output ~is_parent_explicit output =
      | _ -> ());
   root_name
 
-let mld ~parent_spec ~output ~children ~warnings_options input =
+let mld ~parent_spec ~output ~children ~search_assets ~warnings_options input =
   List.fold_left
     (fun acc child_str ->
       match (acc, parse_parent_child_reference child_str) with
@@ -270,7 +270,8 @@ let mld ~parent_spec ~output ~children ~warnings_options input =
   in
   let resolve content =
     let page =
-      Lang.Page.{ name; root; children; content; digest; linked = false }
+      Lang.Page.
+        { name; root; children; content; digest; linked = false; search_assets }
     in
     Odoc_file.save_page output ~warnings:[] page;
     Ok ()
@@ -301,7 +302,8 @@ let compile ~resolver ~parent_cli_spec ~hidden ~children ~output
   let ext = Fs.File.get_ext input in
   if ext = ".mld" then
     check_is_none "Not expecting source (--source) when compiling pages." source
-    >>= fun () -> mld ~parent_spec ~output ~warnings_options ~children input
+    >>= fun () ->
+    mld ~parent_spec ~output ~warnings_options ~children ~search_assets input
   else
     check_is_empty "Not expecting children (--child) when compiling modules."
       children

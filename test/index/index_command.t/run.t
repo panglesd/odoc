@@ -7,7 +7,7 @@ $ odoc compile -c module-main -c src-source root.mld
   $ ocamlc -c j.ml -bin-annot -I .
   $ ocamlc -c main.ml -bin-annot -I .
 
-  $ odoc compile --search-asset index.js -I . --child asset-index.js --child asset-fuse.js.js --child module-main --child module-j page.mld
+  $ odoc compile --search-asset index.js  --search-asset fuse.js.js -I . --child asset-index.js --child asset-fuse.js.js --child module-main --child module-j page.mld
 
 Search scripts are given as a reference to an asset.
 
@@ -989,7 +989,7 @@ The index.js file need to provide a odoc_search command, from a
   html/page/index.js
 
 Run
-$ firefox html/page/Main/index.html
+$ firefox html/page/index.html
 Gtk-Message: 10:17:52.822: Failed to load module "xapp-gtk3-module"
 Gtk-Message: 10:17:52.823: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
 to manually test the search

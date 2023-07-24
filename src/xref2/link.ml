@@ -1046,6 +1046,7 @@ let link ~filename x y =
       if y.Lang.Compilation_unit.linked || y.hidden then y else unit x y)
 
 let page env page =
+  let search_assets = List.map (search_asset env) page.Page.search_assets in
   let () =
     List.iter
       (fun child ->
@@ -1067,6 +1068,7 @@ let page env page =
     page with
     Page.content = comment_docs env page.Page.name page.content;
     linked = true;
+    search_assets;
   }
 
 let resolve_page ~filename env p =
