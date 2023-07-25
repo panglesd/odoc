@@ -293,12 +293,32 @@ let handle_file_ext = function
 let compile ~resolver ~parent_cli_spec ~hidden ~children ~output
     ~warnings_options ~source ~search_assets input =
   parent resolver parent_cli_spec >>= fun parent_spec ->
-  let search_assets : Paths.Reference.Asset.t list =
-    List.map (fun a -> `Root (a, `TAsset)) search_assets
+  let search_assets : (Paths.Reference.Asset.t list, _) result =
+    List.fold_left
+      (fun acc a ->
+        acc >>= fun acc ->
+        let ref_ =
+          match
+            Odoc_model.Semantics.parse_reference a
+            |> Error.handle_errors_and_warnings ~warnings_options
+          with
+          | Error _ as e -> e
+          | Ok (`Asset _ as ref_) -> Ok ((ref_ : Paths.Reference.Asset.t) :: acc)
+          | Ok (`Root (_, `TAsset) as ref_) -> Ok (ref_ :: acc)
+          | Ok (`Root (r, `TUnknown)) -> Ok (`Root (r, `TAsset) :: acc)
+          | _ ->
+              Error
+                (`Msg
+                  (Format.sprintf "Could not parse \"%s\" as an asset reference"
+                     a))
+        in
+        ref_)
+      (Ok []) search_assets
     (* Assets references are considered as "simple" reference, no way to specify
        the parent page of an asset. Therefore, seach assets need to be children
        of a page ancestor. *)
   in
+  search_assets >>= fun search_assets ->
   let ext = Fs.File.get_ext input in
   if ext = ".mld" then
     check_is_none "Not expecting source (--source) when compiling pages." source

@@ -7,19 +7,19 @@ $ odoc compile -c module-main -c src-source root.mld
   $ ocamlc -c j.ml -bin-annot -I .
   $ ocamlc -c main.ml -bin-annot -I .
 
-  $ odoc compile --search-asset index.js  --search-asset fuse.js.js -I . --child asset-index.js --child asset-fuse.js.js --child module-main --child module-j page.mld
+  $ odoc compile --search-asset "asset-\"index.js\""  --search-asset "asset-\"fuse.js.js\"" -I . --child asset-index.js --child asset-fuse.js.js --child module-main --child module-j page.mld
 
 Search scripts are given as a reference to an asset.
 
 An example with an error during the resolving of the reference:
-  $ odoc compile --parent page --search-asset index2.js -I . j.cmt
+  $ odoc compile --parent page --search-asset "\"index2.js\"" -I . j.cmt
   $ odoc link -I . j.odoc
   File "j.odoc":
   Warning: Failed to resolve asset reference unresolvedroot(index2.js) Couldn't find asset "index2.js"
 
 Without error during resolving
-  $ odoc compile --parent page --search-asset fuse.js.js --search-asset index.js -I . j.cmt
-  $ odoc compile --parent page --search-asset fuse.js.js --search-asset index.js -I . main.cmt
+  $ odoc compile --parent page --search-asset "\"fuse.js.js\"" --search-asset "\"index.js\"" -I . j.cmt
+  $ odoc compile --parent page --search-asset "\"fuse.js.js\"" --search-asset "\"index.js\"" -I . main.cmt
 
   $ odoc link -I . j.odoc
   $ odoc link -I . main.odoc
