@@ -18,10 +18,14 @@ An example with an error during the resolving of the reference:
   Warning: Failed to resolve asset reference unresolvedroot(index2.js) Couldn't find asset "index2.js"
 
 Without error during resolving
-  $ odoc compile --parent page --search-asset "\"fuse.js.js\"" --search-asset "\"index.js\"" -I . j.cmt
+  $ odoc compile --search-asset "page-\"page.fuse.js.js\"" --search-asset "page-\"index.js\"" -I . j.cmt
+  ERROR: Could not parse "page-"page.fuse.js.js"" as an asset reference
+  [1]
   $ odoc compile --parent page --search-asset "\"fuse.js.js\"" --search-asset "\"index.js\"" -I . main.cmt
 
   $ odoc link -I . j.odoc
+  File "j.odoc":
+  Warning: Failed to resolve asset reference unresolvedroot(index2.js) Couldn't find asset "index2.js"
   $ odoc link -I . main.odoc
   $ odoc link -I . page-page.odoc
 
