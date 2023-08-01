@@ -114,12 +114,11 @@ let describe_element = function
 
 type 'a with_location = 'a Location.with_location
 
-type img_kind = [ `Link of string | `Reference of string ]
+(* type img_kind = [ `Link of string | `Reference of string with_location ] *)
 
 type ast_leaf_inline_element =
   [ `Space of string
   | `Word of string
-  | `Img of img_kind * string
   | `Code_span of string
   | `Math_span of string
   | `Raw_markup of string option * string ]
@@ -135,6 +134,18 @@ type status = {
   parent_of_sections : Paths.Identifier.LabelParent.t;
 }
 
+let rec alt_to_string alt =
+  let inline_to_string (x : _ with_location) =
+    match x with
+    | { value = `Space s | `Word s | `Code_span s | `Math_span s; _ } -> s
+    | { value = `Img (_, alt); _ } -> alt_to_string alt
+    | { value = `Link (s, _); _ } -> s
+    | { value = `Raw_markup (_, m); _ } -> m
+    | { value = `Reference (_, _, _); _ } -> ""
+    | { value = `Styled _; _ } -> ""
+  in
+  String.concat "" @@ List.map inline_to_string alt
+
 let leaf_inline_element :
     ast_leaf_inline_element with_location ->
     Comment.leaf_inline_element with_location =
@@ -142,17 +153,6 @@ let leaf_inline_element :
   match element with
   | { value = `Word _ | `Code_span _ | `Math_span _; _ } as element -> element
   | { value = `Space _; _ } -> Location.same element `Space
-  | { value = `Img (`Link l, alt); _ } ->
-      `Img (`Link l, alt) |> Location.same element
-  | { value = `Img (`Reference l, alt); location } -> (
-      let target = l and target_location = location in
-      match Reference.parse target_location target |> Error.raise_warnings with
-      | Result.Ok target ->
-          `Img (`Reference target, alt) |> Location.same element
-      | Result.Error error ->
-          Error.raise_warning error;
-          let placeholder = `Code_span alt in
-          Location.at location placeholder)
   | { value = `Raw_markup (target, s); location } -> (
       match target with
       | Some invalid_target
@@ -186,6 +186,19 @@ let rec non_link_inline_element :
   | { value = #ast_leaf_inline_element; _ } as element ->
       (leaf_inline_element element
         :> Comment.non_link_inline_element with_location)
+  | { value = `Img (`Link l, alt); _ } ->
+      let alt = alt_to_string alt in
+      `Img (`Link l, alt) |> Location.same element
+  | { value = `Img (`Reference target, alt); location } -> (
+      let alt = alt_to_string alt in
+      let { Location.value = target; location = target_location } = target in
+      match Reference.parse target_location target |> Error.raise_warnings with
+      | Result.Ok target ->
+          `Img (`Reference target, alt) |> Location.same element
+      | Result.Error error ->
+          Error.raise_warning error;
+          let placeholder = `Code_span alt in
+          Location.at location placeholder)
   | { value = `Styled (style, content); _ } ->
       `Styled (style, non_link_inline_elements status ~surrounding content)
       |> Location.same element
@@ -209,6 +222,19 @@ let rec inline_element :
     Comment.inline_element with_location =
  fun status element ->
   match element with
+  | { value = `Img (`Link l, alt); _ } ->
+      let alt = alt_to_string alt in
+      `Img (`Link l, alt) |> Location.same element
+  | { value = `Img (`Reference target, alt); location } -> (
+      let alt = alt_to_string alt in
+      let { Location.value = target; location = target_location } = target in
+      match Reference.parse target_location target |> Error.raise_warnings with
+      | Result.Ok target ->
+          `Img (`Reference target, alt) |> Location.same element
+      | Result.Error error ->
+          Error.raise_warning error;
+          let placeholder = `Code_span alt in
+          Location.at location placeholder)
   | { value = #ast_leaf_inline_element; _ } as element ->
       (leaf_inline_element element :> Comment.inline_element with_location)
   | { value = `Styled (style, content); location } ->
@@ -243,19 +269,19 @@ let rec nestable_block_element :
   match element with
   | { value = `Paragraph content; location } ->
       Location.at location (`Paragraph (inline_elements status content))
-  | { value = `Image (`Link l, alt); _ } ->
-      `Image (`Link l, alt) |> Location.same element
-  | { value = `Image (`Reference l, alt); location } -> (
-      let target = l and target_location = location in
-      match Error.raise_warnings (Reference.parse target_location target) with
-      | Result.Ok target ->
-          `Image (`Reference target, alt) |> Location.same element
-      | Result.Error error ->
-          Error.raise_warning error;
-          let placeholder =
-            `Paragraph [ `Code_span alt |> Location.same element ]
-          in
-          Location.same element placeholder)
+  (* | { value = `Image (`Link l, alt); _ } -> *)
+  (*     `Image (`Link l, alt) |> Location.same element *)
+  (* | { value = `Image (`Reference l, alt); location } -> ( *)
+  (*     let target = l and target_location = location in *)
+  (*     match Error.raise_warnings (Reference.parse target_location target) with *)
+  (*     | Result.Ok target -> *)
+  (*         `Image (`Reference target, alt) |> Location.same element *)
+  (*     | Result.Error error -> *)
+  (*         Error.raise_warning error; *)
+  (*         let placeholder = *)
+  (*           `Paragraph [ `Code_span alt |> Location.same element ] *)
+  (*         in *)
+  (*         Location.same element placeholder) *)
   | { value = `Code_block { meta; delimiter = _; content; output }; location }
     ->
       let lang_tag =

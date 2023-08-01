@@ -183,23 +183,14 @@ let warning =
 
 let reference_token start target =
   match start with
-  | "{!" -> `Simple_reference target
-  | "{{!" -> `Begin_reference_with_replacement_text target
-  | "{:" -> `Simple_link target
-  | "{{:" -> `Begin_link_with_replacement_text target
-  | _ -> assert false
-
-let img_token start target =
-  let target, alt =
-    match String.split_on_char ' ' target with
-    | [] -> assert false
-    | h :: q -> h, String.concat " " q
-  in
-  match start with
-  | "{img!" -> `Img_reference (target, alt)
-  | "{image!" -> `Image_reference (target, alt)
-  | "{img:" -> `Img_link (target, alt)
-  | "{image:" -> `Image_link (target, alt)
+  | "{!" -> `Simple_reference (`A, target)
+  | "{{!" -> `Begin_reference_with_replacement_text (`A, target)
+  | "{:" -> `Simple_link (`A, target)
+  | "{{:" -> `Begin_link_with_replacement_text (`A, target)
+  | "{img!" -> `Simple_reference (`Img, target)
+  | "{{img!" -> `Begin_reference_with_replacement_text (`Img, target)
+  | "{img:" -> `Simple_link (`Img, target)
+  | "{{img:" -> `Begin_link_with_replacement_text (`Img, target)
   | _ -> assert false
 
 let trim_leading_space_or_accept_whitespace input start_offset text =
@@ -231,7 +222,7 @@ let emit_verbatim input start_offset buffer =
   emit input (`Verbatim t) ~start_offset
 
 (* The locations have to be treated carefully in this function. We need to ensure that
-   the []`Code_block] location matches the entirety of the block including the terminator,
+   the [`Code_block] location matches the entirety of the block including the terminator,
    and the content location is precicely the location of the text of the code itself.
    Note that the location reflects the content _without_ stripping of whitespace, whereas
    the value of the content in the tree has whitespace stripped from the beginning,
@@ -278,10 +269,7 @@ let newline =
   '\n' | "\r\n"
 
 let reference_start =
-  "{!" | "{{!" | "{:" | "{{:"
-
-let img_start =
-  "{img!" | "{img:" |  "{image!" | "{image:"
+  "{!" | "{{!" | "{:" | "{{:" | "{img!" | "{img:" |  "{{img!" | "{{img:"
 
 let raw_markup =
   ([^ '%'] | '%'+ [^ '%' '}'])* '%'*
@@ -383,15 +371,6 @@ and token input = parse
 
   | '+'
     { emit input `Plus }
-
-  | (img_start as start)
-    {
-      let start_offset = Lexing.lexeme_start lexbuf in
-      let target =
-        reference_content input start start_offset (Buffer.create 16) lexbuf
-      in
-      let token = (img_token start target) in
-      emit ~start_offset input token }
 
   | "{b"
     { emit input (`Begin_style `Bold) }

@@ -14,12 +14,13 @@ type alignment = [ `Left | `Center | `Right ]
 type reference_kind = [ `Simple | `With_text ]
 (** References in doc comments can be of two kinds: [{!simple}] or [{{!ref}With text}]. *)
 
-type img_kind = [ `Link of string | `Reference of string ]
+type img_kind = [ `Link of string | `Reference of string with_location ]
 
 type inline_element =
   [ `Space of string
   | `Word of string
-  | `Img of img_kind * string  (** Link and alt text *)
+  | `Img of img_kind * inline_element with_location list
+    (** Link and alt text *)
   | `Code_span of string
   | `Raw_markup of string option * string
   | `Styled of style * inline_element with_location list
@@ -53,7 +54,6 @@ type code_block = {
 and nestable_block_element =
   [ `Paragraph of inline_element with_location list
   | `Code_block of code_block
-  | `Image of img_kind * string
   | `Verbatim of string
   | `Modules of string with_location list
   | `List of

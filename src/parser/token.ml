@@ -23,6 +23,8 @@ type tag =
     | `Closed
     | `Hidden ] ]
 
+type ref_tag = [ `Img | `A ]
+
 type t =
   [ (* End of input. *)
     `End
@@ -58,14 +60,10 @@ type t =
   | `Begin_style of style
   | `Begin_paragraph_style of paragraph_style
   | (* Other inline element markup. *)
-    `Simple_reference of string
-  | `Begin_reference_with_replacement_text of string
-  | `Simple_link of string
-  | `Begin_link_with_replacement_text of string
-  | `Img_reference of string * string
-  | `Img_link of string * string
-  | `Image_reference of string * string
-  | `Image_link of string * string
+    `Simple_reference of ref_tag * string
+  | `Begin_reference_with_replacement_text of ref_tag * string
+  | `Simple_link of ref_tag * string
+  | `Begin_link_with_replacement_text of ref_tag * string
   | (* Leaf block element markup. *)
     `Code_block of
     (string Loc.with_location * string Loc.with_location option) option
@@ -146,15 +144,18 @@ let describe : [< t | `Comment ] -> string = function
   | `Begin_style `Subscript -> "'{_...}' (subscript)"
   | `Math_span _ -> "'{m ...}' (math span)"
   | `Math_block _ -> "'{math ...}' (math block)"
-  | `Img_reference _ -> "'{img!...}' (cross-reference)"
-  | `Img_link _ -> "'{img:...}' (cross-reference)"
-  | `Image_reference _ -> "'{image!...}' (cross-reference)"
-  | `Image_link _ -> "'{image:...}' (cross-reference)"
-  | `Simple_reference _ -> "'{!...}' (cross-reference)"
-  | `Begin_reference_with_replacement_text _ ->
+  | `Simple_reference (`Img, _) -> "'{img!...}' (image reference)"
+  | `Begin_reference_with_replacement_text (`Img, _) ->
+      "'{{img!...} ...}' (image reference)"
+  | `Simple_link (`Img, _) -> "'{img:...}' (image link)"
+  | `Begin_link_with_replacement_text (`Img, _) ->
+      "'{{img:...} ...}' (image link)"
+  | `Simple_reference (`A, _) -> "'{!...}' (cross-reference)"
+  | `Begin_reference_with_replacement_text (`A, _) ->
       "'{{!...} ...}' (cross-reference)"
-  | `Simple_link _ -> "'{:...} (external link)'"
-  | `Begin_link_with_replacement_text _ -> "'{{:...} ...}' (external link)"
+  | `Simple_link (`A, _) -> "'{:...} (external link)'"
+  | `Begin_link_with_replacement_text (`A, _) ->
+      "'{{:...} ...}' (external link)"
   | `End -> "end of text"
   | `Space _ -> "whitespace"
   | `Single_newline _ -> "line break"
@@ -194,9 +195,9 @@ let describe : [< t | `Comment ] -> string = function
   | `Tag `Hidden -> "'@hidden"
   | `Comment -> "top-level text"
 
-let describe_element = function
-  | `Reference (`Simple, _, _) -> describe (`Simple_reference "")
-  | `Reference (`With_text, _, _) ->
-      describe (`Begin_reference_with_replacement_text "")
-  | `Link _ -> describe (`Begin_link_with_replacement_text "")
-  | `Heading (level, _, _) -> describe (`Begin_section_heading (level, None))
+(* let describe_element = function *)
+(*   | `Reference (`Simple, _, _) -> describe (`Simple_reference (`A, "")) *)
+(*   | `Reference (`With_text, _, _) -> *)
+(*       describe (`Begin_reference_with_replacement_text (`A, "")) *)
+(*   | `Link _ -> describe (`Begin_link_with_replacement_text (`A, "")) *)
+(*   | `Heading (level, _, _) -> describe (`Begin_section_heading (level, None)) *)

@@ -47,9 +47,19 @@ module Ast_to_sexp = struct
         List [ Atom "raw_markup"; opt str target; Atom s ]
     | `Math_span s -> List [ Atom "math_span"; Atom s ]
     | `Img (`Reference s, alt) ->
-        List [ Atom "img"; List [ Atom "ref"; Atom s ]; Atom alt ]
+        List
+          [
+            Atom "img";
+            List [ Atom "ref"; at.at str s ];
+            List (List.map (at.at (inline_element at)) alt);
+          ]
     | `Img (`Link s, alt) ->
-        List [ Atom "img"; List [ Atom "link"; Atom s ]; Atom alt ]
+        List
+          [
+            Atom "img";
+            List [ Atom "link"; Atom s ];
+            List (List.map (at.at (inline_element at)) alt);
+          ]
     | `Styled (s, es) ->
         List [ style s; List (List.map (at.at (inline_element at)) es) ]
     | `Reference (kind, r, es) ->
@@ -71,10 +81,6 @@ module Ast_to_sexp = struct
         List
           [ Atom "paragraph"; List (List.map (at.at (inline_element at)) es) ]
     | `Math_block s -> List [ Atom "math_block"; Atom s ]
-    | `Image (`Reference s, alt) ->
-        List [ Atom "image"; List [ Atom "ref"; Atom s ]; Atom alt ]
-    | `Image (`Link s, alt) ->
-        List [ Atom "image"; List [ Atom "link"; Atom s ]; Atom alt ]
     | `Code_block { Ast.meta = None; content; output = None; _ } ->
         List [ Atom "code_block"; at.at str content ]
     | `Code_block { meta = Some meta; content; output = None; _ } ->
@@ -5615,7 +5621,18 @@ let%expect_test _ =
 let%expect_test _ =
   let module Image = struct
     let inline_img_ref =
-      test "{img!asset-\"bli.gif\" alternative text}";
+      test "{img!asset-\"bli.gif\"}";
+      [%expect
+        {|
+        ((output
+          (((f.ml (1 0) (1 38))
+            (paragraph
+             (((f.ml (1 0) (1 38))
+               (img (ref "asset-\"bli.gif\"") "alternative text")))))))
+         (warnings ())) |}]
+
+    let inline_img_ref_alt =
+      test "{{img!asset-\"bli.gif\"} alternative text}";
       [%expect
         {|
         ((output
@@ -5626,7 +5643,7 @@ let%expect_test _ =
          (warnings ())) |}]
 
     let inline_img_link =
-      test "{img:http://ocaml.org/caml.jpg the ocaml logo}";
+      test "{img:http://ocaml.org/caml.jpg}";
       [%expect
         {|
         ((output
@@ -5636,17 +5653,10 @@ let%expect_test _ =
                (img (link http://ocaml.org/caml.jpg) "the ocaml logo")))))))
          (warnings ())) |}]
 
-    let image =
-      test "{image!asset-\"bli.gif\" alternative text}";
+    let inline_img_link_alt =
+      test "{{img:http://ocaml.org/caml.jpg}the ocaml logo}";
       [%expect
         {|
-        ((output
-          (((f.ml (1 0) (1 40)) (image (ref "asset-\"bli.gif\"") "alternative text"))))
-         (warnings ())) |}]
-
-    let image_link =
-      test "{img:http://ocaml.org/caml.jpg the ocaml logo}";
-      [%expect {|
         ((output
           (((f.ml (1 0) (1 46))
             (paragraph

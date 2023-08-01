@@ -3,12 +3,12 @@
 
     And with a {{!asset-"caml.gif"}reference}
 
-    Directly with an image tag {img!asset-"caml.gif" reference}  {img:https://picsum.photos/200/300 reference}
+    Directly with an image tag {{img!asset-"caml.gif"}reference}  {{img:https://picsum.photos/200/300}reference}
 
 
-    {image!asset-"caml.gif" reference}
+    {img!asset-"caml.gif"}
 
-    {image:https://picsum.photos/200/300 reference}
+    {img:https://picsum.photos/200/300}
   *)
 
 type t

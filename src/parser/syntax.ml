@@ -156,12 +156,10 @@ type token_that_always_begins_an_inline_element =
   | `Code_span of string
   | `Raw_markup of string option * string
   | `Begin_style of style
-  | `Img_reference of string * string
-  | `Img_link of string * string
-  | `Simple_reference of string
-  | `Begin_reference_with_replacement_text of string
-  | `Simple_link of string
-  | `Begin_link_with_replacement_text of string
+  | `Simple_reference of Token.ref_tag * string
+  | `Begin_reference_with_replacement_text of Token.ref_tag * string
+  | `Simple_link of Token.ref_tag * string
+  | `Begin_link_with_replacement_text of Token.ref_tag * string
   | `Math_span of string ]
 
 (* Check that the token constructors above actually are all in [Token.t]. *)
@@ -235,25 +233,25 @@ let rec inline_element :
         |> add_warning input;
 
       Loc.at location (`Styled (s, content))
-  | `Simple_reference r ->
+  | `Simple_reference (tag, r) ->
       junk input;
 
-      let r_location = Loc.nudge_start (String.length "{!") location in
+      let n = String.length (match tag with `A -> "{!" | `Img -> "{!img") in
+
+      let r_location = Loc.nudge_start n location in
       let r = Loc.at r_location r in
-
-      Loc.at location (`Reference (`Simple, r, []))
-  | `Img_reference (r, alt) ->
+      let e =
+        match tag with
+        | `A -> `Reference (`Simple, r, [])
+        | `Img -> `Img (`Reference r, [])
+      in
+      Loc.at location e
+  | `Begin_reference_with_replacement_text (tag, r) as parent_markup ->
       junk input;
 
-      Loc.at location (`Img (`Reference r, alt))
-  | `Img_link (r, alt) ->
-      junk input;
+      let n = String.length (match tag with `A -> "{{!" | `Img -> "{{img!") in
 
-      Loc.at location (`Img (`Link r, alt))
-  | `Begin_reference_with_replacement_text r as parent_markup ->
-      junk input;
-
-      let r_location = Loc.nudge_start (String.length "{{!") location in
+      let r_location = Loc.nudge_start n location in
       let r = Loc.at r_location r in
 
       let content, brace_location =
@@ -270,8 +268,14 @@ let rec inline_element :
           location
         |> add_warning input;
 
-      Loc.at location (`Reference (`With_text, r, content))
-  | `Simple_link u ->
+      let e =
+        match tag with
+        | `A -> `Reference (`With_text, r, content)
+        | `Img -> `Img (`Reference r, content)
+      in
+
+      Loc.at location e
+  | `Simple_link (tag, u) ->
       junk input;
 
       let u = String.trim u in
@@ -282,8 +286,11 @@ let rec inline_element :
           location
         |> add_warning input;
 
-      Loc.at location (`Link (u, []))
-  | `Begin_link_with_replacement_text u as parent_markup ->
+      let e =
+        match tag with `A -> `Link (u, []) | `Img -> `Img (`Link u, [])
+      in
+      Loc.at location e
+  | `Begin_link_with_replacement_text (tag, u) as parent_markup ->
       junk input;
 
       let u = String.trim u in
@@ -299,8 +306,12 @@ let rec inline_element :
           ~parent_markup_location:location ~requires_leading_whitespace:false
           input
       in
-
-      `Link (u, content) |> Loc.at (Loc.span [ location; brace_location ])
+      let e =
+        match tag with
+        | `A -> `Link (u, content)
+        | `Img -> `Img (`Link u, content)
+      in
+      e |> Loc.at (Loc.span [ location; brace_location ])
 
 (* Consumes tokens that make up a sequence of inline elements that is ended by
    a '}', a [`Right_brace] token. The brace token is also consumed.
@@ -916,22 +927,22 @@ let rec block_element_list :
         let block = Loc.at location block in
         let acc = block :: acc in
         consume_block_elements ~parsed_a_tag `After_text acc
-    | {
-        value = (`Image_reference (_, alt) | `Image_link (_, alt)) as token;
-        location;
-      } as next_token ->
-        warn_if_after_tags next_token;
-        warn_if_after_text next_token;
-        junk input;
-        let kind =
-          match token with
-          | `Image_reference (s, _) -> `Reference s
-          | `Image_link (s, _) -> `Link s
-        in
-        let block = accepted_in_all_contexts context (`Image (kind, alt)) in
-        let block = Loc.at location block in
-        let acc = block :: acc in
-        consume_block_elements ~parsed_a_tag `After_text acc
+    (* | { *)
+    (*     value = (`Image_reference (_, alt) | `Image_link (_, alt)) as token; *)
+    (*     location; *)
+    (*   } as next_token -> *)
+    (*     warn_if_after_tags next_token; *)
+    (*     warn_if_after_text next_token; *)
+    (*     junk input; *)
+    (*     let kind = *)
+    (*       match token with *)
+    (*       | `Image_reference (s, _) -> `Reference s *)
+    (*       | `Image_link (s, _) -> `Link s *)
+    (*     in *)
+    (*     let block = accepted_in_all_contexts context (`Image (kind, alt)) in *)
+    (*     let block = Loc.at location block in *)
+    (*     let acc = block :: acc in *)
+    (*     consume_block_elements ~parsed_a_tag `After_text acc *)
     | {
         value =
           `Code_block (meta, delim, { value = s; location = v_loc }, has_outputs)
