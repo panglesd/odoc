@@ -4,6 +4,10 @@ A quick test to repro the issue found in #941
 
   $ odoc compile foo.cmti
   $ odoc link foo.odoc
+  File "foo.mli", line 24, characters 10-14:
+  Warning: Reference to 'A' is ambiguous. Please specify its kind: extension-A, extension-decl-A.
+  File "foo.mli", line 21, characters 25-44:
+  Warning: Failed to resolve reference unresolvedroot(B) Couldn't find "B"
 
   $ odoc html-generate --indent -o html/ foo.odocl
 
@@ -28,9 +32,39 @@ The rendered html
         </li>
        </ol>
   --
-      <li><a href="#extension-A"><code>A</code></a></li>
-      <li><a href="#extension-A"><code>A</code></a></li>
-      <li><a href="#extension-B"><code>B</code></a></li>
+      <div class="spec type extension anchored" id="extension-decl-C">
+       <a href="#extension-decl-C" class="anchor"></a>
+       <code>
+        <span><span class="keyword">type</span> 
+         <a href="M/index.html#type-t">M.t</a> += 
+  --
+        <li id="extension-C" class="def extension anchored">
+         <a href="#extension-C" class="anchor"></a>
+         <code><span>| </span><span><span class="extension">C</span></span>
+         </code>
+        </li>
+       </ol>
+  --
+      <li>extension-decl-A : <a href="#extension-A"><code>A</code></a></li>
+      <li>extension-decl-B : <code>B</code></li>
+      <li>extension-A : <a href="#extension-A"><code>A</code></a></li>
+      <li>extension-B : <a href="#extension-B"><code>B</code></a></li>
+      <li>A : <a href="#extension-A"><code>A</code></a></li>
+     </ul>
+     <ul><li>M.t : <a href="M/index.html#type-t"><code>M.t</code></a></li>
+      <li>M.extension-decl-A : 
+       <a href="M/index.html#extension-decl-A"><code>M.A</code></a>
+      </li>
+      <li>M.extension-decl-B : 
+       <a href="M/index.html#extension-decl-B"><code>M.B</code></a>
+      </li>
+      <li>M.extension-A : 
+       <a href="M/index.html#extension-A"><code>M.A</code></a>
+      </li>
+      <li>M.extension-B : 
+       <a href="M/index.html#extension-B"><code>M.B</code></a>
+      </li>
+      <li>M.A : <a href="M/index.html#extension-A"><code>M.A</code></a></li>
      </ul>
     </div>
    </body>
