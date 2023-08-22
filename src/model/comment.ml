@@ -10,10 +10,18 @@ type alignment = [ `Left | `Center | `Right ]
 
 type raw_markup_target = string
 
+type code_with_ref =
+  [ `Txt of string
+  | `Simple_reference of Reference.t
+  | `Reference_with_replacement_text of Reference.t * string
+  | `Simple_link of string
+  | `Link_with_replacement_text of string * string ]
+  list
+
 type leaf_inline_element =
   [ `Space
   | `Word of string
-  | `Code_span of string
+  | `Code_span of code_with_ref
   | `Math_span of string
   | `Raw_markup of raw_markup_target * string ]
 
@@ -71,7 +79,7 @@ type tag =
   | `Deprecated of nestable_block_element with_location list
   | `Param of string * nestable_block_element with_location list
   | `Raise of
-    [ `Code_span of string | reference_element ]
+    [ `Code_span of code_with_ref | reference_element ]
     * nestable_block_element with_location list
   | `Return of nestable_block_element with_location list
   | `See of

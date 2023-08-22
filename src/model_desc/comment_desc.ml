@@ -5,10 +5,18 @@ open Paths_desc
 
 let ignore_loc x = x.Location_.value
 
+type code_with_ref =
+  [ `Txt of string
+  | `Simple_reference of Reference.t
+  | `Reference_with_replacement_text of Reference.t * string
+  | `Simple_link of string
+  | `Link_with_replacement_text of string * string ]
+  list
+
 type general_inline_element =
   [ `Space
   | `Word of string
-  | `Code_span of string
+  | `Code_span of code_with_ref
   | `Math_span of string
   | `Raw_markup of raw_markup_target * string
   | `Styled of style * general_inline_element with_location list
@@ -38,7 +46,7 @@ and general_tag =
   | `Deprecated of general_docs
   | `Param of string * general_docs
   | `Raise of
-    [ `Code_span of string
+    [ `Code_span of code_with_ref
     | `Reference of Paths.Reference.t * general_link_content ]
     * general_docs
   | `Return of general_docs
@@ -64,7 +72,7 @@ let rec inline_element : general_inline_element t =
     (function
     | `Space -> C0 "`Space"
     | `Word x -> C ("`Word", x, string)
-    | `Code_span x -> C ("`Code_span", x, string)
+    | `Code_span _x -> C ("`Code_span", "", string)
     | `Math_span x -> C ("`Math_span", x, string)
     | `Raw_markup (x1, x2) -> C ("`Raw_markup", (x1, x2), Pair (string, string))
     | `Styled (x1, x2) -> C ("`Styled", (x1, x2), Pair (style, link_content))
@@ -147,11 +155,7 @@ and tag : general_tag t =
     | `Author x -> C ("`Author", x, string)
     | `Deprecated x -> C ("`Deprecated", x, docs)
     | `Param (x1, x2) -> C ("`Param", (x1, x2), Pair (string, docs))
-    | `Raise (x1, x2) ->
-        C
-          ( "`Raise",
-            ((x1 :> general_inline_element), x2),
-            Pair (inline_element, docs) )
+    | `Raise (_x1, _x2) -> C ("`Raise", "yo", string)
     | `Return x -> C ("`Return", x, docs)
     | `See (x1, x2, x3) ->
         C ("`See", (x1, x2, x3), Triple (url_kind, string, docs))

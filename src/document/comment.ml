@@ -124,10 +124,27 @@ module Reference = struct
             [ inline @@ Inline.InternalLink link ])
 end
 
+let source_of_code_with_ref (s : Odoc_model.Comment.code_with_ref) =
+  let f x =
+    match x with
+    | `Link_with_replacement_text (s, c) ->
+        [ inline @@ Inline.Link (s, [ inline @@ Inline.Text c ]) ]
+    | `Reference_with_replacement_text (path, c) ->
+        let content = [ inline @@ Inline.Text c ] in
+        Reference.to_ir ~text:content path
+    | `Simple_link s ->
+        [ inline @@ Inline.Link (s, [ inline @@ Inline.Text s ]) ]
+    | `Simple_reference s ->
+        let content = [ inline @@ Inline.Text "s" ] in
+        Reference.to_ir ~text:content s
+    | `Txt s -> [ inline @@ Inline.Text s ]
+  in
+  [ Source.Elt (List.concat_map f s) ]
+
 let leaf_inline_element : Comment.leaf_inline_element -> Inline.one = function
   | `Space -> inline @@ Text " "
   | `Word s -> inline @@ Text s
-  | `Code_span s -> inline @@ Source (source_of_code s)
+  | `Code_span s -> inline @@ Source (source_of_code_with_ref s)
   | `Math_span s -> inline @@ Math s
   | `Raw_markup (target, s) -> inline @@ Raw_markup (target, s)
 

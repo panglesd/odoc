@@ -116,6 +116,23 @@ let parse_comment ~location ~text =
   let ast, warnings = Syntax.parse warnings token_stream in
   { ast; warnings; reversed_newlines; original_pos = location }
 
+let parse_ref_in_string ~location ~text =
+  let warnings = ref [] in
+  let reversed_newlines = reversed_newlines ~input:text in
+  let token_stream =
+    let lexbuf = Lexing.from_string text in
+    let offset_to_location =
+      offset_to_location ~reversed_newlines ~comment_location:location
+    in
+    let input : Lexer.input =
+      { file = location.Lexing.pos_fname; offset_to_location; warnings; lexbuf }
+    in
+    Stream.from (fun _token_index -> Some (Lexer.ref_in_string input lexbuf))
+  in
+  let ast, _warnings = Syntax.parse_ref_in_string warnings token_stream in
+  ast
+(* { ast; warnings; reversed_newlines; original_pos = location } *)
+
 (* Accessor functions, as [t] is opaque *)
 let warnings t = t.warnings
 let ast t = t.ast

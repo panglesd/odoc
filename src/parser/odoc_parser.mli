@@ -16,6 +16,9 @@ val parse_comment : location:Lexing.position -> text:string -> t
     the location should represent the space immediately before the [A], so the
     in the 4th column (e.g. [{... pos_bol=0; pos_cnum=3 }]) *)
 
+val parse_ref_in_string :
+  location:Lexing.position -> text:string -> Ast.ref_in_string
+
 module Ast = Ast
 module Loc = Loc
 

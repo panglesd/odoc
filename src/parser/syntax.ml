@@ -28,13 +28,24 @@ type input = {
   warnings : Warning.t list ref;
 }
 
+type ref_in_string_input = {
+  r_tokens : Token.ref_in_string Loc.with_location Stream.t;
+  r_warnings : Warning.t list ref;
+}
+
 (* {2 Output} *)
 
 let add_warning input warning = input.warnings := warning :: !(input.warnings)
 let junk input = Stream.junk input.tokens
+let junk_ris input = Stream.junk input.r_tokens
 
 let peek input =
   match Stream.peek input.tokens with
+  | Some token -> token
+  | None -> assert false
+
+let peek_ris input =
+  match Stream.peek input.r_tokens with
   | Some token -> token
   | None -> assert false
 
@@ -1461,3 +1472,173 @@ let parse warnings tokens =
   in
   let ast = parse_block_elements () in
   (ast, List.rev !(input.warnings))
+
+(* let rec ref_in_string_list (input : ref_in_string_input) = *)
+(*   let rec consume_text acc = *)
+(*     match peek_ris input with *)
+(*     (\* Terminators: the two tokens that terminate anything. *\) *)
+(*     | { value = `End; _ } -> List.rev acc *)
+(*     | { value = `Right_brace; _ } -> *)
+(*         junk_ris input; *)
+(*         consume_text (`Char '}' :: acc) *)
+(*     | { value = `Char c; _ } -> *)
+(*         junk_ris input; *)
+(*         consume_text (`Char c :: acc) *)
+(*     | { value = `Simple_reference r; _ } -> *)
+(*         junk_ris input; *)
+(*         consume_text (`Txt ("{!" ^ r ^ "}") :: acc) *)
+(*     | `Begin_reference_with_replacement_text r as parent_markup -> *)
+(*         junk_ris input; *)
+
+(*         let r_location = Loc.nudge_start (String.length "{{!") location in *)
+(*         let r = Loc.at r_location r in *)
+
+(*         let content, brace_location = *)
+(*           delimited_inline_element_list ~parent_markup *)
+(*             ~parent_markup_location:location ~requires_leading_whitespace:false *)
+(*             input *)
+(*         in *)
+
+(*         let location = Loc.span [ location; brace_location ] in *)
+
+(*         if content = [] then *)
+(*           Parse_error.should_not_be_empty *)
+(*             ~what:(Token.describe parent_markup) *)
+(*             location *)
+(*           |> add_warning input; *)
+
+(*         Loc.at location (`Reference (`With_text, r, content)) *)
+(*     | `Simple_link u -> *)
+(*         junk input; *)
+
+(*         let u = String.trim u in *)
+
+(*         if u = "" then *)
+(*           Parse_error.should_not_be_empty *)
+(*             ~what:(Token.describe next_token) *)
+(*             location *)
+(*           |> add_warning input; *)
+
+(*         Loc.at location (`Link (u, [])) *)
+(*     | `Begin_link_with_replacement_text u as parent_markup -> *)
+(*         junk input; *)
+
+(*         let u = String.trim u in *)
+
+(*         if u = "" then *)
+(*           Parse_error.should_not_be_empty *)
+(*             ~what:(Token.describe parent_markup) *)
+(*             location *)
+(*           |> add_warning input; *)
+
+(*         let content, brace_location = *)
+(*           delimited_inline_element_list ~parent_markup *)
+(*             ~parent_markup_location:location ~requires_leading_whitespace:false *)
+(*             input *)
+(*         in *)
+
+(*         `Link (u, content) |> Loc.at (Loc.span [ location; brace_location ]) *)
+(*   and consume_ris acc = *)
+(*     match peek_ris input with *)
+(*     (\* Terminators: the two tokens that terminate anything. *\) *)
+(*     | { value = `End; _ } as next_token -> (List.rev acc, next_token) *)
+(*     | { value = `Right_brace; _ } -> *)
+(*         junk_ris input; *)
+(*         consume_ris (`Char '}' :: acc) *)
+(*     | { value = `Char c; _ } -> *)
+(*         junk_ris input; *)
+(*         consume_ris (`Char c :: acc) *)
+(*     | { value = `Simple_reference r; _ } -> *)
+(*         junk_ris input; *)
+(*         let b = (\* Loc.at location *\) `Reference (`Simple, r, []) in *)
+(*         consume_ris (b :: acc) *)
+(*     | `Begin_reference_with_replacement_text r as parent_markup -> *)
+(*         junk_ris input; *)
+
+(*         let r_location = Loc.nudge_start (String.length "{{!") location in *)
+(*         let r = Loc.at r_location r in *)
+
+(*         let content, brace_location = *)
+(*           delimited_inline_element_list ~parent_markup *)
+(*             ~parent_markup_location:location ~requires_leading_whitespace:false *)
+(*             input *)
+(*         in *)
+
+(*         let location = Loc.span [ location; brace_location ] in *)
+
+(*         if content = [] then *)
+(*           Parse_error.should_not_be_empty *)
+(*             ~what:(Token.describe parent_markup) *)
+(*             location *)
+(*           |> add_warning input; *)
+
+(*         Loc.at location (`Reference (`With_text, r, content)) *)
+(*     | `Simple_link u -> *)
+(*         junk input; *)
+
+(*         let u = String.trim u in *)
+
+(*         if u = "" then *)
+(*           Parse_error.should_not_be_empty *)
+(*             ~what:(Token.describe next_token) *)
+(*             location *)
+(*           |> add_warning input; *)
+
+(*         Loc.at location (`Link (u, [])) *)
+(*     | `Begin_link_with_replacement_text u as parent_markup -> *)
+(*         junk input; *)
+
+(*         let u = String.trim u in *)
+
+(*         if u = "" then *)
+(*           Parse_error.should_not_be_empty *)
+(*             ~what:(Token.describe parent_markup) *)
+(*             location *)
+(*           |> add_warning input; *)
+
+(*         let content, brace_location = *)
+(*           delimited_inline_element_list ~parent_markup *)
+(*             ~parent_markup_location:location ~requires_leading_whitespace:false *)
+(*             input *)
+(*         in *)
+
+(*         `Link (u, content) |> Loc.at (Loc.span [ location; brace_location ]) *)
+(*   in *)
+
+(*   let where_in_line = *)
+(*     match context with *)
+(*     | Top_level -> `At_start_of_line *)
+(*     | In_shorthand_list -> `After_shorthand_bullet *)
+(*     | In_explicit_list -> `After_explicit_list_bullet *)
+(*     | In_table_cell -> `After_table_cell *)
+(*     | In_code_results -> `After_tag *)
+(*     | In_tag -> `After_tag *)
+(*   in *)
+
+(*   consume_block_elements ~parsed_a_tag:false where_in_line [] *)
+
+let parse_ref_in_string r_warnings r_tokens =
+  let input : ref_in_string_input = { r_tokens; r_warnings } in
+
+  let _ = ignore input.r_warnings in
+
+  let accumulate (v : Token.ref_in_string) acc =
+    match (v, acc) with
+    | `Char c, `Txt s :: q -> `Txt (Format.sprintf "%s%c" s c) :: q
+    | `Char c, q -> `Txt (Format.sprintf "%c" c) :: q
+    | ( (( `Reference_with_replacement_text _ | `Simple_link _
+         | `Link_with_replacement_text _ | `Simple_reference _ ) as v),
+        _ ) ->
+        v :: acc
+    | `End, _ -> List.rev acc
+  in
+
+  let rec loop acc input =
+    match peek_ris input with
+    | { location = _; value = `End } -> (List.rev acc, [])
+    | { location = _; value } ->
+        junk_ris input;
+        loop (accumulate value acc) input
+  in
+
+  loop [] input (* (ast, List.rev !(input.r_warnings)) *)

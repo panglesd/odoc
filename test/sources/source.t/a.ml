@@ -18,3 +18,5 @@ exception Exn
 class cls = object end
 class cls' = cls
 class type ct = object end
+
+(** A ref {!module-A} and an example: [module {{!module-A}A} = struct end]  *)

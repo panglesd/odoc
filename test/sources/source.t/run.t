@@ -47,10 +47,12 @@ Now, compile the pages with the --source option:
 
   $ odoc compile -I . --source-name a.ml --source-parent-file src-source.odoc a.cmt
   $ odoc link -I . a.odoc
-  $ odoc html-generate --source a.ml --indent -o html a.odocl
+  $ odoc html-generate --source a.ml -o html a.odocl
+  $ odoc support-files -o html
 
 Source links generated in the documentation:
 
+  $ firefox html/A/index.html
   $ grep source_link html/A/index.html -B 2
     <header class="odoc-preamble">
      <h1>Module <code><span>A</span></code>

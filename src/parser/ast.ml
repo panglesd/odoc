@@ -93,3 +93,11 @@ type block_element =
   [ nestable_block_element | `Heading of heading | `Tag of tag ]
 
 type t = block_element with_location list
+
+type ref_in_string =
+  [ `Txt of string
+  | `Simple_reference of string
+  | `Reference_with_replacement_text of string * string
+  | `Simple_link of string
+  | `Link_with_replacement_text of string * string ]
+  list

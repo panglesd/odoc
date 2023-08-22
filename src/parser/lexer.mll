@@ -176,6 +176,8 @@ let with_location_adjustments
 
 let emit =
   with_location_adjustments (fun _ -> Loc.at)
+let emit2 =
+  with_location_adjustments (fun _ -> Loc.at)
 
 let warning =
   with_location_adjustments (fun input location error ->
@@ -187,6 +189,14 @@ let reference_token start target =
   | "{{!" -> `Begin_reference_with_replacement_text target
   | "{:" -> `Simple_link target
   | "{{:" -> `Begin_link_with_replacement_text target
+  | _ -> assert false
+
+let reference_ris start target content =
+  match start, content with
+  | "{!", None -> `Simple_reference target
+  | "{:", None -> `Simple_link target
+  | "{{!", Some c -> `Reference_with_replacement_text (target, c)
+  | "{{:", Some c -> `Link_with_replacement_text (target, c)
   | _ -> assert false
 
 let trim_leading_space_or_accept_whitespace input start_offset text =
@@ -266,6 +276,12 @@ let newline =
 
 let reference_start =
   "{!" | "{{!" | "{:" | "{{:"
+
+let simple_reference_start =
+  "{!" | "{:"
+
+let complex_reference_start =
+  "{{!" | "{{:"
 
 let raw_markup =
   ([^ '%'] | '%'+ [^ '%' '}'])* '%'*
@@ -760,3 +776,52 @@ and code_block start_offset content_offset metadata prefix delim input = parse
       Buffer.add_char prefix c;
       code_block start_offset content_offset metadata prefix delim input lexbuf
     }
+
+and ref_in_string input = parse
+  | (complex_reference_start as start)
+    {
+      let start_offset = Lexing.lexeme_start lexbuf in
+      let target =
+        reference_content input start start_offset (Buffer.create 16) lexbuf
+      in
+      let content = string_in_ris
+        (Buffer.create 1024) 0 (Lexing.lexeme_start lexbuf) input lexbuf in
+      let token = reference_ris start target (Some content) in
+      (emit2 ~start_offset input (token :> Token.ref_in_string)) }
+  | (simple_reference_start as start)
+    {
+      let start_offset = Lexing.lexeme_start lexbuf in
+      let target =
+        reference_content input start start_offset (Buffer.create 16) lexbuf
+      in
+      let token = reference_ris start target None in
+      emit2 ~start_offset input token }
+  | eof
+    { (emit2 input `End) }
+
+  | _ as c
+    { emit2 input (`Char c) }
+
+and string_in_ris buffer nesting_level start_offset input = parse
+  | '}'
+    { if nesting_level = 0 then
+        Buffer.contents buffer
+      else begin
+        Buffer.add_char buffer '}';
+        string_in_ris buffer (nesting_level - 1) start_offset input lexbuf
+      end }
+
+  | '{'
+    { Buffer.add_char buffer '{';
+      string_in_ris buffer (nesting_level + 1) start_offset input lexbuf }
+
+  | '\\' ('{' | '}' as c)
+    { Buffer.add_char buffer c;
+      string_in_ris buffer nesting_level start_offset input lexbuf }
+
+  | _ as c
+    { Buffer.add_char buffer c;
+      string_in_ris buffer nesting_level start_offset input lexbuf }
+| eof {
+Buffer.contents buffer
+}

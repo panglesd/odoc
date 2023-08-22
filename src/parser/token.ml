@@ -84,6 +84,15 @@ type t =
   | section_heading
   | tag ]
 
+type ref_in_string =
+  [ (* End of input. *)
+    `End
+  | `Simple_reference of string
+  | `Reference_with_replacement_text of string * string
+  | `Simple_link of string
+  | `Link_with_replacement_text of string * string
+  | `Char of char ]
+
 let print : [< t ] -> string = function
   | `Begin_paragraph_style `Left -> "'{L'"
   | `Begin_paragraph_style `Center -> "'{C'"

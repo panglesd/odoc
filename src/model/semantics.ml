@@ -137,7 +137,32 @@ let leaf_inline_element :
     Comment.leaf_inline_element with_location =
  fun element ->
   match element with
-  | { value = `Word _ | `Code_span _ | `Math_span _; _ } as element -> element
+  | { value = `Word _ | `Math_span _; _ } as element -> element
+  | { value = `Code_span text; location } as element ->
+      let code =
+        Odoc_parser.parse_ref_in_string ~location:Lexing.dummy_pos ~text
+        (* [] *)
+      in
+      let code =
+        List.map
+          (function
+            | `Simple_reference t -> (
+                match Error.raise_warnings (Reference.parse location t) with
+                | Ok target -> `Simple_reference target
+                | Error error ->
+                    Error.raise_warning error;
+                    `Txt t)
+            | `Reference_with_replacement_text (t, c) -> (
+                match Error.raise_warnings (Reference.parse location t) with
+                | Ok target -> `Reference_with_replacement_text (target, c)
+                | Error error ->
+                    Error.raise_warning error;
+                    `Txt c)
+            | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as x ->
+                x)
+          code
+      in
+      Location.same element (`Code_span code)
   | { value = `Space _; _ } -> Location.same element `Space
   | { value = `Raw_markup (target, s); location } -> (
       match target with
@@ -148,10 +173,10 @@ let leaf_inline_element :
           Error.raise_warning
             (invalid_raw_markup_target invalid_target location);
 
-          Location.same element (`Code_span s)
+          Location.same element (`Code_span [ `Txt s ])
       | None ->
           Error.raise_warning (default_raw_markup_target_not_supported location);
-          Location.same element (`Code_span s)
+          Location.same element (`Code_span [ `Txt s ])
       | Some target -> Location.same element (`Raw_markup (target, s)))
 
 type surrounding =
@@ -303,7 +328,7 @@ let tag :
               (`Reference (target, []), nestable_block_elements status content))
       | Result.Error error ->
           Error.raise_warning error;
-          let placeholder = `Code_span name in
+          let placeholder = `Code_span [ `Txt name ] in
           ok (`Raise (placeholder, nestable_block_elements status content)))
   | `Return content -> ok (`Return (nestable_block_elements status content))
   | `See (kind, target, content) ->
@@ -347,8 +372,8 @@ let generate_heading_label : Comment.inline_element with_location list -> string
           match (element : Comment.inline_element) with
           | `Space -> anchor ^ "-"
           | `Word w -> anchor ^ Astring.String.Ascii.lowercase w
-          | `Code_span c | `Math_span c ->
-              anchor ^ replace_spaces_with_hyphens_and_lowercase c
+          | `Code_span _c -> ""
+          | `Math_span c -> anchor ^ replace_spaces_with_hyphens_and_lowercase c
           | `Raw_markup _ ->
               (* TODO Perhaps having raw markup in a section heading should be an
                  error? *)

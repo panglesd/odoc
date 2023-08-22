@@ -224,6 +224,31 @@ let rec comment_inline_element :
           Errors.report ~what:(`Reference r) ~tools_error:(`Reference e)
             `Resolve;
           orig)
+  | `Code_span c ->
+      `Code_span
+        (List.map
+           (function
+             | `Reference_with_replacement_text (r, c) as orig -> (
+                 match
+                   Ref_tools.resolve_reference env r |> Error.raise_warnings
+                 with
+                 | Ok x -> `Reference_with_replacement_text (`Resolved x, c)
+                 | Error e ->
+                     Errors.report ~what:(`Reference r)
+                       ~tools_error:(`Reference e) `Resolve;
+                     orig)
+             | `Simple_reference r as orig -> (
+                 match
+                   Ref_tools.resolve_reference env r |> Error.raise_warnings
+                 with
+                 | Ok x -> `Simple_reference (`Resolved x)
+                 | Error e ->
+                     Errors.report ~what:(`Reference r)
+                       ~tools_error:(`Reference e) `Resolve;
+                     orig)
+             | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as x ->
+                 x)
+           c)
   | y -> y
 
 and paragraph env elts =
