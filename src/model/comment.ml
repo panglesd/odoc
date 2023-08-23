@@ -64,7 +64,7 @@ type nestable_block_element =
   [ `Paragraph of paragraph
   | `Code_block of
     string option
-    * string with_location
+    * code_with_ref with_location
     * nestable_block_element with_location list option
   | `Math_block of string
   | `Verbatim of string

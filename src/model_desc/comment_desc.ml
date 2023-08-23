@@ -29,7 +29,7 @@ type general_block_element =
   [ `Paragraph of general_link_content
   | `Code_block of
     string option
-    * string with_location
+    * code_with_ref with_location
     * general_block_element with_location list option
   | `Math_block of string
   | `Verbatim of string
@@ -118,8 +118,8 @@ let rec block_element : general_block_element t =
   Variant
     (function
     | `Paragraph x -> C ("`Paragraph", x, link_content)
-    | `Code_block (x1, x2, _) ->
-        C ("`Code_block", (x1, ignore_loc x2), Pair (Option string, string))
+    | `Code_block (x1, _x2, _) ->
+        C ("`Code_block", (x1, "yo"), Pair (Option string, string))
     | `Math_block x -> C ("`Math_block", x, string)
     | `Verbatim x -> C ("`Verbatim", x, string)
     | `Modules x -> C ("`Modules", x, List module_reference)

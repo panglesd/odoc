@@ -266,6 +266,33 @@ let rec nestable_block_element :
         | None -> None
         | Some l -> Some (List.map (nestable_block_element status) l)
       in
+      let content =
+        let text = content.value in
+        let value =
+          Odoc_parser.parse_ref_in_string ~location:Lexing.dummy_pos ~text
+        in
+        let value =
+          List.map
+            (function
+              | `Simple_reference t -> (
+                  match Error.raise_warnings (Reference.parse location t) with
+                  | Ok target -> `Simple_reference target
+                  | Error error ->
+                      Error.raise_warning error;
+                      `Txt t)
+              | `Reference_with_replacement_text (t, c) -> (
+                  match Error.raise_warnings (Reference.parse location t) with
+                  | Ok target -> `Reference_with_replacement_text (target, c)
+                  | Error error ->
+                      Error.raise_warning error;
+                      `Txt c)
+              | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as x
+                ->
+                  x)
+            value
+        in
+        { content with value }
+      in
       Location.at location (`Code_block (lang_tag, content, outputs))
   | { value = `Math_block s; location } -> Location.at location (`Math_block s)
   | { value = `Verbatim _; _ } as element -> element

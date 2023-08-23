@@ -224,7 +224,9 @@ let rec nestable_block_element :
       in
       [
         block
-        @@ Source (lang_tag, source_of_code (Odoc_model.Location_.value code));
+        @@ Source
+             ( lang_tag,
+               source_of_code_with_ref (Odoc_model.Location_.value code) );
       ]
       @ rest
   | `Math_block s -> [ block @@ Math s ]

@@ -262,7 +262,38 @@ and comment_nestable_block_element env parent ~loc:_
     (x : Comment.nestable_block_element) =
   match x with
   | `Paragraph elts -> `Paragraph (paragraph env elts)
-  | (`Code_block _ | `Math_block _ | `Verbatim _) as x -> x
+  | `Code_block (a, b, c) ->
+      `Code_block
+        ( a,
+          (let value =
+             List.map
+               (function
+                 | `Reference_with_replacement_text (r, c) as orig -> (
+                     match
+                       Ref_tools.resolve_reference env r |> Error.raise_warnings
+                     with
+                     | Ok x -> `Reference_with_replacement_text (`Resolved x, c)
+                     | Error e ->
+                         Errors.report ~what:(`Reference r)
+                           ~tools_error:(`Reference e) `Resolve;
+                         orig)
+                 | `Simple_reference r as orig -> (
+                     match
+                       Ref_tools.resolve_reference env r |> Error.raise_warnings
+                     with
+                     | Ok x -> `Simple_reference (`Resolved x)
+                     | Error e ->
+                         Errors.report ~what:(`Reference r)
+                           ~tools_error:(`Reference e) `Resolve;
+                         orig)
+                 | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as
+                   x ->
+                     x)
+               b.value
+           in
+           { b with value }),
+          c )
+  | (`Math_block _ | `Verbatim _) as x -> x
   | `List (x, ys) ->
       `List
         ( x,
