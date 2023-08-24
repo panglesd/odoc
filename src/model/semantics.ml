@@ -130,6 +130,7 @@ type status = {
   sections_allowed : sections_allowed;
   tags_allowed : bool;
   parent_of_sections : Paths.Identifier.LabelParent.t;
+  pol : Location_.point -> Lexing.position;
 }
 
 let leaf_inline_element :
@@ -139,27 +140,46 @@ let leaf_inline_element :
   match element with
   | { value = `Word _ | `Math_span _; _ } as element -> element
   | { value = `Code_span text; location } as element ->
-      let code =
-        Odoc_parser.parse_ref_in_string ~location:Lexing.dummy_pos ~text
-        (* [] *)
+      let code, _warnings =
+        let location =
+          Lexing.
+            {
+              pos_fname = location.file;
+              pos_lnum = location.start.line;
+              pos_bol = location.start.column;
+              pos_cnum = 0;
+            }
+        in
+        Odoc_parser.parse_ref_in_string ~location ~text
       in
       let code =
         List.map
           (function
-            | `Simple_reference t -> (
-                match Error.raise_warnings (Reference.parse location t) with
-                | Ok target -> `Simple_reference target
+            | `Simple_reference
+                { Location.location = target_location; value = t } -> (
+                match
+                  Error.raise_warnings (Reference.parse target_location t)
+                with
+                | Ok target ->
+                    `Simple_reference (Location.at target_location target)
                 | Error error ->
                     Error.raise_warning error;
                     `Txt t)
-            | `Reference_with_replacement_text (t, c) -> (
-                match Error.raise_warnings (Reference.parse location t) with
-                | Ok target -> `Reference_with_replacement_text (target, c)
+            | `Reference_with_replacement_text
+                ({ Location.location = target_location; value = t }, c) -> (
+                match
+                  Error.raise_warnings (Reference.parse target_location t)
+                with
+                | Ok target ->
+                    `Reference_with_replacement_text
+                      (Location.at target_location target, c)
                 | Error error ->
                     Error.raise_warning error;
                     `Txt c)
-            | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as x ->
-                x)
+            | `Simple_link l -> `Simple_link l.Location.value
+            | `Link_with_replacement_text (l, t) ->
+                `Link_with_replacement_text (l.Location.value, t)
+            | `Txt _ as x -> x)
           code
       in
       Location.same element (`Code_span code)
@@ -268,27 +288,39 @@ let rec nestable_block_element :
       in
       let content =
         let text = content.value in
-        let value =
-          Odoc_parser.parse_ref_in_string ~location:Lexing.dummy_pos ~text
+        let location = status.pol location.start in
+        let value, _warnings =
+          Odoc_parser.parse_ref_in_string ~location ~text
         in
         let value =
           List.map
             (function
-              | `Simple_reference t -> (
-                  match Error.raise_warnings (Reference.parse location t) with
-                  | Ok target -> `Simple_reference target
+              | `Simple_reference
+                  { Location.location = target_location; value = t } -> (
+                  match
+                    Error.raise_warnings (Reference.parse target_location t)
+                  with
+                  | Ok target ->
+                      `Simple_reference (Location.at target_location target)
                   | Error error ->
                       Error.raise_warning error;
                       `Txt t)
-              | `Reference_with_replacement_text (t, c) -> (
-                  match Error.raise_warnings (Reference.parse location t) with
-                  | Ok target -> `Reference_with_replacement_text (target, c)
+              | `Reference_with_replacement_text
+                  ({ Location.location = target_location; value = t }, c) -> (
+                  Format.printf "%a\n" Location.pp target_location;
+                  match
+                    Error.raise_warnings (Reference.parse target_location t)
+                  with
+                  | Ok target ->
+                      `Reference_with_replacement_text
+                        (Location.at target_location target, c)
                   | Error error ->
                       Error.raise_warning error;
                       `Txt c)
-              | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as x
-                ->
-                  x)
+              | `Simple_link l -> `Simple_link l.Location.value
+              | `Link_with_replacement_text (l, t) ->
+                  `Link_with_replacement_text (l.Location.value, t)
+              | `Txt _ as x -> x)
             value
         in
         { content with value }
@@ -589,9 +621,11 @@ let append_alerts_to_comment alerts
   comment @ (alerts : alerts :> Comment.docs)
 
 let ast_to_comment ~internal_tags ~sections_allowed ~tags_allowed
-    ~parent_of_sections ast alerts =
+    ~parent_of_sections ast pol alerts =
   Error.catch_warnings (fun () ->
-      let status = { sections_allowed; tags_allowed; parent_of_sections } in
+      let status =
+        { sections_allowed; tags_allowed; parent_of_sections; pol }
+      in
       let ast, tags = strip_internal_tags ast in
       let elts =
         top_level_block_elements status ast |> append_alerts_to_comment alerts
@@ -601,11 +635,12 @@ let ast_to_comment ~internal_tags ~sections_allowed ~tags_allowed
 let parse_comment ~internal_tags ~sections_allowed ~tags_allowed
     ~containing_definition ~location ~text =
   Error.catch_warnings (fun () ->
-      let ast =
-        Odoc_parser.parse_comment ~location ~text |> Error.raise_parser_warnings
+      let ast, pol =
+        let ret = Odoc_parser.parse_comment ~location ~text in
+        (ret |> Error.raise_parser_warnings, Odoc_parser.position_of_point ret)
       in
       ast_to_comment ~internal_tags ~sections_allowed ~tags_allowed
-        ~parent_of_sections:containing_definition ast []
+        ~parent_of_sections:containing_definition ast pol []
       |> Error.raise_warnings)
 
 let parse_reference text =

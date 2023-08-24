@@ -11,3 +11,13 @@ val x : int
       print_int i
     ]}
 *)
+
+(**
+
+   Wrong references are reported well:
+
+   {[
+     {{!blibli}blu}
+]}
+
+    *)

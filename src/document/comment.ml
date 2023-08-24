@@ -131,12 +131,12 @@ let source_of_code_with_ref (s : Odoc_model.Comment.code_with_ref) =
         [ inline @@ Inline.Link (s, [ inline @@ Inline.Text c ]) ]
     | `Reference_with_replacement_text (path, c) ->
         let content = [ inline @@ Inline.Text c ] in
-        Reference.to_ir ~text:content path
+        Reference.to_ir ~text:content path.Odoc_model.Location_.value
     | `Simple_link s ->
         [ inline @@ Inline.Link (s, [ inline @@ Inline.Text s ]) ]
     | `Simple_reference s ->
         let content = [ inline @@ Inline.Text "s" ] in
-        Reference.to_ir ~text:content s
+        Reference.to_ir ~text:content s.Odoc_model.Location_.value
     | `Txt s -> [ inline @@ Inline.Text s ]
   in
   [ Source.Elt (List.concat_map f s) ]

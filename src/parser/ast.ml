@@ -96,8 +96,8 @@ type t = block_element with_location list
 
 type ref_in_string =
   [ `Txt of string
-  | `Simple_reference of string
-  | `Reference_with_replacement_text of string * string
-  | `Simple_link of string
-  | `Link_with_replacement_text of string * string ]
+  | `Simple_reference of string with_location
+  | `Reference_with_replacement_text of string with_location * string
+  | `Simple_link of string with_location
+  | `Link_with_replacement_text of string with_location * string ]
   list

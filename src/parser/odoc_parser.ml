@@ -114,7 +114,7 @@ let parse_comment ~location ~text =
     Stream.from (fun _token_index -> Some (Lexer.token input lexbuf))
   in
   let ast, warnings = Syntax.parse warnings token_stream in
-  { ast; warnings; reversed_newlines; original_pos = location }
+  ({ ast; warnings; reversed_newlines; original_pos = location } : t)
 
 let parse_ref_in_string ~location ~text =
   let warnings = ref [] in
@@ -129,9 +129,7 @@ let parse_ref_in_string ~location ~text =
     in
     Stream.from (fun _token_index -> Some (Lexer.ref_in_string input lexbuf))
   in
-  let ast, _warnings = Syntax.parse_ref_in_string warnings token_stream in
-  ast
-(* { ast; warnings; reversed_newlines; original_pos = location } *)
+  Syntax.parse_ref_in_string warnings token_stream
 
 (* Accessor functions, as [t] is opaque *)
 let warnings t = t.warnings

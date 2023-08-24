@@ -12,8 +12,8 @@ type raw_markup_target = string
 
 type code_with_ref =
   [ `Txt of string
-  | `Simple_reference of Reference.t
-  | `Reference_with_replacement_text of Reference.t * string
+  | `Simple_reference of Reference.t with_location
+  | `Reference_with_replacement_text of Reference.t with_location * string
   | `Simple_link of string
   | `Link_with_replacement_text of string * string ]
   list

@@ -784,8 +784,10 @@ and ref_in_string input = parse
       let target =
         reference_content input start start_offset (Buffer.create 16) lexbuf
       in
+      let end_offset = Lexing.lexeme_end lexbuf in
+      let target = with_location_adjustments (fun _ -> Loc.at) input ~start_offset ~end_offset target in
       let content = string_in_ris
-        (Buffer.create 1024) 0 (Lexing.lexeme_start lexbuf) input lexbuf in
+        (Buffer.create 1024) 0 input lexbuf in
       let token = reference_ris start target (Some content) in
       (emit2 ~start_offset input (token :> Token.ref_in_string)) }
   | (simple_reference_start as start)
@@ -794,6 +796,8 @@ and ref_in_string input = parse
       let target =
         reference_content input start start_offset (Buffer.create 16) lexbuf
       in
+      let end_offset = Lexing.lexeme_end lexbuf in
+      let target = with_location_adjustments (fun _ -> Loc.at) input ~start_offset ~end_offset target in
       let token = reference_ris start target None in
       emit2 ~start_offset input token }
   | eof
@@ -802,26 +806,26 @@ and ref_in_string input = parse
   | _ as c
     { emit2 input (`Char c) }
 
-and string_in_ris buffer nesting_level start_offset input = parse
+and string_in_ris buffer nesting_level input = parse
   | '}'
     { if nesting_level = 0 then
         Buffer.contents buffer
       else begin
         Buffer.add_char buffer '}';
-        string_in_ris buffer (nesting_level - 1) start_offset input lexbuf
+        string_in_ris buffer (nesting_level - 1) input lexbuf
       end }
 
   | '{'
     { Buffer.add_char buffer '{';
-      string_in_ris buffer (nesting_level + 1) start_offset input lexbuf }
+      string_in_ris buffer (nesting_level + 1) input lexbuf }
 
   | '\\' ('{' | '}' as c)
     { Buffer.add_char buffer c;
-      string_in_ris buffer nesting_level start_offset input lexbuf }
+      string_in_ris buffer nesting_level input lexbuf }
 
   | _ as c
     { Buffer.add_char buffer c;
-      string_in_ris buffer nesting_level start_offset input lexbuf }
+      string_in_ris buffer nesting_level input lexbuf }
 | eof {
-Buffer.contents buffer
-}
+      Buffer.contents buffer
+    }

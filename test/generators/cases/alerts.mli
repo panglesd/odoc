@@ -46,3 +46,16 @@ val e : int
 val f : int
 [@@alert f]
 
+
+
+    [@@@alert "X"]
+
+(** blibli1  *)
+
+    [@@@alert "Y"]
+
+(** blibli2  *)
+
+    [@@@alert e "Z"]
+
+(** blibli3  *)

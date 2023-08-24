@@ -228,26 +228,29 @@ let rec comment_inline_element :
       `Code_span
         (List.map
            (function
-             | `Reference_with_replacement_text (r, c) as orig -> (
-                 match
-                   Ref_tools.resolve_reference env r |> Error.raise_warnings
-                 with
-                 | Ok x -> `Reference_with_replacement_text (`Resolved x, c)
-                 | Error e ->
-                     Errors.report ~what:(`Reference r)
-                       ~tools_error:(`Reference e) `Resolve;
-                     orig)
-             | `Simple_reference r as orig -> (
-                 match
-                   Ref_tools.resolve_reference env r |> Error.raise_warnings
-                 with
-                 | Ok x -> `Simple_reference (`Resolved x)
-                 | Error e ->
-                     Errors.report ~what:(`Reference r)
-                       ~tools_error:(`Reference e) `Resolve;
-                     orig)
-             | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as x ->
-                 x)
+             (* | `Reference_with_replacement_text (r, c) as orig -> ( *)
+             (*     match *)
+             (*       Ref_tools.resolve_reference env r |> Error.raise_warnings *)
+             (*     with *)
+             (*     | Ok x -> `Reference_with_replacement_text (`Resolved x, c) *)
+             (*     | Error e -> *)
+             (*         Errors.report ~what:(`Reference r) *)
+             (*           ~tools_error:(`Reference e) `Resolve; *)
+             (*         orig) *)
+             (* | `Simple_reference r as orig -> ( *)
+             (*     match *)
+             (*       Ref_tools.resolve_reference env r |> Error.raise_warnings *)
+             (*     with *)
+             (*     | Ok x -> `Simple_reference (`Resolved x) *)
+             (*     | Error e -> *)
+             (*         Format.eprintf "bli\n%!"; *)
+             (*         Format.printf "bli\n%!"; *)
+             (*         Errors.report ~what:(`Reference r) *)
+             (*           ~tools_error:(`Reference e) `Resolve; *)
+             (*         orig) *)
+             (* | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as x -> *)
+             (*     x *)
+             | x -> x)
            c)
   | y -> y
 
@@ -268,24 +271,33 @@ and comment_nestable_block_element env parent ~loc:_
           (let value =
              List.map
                (function
-                 | `Reference_with_replacement_text (r, c) as orig -> (
-                     match
-                       Ref_tools.resolve_reference env r |> Error.raise_warnings
-                     with
-                     | Ok x -> `Reference_with_replacement_text (`Resolved x, c)
-                     | Error e ->
-                         Errors.report ~what:(`Reference r)
-                           ~tools_error:(`Reference e) `Resolve;
-                         orig)
-                 | `Simple_reference r as orig -> (
-                     match
-                       Ref_tools.resolve_reference env r |> Error.raise_warnings
-                     with
-                     | Ok x -> `Simple_reference (`Resolved x)
-                     | Error e ->
-                         Errors.report ~what:(`Reference r)
-                           ~tools_error:(`Reference e) `Resolve;
-                         orig)
+                 | `Reference_with_replacement_text (r, c) as orig ->
+                     Lookup_failures.with_location r.Location_.location
+                       (fun () ->
+                         match
+                           Ref_tools.resolve_reference env r.Location_.value
+                           |> Error.raise_warnings
+                         with
+                         | Ok x ->
+                             `Reference_with_replacement_text
+                               ({ r with value = `Resolved x }, c)
+                         | Error e ->
+                             Errors.report ~what:(`Reference r.value)
+                               ~tools_error:(`Reference e) `Resolve;
+                             orig)
+                 | `Simple_reference r as orig ->
+                     Lookup_failures.with_location r.Location_.location
+                       (fun () ->
+                         match
+                           Ref_tools.resolve_reference env r.value
+                           |> Error.raise_warnings
+                         with
+                         | Ok x ->
+                             `Simple_reference { r with value = `Resolved x }
+                         | Error e ->
+                             Errors.report ~what:(`Reference r.value)
+                               ~tools_error:(`Reference e) `Resolve;
+                             orig)
                  | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as
                    x ->
                      x)

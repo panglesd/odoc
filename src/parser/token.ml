@@ -87,10 +87,10 @@ type t =
 type ref_in_string =
   [ (* End of input. *)
     `End
-  | `Simple_reference of string
-  | `Reference_with_replacement_text of string * string
-  | `Simple_link of string
-  | `Link_with_replacement_text of string * string
+  | `Simple_reference of string Loc.with_location
+  | `Reference_with_replacement_text of string Loc.with_location * string
+  | `Simple_link of string Loc.with_location
+  | `Link_with_replacement_text of string Loc.with_location * string
   | `Char of char ]
 
 let print : [< t ] -> string = function
