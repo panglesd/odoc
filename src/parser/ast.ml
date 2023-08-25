@@ -96,10 +96,10 @@ type block_element =
 
 type t = block_element with_location list
 
-type ref_in_string =
+type ref_in_string_item =
   [ `Txt of string
   | `Simple_reference of string with_location
   | `Reference_with_replacement_text of string with_location * string
   | `Simple_link of string with_location
   | `Link_with_replacement_text of string with_location * string ]
-  list
+type ref_in_string = ref_in_string_item list

@@ -130,7 +130,6 @@ type status = {
   sections_allowed : sections_allowed;
   tags_allowed : bool;
   parent_of_sections : Paths.Identifier.LabelParent.t;
-  pol : Location_.point -> Lexing.position;
 }
 
 let leaf_inline_element :
@@ -280,8 +279,6 @@ let rec nestable_block_element :
        { meta; delimiter = _; content; output; indentation; nb_blank_lines };
    location;
   } ->
-      Format.printf "indentation is %d, nb_blank_lines is %d\n" indentation
-        nb_blank_lines;
       let lang_tag =
         match meta with
         | Some { language = { Location.value; _ }; _ } -> Some value
@@ -294,87 +291,55 @@ let rec nestable_block_element :
       in
       let content =
         let text = content.value in
-        Format.printf "text is\n\"%s\"\n" text;
-        let location = status.pol content.location.start in
         let update_span (span : Location_.span) =
           let update_point Location_.{ line; column } =
-            if line = 1 && nb_blank_lines = 0 then (
-              Format.printf "sum is %d + %d + %d\n" column indentation
-                content.location.start.column;
-              Location_.
-                {
-                  line = content.location.start.line + line - 1 + nb_blank_lines;
-                  column = column + indentation;
-                })
-            else
-              Location_.
-                {
-                  line = content.location.start.line + line - 1 + nb_blank_lines;
-                  column = column + indentation;
-                }
+            Location_.
+              {
+                line = content.location.start.line + line - 1 + nb_blank_lines;
+                column = column + indentation;
+              }
           in
           let start = update_point span.start
           and end_ = update_point span.end_ in
-          Format.printf "Before : %a \nAfter %a\n" Location_.pp span
-            Location_.pp { span with start; end_ };
           { span with start; end_ }
         in
         let location =
-          { location with Lexing.pos_lnum = 1; pos_bol = 0; pos_cnum = 0 }
+          {
+            Lexing.pos_lnum = 1;
+            pos_bol = 0;
+            pos_cnum = 0;
+            pos_fname = content.location.file;
+          }
         in
-        let value, _warnings =
+        let value =
           Odoc_parser.parse_ref_in_string ~location ~text
+          |> Error.raise_ref_in_string_warnings
         in
         let value =
           List.map
-            (function
-              | `Simple_reference l ->
-                  `Simple_reference
-                    {
-                      l with
-                      Location.location = update_span l.Location.location;
-                    }
-              | `Reference_with_replacement_text (l, c) ->
-                  `Reference_with_replacement_text
-                    ( {
-                        l with
-                        Location.location = update_span l.Location.location;
-                      },
-                      c )
+            (fun (x : Odoc_parser.Ast.ref_in_string_item) ->
+              match x with
+              | `Simple_reference { location; value = t } -> (
+                  let location = update_span location in
+                  match Error.raise_warnings (Reference.parse location t) with
+                  | Ok target -> `Simple_reference (Location.at location target)
+                  | Error error ->
+                      Error.raise_warning error;
+                      `Txt t)
+              | `Reference_with_replacement_text ({ location; value = t }, c)
+                -> (
+                  let location = update_span location in
+                  match Error.raise_warnings (Reference.parse location t) with
+                  | Ok target ->
+                      `Reference_with_replacement_text
+                        (Location.at location target, c)
+                  | Error error ->
+                      Error.raise_warning error;
+                      `Txt c)
               | `Simple_link l -> `Simple_link l.Location.value
               | `Link_with_replacement_text (l, t) ->
                   `Link_with_replacement_text (l.Location.value, t)
               | `Txt _ as x -> x)
-            value
-        in
-        let value =
-          List.map
-            (function
-              | `Simple_reference
-                  { Location.location = target_location; value = t } -> (
-                  match
-                    Error.raise_warnings (Reference.parse target_location t)
-                  with
-                  | Ok target ->
-                      `Simple_reference (Location.at target_location target)
-                  | Error error ->
-                      Error.raise_warning error;
-                      `Txt t)
-              | `Reference_with_replacement_text
-                  ({ Location.location = target_location; value = t }, c) -> (
-                  Format.printf "%a\n" Location.pp target_location;
-                  match
-                    Error.raise_warnings (Reference.parse target_location t)
-                  with
-                  | Ok target ->
-                      `Reference_with_replacement_text
-                        (Location.at target_location target, c)
-                  | Error error ->
-                      Error.raise_warning error;
-                      `Txt c)
-              | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as x
-                ->
-                  x)
             value
         in
         { content with value }
@@ -675,11 +640,9 @@ let append_alerts_to_comment alerts
   comment @ (alerts : alerts :> Comment.docs)
 
 let ast_to_comment ~internal_tags ~sections_allowed ~tags_allowed
-    ~parent_of_sections ast pol alerts =
+    ~parent_of_sections ast alerts =
   Error.catch_warnings (fun () ->
-      let status =
-        { sections_allowed; tags_allowed; parent_of_sections; pol }
-      in
+      let status = { sections_allowed; tags_allowed; parent_of_sections } in
       let ast, tags = strip_internal_tags ast in
       let elts =
         top_level_block_elements status ast |> append_alerts_to_comment alerts
@@ -689,12 +652,11 @@ let ast_to_comment ~internal_tags ~sections_allowed ~tags_allowed
 let parse_comment ~internal_tags ~sections_allowed ~tags_allowed
     ~containing_definition ~location ~text =
   Error.catch_warnings (fun () ->
-      let ast, pol =
-        let ret = Odoc_parser.parse_comment ~location ~text in
-        (ret |> Error.raise_parser_warnings, Odoc_parser.position_of_point ret)
+      let ast =
+        Odoc_parser.parse_comment ~location ~text |> Error.raise_parser_warnings
       in
       ast_to_comment ~internal_tags ~sections_allowed ~tags_allowed
-        ~parent_of_sections:containing_definition ast pol []
+        ~parent_of_sections:containing_definition ast []
       |> Error.raise_warnings)
 
 let parse_reference text =

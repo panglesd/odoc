@@ -67,3 +67,8 @@ val t_of_parser_t : Odoc_parser.Warning.t -> t
 
 val raise_parser_warnings : Odoc_parser.t -> Odoc_parser.Ast.t
 (** Like {!raise_warnings} but handle parsing errors. *)
+
+val raise_ref_in_string_warnings :
+  Odoc_parser.Ast.ref_in_string * Odoc_parser.Warning.t list ->
+  Odoc_parser.Ast.ref_in_string
+(** Like {!raise_parser_warnings} but handle parsing errors in string. *)

@@ -111,9 +111,9 @@ let is_stop_comment attr =
 let pad_loc loc =
   { loc.Location.loc_start with pos_cnum = loc.loc_start.pos_cnum + 3 }
 
-let ast_to_comment ~internal_tags parent ast_docs pol alerts =
+let ast_to_comment ~internal_tags parent ast_docs alerts =
   Odoc_model.Semantics.ast_to_comment ~internal_tags ~sections_allowed:`All
-    ~tags_allowed:true ~parent_of_sections:parent ast_docs pol alerts
+    ~tags_allowed:true ~parent_of_sections:parent ast_docs alerts
   |> Error.raise_warnings
 
 let mk_alert_payload ~loc name p =
@@ -128,20 +128,18 @@ let attached internal_tags parent attrs =
         match parse_attribute attr with
         | Some (`Doc (str, loc)) ->
             let ast_docs =
-              let ret = Odoc_parser.parse_comment ~location:(pad_loc loc) ~text:str in
-              ret |> Error.raise_parser_warnings, Odoc_parser.position_of_point ret
+              Odoc_parser.parse_comment ~location:(pad_loc loc) ~text:str
+              |> Error.raise_parser_warnings
             in
-            loop (Some ast_docs) acc_alerts rest
+            loop (List.rev_append ast_docs acc_docs) acc_alerts rest
         | Some (`Alert (name, p, loc)) ->
             let elt = mk_alert_payload ~loc name p in
             loop acc_docs (elt :: acc_alerts) rest
         | Some (`Text _ | `Stop _) | None -> loop acc_docs acc_alerts rest)
-    | [] -> (acc_docs, List.rev acc_alerts)
+    | [] -> (List.rev acc_docs, List.rev acc_alerts)
   in
-  let ast_docs, alerts = loop None [] attrs in
-  let ast_docs, pol = match ast_docs with Some x -> x | None -> ([], (fun _ -> Lexing.dummy_pos)) in
-  let l = ast_to_comment ~internal_tags parent ast_docs pol  alerts in
-  l
+  let ast_docs, alerts = loop [] [] attrs in
+  ast_to_comment ~internal_tags parent ast_docs alerts
 
 let attached_no_tag parent attrs =
   let x, () = attached Semantics.Expect_none parent attrs in
@@ -235,8 +233,8 @@ let extract_top_comment internal_tags ~classify parent items =
         match classify hd with
         | `Text (text, loc) ->
             let ast_docs =
-              let ret = Odoc_parser.parse_comment ~location:(pad_loc loc) ~text in ret
-              |> Error.raise_parser_warnings, Odoc_parser.position_of_point ret
+              Odoc_parser.parse_comment ~location:(pad_loc loc) ~text
+              |> Error.raise_parser_warnings
             in
             let items, alerts = extract_tail_alerts [] tl in
             (items, ast_docs, alerts)
@@ -246,14 +244,14 @@ let extract_top_comment internal_tags ~classify parent items =
         | `Skip ->
             let items, ast_docs, alerts = extract tl in
             (hd :: items, ast_docs, alerts)
-        | `Return -> (items, ([], (fun _ -> Lexing.dummy_pos)), []))
-    | [] -> ([], ([], (fun _ -> Lexing.dummy_pos)), [])
+        | `Return -> (items, [], []))
+    | [] -> ([], [], [])
   in
-  let items, (ast_docs, pol), alerts = extract items in
+  let items, ast_docs, alerts = extract items in
   let docs, tags =
     ast_to_comment ~internal_tags
       (parent : Paths.Identifier.Signature.t :> Paths.Identifier.LabelParent.t)
-      ast_docs pol alerts
+      ast_docs alerts
   in
   (items, split_docs docs, tags)
 

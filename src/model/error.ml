@@ -144,3 +144,10 @@ let raise_parser_warnings v =
   raise_warnings'
     (List.map (fun p -> { w = t_of_parser_t p; non_fatal }) warnings);
   Odoc_parser.ast v
+
+let raise_ref_in_string_warnings (ast, warnings) =
+  (* Parsing errors in a string is not fatal. *)
+  let non_fatal = true in
+  raise_warnings'
+    (List.map (fun p -> { w = t_of_parser_t p; non_fatal }) warnings);
+  ast

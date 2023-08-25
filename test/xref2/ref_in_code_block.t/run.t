@@ -79,5 +79,5 @@ In html, labels in subpages should not be disambiguated since they won't have th
 
 
   $ firefox html/A/index.html
-  Gtk-Message: 14:58:50.579: Failed to load module "xapp-gtk3-module"
-  Gtk-Message: 14:58:50.579: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+  Gtk-Message: 15:06:57.184: Failed to load module "xapp-gtk3-module"
+  Gtk-Message: 15:06:57.184: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
