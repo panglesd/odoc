@@ -68,6 +68,8 @@ type t =
     * string
     * string Loc.with_location
     * bool
+    * int
+    * int
   | `Verbatim of string
   | `Modules of string
   | (* List markup. *)

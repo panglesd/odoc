@@ -919,8 +919,13 @@ let rec block_element_list :
         consume_block_elements ~parsed_a_tag `After_text acc
     | {
         value =
-          `Code_block (meta, delim, { value = s; location = v_loc }, has_outputs)
-          as token;
+          `Code_block
+            ( meta,
+              delim,
+              { value = s; location = v_loc },
+              has_outputs,
+              indentation,
+              nb_blank_lines ) as token;
         location;
       } as next_token ->
         warn_if_after_tags next_token;
@@ -959,6 +964,8 @@ let rec block_element_list :
                 delimiter;
                 content = { value = s; location = v_loc };
                 output;
+                indentation;
+                nb_blank_lines;
               })
         in
         let block = Loc.at location block in

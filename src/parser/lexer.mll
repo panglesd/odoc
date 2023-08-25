@@ -38,19 +38,19 @@ let math_constr kind x =
 (* This is used for code and verbatim blocks. It can be done with a regular
    expression, but the regexp gets quite ugly, so a function is easier to
    understand. *)
-let trim_leading_blank_lines : string -> string = fun s ->
-  let rec scan_for_last_newline : int -> int -> int =
-      fun index trim_until ->
+let trim_leading_blank_lines : string -> string * int = fun s ->
+  let rec scan_for_last_newline : int -> int -> int -> int * int =
+      fun index nb_newlines trim_until ->
     if index >= String.length s then
-      String.length s
+      String.length s, nb_newlines
     else
       match s.[index] with
-      | ' ' | '\t' | '\r' -> scan_for_last_newline (index + 1) trim_until
-      | '\n' -> scan_for_last_newline (index + 1) (index + 1)
-      | _ -> trim_until
+      | ' ' | '\t' | '\r' -> scan_for_last_newline (index + 1) nb_newlines trim_until
+      | '\n' -> scan_for_last_newline (index + 1) (nb_newlines + 1) (index + 1)
+      | _ -> trim_until, nb_newlines
   in
-  let trim_until = scan_for_last_newline 0 0 in
-  String.sub s trim_until (String.length s - trim_until)
+  let trim_until, nb_newlines = scan_for_last_newline 0 0 0 in
+  String.sub s trim_until (String.length s - trim_until), nb_newlines
 
 let trim_trailing_blank_lines : string -> string = fun s ->
   let rec scan_for_last_newline : int -> int option -> int option =
@@ -76,9 +76,9 @@ let trim_trailing_blank_lines : string -> string = fun s ->
     in
     String.sub s 0 trim_from
 
-(** Returns [None] for an empty, [Some ident] for an indented line. *)
-let trim_leading_whitespace : first_line_offset:int -> string -> string =
+let trim_leading_whitespace : first_line_offset:int -> string -> string * int =
  fun ~first_line_offset s ->
+  (** Returns [None] for an empty, [Some ident] for an indented line. *)
   let count_leading_whitespace line =
     let rec count_leading_whitespace' index len =
       if index = len then None
@@ -104,7 +104,7 @@ let trim_leading_whitespace : first_line_offset:int -> string -> string =
       | _ -> least_so_far)
   in
 
-  let first_line_max_drop, least_amount_of_whitespace =
+  let _first_line_max_drop, least_amount_of_whitespace =
     match lines with
     | [] -> 0, None
     | first_line :: tl ->
@@ -118,23 +118,23 @@ let trim_leading_whitespace : first_line_offset:int -> string -> string =
 
   match least_amount_of_whitespace with
   | None ->
-    s
+    s, 0
   | Some least_amount_of_whitespace ->
     let drop n line =
       (* Since blank lines were ignored when calculating
          [least_amount_of_whitespace], their length might be less than the
          amount. *)
-      if String.length line < n then line
+      if String.length line < n then ""
       else String.sub line n (String.length line - n)
     in
     let lines =
       match lines with
       | [] -> []
       | first_line :: tl ->
-        drop (min first_line_max_drop least_amount_of_whitespace) first_line
+        drop (max (least_amount_of_whitespace - first_line_offset) 0) first_line
         :: List.map (drop least_amount_of_whitespace) tl
     in
-    String.concat "\n" lines
+    String.concat "\n" lines, least_amount_of_whitespace
 
 type input = {
   file : string;
@@ -223,29 +223,27 @@ let emit_verbatim input start_offset buffer =
   let t = Buffer.contents buffer in
   let t = trim_trailing_space_or_accept_whitespace t in
   let t = trim_leading_space_or_accept_whitespace input start_offset t in
-  let t = trim_leading_blank_lines t in
+  let t, _ = trim_leading_blank_lines t in
   let t = trim_trailing_blank_lines t in
   emit input (`Verbatim t) ~start_offset
 
 (* The locations have to be treated carefully in this function. We need to ensure that
-   the []`Code_block] location matches the entirety of the block including the terminator,
+   the [`Code_block] location matches the entirety of the block including the terminator,
    and the content location is precicely the location of the text of the code itself.
-   Note that the location reflects the content _without_ stripping of whitespace, whereas
-   the value of the content in the tree has whitespace stripped from the beginning,
-   and trailing empty lines removed. *)
+ *)
 let emit_code_block ~start_offset content_offset input metadata delim terminator c has_results =
   let c = Buffer.contents c |> trim_trailing_blank_lines in
   let content_location = input.offset_to_location content_offset in
-  let c =
+  let c, indentation =
     with_location_adjustments
       (fun _ _location c ->
          let first_line_offset = content_location.column in
          trim_leading_whitespace ~first_line_offset c)
       input c
   in
-  let c = trim_leading_blank_lines c in
+  let c, nb_blank_lines = trim_leading_blank_lines c in
   let c = with_location_adjustments ~adjust_end_by:terminator ~start_offset:content_offset (fun _ -> Loc.at) input c in
-  emit ~start_offset input (`Code_block (metadata, delim, c, has_results))
+  emit ~start_offset input (`Code_block (metadata, delim, c, has_results, indentation, nb_blank_lines))
 
 let heading_level input level =
   if String.length level >= 2 && level.[0] = '0' then begin
@@ -438,7 +436,7 @@ and token input = parse
       in
       let emit_truncated_code_block () =
         let empty_content = with_location_adjustments (fun _ -> Loc.at) input "" in
-        emit ~start_offset input (`Code_block (Some (lang_tag, None), delim, empty_content, false))
+        emit ~start_offset input (`Code_block (Some (lang_tag, None), delim, empty_content, false, 0, 0))
       in
       match code_block_metadata_tail input lexbuf with
       | `Ok metadata -> code_block start_offset (Lexing.lexeme_end lexbuf) (Some (lang_tag, metadata)) (Buffer.create 256) delim input lexbuf

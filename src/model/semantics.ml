@@ -274,8 +274,14 @@ let rec nestable_block_element :
   match element with
   | { value = `Paragraph content; location } ->
       Location.at location (`Paragraph (inline_elements status content))
-  | { value = `Code_block { meta; delimiter = _; content; output }; location }
-    ->
+  | {
+   value =
+     `Code_block
+       { meta; delimiter = _; content; output; indentation; nb_blank_lines };
+   location;
+  } ->
+      Format.printf "indentation is %d, nb_blank_lines is %d\n" indentation
+        nb_blank_lines;
       let lang_tag =
         match meta with
         | Some { language = { Location.value; _ }; _ } -> Some value
@@ -288,9 +294,58 @@ let rec nestable_block_element :
       in
       let content =
         let text = content.value in
-        let location = status.pol location.start in
+        Format.printf "text is\n\"%s\"\n" text;
+        let location = status.pol content.location.start in
+        let update_span (span : Location_.span) =
+          let update_point Location_.{ line; column } =
+            if line = 1 && nb_blank_lines = 0 then (
+              Format.printf "sum is %d + %d + %d\n" column indentation
+                content.location.start.column;
+              Location_.
+                {
+                  line = content.location.start.line + line - 1 + nb_blank_lines;
+                  column = column + indentation;
+                })
+            else
+              Location_.
+                {
+                  line = content.location.start.line + line - 1 + nb_blank_lines;
+                  column = column + indentation;
+                }
+          in
+          let start = update_point span.start
+          and end_ = update_point span.end_ in
+          Format.printf "Before : %a \nAfter %a\n" Location_.pp span
+            Location_.pp { span with start; end_ };
+          { span with start; end_ }
+        in
+        let location =
+          { location with Lexing.pos_lnum = 1; pos_bol = 0; pos_cnum = 0 }
+        in
         let value, _warnings =
           Odoc_parser.parse_ref_in_string ~location ~text
+        in
+        let value =
+          List.map
+            (function
+              | `Simple_reference l ->
+                  `Simple_reference
+                    {
+                      l with
+                      Location.location = update_span l.Location.location;
+                    }
+              | `Reference_with_replacement_text (l, c) ->
+                  `Reference_with_replacement_text
+                    ( {
+                        l with
+                        Location.location = update_span l.Location.location;
+                      },
+                      c )
+              | `Simple_link l -> `Simple_link l.Location.value
+              | `Link_with_replacement_text (l, t) ->
+                  `Link_with_replacement_text (l.Location.value, t)
+              | `Txt _ as x -> x)
+            value
         in
         let value =
           List.map
@@ -317,10 +372,9 @@ let rec nestable_block_element :
                   | Error error ->
                       Error.raise_warning error;
                       `Txt c)
-              | `Simple_link l -> `Simple_link l.Location.value
-              | `Link_with_replacement_text (l, t) ->
-                  `Link_with_replacement_text (l.Location.value, t)
-              | `Txt _ as x -> x)
+              | (`Simple_link _ | `Link_with_replacement_text _ | `Txt _) as x
+                ->
+                  x)
             value
         in
         { content with value }

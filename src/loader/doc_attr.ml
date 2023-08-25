@@ -139,7 +139,7 @@ let attached internal_tags parent attrs =
     | [] -> (acc_docs, List.rev acc_alerts)
   in
   let ast_docs, alerts = loop None [] attrs in
-  let ast_docs, pol = match ast_docs with Some x -> x | None -> ([], _) in
+  let ast_docs, pol = match ast_docs with Some x -> x | None -> ([], (fun _ -> Lexing.dummy_pos)) in
   let l = ast_to_comment ~internal_tags parent ast_docs pol  alerts in
   l
 
@@ -246,8 +246,8 @@ let extract_top_comment internal_tags ~classify parent items =
         | `Skip ->
             let items, ast_docs, alerts = extract tl in
             (hd :: items, ast_docs, alerts)
-        | `Return -> (items, ([], _), []))
-    | [] -> ([], ([], _), [])
+        | `Return -> (items, ([], (fun _ -> Lexing.dummy_pos)), []))
+    | [] -> ([], ([], (fun _ -> Lexing.dummy_pos)), [])
   in
   let items, (ast_docs, pol), alerts = extract items in
   let docs, tags =

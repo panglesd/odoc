@@ -3,12 +3,31 @@ A quick test to repro the issue found in #857
   $ ocamlc -bin-annot -c a.mli
 
   $ odoc compile a.cmti
-  File "a.mli", line 9, characters 4-9
-  File "a.mli", line 9, characters 12-17
-  File "a.mli", line 19, characters -3-7
+  indentation is 9, nb_blank_lines is 4
+  text is
+  "let i =
+  {{!f}f} {{!x}x} in
+  print_int i"
+  Before : File "a.mli", line 2, characters 0-5 
+  After File "a.mli", line 17, characters 9-14
+  Before : File "a.mli", line 2, characters 8-13 
+  After File "a.mli", line 17, characters 17-22
+  File "a.mli", line 17, characters 9-14
+  File "a.mli", line 17, characters 17-22
+  indentation is 13, nb_blank_lines is 1
+  text is
+  "ddd  
+     {{!blibli}blu}
+  
+           sefesf"
+  Before : File "a.mli", line 2, characters 3-13 
+  After File "a.mli", line 31, characters 16-26
+  File "a.mli", line 31, characters 16-26
   $ odoc link a.odoc
-  File "a.mli", line 19, characters -3-7:
+  File "a.mli", line 31, characters 16-26:
   Warning: Failed to resolve reference unresolvedroot(blibli) Couldn't find "blibli"
+  File "a.mli", line 25, characters 0-13:
+  Warning: Failed to resolve reference unresolvedroot(edesff) Couldn't find "edesff"
 
   $ odoc html-generate -o html/ a.odocl
   $ odoc support-files -o html/
@@ -52,11 +71,13 @@ In html, labels in subpages should not be disambiguated since they won't have th
   html/katex.min.js
   html/katex.min.css
   html/A
+  html/A/X
+  html/A/X/index.html
   html/A/index.html
   html/odoc.css
   html/highlight.pack.js
 
 
   $ firefox html/A/index.html
-  Gtk-Message: 11:56:56.415: Failed to load module "xapp-gtk3-module"
-  Gtk-Message: 11:56:56.416: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+  Gtk-Message: 14:58:50.579: Failed to load module "xapp-gtk3-module"
+  Gtk-Message: 14:58:50.579: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.

@@ -45,6 +45,8 @@ type code_block = {
   delimiter : string option;
   content : string with_location;
   output : nestable_block_element with_location list option;
+  indentation : int;
+  nb_blank_lines : int;
 }
 
 and nestable_block_element =

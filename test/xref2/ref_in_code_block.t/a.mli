@@ -4,20 +4,33 @@ val f : int -> int
 val x : int
 (** An integer  *)
 
-(** We can use [f] as follows:
+module X : sig
+  val f : int
+       (** We can use [f] as follows:
 
-    {[
-      let i = {{!f}f} {{!x}x} in
-      print_int i
-    ]}
+
+                         {[
+
+
+      
+         let i =
+         {{!f}f} {{!x}x} in
+         print_int i
+      ]}
 *)
+end
 
 (**
 
+{{!edesff}dd}
+
    Wrong references are reported well:
 
-   {[
-     {{!blibli}blu}
+       {[    
+             ddd  
+                {{!blibli}blu}
+
+                      sefesf
 ]}
 
     *)

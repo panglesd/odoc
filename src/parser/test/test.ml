@@ -2424,6 +2424,19 @@ let%expect_test _ =
                                                                \nbar")))))
          (warnings ())) |}]
 
+    let leading_whitespace_leading_newline2 =
+      test {aa|{[
+      foo
+   
+      bar
+]}|aa};
+      [%expect
+        {|
+        ((output
+          (((f.ml (1 0) (4 2)) (code_block ((f.ml (1 2) (4 0))  "foo\
+                                                               \nbar")))))
+         (warnings ())) |}]
+
     let leading_tab =
       test "{[\tfoo]}";
       [%expect
