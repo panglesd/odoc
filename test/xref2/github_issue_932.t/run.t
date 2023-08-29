@@ -4,8 +4,6 @@ A quick test to repro the issue found in #941
 
   $ odoc compile foo.cmti
   $ odoc link foo.odoc
-  File "foo.mli", line 21, characters 25-44:
-  Warning: Failed to resolve reference unresolvedroot(B) Couldn't find "B"
 
   $ odoc html-generate --indent -o html/ foo.odocl
 
@@ -44,7 +42,7 @@ The rendered html
        </ol>
   --
       <li>extension-decl-A : <a href="#extension-A"><code>A</code></a></li>
-      <li>extension-decl-B : <code>B</code></li>
+      <li>extension-decl-B : <a href="#extension-B"><code>B</code></a></li>
       <li>extension-A : <a href="#extension-A"><code>A</code></a></li>
       <li>extension-B : <a href="#extension-B"><code>B</code></a></li>
       <li>A : <a href="#extension-A"><code>A</code></a></li>

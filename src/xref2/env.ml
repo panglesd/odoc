@@ -746,9 +746,12 @@ let rec open_signature : Lang.Signature.t -> t -> t =
             let env =
               match te.L.Extension.constructors with
               | [] -> env
-              | x :: _ ->
+              | x :: _ as cs ->
                   let ty = extension_constructor ident_map x in
-                  add_extension_decl x.L.Extension.Constructor.id ty env
+                  List.fold_left
+                    (fun env (x : L.Extension.Constructor.t) ->
+                      add_extension_decl x.id ty env)
+                    env cs
             in
             List.fold_left
               (fun env tec ->
