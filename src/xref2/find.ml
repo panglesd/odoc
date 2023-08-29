@@ -289,6 +289,20 @@ let extension_in_sig sg name =
     | Signature.TypExt t -> inner t t.Extension.constructors
     | _ -> None)
 
+let extension_decl_in_sig sg name =
+  let rec inner t first = function
+    | ec :: _ when ec.Extension.Constructor.name = name ->
+        Some (`FExt (t, first))
+    | _ :: tl -> inner t first tl
+    | [] -> None
+  in
+  find_in_sig sg (function
+    | Signature.TypExt t -> (
+        match t.Extension.constructors with
+        | [] -> None
+        | first :: _ as cs -> inner t first cs)
+    | _ -> None)
+
 let label_parent_in_sig sg name =
   filter_in_sig sg (function
     | Signature.Module (id, _, m) when N.module_ id = name ->

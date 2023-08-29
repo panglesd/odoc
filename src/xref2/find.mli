@@ -69,6 +69,8 @@ val exception_in_sig : Signature.t -> string -> exception_ option
 
 val extension_in_sig : Signature.t -> string -> extension option
 
+val extension_decl_in_sig : Signature.t -> string -> extension option
+
 val any_in_type : TypeDecl.t -> string -> any_in_type option
 
 val any_in_typext : Extension.t -> string -> extension option

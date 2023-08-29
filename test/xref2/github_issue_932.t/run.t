@@ -42,7 +42,7 @@ The rendered html
        </ol>
   --
       <li>extension-decl-A : <a href="#extension-A"><code>A</code></a></li>
-      <li>extension-decl-B : <a href="#extension-B"><code>B</code></a></li>
+      <li>extension-decl-B : <a href="#extension-A"><code>A</code></a></li>
       <li>extension-A : <a href="#extension-A"><code>A</code></a></li>
       <li>extension-B : <a href="#extension-B"><code>B</code></a></li>
       <li>A : <a href="#extension-A"><code>A</code></a></li>
@@ -52,7 +52,7 @@ The rendered html
        <a href="M/index.html#extension-decl-A"><code>M.A</code></a>
       </li>
       <li>M.extension-decl-B : 
-       <a href="M/index.html#extension-decl-B"><code>M.B</code></a>
+       <a href="M/index.html#extension-decl-A"><code>M.A</code></a>
       </li>
       <li>M.extension-A : 
        <a href="M/index.html#extension-A"><code>M.A</code></a>

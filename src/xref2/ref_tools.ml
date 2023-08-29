@@ -397,13 +397,16 @@ module ED = struct
 
   let in_env env name =
     env_lookup_by_name Env.s_extension_decl name env
-    >>= fun (`ExtensionDecl (id, _)) -> Ok (`Identifier id :> t)
+    >>= fun (`ExtensionDecl (_, c)) ->
+    env_lookup_by_name Env.s_extension c.name env
+    >>= fun (`Extension (id, _)) -> Ok (`Identifier id :> t)
 
   let in_signature _env ((parent', parent_cp, sg) : signature_lookup_result)
       name =
     let sg = Tools.prefix_signature (parent_cp, sg) in
-    find Find.extension_in_sig sg (ExtensionName.to_string name) >>= fun _ ->
-    Ok (`ExtensionDecl (parent', name))
+    find Find.extension_decl_in_sig sg (ExtensionName.to_string name)
+    >>= fun (`FExt (_, c) : Find.extension) ->
+    Ok (`ExtensionDecl (parent', ExtensionName.make_std c.name))
 end
 
 module EX = struct
