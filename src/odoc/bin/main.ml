@@ -387,8 +387,7 @@ module Indexing = struct
 
   let index directories dst =
     let output = output_file ~dst in
-    Indexing.compile ~output
-      directories
+    Indexing.compile ~output directories
 
   let cmd =
     let dst =
@@ -399,9 +398,7 @@ module Indexing = struct
       Arg.(
         value & opt (some string) None & info ~docs ~docv:"PATH" ~doc [ "o" ])
     in
-    Term.(
-      const handle_error
-      $ (const index $ odoc_file_directories $ dst ))
+    Term.(const handle_error $ (const index $ odoc_file_directories $ dst))
 
   let info ~docs =
     let doc =
