@@ -30,6 +30,7 @@
  (enabled_if
   (> %{ocaml_version} 4.11))
  (deps
+  (package odoc)
   (glob_files *.mld)
   (glob_files library_mlds/*)
   (glob_files examples/*.ml*))
