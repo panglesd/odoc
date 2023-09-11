@@ -1,6 +1,10 @@
 (library
  (name odoc_xref2)
  (public_name odoc.xref2)
+ (instrumentation
+  (backend landmarks --auto))
+ (instrumentation
+  (backend bisect_ppx))
  (libraries odoc_model))
 
 (rule
