@@ -831,16 +831,7 @@ let resolve_asset_reference env (m : Reference.Asset.t) =
     match page with
     | Some page -> (
         match page.Identifier.iv with
-        | `Page (parent, page) -> (
-            match Env.lookup_page (PageName.to_string page) env with
-            | Some { children; name; _ } when has_asset children asset_name ->
-                Ok
-                  (`Resolved
-                    (`Identifier (Identifier.Mk.asset_file (name, asset_name))))
-            | _ ->
-                let parent = (parent :> Identifier.Page.t option) in
-                find_in_page parent asset_name)
-        | `LeafPage (parent, page) -> (
+        | `Page (parent, page) | `LeafPage (parent, page) -> (
             match Env.lookup_page (PageName.to_string page) env with
             | Some { children; name; _ } when has_asset children asset_name ->
                 Ok
