@@ -56,6 +56,8 @@ module Arg = struct
 
   let pos = pos
 
+  let pos_all = pos_all
+
   let file = file
 
   let bool = bool
