@@ -349,7 +349,7 @@ module L = struct
             when name = LabelName.to_string name' ->
               Ok (`Identifier label)
           | _ -> find tl)
-      | [] -> Error (`Find_by_name (`Page, name))
+      | [] -> Error (`Find_by_name (`Label, name))
     in
     find p.Odoc_model.Lang.Page.content
 
