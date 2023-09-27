@@ -93,8 +93,8 @@ let lookup_shape :
     | Some x -> Some x
     | None -> (
       match unit.source_info with
-      | Some si -> Some (MkId.source_location_mod si.id)
-      | None -> None)
+      | Some {id = Some id ; _} -> Some (MkId.source_location_mod id)
+      | _ -> None)
 
 
 let lookup_def :

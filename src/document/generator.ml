@@ -1812,8 +1812,8 @@ module Make (Syntax : SYNTAX) = struct
       in
       let source_anchor =
         match t.source_info with
-        | Some { id; _ } -> Some (Source_page.url id)
-        | None -> None
+        | Some { id = Some id; _ } -> Some (Source_page.url id)
+        | _ -> None
       in
       let page = make_expansion_page ~source_anchor url [ unit_doc ] items in
       Document.Page page

@@ -106,46 +106,42 @@ module Global_analysis = struct
     | _ -> ()
 end
 
-let of_cmt (cmt : Cmt_format.cmt_infos) =
-  let ttree = cmt.cmt_annots in
-  match ttree with
-  | Cmt_format.Implementation structure ->
-      let poses = ref [] in
-      let module_expr iterator mod_expr =
-        Global_analysis.module_expr poses mod_expr;
-        Compat.Tast_iterator.default_iterator.module_expr iterator mod_expr
-      in
-      let expr iterator e =
-        Global_analysis.expr poses e;
-        Compat.Tast_iterator.default_iterator.expr iterator e
-      in
-      let pat iterator e =
-        Global_analysis.pat poses e;
-        Compat.Tast_iterator.default_iterator.pat iterator e
-      in
-      let typ iterator ctyp_expr =
-        Global_analysis.core_type poses ctyp_expr;
-        Compat.Tast_iterator.default_iterator.typ iterator ctyp_expr
-      in
-      let module_type iterator mty =
-        Global_analysis.module_type poses mty;
-        Compat.Tast_iterator.default_iterator.module_type iterator mty
-      in
-      let class_type iterator cl_type =
-        Global_analysis.class_type poses cl_type;
-        Compat.Tast_iterator.default_iterator.class_type iterator cl_type
-      in
-      let iterator =
-        {
-          Compat.Tast_iterator.default_iterator with
-          expr;
-          pat;
-          module_expr;
-          typ;
-          module_type;
-          class_type;
-        }
-      in
-      iterator.structure iterator structure;
-      !poses
-  | _ -> []
+let of_cmt structure =
+  let poses = ref [] in
+  let module_expr iterator mod_expr =
+    Global_analysis.module_expr poses mod_expr;
+    Compat.Tast_iterator.default_iterator.module_expr iterator mod_expr
+  in
+  let expr iterator e =
+    Global_analysis.expr poses e;
+    Compat.Tast_iterator.default_iterator.expr iterator e
+  in
+  let pat iterator e =
+    Global_analysis.pat poses e;
+    Compat.Tast_iterator.default_iterator.pat iterator e
+  in
+  let typ iterator ctyp_expr =
+    Global_analysis.core_type poses ctyp_expr;
+    Compat.Tast_iterator.default_iterator.typ iterator ctyp_expr
+  in
+  let module_type iterator mty =
+    Global_analysis.module_type poses mty;
+    Compat.Tast_iterator.default_iterator.module_type iterator mty
+  in
+  let class_type iterator cl_type =
+    Global_analysis.class_type poses cl_type;
+    Compat.Tast_iterator.default_iterator.class_type iterator cl_type
+  in
+  let iterator =
+    {
+      Compat.Tast_iterator.default_iterator with
+      expr;
+      pat;
+      module_expr;
+      typ;
+      module_type;
+      class_type;
+    }
+  in
+  iterator.structure iterator structure;
+  !poses
