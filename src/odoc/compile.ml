@@ -99,16 +99,17 @@ let resolve_imports resolver imports =
 (** Raises warnings and errors. *)
 let resolve_and_substitute ~resolver ~make_root ~source_id_opt ~cmt_filename_opt
     ~hidden (parent : Paths.Identifier.ContainerPage.t option) input_file
-    input_type ~count_occurrences:_ =
+    input_type ~count_occurrences =
   let filename = Fs.File.to_string input_file in
   let unit =
     match input_type with
     | `Cmti ->
         Odoc_loader.read_cmti ~make_root ~parent ~filename ~source_id_opt
-          ~cmt_filename_opt
+          ~cmt_filename_opt ~count_occurrences
         |> Error.raise_errors_and_warnings
     | `Cmt ->
         Odoc_loader.read_cmt ~make_root ~parent ~filename ~source_id_opt
+          ~count_occurrences
         |> Error.raise_errors_and_warnings
     | `Cmi ->
         Odoc_loader.read_cmi ~make_root ~parent ~filename

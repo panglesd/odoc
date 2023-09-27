@@ -4,8 +4,6 @@ The module C is not exposed in the handwritten toplevel module.
 The module A and B are exposed.
 The module B depends on both B and C, the module C only depends on A.
 
-  $ odoc compile -c module-a -c src-source root.mld
-
   $ ocamlc -c -o main__.cmo main__.ml -bin-annot -w -49 -no-alias-deps -I .
   $ ocamlc -c -open Main__ -o main__A.cmo a.ml -bin-annot -I .
   $ ocamlc -c -open Main__ -o main__C.cmo c.ml -bin-annot -I .
@@ -15,15 +13,12 @@ The module B depends on both B and C, the module C only depends on A.
 Passing the count-occurrences flag to odoc compile makes it collect the
 occurrences information.
 
-  $ printf "a.ml\nb.ml\nc.ml\nmain.ml\n" > source_tree.map
-  $ odoc source-tree -I . --parent page-root -o src-source.odoc source_tree.map
 
-
-  $ odoc compile --source-name a.ml --source-parent-file src-source.odoc  --count-occurrences -I . main__A.cmt
-  $ odoc compile --source-name c.ml --source-parent-file src-source.odoc  --count-occurrences -I . main__C.cmt
-  $ odoc compile --source-name b.ml --source-parent-file src-source.odoc  --count-occurrences -I . main__B.cmt
+  $ odoc compile --count-occurrences -I . main__A.cmt
+  $ odoc compile --count-occurrences -I . main__C.cmt
+  $ odoc compile --count-occurrences -I . main__B.cmt
   $ odoc compile --count-occurrences -I . main__.cmt
-  $ odoc compile --source-name main.ml --source-parent-file src-source.odoc  --count-occurrences -I . main.cmt
+  $ odoc compile --count-occurrences -I . main.cmt
 
   $ odoc link -I . main.odoc
   $ odoc link -I . main__A.odoc

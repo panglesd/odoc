@@ -32,7 +32,7 @@ module Source_info = struct
 
   type infos = annotation with_pos list
 
-  type t = { id : Identifier.SourcePage.t; infos : infos }
+  type t = { id : Identifier.SourcePage.t option; infos : infos }
 end
 
 module rec Module : sig
