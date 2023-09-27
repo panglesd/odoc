@@ -503,22 +503,30 @@ let of_cmt (source_id : Odoc_model.Paths.Identifier.SourcePage.t)
 
   (uid_to_id, postprocess_poses source_id vs uid_to_id uid_to_loc)
 
-let read_cmt_infos source_id_opt id cmt_info =
-  let occ_infos = Occurrences.of_cmt cmt_info in
+let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
   match Odoc_model.Compat.shape_of_cmt_infos cmt_info with
   | Some shape -> (
       let uid_to_loc = cmt_info.cmt_uid_to_loc in
-      match (source_id_opt, cmt_info.cmt_annots) with
-      | Some source_id, Implementation impl ->
+      match (source_id_opt, count_occurrences, cmt_info.cmt_annots) with
+      | Some source_id, _, Implementation impl ->
           let map, source_infos = of_cmt source_id id impl uid_to_loc in
+          let occ_infos = Occurrences.of_cmt impl in
           let source_infos = List.rev_append source_infos occ_infos in
           ( Some (shape, map),
             Some
               {
-                Odoc_model.Lang.Source_info.id = source_id;
+                Odoc_model.Lang.Source_info.id = Some source_id;
                 infos = source_infos;
               } )
-      | _, _ -> (Some (shape, Odoc_model.Compat.empty_map), None))
+      | None, true, Implementation impl ->
+          let occ_infos = Occurrences.of_cmt impl in
+          ( None,
+            Some
+              {
+                Odoc_model.Lang.Source_info.id = None;
+                infos = occ_infos;
+              } )
+      | _, _, _ -> (Some (shape, Odoc_model.Compat.empty_map), None))
   | None -> (None, None)
 
 
