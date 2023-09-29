@@ -31,15 +31,12 @@
   (> %{ocaml_version} 4.11))
  (deps
   (package odoc)
+  (universe) ; Benchmark depends on the running programs in the background
   (glob_files *.mld)
   (glob_files library_mlds/*)
   (glob_files examples/*.ml*))
  (action
-  (progn
-   ; Make sure the benchmark result is created as Dune would not show the diff
-   ; if the script failed before creating it.
-   (write-file driver-benchmarks.json "")
-   (run ocaml-mdx-test --force-output %{dep:driver.mld}))))
+   (run ocaml-mdx-test --force-output %{dep:driver.mld})))
 
 (rule
  (alias docgen)
