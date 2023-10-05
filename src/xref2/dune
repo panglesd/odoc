@@ -8,12 +8,14 @@
  (libraries odoc_model))
 
 (rule
- (with-stdout-to shape_tools.ml
-   (run %{bin:cppo} -V OCAML:%{ocaml_version} %{dep:shape_tools.cppo.ml})))
+ (with-stdout-to
+  shape_tools.ml
+  (run %{bin:cppo} -V OCAML:%{ocaml_version} %{dep:shape_tools.cppo.ml})))
 
 (rule
- (with-stdout-to shape_tools.mli
-   (run %{bin:cppo} -V OCAML:%{ocaml_version} %{dep:shape_tools.cppo.mli})))
+ (with-stdout-to
+  shape_tools.mli
+  (run %{bin:cppo} -V OCAML:%{ocaml_version} %{dep:shape_tools.cppo.mli})))
 
 (rule
  (alias runmdx)
