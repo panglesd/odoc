@@ -26,7 +26,7 @@ let relativize p = Fpath.(v ".." // p) (* this driver is run from the [doc] dir 
 
 (* Whether to instrument with landmarks. Result for each commands will be saved
    to directory [_build/default/doc/landmarks]. *)
-let instrument = false
+let instrument = true
 ]}
 
 {1 Desired Output}
