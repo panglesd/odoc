@@ -1025,9 +1025,6 @@ and lookup_constructor :
       >>= fun (_, x) -> Ok x
   | `FType_removed _ -> Error `Find_failure (* failwith "Error" *)
 
-(* handle_value_lookup env (ValueName.to_string id) p sg *)
-(* >>= fun (_, `FValue (name, c)) -> Ok (`FValue (name, Subst.value sub c)) *)
-
 and lookup_class_type :
     Env.t ->
     Cpath.Resolved.class_type ->
@@ -1381,18 +1378,10 @@ and resolve_constructor :
       match parent_type with
       | `FType_removed _ -> (* failwith "error" *) Error `Find_failure
       | `FType (_, t) ->
-          handle_constructor_lookup env (ConstructorName.to_string id) parent t
-      (* let result = *)
-      (*   match Find.value_in_sig parent_sig (ValueName.to_string id) with *)
-      (*   | `FValue (name, t) :: _ -> *)
-      (*       Some (`Value (parent, name), `FValue (name, Subst.value sub t)) *)
-      (*   | [] -> None *)
-      (* in *)
-      (* of_option ~error:`Find_failure result *))
+          handle_constructor_lookup env (ConstructorName.to_string id) parent t)
   | `Resolved r ->
       let x = lookup_constructor env r in
       x >>= fun t -> Ok (r, t)
-(* Ok (`Constructor a, t) *)
 
 and resolve_class_type : Env.t -> Cpath.class_type -> resolve_class_type_result
     =

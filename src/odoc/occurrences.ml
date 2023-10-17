@@ -25,44 +25,25 @@ module H = Hashtbl.Make (Odoc_model.Paths.Identifier)
 let count ~dst ~warnings_options:_ directories =
   let htbl = H.create 100 in
   let f () (unit : Odoc_model.Lang.Compilation_unit.t) =
+    let incr tbl p p' =
+      let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
+      let old_value = match H.find_opt tbl id with Some n -> n | None -> 0 in
+      if not Odoc_model.Paths.Path.(is_hidden p') then
+        H.replace tbl id (old_value + 1)
+    in
     let () =
       List.iter
         (function
           | Odoc_model.Lang.Source_info.ModulePath (`Resolved p as p'), _ ->
-              let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
-              let old_value =
-                match H.find_opt htbl id with Some n -> n | None -> 0
-              in
-              if not Odoc_model.Paths.Path.(is_hidden (p' : Module.t :> t)) then
-                H.replace htbl id (old_value + 1)
+              incr htbl p Odoc_model.Paths.Path.((p' : Module.t :> t))
           | ValuePath (`Resolved p as p'), _ ->
-              let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
-              let old_value =
-                match H.find_opt htbl id with Some n -> n | None -> 0
-              in
-              if not Odoc_model.Paths.Path.(is_hidden (p' : Value.t :> t)) then
-                H.replace htbl id (old_value + 1)
+              incr htbl p Odoc_model.Paths.Path.((p' : Value.t :> t))
           | ClassPath (`Resolved p as p'), _ ->
-              let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
-              let old_value =
-                match H.find_opt htbl id with Some n -> n | None -> 0
-              in
-              if not Odoc_model.Paths.Path.(is_hidden (p' : ClassType.t :> t))
-              then H.replace htbl id (old_value + 1)
+              incr htbl p Odoc_model.Paths.Path.((p' : ClassType.t :> t))
           | MtyPath (`Resolved p as p'), _ ->
-              let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
-              let old_value =
-                match H.find_opt htbl id with Some n -> n | None -> 0
-              in
-              if not Odoc_model.Paths.Path.(is_hidden (p' : ModuleType.t :> t))
-              then H.replace htbl id (old_value + 1)
+              incr htbl p Odoc_model.Paths.Path.((p' : ModuleType.t :> t))
           | TypePath (`Resolved p as p'), _ ->
-              let id = Odoc_model.Paths.Path.Resolved.(identifier (p :> t)) in
-              let old_value =
-                match H.find_opt htbl id with Some n -> n | None -> 0
-              in
-              if not Odoc_model.Paths.Path.(is_hidden (p' : Type.t :> t)) then
-                H.replace htbl id (old_value + 1)
+              incr htbl p Odoc_model.Paths.Path.((p' : Type.t :> t))
           | _ -> ())
         (match unit.source_info with None -> [] | Some i -> i.infos)
     in
