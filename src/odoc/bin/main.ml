@@ -294,7 +294,9 @@ end = struct
       Arg.(value & flag & info ~doc [ "r"; "resolve-fwd-refs" ])
     in
     let count_occurrences =
-      let doc = "Count occurrences in implementation. Useful for " in
+      let doc =
+        "Count occurrences in implementation. Useful in search ranking."
+      in
       Arg.(value & flag & info ~doc [ "count-occurrences" ])
     in
     Term.(

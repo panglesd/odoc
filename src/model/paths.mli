@@ -357,12 +357,6 @@ module rec Path : sig
 
     module Value : sig
       type t = Paths_types.Resolved_path.value
-
-      (* val of_ident : Identifier.Path.Value.t -> t *)
-
-      (* val is_hidden : t -> bool *)
-
-      (* val identifier : t -> Identifier.Path.Type.t *)
     end
 
     module ClassType : sig
