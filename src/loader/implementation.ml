@@ -510,6 +510,8 @@ let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
       match (source_id_opt, count_occurrences, cmt_info.cmt_annots) with
       | Some source_id, _, Implementation impl ->
           let map, source_infos = of_cmt source_id id impl uid_to_loc in
+          (* Occurrence infos are used in source rendering, for jump to
+             documentation. *)
           let occ_infos = Occurrences.of_cmt impl in
           let source_infos = List.rev_append source_infos occ_infos in
           ( Some (shape, map),
