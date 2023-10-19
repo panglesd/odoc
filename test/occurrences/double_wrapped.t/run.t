@@ -44,8 +44,9 @@ Uses of values Y.x and Z.y (in b.ml) are not counted since they come from a "loc
 Uses of values Main__.C.y and Main__.A.x are not rewritten since we use references instead of paths.
 
   $ occurrences_print occurrences.txt
-  Main.A.x was used 2 times
-  Main.A.t was used 1 times
-  Main.A was used 3 times
-  Main.A.M was used 2 times
-  Main.B was used 1 times
+  Main.A.t was used directly 1 times and indirectly 0 times
+  Main.A.x was used directly 2 times and indirectly 0 times
+  Main.A.M was used directly 2 times and indirectly 0 times
+  Main.A was used directly 3 times and indirectly 5 times
+  Main.B was used directly 1 times and indirectly 0 times
+  Main was used directly 0 times and indirectly 9 times
