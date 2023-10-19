@@ -5,7 +5,10 @@ let pos_of_loc loc = (loc.Location.loc_start.pos_cnum, loc.loc_end.pos_cnum)
 module Global_analysis = struct
   let rec docparent_of_path (path : Path.t) : _ option =
     match path with
-    | Pident id ->
+    | Pident id
+      when true
+           (* see comment on last match case for the intriguing [when] clause *)
+      ->
         let id_s = Ident.name id in
         if Ident.persistent id then Some (`Root id_s) else None
     | Pdot (i, l) -> (
@@ -13,8 +16,17 @@ module Global_analysis = struct
         | None -> None
         | Some i -> Some (`Dot (i, l)))
     | Papply (_, _) ->
-        (* When resolving Path, [odoc] currently assert it contains no functor. So we cannot use:
-           [docparent_of_path i] *)
+        (* When resolving Path, [odoc] currently assert it contains no
+           functor. So we cannot use [docparent_of_path i] *)
+        None
+    (* Pextra_ty *)
+    | _ ->
+        (* OCaml 5.1 introduced new kinds of paths, using the [Pextra_ty]
+           constructor, that we do not support for now. In order to avoid cppo
+           compatibility code, we use a wildcard and not the explicit
+           constructor. In order to avoid the "this match case is unused"
+           warning on OCaml < 5.1 we added a [when true] condition to one of the
+           previous match case *)
         None
 
   (* Types path (for instance) cannot be just `Root _, it needs to be `Dot. An
@@ -22,15 +34,17 @@ module Global_analysis = struct
      `Dot, but the typer does not know that. So, we need this function. *)
   let childpath_of_path (path : Path.t) =
     match path with
-    | Pident _ -> None (* is never persistent *)
+    | Pident _ when true (* See comment above *) ->
+        None (* is never persistent *)
     | Pdot (i, l) -> (
         match docparent_of_path i with
         | None -> None
         | Some i -> Some (`Dot (i, l)))
     | Papply (_i, _) ->
-        (* When resolving Path, [odoc] currently assert it contains no functor. So we cannot use:
-           [childpath_of_path i] *)
+        (* When resolving Path, [odoc] currently assert it contains no
+           functor. So we cannot use [childpath_of_path i] *)
         None
+    | _ -> None
 
   let expr poses expr =
     match expr with
