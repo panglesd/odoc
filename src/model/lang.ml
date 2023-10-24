@@ -18,15 +18,19 @@ open Paths
 
 (** {3 Modules} *)
 module Source_info = struct
+
+  type ('doc, 'impl) jump_to = {documentation : 'doc option ; implementation : 'impl option}
+
+  type none = |
+
   type annotation =
     | Definition of Paths.Identifier.SourceLocation.t
-    | Value of Paths.Identifier.SourceLocation.t
-    | ValuePath of Path.Value.t
-    | ModulePath of Path.Module.t
-    | ClassPath of Path.ClassType.t
-    | MtyPath of Path.ModuleType.t
-    | TypePath of Path.Type.t
-    | ConstructorPath of Path.Constructor.t
+    | Value of (Path.Value.t, Paths.Identifier.SourceLocation.t) jump_to
+    | Module of (Path.Module.t, none) jump_to
+    | Class of (Path.ClassType.t, none) jump_to
+    | ModuleType of (Path.ModuleType.t, none) jump_to
+    | Type of (Path.Type.t, none) jump_to
+    | Constructor of (Path.Constructor.t, none) jump_to
 
   type 'a with_pos = 'a * (int * int)
 
