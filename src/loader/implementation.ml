@@ -1,5 +1,3 @@
-#if OCAML_VERSION >= (4, 14, 0)
-
 (* open Odoc_model.Lang.Source_info *)
 
 let pos_of_loc loc = (loc.Location.loc_start.pos_cnum, loc.loc_end.pos_cnum)
@@ -349,12 +347,3 @@ let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
             Some { Odoc_model.Lang.Source_info.id = None; infos = [] } )
       | _, _, _ -> (Some (shape, Odoc_model.Compat.empty_map), None))
   | None -> (None, None)
-
-
-
-#else
-
-let read_cmt_infos _source_id_opt _id _cmt_info =
-  (None, None)
-
-#endif
