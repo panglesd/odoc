@@ -24,9 +24,16 @@ let html_of_doc ~config ~resolve docs =
         let children = List.concat @@ List.map (doc_to_html ~is_in_a) docs in
         match info with
         | Syntax tok -> [ span ~a:[ a_class [ tok ] ] children ]
-        | Link anchor ->
-            let href = Link.href ~config ~resolve anchor in
-            [ a ~a:[ a_href href ] children ]
+        | Link { documentation; implementation } -> (
+            let href_implementation =
+              Option.map (Link.href ~config ~resolve) implementation
+            in
+            let _href_documentation =
+              Option.map (Link.href ~config ~resolve) documentation
+            in
+            match href_implementation with
+            | Some href -> [ a ~a:[ a_href href ] children ]
+            | None -> children)
         | Anchor lbl -> [ span ~a:[ a_id lbl ] children ])
   in
   span ~a:[] @@ List.concat @@ List.map (doc_to_html ~is_in_a:false) docs

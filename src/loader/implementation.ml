@@ -20,12 +20,13 @@ module Analysis = struct
   type env = Ident_env.t (* * Location.t Shape.Uid.Tbl.t *)
 
   let env_wrap : (Ident_env.t -> Ident_env.t) -> env -> env =
-   fun f (env(* , uid_to_loc *)) -> (f env(* , uid_to_loc *))
+   fun f env (* , uid_to_loc *) -> f env (* , uid_to_loc *)
 
-  let get_env : env -> Ident_env.t = fun (env(* , _ *)) -> env
+  let get_env : env -> Ident_env.t = fun env (* , _ *) -> env
 
-  let _get_uid_to_loc : (* env *) Location.t Shape.Uid.Tbl.t -> Location.t Shape.Uid.Tbl.t =
-   fun ((* _,  *)uid_to_loc) -> uid_to_loc
+  let _get_uid_to_loc :
+      (* env *) Location.t Shape.Uid.Tbl.t -> Location.t Shape.Uid.Tbl.t =
+   fun (* _,  *) uid_to_loc -> uid_to_loc
 
   let rec structure env parent str =
     let env' = env_wrap (Ident_env.add_structure_tree_items parent str) env in
@@ -143,62 +144,84 @@ module Analysis = struct
     | desc -> desc
 end
 
-let postprocess_poses source_id poses uid_to_id uid_to_loc : Odoc_model.Lang.Source_info.infos =
-  let local_def_anchors =
-    List.filter_map
-      (function
-        | Occurrences.Global_analysis.Definition id, _ ->
-            let name =
-              Odoc_model.Names.LocalName.make_std
-                (Printf.sprintf "local_%s_%d" (Ident.name id) (counter ()))
-            in
-            let identifier =
-              Odoc_model.Paths.Identifier.Mk.source_location_int
-                (source_id, name)
-            in
-            Some (id, identifier)
-        | _ -> None)
-      poses
-  in
-  let poses =
-    List.map
-      (function
-        | Occurrences.Global_analysis.Definition id, loc ->
-            ( Odoc_model.Lang.Source_info.Definition
-                (List.assoc id local_def_anchors),
-              loc )
-        | Value ({ Odoc_model.Lang.Source_info.implementation; _ } as v), loc ->
-            let implementation =
-              match implementation with
-              | Some (LocalValue uniq) -> (
-                  match List.assoc_opt uniq local_def_anchors with
-                  | Some anchor -> Some anchor
-                  | None -> None)
-              | Some (DefJmp x) -> (
-                  match Shape.Uid.Map.find_opt x uid_to_id with
-                  | Some id -> Some id
-                  | None -> None)
-              | None -> None
-            in
-            (Value { v with implementation }, loc)
-        | Module m, loc -> (Module m, loc)
-        | Class m, loc -> (Class m, loc)
-        | ModuleType m, loc -> (ModuleType m, loc)
-        | Type m, loc -> (Type m, loc)
-        | Constructor m, loc -> (Constructor m, loc))
-      poses
-  in
-  let defs =
-    Shape.Uid.Map.fold
-      (fun uid id acc ->
-        let loc_opt = Shape.Uid.Tbl.find_opt uid_to_loc uid in
-        match loc_opt with
-        | Some loc ->
-            (Odoc_model.Lang.Source_info.Definition id, pos_of_loc loc) :: acc
-        | _ -> acc)
-      uid_to_id []
-  in
-  defs @ poses
+let postprocess_poses source_id poses uid_to_id uid_to_loc :
+    Odoc_model.Lang.Source_info.infos =
+  match source_id with
+  | None ->
+      List.filter_map
+        (function
+          | Occurrences.Global_analysis.Definition _, _ -> None
+          | Value v, loc ->
+              Some
+                ( Odoc_model.Lang.Source_info.Value
+                    { v with implementation = None },
+                  loc )
+          | Module m, loc -> Some (Module { m with implementation = None }, loc)
+          | Class m, loc -> Some (Class { m with implementation = None }, loc)
+          | ModuleType m, loc ->
+              Some (ModuleType { m with implementation = None }, loc)
+          | Type m, loc -> Some (Type { m with implementation = None }, loc)
+          | Constructor m, loc ->
+              Some (Constructor { m with implementation = None }, loc))
+        poses
+  | Some source_id ->
+      let local_def_anchors =
+        List.filter_map
+          (function
+            | Occurrences.Global_analysis.Definition id, _ ->
+                let name =
+                  Odoc_model.Names.LocalName.make_std
+                    (Printf.sprintf "local_%s_%d" (Ident.name id) (counter ()))
+                in
+                let identifier =
+                  Odoc_model.Paths.Identifier.Mk.source_location_int
+                    (source_id, name)
+                in
+                Some (id, identifier)
+            | _ -> None)
+          poses
+      in
+      let poses =
+        List.map
+          (function
+            | Occurrences.Global_analysis.Definition id, loc ->
+                ( Odoc_model.Lang.Source_info.Definition
+                    (List.assoc id local_def_anchors),
+                  loc )
+            | ( Value ({ Odoc_model.Lang.Source_info.implementation; _ } as v),
+                loc ) ->
+                let implementation =
+                  match implementation with
+                  | Some (LocalValue uniq) -> (
+                      match List.assoc_opt uniq local_def_anchors with
+                      | Some anchor -> Some anchor
+                      | None -> None)
+                  | Some (DefJmp x) -> (
+                      match Shape.Uid.Map.find_opt x uid_to_id with
+                      | Some id -> Some id
+                      | None -> None)
+                  | None -> None
+                in
+                (Value { v with implementation }, loc)
+            | Module m, loc -> (Module m, loc)
+            | Class m, loc -> (Class m, loc)
+            | ModuleType m, loc -> (ModuleType m, loc)
+            | Type m, loc -> (Type m, loc)
+            | Constructor m, loc -> (Constructor m, loc))
+          poses
+      in
+      let defs =
+        Shape.Uid.Map.fold
+          (fun uid id acc ->
+            let loc_opt = Shape.Uid.Tbl.find_opt uid_to_loc uid in
+            match loc_opt with
+            | Some loc ->
+                (Odoc_model.Lang.Source_info.Definition id, pos_of_loc loc)
+                :: acc
+            | _ -> acc)
+          uid_to_id []
+      in
+      defs @ poses
 
 let anchor_of_identifier id =
   let open Odoc_document.Url in
@@ -274,13 +297,13 @@ let anchor_of_identifier id =
   in
   anchor_of_identifier [] id |> String.concat "."
 
-let of_cmt (source_id : Odoc_model.Paths.Identifier.SourcePage.t)
+let of_cmt (source_id : Odoc_model.Paths.Identifier.SourcePage.t option)
     (id : Odoc_model.Paths.Identifier.RootModule.t)
     (structure : Typedtree.structure)
     (uid_to_loc : Warnings.loc Types.Uid.Tbl.t) =
   let env = Ident_env.empty () in
   let () =
-    Analysis.structure (env(* , uid_to_loc *))
+    Analysis.structure env (* , uid_to_loc *)
       (id :> Odoc_model.Paths.Identifier.Signature.t)
       structure
     (* |> List.rev *)
@@ -293,31 +316,36 @@ let of_cmt (source_id : Odoc_model.Paths.Identifier.SourcePage.t)
   let uid_to_id : Odoc_model.Paths.Identifier.SourceLocation.t Shape.Uid.Map.t =
     Shape.Uid.Map.filter_map
       (fun uid loc ->
-        if loc.Location.loc_ghost then None
-        else
-          let identifier = Ident_env.identifier_of_loc env loc in
-          let anchor =
-            match identifier with
-            | Some x ->
-                Some
-                  (Odoc_model.Names.DefName.make_std (anchor_of_identifier x))
-            | None -> (
-                match uid with
-                | Compilation_unit _ -> None
-                | Item _ ->
-                    let name =
-                      Odoc_model.Names.DefName.make_std
-                        (Printf.sprintf "def_%d" (counter ()))
-                    in
-                    Some name
-                | _ -> None)
-          in
-          match anchor with
-          | Some a ->
-              Some
-                (Odoc_model.Paths.Identifier.Mk.source_location (source_id, a)
-                  :> Odoc_model.Paths.Identifier.SourceLocation.t)
-          | None -> None)
+        match source_id with
+        | None -> None
+        | Some source_id -> (
+            if loc.Location.loc_ghost then None
+            else
+              let identifier = Ident_env.identifier_of_loc env loc in
+              let anchor =
+                match identifier with
+                | Some x ->
+                    Some
+                      (Odoc_model.Names.DefName.make_std
+                         (anchor_of_identifier x))
+                | None -> (
+                    match uid with
+                    | Compilation_unit _ -> None
+                    | Item _ ->
+                        let name =
+                          Odoc_model.Names.DefName.make_std
+                            (Printf.sprintf "def_%d" (counter ()))
+                        in
+                        Some name
+                    | _ -> None)
+              in
+              match anchor with
+              | Some a ->
+                  Some
+                    (Odoc_model.Paths.Identifier.Mk.source_location
+                       (source_id, a)
+                      :> Odoc_model.Paths.Identifier.SourceLocation.t)
+              | None -> None))
       uid_to_loc_map
   in
   (uid_to_id, env)
@@ -328,22 +356,21 @@ let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
   | Some shape -> (
       let uid_to_loc = cmt_info.cmt_uid_to_loc in
       match (source_id_opt, count_occurrences, cmt_info.cmt_annots) with
-      | Some source_id, _, Implementation impl ->
-          let map, _env = of_cmt source_id id impl uid_to_loc in
+      | (Some _ as source_id), _, Implementation impl
+      | source_id, true, Implementation impl ->
+          let map, env = of_cmt source_id id impl uid_to_loc in
           (* Occurrence infos are used in source rendering, for jump to
              documentation. *)
-          let occ_infos = Occurrences.of_cmt uid_to_loc impl in
-          let source_infos = postprocess_poses source_id occ_infos map uid_to_loc in
+          let occ_infos = Occurrences.of_cmt env uid_to_loc impl in
+          let source_infos =
+            postprocess_poses source_id occ_infos map uid_to_loc
+          in
           (* let source_infos = List.rev_append source_infos occ_infos in *)
           ( Some (shape, map),
             Some
               {
-                Odoc_model.Lang.Source_info.id = Some source_id;
+                Odoc_model.Lang.Source_info.id = source_id;
                 infos = source_infos;
               } )
-      | None, true, Implementation _impl ->
-          (* let occ_infos = Occurrences.of_cmt impl in *)
-          ( None,
-            Some { Odoc_model.Lang.Source_info.id = None; infos = [] } )
       | _, _, _ -> (Some (shape, Odoc_model.Compat.empty_map), None))
   | None -> (None, None)

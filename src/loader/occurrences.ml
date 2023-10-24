@@ -3,9 +3,7 @@ open Odoc_model.Lang.Source_info
 let pos_of_loc loc = (loc.Location.loc_start.pos_cnum, loc.loc_end.pos_cnum)
 
 module Global_analysis = struct
-  type value_implementation =
-    | LocalValue of Ident.t
-    | DefJmp of Shape.Uid.t
+  type value_implementation = LocalValue of Ident.t | DefJmp of Shape.Uid.t
 
   type annotation =
     | Definition of Ident.t
@@ -15,7 +13,6 @@ module Global_analysis = struct
     | ModuleType of (Odoc_model.Paths.Path.ModuleType.t, none) jump_to
     | Type of (Odoc_model.Paths.Path.Type.t, none) jump_to
     | Constructor of (Odoc_model.Paths.Path.Constructor.t, none) jump_to
-
 
   let rec docparent_of_path (path : Path.t) : _ option =
     match path with
@@ -60,100 +57,128 @@ module Global_analysis = struct
         None
     | _ -> None
 
-let expr uid_to_loc poses expr =
-  let exp_loc = expr.Typedtree.exp_loc in
-  if exp_loc.loc_ghost then ()
-  else
-    match expr.exp_desc with
-    | Texp_ident (p, _, value_description) -> (
-        let implementation =
-          match
-            Shape.Uid.Tbl.find_opt uid_to_loc
-              value_description.val_uid
-          with
-          | Some _ -> Some (DefJmp value_description.val_uid)
-          | None -> (
-              match p with Pident id -> Some (LocalValue id) | _ -> None)
-        in
-        let documentation = childpath_of_path p in
-        match (implementation, documentation) with
-        | None, None -> ()
-        | _ ->
-            poses :=
-              ( Value { documentation; implementation = None },
-                pos_of_loc exp_loc )
-              :: !poses)
-    | Texp_construct (l, { cstr_res; _ }, _) -> (
-        let desc = Compat.get_type_desc cstr_res in
-        match desc with
-        | Types.Tconstr (p, _, _) ->
-            let implementation = None in
-            let documentation =
-              match childpath_of_path p with
-              | None -> None
-              | Some ref_ -> Some (`Dot (ref_, Longident.last l.txt))
-            in
-            poses :=
-              (Constructor { implementation; documentation }, pos_of_loc exp_loc)
-              :: !poses
-        | _ -> ())
-    | _ -> ()
-
-  let pat poses : _ Compat.pattern -> unit = function
-    | { Typedtree.pat_desc; pat_loc; _ } -> (
-        match Compat.get_pattern_construct_info pat_desc with
-        | Some (l, cstr_res) -> (
-            let desc = Compat.get_type_desc cstr_res in
-            match desc with
-            | Types.Tconstr (p, _, _) -> (
+  let expr uid_to_loc poses expr =
+    let exp_loc = expr.Typedtree.exp_loc in
+    if exp_loc.loc_ghost then ()
+    else
+      match expr.exp_desc with
+      | Texp_ident (p, _, value_description) -> (
+          let implementation =
+            match
+              Shape.Uid.Tbl.find_opt uid_to_loc value_description.val_uid
+            with
+            | Some _ -> Some (DefJmp value_description.val_uid)
+            | None -> (
+                match p with Pident id -> Some (LocalValue id) | _ -> None)
+          in
+          let documentation = childpath_of_path p in
+          match (implementation, documentation) with
+          | None, None -> ()
+          | _ ->
+              poses :=
+                ( Value { documentation; implementation },
+                  pos_of_loc exp_loc )
+                :: !poses)
+      | Texp_construct (l, { cstr_res; _ }, _) -> (
+          let desc = Compat.get_type_desc cstr_res in
+          match desc with
+          | Types.Tconstr (p, _, _) ->
               let implementation = None in
-                let documentation =match childpath_of_path p with
+              let documentation =
+                match childpath_of_path p with
                 | None -> None
-                | Some ref_ -> Some (`Dot (ref_, Longident.last l.txt)) in
-                    poses :=
-                      ( Constructor ({implementation ; documentation}),
-                        pos_of_loc pat_loc )
-                      :: !poses)
-            | _ -> ())
-        | None -> ())
+                | Some ref_ -> Some (`Dot (ref_, Longident.last l.txt))
+              in
+              poses :=
+                ( Constructor { implementation; documentation },
+                  pos_of_loc exp_loc )
+                :: !poses
+          | _ -> ())
+      | _ -> ()
+
+  let pat env (type a) poses : a Compat.pattern -> unit = function
+    | { Typedtree.pat_desc; pat_loc = { loc_ghost = false; _ } as loc; _ } ->
+        let () =
+          match Compat.get_pattern_construct_info pat_desc with
+          | Some (l, cstr_res) -> (
+              let desc = Compat.get_type_desc cstr_res in
+              match desc with
+              | Types.Tconstr (p, _, _) ->
+                  let implementation = None in
+                  let documentation =
+                    match childpath_of_path p with
+                    | None -> None
+                    | Some ref_ -> Some (`Dot (ref_, Longident.last l.txt))
+                  in
+                  poses :=
+                    ( Constructor { implementation; documentation },
+                      pos_of_loc loc )
+                    :: !poses
+              | _ -> ())
+          | None -> ()
+        in
+        let maybe_localvalue id loc =
+          match Ident_env.identifier_of_loc (env) loc with
+          | None -> Some (Definition id, pos_of_loc loc)
+          | Some _ -> None
+        in
+        let () =
+          match pat_desc with
+          | Tpat_var (id, loc) -> (
+              match maybe_localvalue id loc.loc with
+              | Some x -> poses := x :: !poses
+              | None -> ())
+          | Tpat_alias (_, id, loc) -> (
+              match maybe_localvalue id loc.loc with
+              | Some x -> poses := x :: !poses
+              | None -> ())
+          | _ -> ()
+        in
+        ()
+    | _ -> ()
 
   let module_expr poses mod_expr =
     match mod_expr with
-    | { Typedtree.mod_desc = Tmod_ident (p, _); mod_loc; _ } -> (
-        let documentation =  docparent_of_path p in
+    | { Typedtree.mod_desc = Tmod_ident (p, _); mod_loc; _ } ->
+        let documentation = docparent_of_path p in
         let implementation = None in
-            poses :=
-              ( Module {implementation ; documentation},
-                pos_of_loc mod_loc )
-              :: !poses)
+        poses :=
+          (Module { implementation; documentation }, pos_of_loc mod_loc)
+          :: !poses
     | _ -> ()
 
   let class_type poses cltyp =
     match cltyp with
-    | { Typedtree.cltyp_desc = Tcty_constr (p, _, _); cltyp_loc; _ } -> (
+    | { Typedtree.cltyp_desc = Tcty_constr (p, _, _); cltyp_loc; _ } ->
         let implementation = None in
         let documentation = childpath_of_path p in
-         poses := (Class {implementation ; documentation}, pos_of_loc cltyp_loc) :: !poses)
+        poses :=
+          (Class { implementation; documentation }, pos_of_loc cltyp_loc)
+          :: !poses
     | _ -> ()
 
   let module_type poses mty_expr =
     match mty_expr with
-    | { Typedtree.mty_desc = Tmty_ident (p, _); mty_loc; _ } -> (
+    | { Typedtree.mty_desc = Tmty_ident (p, _); mty_loc; _ } ->
         let implementation = None in
-        let documentation =  childpath_of_path p in
-        poses := (ModuleType {implementation ; documentation}, pos_of_loc mty_loc) :: !poses)
+        let documentation = childpath_of_path p in
+        poses :=
+          (ModuleType { implementation; documentation }, pos_of_loc mty_loc)
+          :: !poses
     | _ -> ()
 
   let core_type poses ctyp_expr =
     match ctyp_expr with
-    | { Typedtree.ctyp_desc = Ttyp_constr (p, _, _); ctyp_loc; _ } -> (
+    | { Typedtree.ctyp_desc = Ttyp_constr (p, _, _); ctyp_loc; _ } ->
         let implementation = None in
-        let documentation =  childpath_of_path p in
-        poses := (Type {implementation ; documentation}, pos_of_loc ctyp_loc) :: !poses)
+        let documentation = childpath_of_path p in
+        poses :=
+          (Type { implementation; documentation }, pos_of_loc ctyp_loc)
+          :: !poses
     | _ -> ()
 end
 
-let of_cmt uid_to_loc structure =
+let of_cmt env uid_to_loc structure =
   let poses = ref [] in
   let module_expr iterator mod_expr =
     Global_analysis.module_expr poses mod_expr;
@@ -164,7 +189,7 @@ let of_cmt uid_to_loc structure =
     Compat.Tast_iterator.default_iterator.expr iterator e
   in
   let pat iterator e =
-    Global_analysis.pat poses e;
+    Global_analysis.pat env poses e;
     Compat.Tast_iterator.default_iterator.pat iterator e
   in
   let typ iterator ctyp_expr =

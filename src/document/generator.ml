@@ -252,6 +252,27 @@ module Make (Syntax : SYNTAX) = struct
     let path id = Url.Path.from_identifier id
     let url id = Url.from_path (path id)
 
+    let to_link documentation implementation =
+      let documentation =
+        let open Paths.Path.Resolved in
+        match documentation with
+        | Some (`Resolved p) when not (is_hidden (p :> t)) -> (
+            let id = identifier (p :> t) in
+            match Url.from_identifier ~stop_before:false id with
+            | Ok link -> Some link
+            | _ -> None)
+        | _ -> None
+      in
+      let implementation =
+        match implementation with
+        | None -> None
+        | Some id -> (
+            match Url.Anchor.from_identifier (id :> Paths.Identifier.t) with
+            | Ok url -> Some url
+            | Error _ -> None)
+      in
+      Some (Source_page.Link { implementation; documentation })
+
     let info_of_info : Lang.Source_info.annotation -> Source_page.info option =
       function
       (* | Value {implementation = Some id; _} -> ( *)
@@ -264,48 +285,14 @@ module Make (Syntax : SYNTAX) = struct
           | `SourceLocationInternal (_, local) ->
               Some (Anchor (LocalName.to_string local))
           | _ -> None)
-      | Module ({documentation = Some (`Resolved p) ; _})
-        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
-        -> (
-          let id = Paths.Path.Resolved.(identifier (p :> t)) in
-          match Url.from_identifier ~stop_before:false id with
-          | Ok link -> Some (Link link)
-          | _ -> None)
-      | ModuleType ({documentation = Some (`Resolved p) ; _})
-        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
-        -> (
-          let id = Paths.Path.Resolved.(identifier (p :> t)) in
-          match Url.from_identifier ~stop_before:false id with
-          | Ok link -> Some (Link link)
-          | _ -> None)
-      | Type ({documentation = Some (`Resolved p) ; _})
-        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
-        -> (
-          let id = Paths.Path.Resolved.(identifier (p :> t)) in
-          match Url.from_identifier ~stop_before:false id with
-          | Ok link -> Some (Link link)
-          | _ -> None)
-      | Value ({documentation = Some (`Resolved p) ; _})
-      (* | ValuePath (`Resolved p) *)
-        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
-        -> (
-          let id = Paths.Path.Resolved.(identifier (p :> t)) in
-          match Url.from_identifier ~stop_before:false id with
-          | Ok link -> Some (Link link)
-          | _ -> None)
-      | Constructor ({documentation = Some (`Resolved p) ; _})
-        when not (Paths.Path.Resolved.is_hidden (p :> Paths.Path.Resolved.t))
-        -> (
-          let id = Paths.Path.Resolved.(identifier (p :> t)) in
-          match Url.from_identifier ~stop_before:false id with
-          | Ok link -> Some (Link link)
-          | _ -> None)
-      | Module _ -> None
-      | Class _ -> None
-      | Type _ -> None
-      | ModuleType _ -> None
-      | Value _ -> None
-      | Constructor _ -> None
+      | Module { documentation; _ } -> to_link documentation None
+      | ModuleType { documentation; _ } -> to_link documentation None
+      | Type { documentation; _ } -> to_link documentation None
+      | Class { documentation; _ } -> to_link documentation None
+      | Value { documentation; implementation } ->
+          to_link documentation implementation
+      | Constructor { documentation; _ } -> to_link documentation None
+
 
     let source id syntax_info infos source_code =
       let url = path id in

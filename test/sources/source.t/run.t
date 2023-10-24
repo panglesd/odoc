@@ -279,9 +279,9 @@ Ids generated in the source code:
   id="val-{x}2"
   id="val-y"
   id="val-z"
-  id="local_a_2"
-  id="val-z'"
   id="local_a_3"
+  id="val-z'"
+  id="local_a_2"
   id="module-A"
   id="module-B"
   id="module-type-T"
@@ -308,4 +308,3 @@ Ids generated in the source code:
   id="module-FF2"
   id="module-FF2.argument-1-A.module-E"
   id="module-FF2.argument-2-A.module-F"
-

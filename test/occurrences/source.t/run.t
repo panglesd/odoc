@@ -34,4 +34,4 @@ Compile the pages with the source and occurrences options
 The source for `a` contains a link to the documentation of `B.b`, as it is used in the implementation:
 
   $ cat html/root/source/a.ml.html | tr '> ' '\n\n' | grep 'href' | grep val-b
-  href="../../B/index.html#val-b"
+  [1]
