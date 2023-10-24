@@ -13,6 +13,8 @@ Tags:
 
 ### Added
 - Display 'private' keyword for private type extensions (@gpetiot, #1019)
+- Add jumps to documentation in rendered source code, and a `count-occurrences`
+  flag and command to count occurrences of every identifiers (@panglesd, #976)
 
 # 2.3.0
 
