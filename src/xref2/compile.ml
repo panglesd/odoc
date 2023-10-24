@@ -87,27 +87,25 @@ and source_info env si = { si with infos = source_info_infos env si.infos }
 
 and source_info_infos env infos =
   let open Source_info in
+  let map_doc f v =
+    let documentation =
+      match v.documentation with Some p -> Some (f p) | None -> None
+    in
+    { v with documentation }
+  in
   List.map
     (function
-      | ModulePath p, pos ->
-          let p = module_path env p in
-          (ModulePath p, pos)
-      | TypePath p, pos ->
-          let p = type_path env p in
-          (TypePath p, pos)
-      | MtyPath p, pos ->
-          let p = module_type_path env p in
-          (MtyPath p, pos)
-      | ClassPath p, pos ->
-          let p = class_type_path env p in
-          (ClassPath p, pos)
-      | ValuePath p, pos ->
-          let p = value_path env p in
-          (ValuePath p, pos)
-      | ConstructorPath p, pos ->
-          let p = constructor_path env p in
-          (ConstructorPath p, pos)
-      | i -> i)
+      | v, pos ->
+          let v =
+            match v with
+            | Value v -> Value (map_doc (value_path env) v)
+            | Module v -> Module (map_doc (module_path env) v)
+            | ModuleType v -> ModuleType (map_doc (module_type_path env) v)
+            | Type v -> Type (map_doc (type_path env) v)
+            | Constructor v -> Constructor (map_doc (constructor_path env) v)
+            | i -> i
+          in
+          (v, pos))
     infos
 
 and content env id =

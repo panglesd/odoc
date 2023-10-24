@@ -126,15 +126,15 @@ let count ~dst ~warnings_options:_ directories =
     let () =
       List.iter
         (function
-          | Odoc_model.Lang.Source_info.ModulePath (`Resolved p as p'), _ ->
+          | Odoc_model.Lang.Source_info.Module ({documentation = Some (`Resolved p as p') ; _}), _ ->
               incr htbl p Odoc_model.Paths.Path.((p' : Module.t :> t))
-          | ValuePath (`Resolved p as p'), _ ->
+          | Value ({documentation = Some (`Resolved p as p') ; _}), _ ->
               incr htbl p Odoc_model.Paths.Path.((p' : Value.t :> t))
-          | ClassPath (`Resolved p as p'), _ ->
+          | Class ({documentation = Some (`Resolved p as p') ; _}), _ ->
               incr htbl p Odoc_model.Paths.Path.((p' : ClassType.t :> t))
-          | MtyPath (`Resolved p as p'), _ ->
+          | ModuleType ({documentation = Some (`Resolved p as p') ; _}), _ ->
               incr htbl p Odoc_model.Paths.Path.((p' : ModuleType.t :> t))
-          | TypePath (`Resolved p as p'), _ ->
+          | Type ({documentation = Some (`Resolved p as p') ; _}), _ ->
               incr htbl p Odoc_model.Paths.Path.((p' : Type.t :> t))
           | _ -> ())
         (match unit.source_info with None -> [] | Some i -> i.infos)

@@ -410,29 +410,23 @@ let rec unit env t =
     let open Source_info in
     match t.source_info with
     | Some inf ->
+        let map_doc f v =
+          let documentation =
+            match v.documentation with Some p -> Some (f p) | None -> None
+          in
+          { v with documentation }
+        in
         let infos =
           List.map
             (fun (i, pos) ->
               let info =
                 match i with
-                | ValuePath p ->
-                    let p = value_path env p in
-                    ValuePath p
-                | ModulePath p ->
-                    let p = module_path env p in
-                    ModulePath p
-                | MtyPath p ->
-                    let p = module_type_path env p in
-                    MtyPath p
-                | ClassPath p ->
-                    let p = class_type_path env p in
-                    ClassPath p
-                | TypePath p ->
-                    let p = type_path env p in
-                    TypePath p
-                | ConstructorPath p ->
-                    let p = constructor_path env p in
-                    ConstructorPath p
+                | Value v -> Value (map_doc (value_path env) v)
+                | Module v -> Module (map_doc (module_path env) v)
+                | ModuleType v -> ModuleType (map_doc (module_type_path env) v)
+                | Type v -> Type (map_doc (type_path env) v)
+                | Constructor v ->
+                    Constructor (map_doc (constructor_path env) v)
                 | i -> i
               in
               (info, pos))
