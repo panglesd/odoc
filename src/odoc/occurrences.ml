@@ -130,7 +130,7 @@ let count ~dst ~warnings_options:_ directories =
               incr htbl p Odoc_model.Paths.Path.((p' : Module.t :> t))
           | Value ({documentation = Some (`Resolved p as p') ; _}), _ ->
               incr htbl p Odoc_model.Paths.Path.((p' : Value.t :> t))
-          | Class ({documentation = Some (`Resolved p as p') ; _}), _ ->
+          | ClassType ({documentation = Some (`Resolved p as p') ; _}), _ ->
               incr htbl p Odoc_model.Paths.Path.((p' : ClassType.t :> t))
           | ModuleType ({documentation = Some (`Resolved p as p') ; _}), _ ->
               incr htbl p Odoc_model.Paths.Path.((p' : ModuleType.t :> t))

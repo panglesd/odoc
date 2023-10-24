@@ -284,7 +284,7 @@ module Make (Syntax : SYNTAX) = struct
       | Module { documentation; _ } -> to_link documentation None
       | ModuleType { documentation; _ } -> to_link documentation None
       | Type { documentation; _ } -> to_link documentation None
-      | Class { documentation; _ } -> to_link documentation None
+      | ClassType { documentation; _ } -> to_link documentation None
       | Value { documentation; implementation } ->
           to_link documentation implementation
       | Constructor { documentation; _ } -> to_link documentation None

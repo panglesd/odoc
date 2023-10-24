@@ -9,7 +9,7 @@ module Global_analysis = struct
     | Definition of Ident.t
     | Value of (Odoc_model.Paths.Path.Value.t, value_implementation) jump_to
     | Module of (Odoc_model.Paths.Path.Module.t, none) jump_to
-    | Class of (Odoc_model.Paths.Path.ClassType.t, none) jump_to
+    | ClassType of (Odoc_model.Paths.Path.ClassType.t, none) jump_to
     | ModuleType of (Odoc_model.Paths.Path.ModuleType.t, none) jump_to
     | Type of (Odoc_model.Paths.Path.Type.t, none) jump_to
     | Constructor of (Odoc_model.Paths.Path.Constructor.t, none) jump_to
@@ -154,7 +154,7 @@ module Global_analysis = struct
         let implementation = None in
         let documentation = childpath_of_path p in
         poses :=
-          (Class { implementation; documentation }, pos_of_loc cltyp_loc)
+          (ClassType { implementation; documentation }, pos_of_loc cltyp_loc)
           :: !poses
     | _ -> ()
 

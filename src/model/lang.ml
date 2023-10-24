@@ -27,7 +27,7 @@ module Source_info = struct
     | Definition of Paths.Identifier.SourceLocation.t
     | Value of (Path.Value.t, Paths.Identifier.SourceLocation.t) jump_to
     | Module of (Path.Module.t, none) jump_to
-    | Class of (Path.ClassType.t, none) jump_to
+    | ClassType of (Path.ClassType.t, none) jump_to
     | ModuleType of (Path.ModuleType.t, none) jump_to
     | Type of (Path.Type.t, none) jump_to
     | Constructor of (Path.Constructor.t, none) jump_to

@@ -146,7 +146,7 @@ let postprocess_poses source_id poses uid_to_id uid_to_loc :
                     { v with implementation = None },
                   loc )
           | Module m, loc -> Some (Module { m with implementation = None }, loc)
-          | Class m, loc -> Some (Class { m with implementation = None }, loc)
+          | ClassType m, loc -> Some (ClassType { m with implementation = None }, loc)
           | ModuleType m, loc ->
               Some (ModuleType { m with implementation = None }, loc)
           | Type m, loc -> Some (Type { m with implementation = None }, loc)
@@ -193,7 +193,7 @@ let postprocess_poses source_id poses uid_to_id uid_to_loc :
                 in
                 (Value { v with implementation }, loc)
             | Module m, loc -> (Module m, loc)
-            | Class m, loc -> (Class m, loc)
+            | ClassType m, loc -> (ClassType m, loc)
             | ModuleType m, loc -> (ModuleType m, loc)
             | Type m, loc -> (Type m, loc)
             | Constructor m, loc -> (Constructor m, loc))
