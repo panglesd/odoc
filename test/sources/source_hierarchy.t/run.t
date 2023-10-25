@@ -8,7 +8,7 @@ A page can have source children.
 Compile the modules:
 
   $ ocamlc -c a.ml -bin-annot
-  $ ocamlc -c b.ml -bin-annot
+  $ ocamlc -c b.ml -I . -bin-annot
   $ ocamlc -c c.ml -bin-annot
 
 Now, compile the pages with the --source option. The source-name must be included in the source-children of the source-parent:
@@ -26,6 +26,8 @@ Now, compile the pages with the --source option. The source-name must be include
   $ odoc html-generate --source a.ml --indent -o html a.odocl
   $ odoc html-generate --source b.ml --indent -o html b.odocl
   $ odoc html-generate --source c.ml --indent -o html c.odocl
+
+  $ odoc support-files -o html
 
 Source pages and source directory pages are generated:
 
@@ -78,3 +80,6 @@ A directory simply list its children:
     </div>
    </body>
   </html>
+
+  $ cp -r html /tmp/html
+  $ firefox /tmp/html
