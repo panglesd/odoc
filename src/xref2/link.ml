@@ -194,6 +194,11 @@ let constructor_path :
             in
             p)
 
+let () =
+  (* Until those are used *)
+  ignore value_path;
+  ignore constructor_path
+
 let class_type_path : Env.t -> Paths.Path.ClassType.t -> Paths.Path.ClassType.t
     =
  fun env p ->
