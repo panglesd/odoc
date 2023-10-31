@@ -487,7 +487,7 @@ let class_name_exists name items =
 let class_type_name_exists name items =
   List.exists (function | `ClassType (id',_,_,_,_) when Ident.name id' = name -> true | _ -> false) items
 
-let add_items : Id.Signature.t -> item list -> t -> t = fun parent items env ->
+let add_items : Id.Signature.t -> item list -> t -> unit = fun parent items env ->
   let open Odoc_model.Paths.Identifier in
   let rec inner items env =
     match items with
@@ -605,23 +605,23 @@ let add_items : Id.Signature.t -> item list -> t -> t = fun parent items env ->
       (match loc with | Some l -> LocHashtbl.add env.loc_to_ident l (identifier :> Id.any) | _ -> ());
       inner rest { env with hidden }
 
-    | [] -> env
+    | [] -> ()
     in inner items env
 
 let identifier_of_loc : t -> Location.t -> Odoc_model.Paths.Identifier.t option = fun env loc ->
   try Some (LocHashtbl.find env.loc_to_ident loc) with Not_found -> None
 
-let add_signature_tree_items : Paths.Identifier.Signature.t -> Typedtree.signature -> t -> t = 
+let add_signature_tree_items : Paths.Identifier.Signature.t -> Typedtree.signature -> t -> unit =
   fun parent sg env ->
     let items = extract_signature_tree_items false sg.sig_items |> flatten_includes in
     add_items parent items env
 
-let add_structure_tree_items : Paths.Identifier.Signature.t -> Typedtree.structure -> t -> t =
+let add_structure_tree_items : Paths.Identifier.Signature.t -> Typedtree.structure -> t -> unit =
   fun parent sg env ->
   let items = extract_structure_tree_items false sg.str_items |> flatten_includes in
   add_items parent items env
 
-let handle_signature_type_items : Paths.Identifier.Signature.t -> Compat.signature -> t -> t =
+let handle_signature_type_items : Paths.Identifier.Signature.t -> Compat.signature -> t -> unit =
   fun parent sg env ->
     let items = extract_signature_type_items sg in
     add_items parent items env
@@ -633,7 +633,7 @@ let add_parameter parent id name env =
   let () = IdentHashtbl.add env.module_paths id path in
   let () = IdentHashtbl.add env.modules id oid in
   let () = IdentHashtbl.add env.parameters id oid in
-  env
+  ()
 
 let find_module env id =
   IdentHashtbl.find env.module_paths id

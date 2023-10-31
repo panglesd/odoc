@@ -21,8 +21,8 @@ module Analysis = struct
 
   type env = Ident_env.t * Location.t Shape.Uid.Tbl.t
 
-  let env_wrap : (Ident_env.t -> Ident_env.t) -> env -> env =
-   fun f (env, uid_to_loc) -> (f env, uid_to_loc)
+  let env_wrap : (Ident_env.t -> unit) -> env -> unit =
+   fun f (env, _) -> f env
 
   let get_env : env -> Ident_env.t = fun (env, _) -> env
 
@@ -30,12 +30,12 @@ module Analysis = struct
    fun (_, uid_to_loc) -> uid_to_loc
 
   let rec structure env parent acc str =
-    let env' = env_wrap (Ident_env.add_structure_tree_items parent str) env in
-    List.fold_left (structure_item env' parent) acc str.str_items
+    let () = env_wrap (Ident_env.add_structure_tree_items parent str) env in
+    List.fold_left (structure_item env parent) acc str.str_items
 
   and signature env parent acc sg =
-    let env' = env_wrap (Ident_env.add_signature_tree_items parent sg) env in
-    List.fold_left (signature_item env' parent) acc sg.sig_items
+    let () = env_wrap (Ident_env.add_signature_tree_items parent sg) env in
+    List.fold_left (signature_item env parent) acc sg.sig_items
 
   and signature_item env parent acc item =
     match item.sig_desc with
@@ -307,7 +307,7 @@ module Analysis = struct
           | Named (id_opt, _, arg) -> (
               match id_opt with
               | Some id ->
-                  let env =
+                  let () =
                     env_wrap
                       (Ident_env.add_parameter parent id
                          (ModuleName.of_ident id))
