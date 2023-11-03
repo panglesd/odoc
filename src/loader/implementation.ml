@@ -20,64 +20,67 @@ module Env = struct
   open Typedtree
   open Odoc_model.Paths
 
-  let rec structure env parent str =
-    let () = Ident_env.add_structure_tree_items parent str env in
-    List.iter (structure_item env parent) str.str_items
+  let rec structure env parent pparent str =
+    let () = Ident_env.add_structure_tree_items parent (Some pparent) str env in
+    List.iter (structure_item env parent pparent ) str.str_items
 
-  and signature env parent sg =
-    let () = Ident_env.add_signature_tree_items parent sg env in
-    List.iter (signature_item env parent) sg.sig_items
+  and signature env parent pparent sg =
+    let () = Ident_env.add_signature_tree_items parent (Some pparent) sg env in
+    List.iter (signature_item env parent pparent ) sg.sig_items
 
-  and signature_item env parent item =
+  and signature_item env parent  pparent item =
     match item.sig_desc with
-    | Tsig_module mb -> module_declaration env parent mb
-    | Tsig_recmodule mbs -> module_declarations env parent mbs
-    | Tsig_modtype mtd -> module_type_declaration env parent mtd
-    | Tsig_modtypesubst mtd -> module_type_declaration env parent mtd
+    | Tsig_module mb -> module_declaration env parent  pparent mb
+    | Tsig_recmodule mbs -> module_declarations env parent  pparent mbs
+    | Tsig_modtype mtd -> module_type_declaration env parent  pparent mtd
+    | Tsig_modtypesubst mtd -> module_type_declaration env parent  pparent mtd
     | Tsig_value _ | Tsig_type _ | Tsig_typesubst _ | Tsig_typext _
     | Tsig_exception _ | Tsig_modsubst _ | Tsig_open _ | Tsig_include _
     | Tsig_class _ | Tsig_class_type _ | Tsig_attribute _ ->
         ()
 
-  and module_declaration env _parent md =
+  and module_declaration env _parent  _pparent md =
     match md.md_id with
     | None -> ()
     | Some mb_id ->
         let id = Ident_env.find_module_identifier env mb_id in
-        module_type env (id :> Identifier.Signature.t) md.md_type
+        let pparent = Ident_env.find_path env mb_id in
+        module_type env (id :> Identifier.Signature.t)  pparent  md.md_type
 
-  and module_declarations env parent mds =
-    List.iter (module_declaration env parent) mds
+  and module_declarations env parent pparent  mds =
+    List.iter (module_declaration env parent pparent) mds
 
-  and module_type_declaration env _parent mtd =
+  and module_type_declaration env _parent _pparent  mtd =
     let id = Ident_env.find_module_type env mtd.mtd_id in
+    let pparent = Ident_env.find_path env  mtd.mtd_id in
     match mtd.mtd_type with
     | None -> ()
-    | Some mty -> module_type env (id :> Identifier.Signature.t) mty
+    | Some mty -> module_type env (id :> Identifier.Signature.t)  pparent mty
 
-  and structure_item env parent item =
+  and structure_item env parent pparent  item =
     match item.str_desc with
-    | Tstr_module mb -> module_binding env parent mb
-    | Tstr_recmodule mbs -> module_bindings env parent mbs
-    | Tstr_modtype mtd -> module_type_declaration env parent mtd
+    | Tstr_module mb -> module_binding env parent pparent  mb
+    | Tstr_recmodule mbs -> module_bindings env parent pparent  mbs
+    | Tstr_modtype mtd -> module_type_declaration env parent pparent  mtd
     | Tstr_open _ | Tstr_value _ | Tstr_class _ | Tstr_eval _
     | Tstr_class_type _ | Tstr_include _ | Tstr_attribute _ | Tstr_primitive _
     | Tstr_type _ | Tstr_typext _ | Tstr_exception _ ->
         ()
 
-  and module_type env (parent : Identifier.Signature.t) mty =
+  and module_type env (parent : Identifier.Signature.t) pparent mty =
     match mty.mty_desc with
-    | Tmty_signature sg -> signature env (parent : Identifier.Signature.t) sg
-    | Tmty_with (mty, _) -> module_type env parent mty
-    | Tmty_functor (_, t) -> module_type env parent t
+    | Tmty_signature sg -> signature env (parent : Identifier.Signature.t)  (pparent :> Ident_env.module_path) sg
+    | Tmty_with (mty, _) -> module_type env parent  pparent mty
+    | Tmty_functor (_, t) -> module_type env parent  pparent t
     | Tmty_ident _ | Tmty_alias _ | Tmty_typeof _ -> ()
 
-  and module_bindings env parent mbs = List.iter (module_binding env parent) mbs
+  and module_bindings env parent pparent  mbs = List.iter (module_binding env parent  pparent ) mbs
 
-  and module_binding env _parent mb =
+  and module_binding env _parent _pparent  mb =
     match mb.mb_id with
     | None -> ()
     | Some id ->
+        let pparent = Ident_env.find_path env  id in
         let id = Ident_env.find_module_identifier env id in
         let id = (id :> Identifier.Module.t) in
         let inner =
@@ -85,14 +88,14 @@ module Env = struct
           | Tmod_ident (_p, _) -> ()
           | _ ->
               let id = (id :> Identifier.Signature.t) in
-              module_expr env id mb.mb_expr
+              module_expr env id  pparent mb.mb_expr
         in
         inner
 
-  and module_expr env parent mexpr =
+  and module_expr env parent  pparent mexpr =
     match mexpr.mod_desc with
     | Tmod_ident _ -> ()
-    | Tmod_structure str -> structure env parent str
+    | Tmod_structure str -> structure env parent (pparent :> Ident_env.module_path)  str
     | Tmod_functor (parameter, res) ->
         let open Odoc_model.Names in
         let () =
@@ -106,17 +109,17 @@ module Env = struct
                       env
                   in
                   let id = Ident_env.find_module_identifier env id in
-                  module_type env (id :> Identifier.Signature.t) arg
+                  module_type env (id :> Identifier.Signature.t)  pparent arg
               | None -> ())
         in
-        module_expr env (Odoc_model.Paths.Identifier.Mk.result parent) res
+        module_expr env (Odoc_model.Paths.Identifier.Mk.result parent)  pparent res
     | Tmod_constraint (me, _, constr, _) ->
         let () =
           match constr with
           | Tmodtype_implicit -> ()
-          | Tmodtype_explicit mt -> module_type env parent mt
+          | Tmodtype_explicit mt -> module_type env parent  pparent mt
         in
-        module_expr env parent me
+        module_expr env parent  pparent me
     | _ -> ()
 
   and unwrap_module_expr_desc = function
@@ -124,10 +127,10 @@ module Env = struct
         unwrap_module_expr_desc mexpr.mod_desc
     | desc -> desc
 
-  let of_structure (id : Odoc_model.Paths.Identifier.RootModule.t)
+  let of_structure (id : Odoc_model.Paths.Identifier.RootModule.t) pparent 
       (s : Typedtree.structure) =
     let env = Ident_env.empty () in
-    let () = structure env (id :> Odoc_model.Paths.Identifier.Signature.t) s in
+    let () = structure env (id :> Odoc_model.Paths.Identifier.Signature.t)  pparent s in
     env
 end
 
@@ -318,10 +321,12 @@ let process_occurrences env poses loc_to_id local_ident_to_loc =
     (function
       | Typedtree_traverse.Analysis.Value p, loc ->
           process p Ident_env.Path.read_value |> Option.iter @@ fun l ->
+                                                              (match l.documentation with Some (`Dot(`Root r, name), _) -> Format.printf "Dot(Root %s, %s)\n%!" r (name) | _ -> ());
           AnnotHashtbl.replace occ_tbl (Value l, pos_of_loc loc) ()
       | Module p, loc ->
-          process p Ident_env.Path.read_module |> Option.iter @@ fun l ->
-          AnnotHashtbl.replace occ_tbl (Module l, pos_of_loc loc) ()
+          process p (Ident_env.Path.read_module ~full:true) |> Option.iter @@ fun l ->
+          (* (match l.documentation with Some (`Identifier (id, _), _) -> Format.printf "ModuleID(%s)\n%!" (Odoc_model.Paths.Identifier.fullname (id :> Odoc_model.Paths.Identifier.t) |> String.concat ".") | _ -> ()); *)
+         AnnotHashtbl.replace occ_tbl (Module l, pos_of_loc loc) ()
       | ClassType p, loc ->
           process p Ident_env.Path.read_class_type |> Option.iter @@ fun l ->
           AnnotHashtbl.replace occ_tbl (ClassType l, pos_of_loc loc) ()
@@ -329,9 +334,12 @@ let process_occurrences env poses loc_to_id local_ident_to_loc =
           process p Ident_env.Path.read_module_type |> Option.iter @@ fun l ->
           AnnotHashtbl.replace occ_tbl (ModuleType l, pos_of_loc loc) ()
       | Type p, loc ->
-          process p Ident_env.Path.read_type |> Option.iter @@ fun l ->
+         Format.printf "Here is the path of a type occurrence: %a\n%!" (Path.print) p;
+         process p Ident_env.Path.read_type |> Option.iter @@ fun l ->
+                                                              (match l.documentation with Some (`Identifier (id, _), _) -> Format.printf "ID(%s)\n%!" (Odoc_model.Paths.Identifier.fullname (id :> Odoc_model.Paths.Identifier.t) |> String.concat ".") | _ -> ());
           AnnotHashtbl.replace occ_tbl (Type l, pos_of_loc loc) ()
       | Constructor _p, loc ->
+         Format.printf "Here is the path of a constructor occurrence: %a\n%!" (Path.print) _p;
           (* process p Ident_env.Path.read_constructor *)
           None |> Option.iter @@ fun l ->
           AnnotHashtbl.replace occ_tbl (Constructor l, pos_of_loc loc) ()
@@ -346,14 +354,14 @@ let add_definitions loc_to_id occurrences =
       (Odoc_model.Lang.Source_info.Definition id, pos_of_loc loc) :: acc)
     loc_to_id occurrences
 
-let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
+let read_cmt_infos source_id_opt id module_name cmt_info ~count_occurrences =
   match Odoc_model.Compat.shape_of_cmt_infos cmt_info with
   | Some shape -> (
       let uid_to_loc = cmt_info.cmt_uid_to_loc in
       match (source_id_opt, count_occurrences, cmt_info.cmt_annots) with
       | (Some _ as source_id), _, Implementation impl
       | source_id, true, Implementation impl ->
-          let env = Env.of_structure id impl in
+          let env = Env.of_structure id (`Root module_name) impl in
           let traverse_infos =
             Typedtree_traverse.of_cmt env impl |> List.rev
             (* Information are accumulated in a list. We need to have the

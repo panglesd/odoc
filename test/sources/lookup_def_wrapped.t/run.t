@@ -13,6 +13,7 @@ It's a simpler case than Dune's wrapping.
 
   $ odoc compile --source-name a.ml --source-parent-file src-source.odoc -I . main__A.cmt
   $ odoc compile --source-name b.ml --source-parent-file src-source.odoc -I . main__B.cmt
+  Dot(Root Main__A, x)
   $ odoc compile --source-name main.ml --source-parent-file src-source.odoc -I . main.cmt
 
   $ odoc link -I . main__A.odoc

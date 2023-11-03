@@ -556,7 +556,7 @@ let rec unit env t =
                     Value
                       (jump_to v
                          (Shape_tools.lookup_value_path env)
-                         (value_path ~report_errors:false env))
+                         (value_path ~report_errors:true env))
                 | Module v ->
                     Module
                       (jump_to v

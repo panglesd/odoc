@@ -87,7 +87,38 @@ Now, compile the pages with the --source option:
   $ odoc source-tree -I . --parent page-root -o src-source.odoc source_tree.map
 
   $ odoc compile -I . --source-name a.ml --source-parent-file src-source.odoc a.cmt
+  Here is the path of a type occurrence: string/15!
+  ID(string)
+  Here is the path of a constructor occurrence: truc/269[2]
+  Here is the path of a constructor occurrence: Yoyo/276[3].bli
+  Dot(Root Stdlib, +)
+  Dot(Root Stdlib, ||)
+  Dot(Root Stdlib, =)
+  Here is the path of a constructor occurrence: bool/5!
+  Dot(Root Stdlib, +)
+  Dot(Root Stdlib, ||)
+  Dot(Root Stdlib, =)
+  Here is the path of a constructor occurrence: bool/5!
+  Dot(Root Stdlib, +)
+  Dot(Root Stdlib, raise)
+  Here is the path of a constructor occurrence: exn/7!
+  Here is the path of a type occurrence: int/1!
+  ID(int)
+  Here is the path of a type occurrence: int/1!
+  ID(int)
+  Here is the path of a type occurrence: a1/314[18]
+  ID(A.a1)
   $ odoc link -I . a.odoc
+  File "a.odoc":
+  Warning: Failed to lookup value identifier((root A).{x}2, false) Lookup failure (value): (root A).{x}2
+  File "a.odoc":
+  Warning: Failed to lookup value identifier((root A).{x}2, false) Lookup failure (value): (root A).{x}2
+  File "a.odoc":
+  Warning: Failed to lookup value identifier((root A).{x}2, false) Lookup failure (value): (root A).{x}2
+  File "a.odoc":
+  Warning: Failed to lookup value identifier((root A).{x}2, false) Lookup failure (value): (root A).{x}2
+  File "a.odoc":
+  Warning: Failed to lookup value identifier((root A).{x}2, false) Lookup failure (value): (root A).{x}2
   $ odoc link -I . page-root.odoc
   $ odoc link -I . src-source.odoc
   $ odoc html-generate --indent -o html src-source.odocl

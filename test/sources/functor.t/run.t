@@ -9,8 +9,13 @@ Verify the behavior on functors.
   $ ocamlc -c -o a.cmo a.ml -bin-annot -I .
   $ ocamlc -c -o b.cmo b.ml -bin-annot -I .
   $ odoc compile --source-name s.ml --source-parent-file src-source.odoc -I . s.cmt
+  Here is the path of a type occurrence: t/268[1]
+  ID(S.S.t)
   $ odoc compile --source-name a.ml --source-parent-file src-source.odoc -I . a.cmt
+  Here is the path of a type occurrence: S/271[2].t
   $ odoc compile --source-name b.ml --source-parent-file src-source.odoc -I . b.cmt
+  Here is the path of a type occurrence: int/1!
+  ID(int)
   $ odoc link -I . s.odoc
   $ odoc link -I . a.odoc
   $ odoc link -I . b.odoc

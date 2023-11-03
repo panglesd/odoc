@@ -1081,7 +1081,7 @@ and read_signature_noenv env parent (items : Odoc_model.Compat.signature) =
     loop ([],{s_modules=[]; s_module_types=[]; s_values=[];s_types=[]; s_classes=[]; s_class_types=[]}) items
 
 and read_signature env parent (items : Odoc_model.Compat.signature) =
-  let () = Env.handle_signature_type_items parent items env in
+  let () = Env.handle_signature_type_items parent None items env in
   fst @@ read_signature_noenv env parent items
 
 

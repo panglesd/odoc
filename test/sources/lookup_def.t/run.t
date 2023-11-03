@@ -7,6 +7,8 @@ Compile the modules:
 
   $ ocamlc -c a.mli a.ml -bin-annot
   $ odoc compile --cmt a.cmt --source-name a.ml --source-parent-file src-source.odoc -I . a.cmti
+  Here is the path of a type occurrence: int/1!
+  ID(int)
   $ odoc link a.odoc
 
 Show the locations:

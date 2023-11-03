@@ -35,6 +35,9 @@ module IdentHashtbl = Hashtbl.Make(struct
     let hash = Hashtbl.hash
   end)
 
+type module_path = [`Dot of module_path * string | `Root of string]
+type path = [`Dot of module_path * string]
+
 type t =
   { modules : Id.Module.t IdentHashtbl.t;
     parameters : Id.FunctorParameter.t IdentHashtbl.t;
@@ -48,6 +51,7 @@ type t =
     classes : Id.Class.t IdentHashtbl.t;
     class_types : Id.ClassType.t IdentHashtbl.t;
     loc_to_ident : Id.t LocHashtbl.t;
+    ident_to_path : path IdentHashtbl.t;
     hidden : unit IdentHashtbl.t; (* we use term hidden to mean shadowed and idents_in_doc_off_mode items*)
   }
 
@@ -64,6 +68,7 @@ let empty () =
     classes = IdentHashtbl.create 10;
     class_types = IdentHashtbl.create 10;
     loc_to_ident = LocHashtbl.create 100;
+    ident_to_path = IdentHashtbl.create 10;
     hidden = IdentHashtbl.create 100;
   }
 
@@ -487,19 +492,20 @@ let class_name_exists name items =
 let class_type_name_exists name items =
   List.exists (function | `ClassType (id',_,_,_,_) when Ident.name id' = name -> true | _ -> false) items
 
-let add_items : Id.Signature.t -> item list -> t -> unit = fun parent items env ->
+let add_items : Id.Signature.t -> module_path option -> item list -> t -> unit = fun parent pparent items env ->
   let open Odoc_model.Paths.Identifier in
   let rec inner items env =
     match items with
     | `Type (t, is_hidden_item, loc) :: rest ->
       let name = Ident.name t in
       let is_hidden = is_hidden_item || type_name_exists name rest in
-        let identifier =
+      let identifier =
         if is_hidden
         then (IdentHashtbl.add env.hidden t (); Mk.type_(parent, TypeName.internal_of_string name))
         else Mk.type_(parent, TypeName.make_std name)
       in
       let () = IdentHashtbl.add env.types t identifier in
+      let () = match pparent with Some pparent -> IdentHashtbl.add env.ident_to_path t (`Dot(pparent, name)) | None -> () in
       (match loc with | Some l -> LocHashtbl.add env.loc_to_ident l (identifier :> Id.any) | _ -> ());
       inner rest env
 
@@ -510,6 +516,7 @@ let add_items : Id.Signature.t -> item list -> t -> unit = fun parent items env 
         Mk.constructor(parent, ConstructorName.make_std name)
       in
       let () = IdentHashtbl.add env.constructors t identifier in
+      let () = match pparent with Some pparent -> IdentHashtbl.add env.ident_to_path t (`Dot(pparent, name)) | None -> () in
       (match loc with | Some l -> LocHashtbl.add env.loc_to_ident l (identifier :> Id.any) | _ -> ());
       inner rest env
 
@@ -518,12 +525,14 @@ let add_items : Id.Signature.t -> item list -> t -> unit = fun parent items env 
       let identifier = Mk.exception_(parent, ExceptionName.make_std name) in
       (match loc with | Some l -> LocHashtbl.add env.loc_to_ident l (identifier :> Id.any) | _ -> ());
       let () = IdentHashtbl.add env.exceptions t identifier in
+      let () = match pparent with Some pparent -> IdentHashtbl.add env.ident_to_path t (`Dot(pparent, name)) | None -> () in
       inner rest env
 
     | `Extension (t, loc) :: rest ->
       let name = Ident.name t in
       let identifier = Mk.extension(parent, ExtensionName.make_std name) in
       (match loc with | Some l -> LocHashtbl.add env.loc_to_ident l (identifier :> Id.any) | _ -> ());
+      let () = match pparent with Some pparent -> IdentHashtbl.add env.ident_to_path t (`Dot(pparent, name)) | None -> () in
       let () = IdentHashtbl.add env.extensions t identifier in
       inner rest env
 
@@ -535,6 +544,7 @@ let add_items : Id.Signature.t -> item list -> t -> unit = fun parent items env 
         then (IdentHashtbl.add env.hidden t (); Mk.value(parent, ValueName.internal_of_string name))
         else Mk.value(parent, ValueName.make_std name)
       in
+      let () = match pparent with Some pparent -> IdentHashtbl.add env.ident_to_path t (`Dot(pparent, name)) | None -> () in
       let () = IdentHashtbl.add env.values t identifier in
       (match loc with | Some l -> LocHashtbl.add env.loc_to_ident l (identifier :> Id.any) | _ -> ());
       inner rest env
@@ -548,6 +558,7 @@ let add_items : Id.Signature.t -> item list -> t -> unit = fun parent items env 
         else Mk.module_type(parent, ModuleTypeName.make_std name)
       in
       let () = IdentHashtbl.add env.module_types t identifier in
+      let () = match pparent with Some pparent -> IdentHashtbl.add env.ident_to_path t (`Dot(pparent, name)) | None -> () in
       (match loc with | Some l -> LocHashtbl.add env.loc_to_ident l (identifier :> Id.any) | _ -> ());
       inner rest env
 
@@ -563,6 +574,7 @@ let add_items : Id.Signature.t -> item list -> t -> unit = fun parent items env 
       let path = `Identifier(identifier, is_hidden) in
       let () = IdentHashtbl.add env.modules t identifier in
       let () = IdentHashtbl.add env.module_paths t path in
+      let () = match pparent with Some pparent -> IdentHashtbl.add env.ident_to_path t (`Dot(pparent, name)) | None -> () in
       (match loc with | Some l -> LocHashtbl.add env.loc_to_ident l (identifier :> Id.any) | _ -> ());
       inner rest env
 
@@ -581,6 +593,7 @@ let add_items : Id.Signature.t -> item list -> t -> unit = fun parent items env 
         else Mk.class_(parent, ClassName.make_std name)
       in
 
+      let () = match pparent with Some pparent -> IdentHashtbl.add env.ident_to_path t (`Dot(pparent, name)) | None -> () in
       let () =
         List.fold_right (fun id () -> IdentHashtbl.add env.classes id identifier)
           class_types () in
@@ -603,6 +616,7 @@ let add_items : Id.Signature.t -> item list -> t -> unit = fun parent items env 
           Mk.class_type(parent, ClassTypeName.internal_of_string name))
         else Mk.class_type(parent, ClassTypeName.make_std name)
       in
+      let () = match pparent with Some pparent -> IdentHashtbl.add env.ident_to_path t (`Dot(pparent, name)) | None -> () in
       let () =
         List.fold_right (fun id () -> IdentHashtbl.add env.class_types id identifier)
           class_types () in
@@ -618,20 +632,20 @@ let identifier_of_loc : t -> Location.t -> Odoc_model.Paths.Identifier.t option 
 let iter_located_identifier : t -> (Location.t -> Odoc_model.Paths.Identifier.t -> unit) -> unit = fun env f ->
   LocHashtbl.iter f env.loc_to_ident
 
-let add_signature_tree_items : Paths.Identifier.Signature.t -> Typedtree.signature -> t -> unit = 
-  fun parent sg env ->
+let add_signature_tree_items : Paths.Identifier.Signature.t -> module_path option -> Typedtree.signature -> t -> unit =
+  fun parent path_parent sg env ->
     let items = extract_signature_tree_items false sg.sig_items |> flatten_includes in
-    add_items parent items env
+    add_items parent path_parent items env
 
-let add_structure_tree_items : Paths.Identifier.Signature.t -> Typedtree.structure -> t -> unit =
-  fun parent sg env ->
+let add_structure_tree_items : Paths.Identifier.Signature.t -> _ -> Typedtree.structure -> t -> unit =
+  fun parent pparent sg env ->
   let items = extract_structure_tree_items false sg.str_items |> flatten_includes in
-  add_items parent items env
+  add_items parent pparent items env
 
-let handle_signature_type_items : Paths.Identifier.Signature.t -> Compat.signature -> t -> unit =
-  fun parent sg env ->
+let handle_signature_type_items : Paths.Identifier.Signature.t -> _ -> Compat.signature -> t -> unit =
+  fun parent pparent sg env ->
     let items = extract_signature_type_items sg in
-    add_items parent items env
+    add_items parent pparent items env
 
 let add_parameter parent id name env =
   let hidden = ModuleName.is_hidden name in
@@ -644,6 +658,9 @@ let add_parameter parent id name env =
 
 let find_module env id =
   IdentHashtbl.find env.module_paths id
+
+let find_path env id =
+  IdentHashtbl.find env.ident_to_path id
 
 let find_module_identifier env id =
   IdentHashtbl.find env.modules id
@@ -702,28 +719,28 @@ let is_shadowed
     IdentHashtbl.mem env.hidden id
 module Path = struct
 
-  let read_module_ident env id =
+  let read_module_ident ?(full = false) env id =
     if Ident.persistent id then `Root (Ident.name id)
     else
-      try find_module env id
+      try if not full then find_module env id else (find_path env id :> P.Module.t)
       with Not_found -> assert false
 
-  let read_module_type_ident env id =
+  let read_module_type_ident ?(full = false)  env id =
     try
-      `Identifier (find_module_type env id, false)
+      if not full then `Identifier (find_module_type env id, false) else (find_path env id :> P.ModuleType.t)
     with Not_found -> assert false
 
-  let read_type_ident env id =
+  let read_type_ident ?(full = false)  env id =
     try
-      `Identifier (find_type env id, false)
+      if not full then       `Identifier (find_type env id, false) else (find_path env id :> P.Type.t)
     with Not_found -> assert false
 
-  let read_value_ident env id : Paths.Path.Value.t =
-    `Identifier (find_value_identifier env id, false)
+  let read_value_ident ?(full = false)  env id : Paths.Path.Value.t =
+      if not full then     `Identifier (find_value_identifier env id, false)  else (find_path env id :> P.Value.t)
 
-  let read_class_type_ident env id : Paths.Path.ClassType.t =
+  let read_class_type_ident ?(full = false)  env id : Paths.Path.ClassType.t =
     try
-      `Identifier (find_class_type env id, false)
+      if not full then       `Identifier (find_class_type env id, false) else (find_path env id :> P.ClassType.t)
     with Not_found ->
       `Dot(`Root "*", (Ident.name id))
       (* TODO remove this hack once the fix for PR#6650
@@ -747,8 +764,8 @@ module Path = struct
   let strip_hash s =
     if s.[0]='#' then String.sub s 1 (String.length s - 1) else s
 
-  let rec read_module : t -> Path.t -> Paths.Path.Module.t = fun env -> function
-    | Path.Pident id -> read_module_ident env id
+  let rec read_module : ?full:bool -> t -> Path.t -> Paths.Path.Module.t = fun ?(full = false) env -> function
+    | Path.Pident id -> read_module_ident ~full env id
 #if OCAML_VERSION >= (4,8,0)
     | Path.Pdot(p, s) -> `Dot(read_module env p, s)
 #else
@@ -759,8 +776,8 @@ module Path = struct
     | Path.Pextra_ty _ -> assert false
 #endif
 
-  let read_module_type env = function
-    | Path.Pident id -> read_module_type_ident env id
+  let read_module_type ?(full = false) env = function
+    | Path.Pident id -> read_module_type_ident ~full env id
 #if OCAML_VERSION >= (4,8,0)
     | Path.Pdot(p, s) -> `Dot(read_module env p, s)
 #else
@@ -771,8 +788,8 @@ module Path = struct
     | Path.Pextra_ty _ -> assert false
 #endif
 
-  let read_class_type env = function
-    | Path.Pident id -> read_class_type_ident env id
+  let read_class_type ?(full = false) env = function
+    | Path.Pident id -> read_class_type_ident ~full env id
 #if OCAML_VERSION >= (4,8,0)
     | Path.Pdot(p, s) -> `Dot(read_module env p, strip_hash s)
 #else
@@ -784,11 +801,11 @@ module Path = struct
 #endif
 
 #if OCAML_VERSION < (5,1,0)
-  let read_type env = function
+  let read_type ?(full = false) env = function
 #else
-    let rec read_type env = function
+    let rec read_type ?(full = false) env = function
 #endif
-    | Path.Pident id -> read_type_ident env id
+    | Path.Pident id -> read_type_ident ~full env id
 #if OCAML_VERSION >= (4,8,0)
     | Path.Pdot(p, s) -> `Dot(read_module env p, strip_hash s)
 #else
@@ -799,8 +816,8 @@ module Path = struct
     | Path.Pextra_ty (p,_) -> read_type env p
 #endif
 
-  let read_value env = function
-    | Path.Pident id -> read_value_ident env id
+  let read_value  ?(full = false) env = function
+    | Path.Pident id -> read_value_ident ~full env id
 #if OCAML_VERSION >= (4,8,0)
     | Path.Pdot(p, s) -> `Dot(read_module env p, s)
 #else

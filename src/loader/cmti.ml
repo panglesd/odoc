@@ -772,7 +772,7 @@ and read_signature :
       'tags. 'tags Odoc_model.Semantics.handle_internal_tags -> _ -> _ -> _ ->
       _ * 'tags =
  fun internal_tags env parent sg ->
-  let () = Env.add_signature_tree_items parent sg env in
+  let () = Env.add_signature_tree_items parent  None sg env in
   let items, (doc, doc_post), tags =
     let classify item =
       match item.sig_desc with

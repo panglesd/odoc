@@ -7,6 +7,8 @@ Checking that source links exists inside recursive modules.
 
   $ ocamlc -c main.ml -bin-annot -I .
   $ odoc compile --source-name main.ml --source-parent-file src-source.odoc -I . main.cmt
+  Here is the path of a type occurrence: B/269[1].t
+  Here is the path of a type occurrence: A/268[1].t
   $ odoc link -I . main.odoc
   $ odoc html-generate --source main.ml --indent -o html main.odocl
 

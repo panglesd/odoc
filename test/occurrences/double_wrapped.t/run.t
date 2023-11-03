@@ -14,8 +14,25 @@ Passing the count-occurrences flag to odoc compile makes it collect the
 occurrences information.
 
   $ odoc compile --count-occurrences -I . main__A.cmt
+  Here is the path of a type occurrence: string/15!
+  ID(string)
+  Dot(Root Stdlib, +)
+  Here is the path of a constructor occurrence: t1/278[3]
+  Here is the path of a type occurrence: t1/278[3]
+  ID(Main__A.t1)
+  Here is the path of a constructor occurrence: t2/281[4]
+  Here is the path of a type occurrence: t2/281[4]
+  ID(Main__A.t2)
+  Dot(Root Stdlib, +)
   $ odoc compile --count-occurrences -I . main__C.cmt
+  Dot(Root Stdlib, +)
   $ odoc compile --count-occurrences -I . main__B.cmt
+  Dot(Root Stdlib, +)
+  Dot(Root Stdlib, +)
+  Dot(Root Stdlib, +)
+  Here is the path of a type occurrence: Main__!.A.t
+  Here is the path of a constructor occurrence: Main__!.A.t1
+  Here is the path of a type occurrence: Main__!.A.t1
   $ odoc compile --count-occurrences -I . main__.cmt
   $ odoc compile --count-occurrences -I . main.cmt
 
@@ -43,7 +60,7 @@ and a hashtable for each compilation unit.
   $ mv main__C.odocl main__C
   $ odoc count-occurrences -I main -o main.occ
   $ odoc count-occurrences -I main__ -o main__.occ
-  $ odoc count-occurrences -I main__A -o main__A.occ
+  $ odoc count-occurrences -I main__A -o main__A.occ  --include-hidden
   $ odoc count-occurrences -I main__B -o main__B.occ
   $ odoc count-occurrences -I main__C -o main__C.occ
 
@@ -61,6 +78,11 @@ Uses of values Y.x and Z.y (in b.ml) are not counted since they come from a "loc
   $ occurrences_print main__.occ | sort
 
   $ occurrences_print main__A.occ | sort
+  Main__A was used directly 0 times and indirectly 5 times
+  Main__A.M was used directly 1 times and indirectly 0 times
+  Main__A.t1 was used directly 1 times and indirectly 0 times
+  Main__A.t2 was used directly 1 times and indirectly 0 times
+  Main__A.x was used directly 2 times and indirectly 0 times
   string was used directly 1 times and indirectly 0 times
 
   $ occurrences_print main__B.occ | sort
@@ -86,6 +108,11 @@ Now we can merge both files
   Main was used directly 0 times and indirectly 2 times
   Main.A was used directly 0 times and indirectly 2 times
   Main.A.x was used directly 2 times and indirectly 0 times
+  Main__A was used directly 0 times and indirectly 5 times
+  Main__A.M was used directly 1 times and indirectly 0 times
+  Main__A.t1 was used directly 1 times and indirectly 0 times
+  Main__A.t2 was used directly 1 times and indirectly 0 times
+  Main__A.x was used directly 2 times and indirectly 0 times
   string was used directly 1 times and indirectly 0 times
 
 Compare with the one created directly with all occurrences:
@@ -101,11 +128,12 @@ We can also include persistent ids, and hidden ids:
 
   $ odoc count-occurrences -I . -o occurrences.txt --include-persistent
   $ occurrences_print occurrences.txt | sort
-  Main was used directly 0 times and indirectly 13 times
-  Main.A was used directly 4 times and indirectly 8 times
+  Main was used directly 0 times and indirectly 14 times
+  Main.A was used directly 4 times and indirectly 9 times
   Main.A.(||>) was used directly 1 times and indirectly 0 times
   Main.A.M was used directly 2 times and indirectly 0 times
   Main.A.t was used directly 1 times and indirectly 0 times
+  Main.A.t1 was used directly 1 times and indirectly 0 times
   Main.A.x was used directly 4 times and indirectly 0 times
   Main.B was used directly 1 times and indirectly 0 times
   string was used directly 1 times and indirectly 0 times
@@ -115,6 +143,11 @@ We can also include persistent ids, and hidden ids:
   Main was used directly 0 times and indirectly 2 times
   Main.A was used directly 0 times and indirectly 2 times
   Main.A.x was used directly 2 times and indirectly 0 times
+  Main__A was used directly 0 times and indirectly 5 times
+  Main__A.M was used directly 1 times and indirectly 0 times
+  Main__A.t1 was used directly 1 times and indirectly 0 times
+  Main__A.t2 was used directly 1 times and indirectly 0 times
+  Main__A.x was used directly 2 times and indirectly 0 times
   Main__B was used directly 0 times and indirectly 1 times
   Main__B.Z was used directly 0 times and indirectly 1 times
   Main__B.Z.y was used directly 1 times and indirectly 0 times
@@ -122,17 +155,22 @@ We can also include persistent ids, and hidden ids:
 
   $ odoc count-occurrences -I . -o occurrences.txt --include-persistent --include-hidden
   $ occurrences_print occurrences.txt | sort
-  Main was used directly 0 times and indirectly 13 times
-  Main.A was used directly 4 times and indirectly 8 times
+  Main was used directly 0 times and indirectly 14 times
+  Main.A was used directly 4 times and indirectly 9 times
   Main.A.(||>) was used directly 1 times and indirectly 0 times
   Main.A.M was used directly 2 times and indirectly 0 times
   Main.A.t was used directly 1 times and indirectly 0 times
+  Main.A.t1 was used directly 1 times and indirectly 0 times
   Main.A.x was used directly 4 times and indirectly 0 times
   Main.B was used directly 1 times and indirectly 0 times
   Main__ was used directly 0 times and indirectly 2 times
   Main__.C was used directly 1 times and indirectly 1 times
   Main__.C.y was used directly 1 times and indirectly 0 times
-  Main__A was used directly 1 times and indirectly 0 times
+  Main__A was used directly 1 times and indirectly 5 times
+  Main__A.M was used directly 1 times and indirectly 0 times
+  Main__A.t1 was used directly 1 times and indirectly 0 times
+  Main__A.t2 was used directly 1 times and indirectly 0 times
+  Main__A.x was used directly 2 times and indirectly 0 times
   Main__B was used directly 1 times and indirectly 1 times
   Main__B.Z was used directly 0 times and indirectly 1 times
   Main__B.Z.y was used directly 1 times and indirectly 0 times

@@ -382,12 +382,12 @@ let rec read_module_expr env parent label_parent mexpr =
         Functor (f_parameter, res)
 #else
     | Tmod_functor(id, _, arg, res) ->
-        let new_env = Env.add_parameter parent id (ModuleName.of_ident id) env in
+        let () = Env.add_parameter parent id (ModuleName.of_ident id) env in
         let f_parameter =
           match arg with
           | None -> FunctorParameter.Unit
           | Some arg ->
-              let id = Env.find_parameter_identifier new_env id in
+              let id = Env.find_parameter_identifier env id in
               let arg = Cmti.read_module_type env (id :> Identifier.Signature.t) label_parent arg in
               Named { FunctorParameter. id; expr = arg; }
         in
@@ -577,7 +577,7 @@ and read_structure :
       'tags. 'tags Odoc_model.Semantics.handle_internal_tags -> _ -> _ -> _ ->
       _ * 'tags =
  fun internal_tags env parent str ->
-  let () = Env.add_structure_tree_items parent str env in
+  let () = Env.add_structure_tree_items parent None str env in
   let items, (doc, doc_post), tags =
     let classify item =
       match item.str_desc with

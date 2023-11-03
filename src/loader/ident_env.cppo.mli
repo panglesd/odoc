@@ -18,33 +18,38 @@ open Odoc_model
 
 type t
 
+type module_path = [`Dot of module_path * string | `Root of string]
+type path = [`Dot of module_path * string]
+
 val empty : unit -> t
 
 val add_parameter :
   Paths.Identifier.Signature.t -> Ident.t -> Names.ModuleName.t -> t -> unit
 
 val handle_signature_type_items :
-  Paths.Identifier.Signature.t -> Compat.signature -> t -> unit
+  Paths.Identifier.Signature.t -> module_path option -> Compat.signature -> t -> unit
 
 val add_signature_tree_items :
-  Paths.Identifier.Signature.t -> Typedtree.signature -> t -> unit
+  Paths.Identifier.Signature.t -> module_path option -> Typedtree.signature -> t -> unit
 
 val add_structure_tree_items :
-  Paths.Identifier.Signature.t -> Typedtree.structure -> t -> unit
+  Paths.Identifier.Signature.t -> module_path option -> Typedtree.structure -> t -> unit
 
 module Path : sig
-  val read_module : t -> Path.t -> Paths.Path.Module.t
+  val read_module : ?full:bool -> t -> Path.t -> Paths.Path.Module.t
 
-  val read_module_type : t -> Path.t -> Paths.Path.ModuleType.t
+  val read_module_type :  ?full:bool ->t -> Path.t -> Paths.Path.ModuleType.t
 
-  val read_type : t -> Path.t -> Paths.Path.Type.t
+  val read_type :?full:bool -> t -> Path.t -> Paths.Path.Type.t
 
-  val read_class_type : t -> Path.t -> Paths.Path.ClassType.t
+  val read_class_type : ?full:bool ->t -> Path.t -> Paths.Path.ClassType.t
 
-  val read_value : t -> Path.t -> Paths.Path.Value.t
+  val read_value : ?full:bool ->t -> Path.t -> Paths.Path.Value.t
 end
 
 val find_module : t -> Ident.t -> Paths.Path.Module.t
+
+val find_path : t -> Ident.t -> path
 
 val find_module_identifier : t -> Ident.t -> Paths.Identifier.Module.t
 
