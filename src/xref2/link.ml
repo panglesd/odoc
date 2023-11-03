@@ -538,11 +538,6 @@ let rec unit env t =
                       (jump_to v
                          (fun _ -> None)
                          (type_path ~report_errors:false env))
-                | Constructor v ->
-                    Constructor
-                      (jump_to v
-                         (fun _ -> None)
-                         (constructor_path ~report_errors:false env))
                 | i -> i
               in
               (info, pos))

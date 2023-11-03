@@ -93,7 +93,6 @@ and source_info_infos env infos =
             | Module v -> Module (map_doc (module_path env) v)
             | ModuleType v -> ModuleType (map_doc (module_type_path env) v)
             | Type v -> Type (map_doc (type_path env) v)
-            | Constructor v -> Constructor (map_doc (constructor_path env) v)
             | i -> i
           in
           (v, pos))
