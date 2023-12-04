@@ -65,7 +65,7 @@ and nestable_block_element =
     reference_kind
     * media_href with_location
     * inline_element with_location list
-    * media (** @since 2.3.0 *)]
+    * media (** @since 2.4.0 *)]
 (** Some block elements may be nested within lists or tags, but not all.
     The [`List] constructor has a parameter of type [\[`Light | `Heavy\]].
     This corresponds to the syntactic constructor used (see the
