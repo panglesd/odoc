@@ -230,6 +230,7 @@ let path_of_module_of_source ppf url =
 
 let src_page_creator ~breadcrumbs ~config ~url ~header name content =
   let theme_uri = Config.theme_uri config in
+  let support_uri = Config.support_uri config in
   let head : Html_types.head Html.elt =
     let title_string =
       Format.asprintf "Source: %s%a" name path_of_module_of_source url
@@ -256,6 +257,13 @@ let src_page_creator ~breadcrumbs ~config ~url ~header name content =
               Html.a_content "width=device-width,initial-scale=1.0";
             ]
           ();
+        Html.script
+          ~a:
+          [
+            Html.a_src (file_uri support_uri "odoc_source.js");
+            Html.a_defer ();
+          ]
+          (Html.txt "");
       ]
     in
     Html.head (Html.title (Html.txt title_string)) meta_elements
