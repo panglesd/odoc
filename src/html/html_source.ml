@@ -31,24 +31,36 @@ let html_of_doc ~config ~resolve docs =
             let href_documentation =
               Option.map (Link.href ~config ~resolve) documentation
             in
-            let body =
-              match href_implementation with
-              | Some href -> [ a ~a:[ a_href href ] children ]
-              | None -> children
-            in
-            match href_documentation with
-            | None -> body
-            | Some href ->
-                [
-                  span
-                    ~a:[ a_class [ "jump-to-doc-container" ] ]
-                    [
-                      span ~a:[] body;
-                      a
-                        ~a:[ a_href href; a_class [ "jump-to-doc" ] ]
-                        [ txt " 📖" ];
-                    ];
-                ])
+            match href_documentation, href_implementation with
+            | None, None -> children
+            | _ ->
+               let summary = span ~a:[a_class ["summary"]] children in
+               let href h c s t =
+                 match h with
+                 | Some href -> [ a ~a:[ a_href href; a_class [c] ; a_title t ] [txt s] ]
+                 | None -> []
+               in
+               let a_impl = href href_implementation "impl" "💻" "Jump to implementation" in
+               let a_doc = href href_documentation "doc" "📖" "Jump to documentation" in
+               [ span ~a:[a_class ["details"]] [summary ; span ~a:[a_class ["jumps"]] (a_impl @ a_doc)]]
+            (* let body = *)
+            (*   match href_implementation with *)
+            (*   | Some href -> [ a ~a:[ a_href href ] children ] *)
+            (*   | None -> children *)
+            (* in *)
+            (* match href_documentation with *)
+            (* | None -> body *)
+            (* | Some href -> *)
+            (*     [ *)
+            (*       span *)
+            (*         ~a:[ a_class [ "jump-to-doc-container" ] ] *)
+            (*         [ *)
+            (*           span ~a:[] body; *)
+            (*           a *)
+            (*             ~a:[ a_href href; a_class [ "jump-to-doc" ] ] *)
+            (*             [ txt " 📖" ]; *)
+            (*         ]; *)
+            (*     ] *))
         | Anchor lbl -> [ span ~a:[ a_id lbl ] children ])
   in
   span ~a:[] @@ List.concat @@ List.map (doc_to_html ~is_in_a:false) docs

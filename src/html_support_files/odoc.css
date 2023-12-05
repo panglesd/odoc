@@ -1211,6 +1211,33 @@ td.def-doc *:first-child {
   display: none;
 }
 
+.details {
+  position: relative; 
+}
+
+.summary {
+  cursor: pointer;
+}
+
+.jumps {
+  position: absolute;
+  top:-12px;
+}
+.jumps .impl {
+  display: block;
+}
+.jumps .doc {
+  display: block;
+}
+.open + .jumps {
+  display: inline;
+}
+.jumps {
+  display: none;
+}
+.summary.open {
+  text-decoration: underline
+}
 /* Source directories */
 
 .odoc-directory::before {
