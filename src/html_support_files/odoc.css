@@ -1203,41 +1203,6 @@ td.def-doc *:first-child {
   color: #657b83;
 }
 
-.jump-to-doc-container:hover .jump-to-doc {
-  display: inline;
-}
-
-.jump-to-doc {
-  display: none;
-}
-
-.details {
-  position: relative; 
-}
-
-.summary {
-  cursor: pointer;
-}
-
-.jumps {
-  position: absolute;
-  top:-12px;
-}
-.jumps .impl {
-  display: block;
-}
-.jumps .doc {
-  display: block;
-}
-.open + .jumps {
-  display: inline;
-}
-.jumps {
-  display: none;
-}
-.summary.open {
-  text-decoration: underline
-}
 /* Source directories */
 
 .odoc-directory::before {
