@@ -56,10 +56,10 @@ type kind =
   | Field of field_entry
 
 type t = {
-  id : Odoc_model.Paths.Identifier.Any.t;
+  id : Odoc_model.Paths.Identifier.NonSrc.t;
   doc : Odoc_model.Comment.docs;
   kind : kind;
 }
 
 val entries_of_item :
-  Odoc_model.Paths.Identifier.Any.t -> Odoc_model.Fold.item -> t list
+  Odoc_model.Paths.Identifier.NonSrc.t -> Odoc_model.Fold.item -> t list

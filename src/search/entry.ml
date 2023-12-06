@@ -67,13 +67,13 @@ type kind =
 module Html = Tyxml.Html
 
 type t = {
-  id : Odoc_model.Paths.Identifier.Any.t;
+  id : Odoc_model.Paths.Identifier.NonSrc.t;
   doc : Odoc_model.Comment.docs;
   kind : kind;
 }
 
 let entry ~id ~doc ~kind =
-  let id = (id :> Odoc_model.Paths.Identifier.Any.t) in
+  let id = (id :> Odoc_model.Paths.Identifier.NonSrc.t) in
   { id; kind; doc }
 
 let varify_params =

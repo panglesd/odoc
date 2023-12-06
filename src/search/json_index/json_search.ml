@@ -200,16 +200,16 @@ let unit ppf u =
     in
     let id =
       match i with
-      | CompilationUnit u -> (u.id :> Odoc_model.Paths.Identifier.t)
+      | CompilationUnit u -> (u.id :> Odoc_model.Paths.Identifier.NonSrc.t)
       | TypeDecl _ -> id
-      | Module m -> (m.id :> Odoc_model.Paths.Identifier.t)
+      | Module m -> (m.id :> Odoc_model.Paths.Identifier.NonSrc.t)
       | Value _ -> id
       | Exception _ -> id
-      | ClassType ct -> (ct.id :> Odoc_model.Paths.Identifier.t)
+      | ClassType ct -> (ct.id :> Odoc_model.Paths.Identifier.NonSrc.t)
       | Method _ -> id
-      | Class c -> (c.id :> Odoc_model.Paths.Identifier.t)
+      | Class c -> (c.id :> Odoc_model.Paths.Identifier.NonSrc.t)
       | Extension _ -> id
-      | ModuleType mt -> (mt.id :> Odoc_model.Paths.Identifier.t)
+      | ModuleType mt -> (mt.id :> Odoc_model.Paths.Identifier.NonSrc.t)
       | Doc _ -> id
     in
     let first = output_json ppf first entries in
@@ -218,8 +218,8 @@ let unit ppf u =
   let _first =
     Odoc_model.Fold.unit ~f
       ( true,
-        (u.Odoc_model.Lang.Compilation_unit.id :> Odoc_model.Paths.Identifier.t)
-      )
+        (u.Odoc_model.Lang.Compilation_unit.id
+          :> Odoc_model.Paths.Identifier.NonSrc.t) )
       u
   in
   ()
@@ -227,7 +227,9 @@ let unit ppf u =
 let page ppf (page : Odoc_model.Lang.Page.t) =
   let f first i =
     let entries =
-      Entry.entries_of_item (page.name :> Odoc_model.Paths.Identifier.t) i
+      Entry.entries_of_item
+        (page.name :> Odoc_model.Paths.Identifier.NonSrc.t)
+        i
     in
     let entries =
       List.map (fun entry -> (entry, Html.of_entry entry)) entries
