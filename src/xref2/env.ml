@@ -360,9 +360,10 @@ let module_of_unit : Lang.Compilation_unit.t -> Component.Module.t =
  fun unit ->
   let id = (unit.id :> Paths.Identifier.Module.t) in
   let locs =
-    match unit.source_info with
-    | Some { id = Some id; _ } -> Some (Identifier.Mk.source_location_mod id)
-    | _ -> None
+    (* match unit.source_info with *)
+    (* | Some { id = Some id; _ } -> Some (Identifier.Mk.source_location_mod id) *)
+    (* | _ ->  *)
+    None
   in
   match unit.content with
   | Module s ->

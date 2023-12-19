@@ -324,19 +324,21 @@ end = struct
 end
 
 module Source_tree = struct
-  let has_src_prefix input =
+  let prefix = "src-tree"
+
+  let has_src_tree_prefix input =
     input |> Fs.File.basename |> Fs.File.to_string
-    |> Astring.String.is_prefix ~affix:"src-"
+    |> Astring.String.is_prefix ~affix:prefix
 
   let output_file ~output ~input =
     match output with
     | Some output -> output
     | None ->
         let output =
-          if not (has_src_prefix input) then
+          if not (has_src_tree_prefix input) then
             let directory = Fs.File.dirname input in
             let name = input |> Fs.File.basename |> Fs.File.to_string in
-            let name = "src-" ^ name in
+            let name = prefix ^ name in
             Fs.File.create ~directory ~name
           else input
         in
@@ -357,8 +359,10 @@ module Source_tree = struct
           let f = Fs.File.of_string s in
           if not (Fs.File.has_ext ".odoc" f) then
             Error (`Msg "Output file must have '.odoc' extension.")
-          else if not (has_src_prefix f) then
-            Error (`Msg "Output file must be prefixed with 'src-'.")
+          else if not (has_src_tree_prefix f) then
+            Error
+              (`Msg
+                (Format.sprintf "Output file must be prefixed with '%s'." prefix))
           else Ok f
       | Error _ as e -> e
     and print = Fpath.pp in
@@ -374,8 +378,11 @@ module Source_tree = struct
     in
     let dst =
       let doc =
-        "Output file path. Non-existing intermediate directories are created. \
-         The basename must start with the prefix 'src-' and extension '.odoc'."
+        Format.sprintf
+          "Output file path. Non-existing intermediate directories are \
+           created. The basename must start with the prefix '%s' and extension \
+           '.odoc'."
+          prefix
       in
       Arg.(
         value
@@ -391,6 +398,92 @@ module Source_tree = struct
       const handle_error
       $ (const compile_source_tree $ odoc_file_directories $ dst $ parent
        $ input $ warnings_options))
+
+  let info ~docs =
+    let doc =
+      "Compile a source tree into a page. Expect a text file containing the \
+       relative paths to every source files in the source tree. The paths \
+       should be the same as the one passed to $(i,odoc compile \
+       --source-name)."
+    in
+    Term.info "source-tree" ~docs ~doc
+end
+
+module Compile_src = struct
+  let prefix = "src-"
+
+  let has_src_prefix input =
+    input |> Fs.File.basename |> Fs.File.to_string
+    |> Astring.String.is_prefix ~affix:prefix
+
+  let output_file ~output ~input =
+    match output with
+    | Some output -> output
+    | None ->
+        let output =
+          if not (has_src_prefix input) then
+            let directory = Fs.File.dirname input in
+            let name = input |> Fs.File.basename |> Fs.File.to_string in
+            let name = prefix ^ name in
+            Fs.File.create ~directory ~name
+          else input
+        in
+        Fs.File.(set_ext ".odoc" output)
+
+  let compile_source directories output parent input warnings_options =
+    let input = Fs.File.of_string input in
+    let output = output_file ~output ~input in
+    let resolver =
+      Resolver.create ~important_digests:true ~directories ~open_modules:[]
+    in
+    Source.compile ~resolver ~parent ~output ~warnings_options input
+
+  let arg_page_output =
+    let open Or_error in
+    let parse inp =
+      match Arg.(conv_parser string) inp with
+      | Ok s ->
+          let f = Fs.File.of_string s in
+          if not (Fs.File.has_ext ".odoc" f) then
+            Error (`Msg "Output file must have '.odoc' extension.")
+          else if not (has_src_prefix f) then
+            Error
+              (`Msg
+                (Format.sprintf "Output file must be prefixed with '%s'." prefix))
+          else Ok f
+      | Error _ as e -> e
+    and print = Fpath.pp in
+    Arg.conv (parse, print)
+
+  let cmd =
+    let parent =
+      let doc = "Parent page or subpage." in
+      Arg.(
+        required
+        & opt (some string) None
+        & info ~docs ~docv:"PARENT" ~doc [ "parent" ])
+    in
+    let dst =
+      let doc =
+        Format.sprintf
+          "Output file path. Non-existing intermediate directories are \
+           created. The basename must start with the prefix '%s' and extension \
+           '.odoc'."
+          prefix
+      in
+      Arg.(
+        value
+        & opt (some arg_page_output) None
+        & info ~docs ~docv:"PATH" ~doc [ "o" ])
+    in
+    let input =
+      let doc = "Input $(i,.cmt) file." in
+      Arg.(required & pos 0 (some file) None & info ~doc ~docv:"FILE" [])
+    in
+    Term.(
+      const handle_error
+      $ (const compile_source $ odoc_file_directories $ dst $ parent $ input
+       $ warnings_options))
 
   let info ~docs =
     let doc =

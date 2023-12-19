@@ -245,14 +245,14 @@ module Make (Syntax : SYNTAX) = struct
     val source :
       Paths.Identifier.SourcePage.t ->
       Syntax_highlighter.infos ->
-      Lang.Source_info.infos ->
+      Lang.Source_page.Source_info.t ->
       string ->
       Source_page.t
   end = struct
     let path id = Url.Path.from_identifier id
     let url id = Url.from_path (path id)
 
-    let to_link { Lang.Source_info.documentation; implementation } =
+    let to_link { Lang.Source_page.Source_info.documentation; implementation } =
       let documentation =
         (* Since documentation link are not rendered, we comment the code to
            extract the href, and always output [None] *)
@@ -269,7 +269,7 @@ module Make (Syntax : SYNTAX) = struct
       in
       let implementation =
         match implementation with
-        | Some (Odoc_model.Lang.Source_info.Resolved id) -> (
+        | Some (Odoc_model.Lang.Source_page.Source_info.Resolved id) -> (
             match Url.Anchor.from_identifier (id :> Paths.Identifier.t) with
             | Ok url -> Some url
             | Error _ -> None)
