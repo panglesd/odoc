@@ -482,32 +482,34 @@ module rec Compilation_unit : sig
 end =
   Compilation_unit
 
+module rec Source_info : sig
+  type 'a jump_to_impl =
+    | Unresolved of 'a
+    | Resolved of Identifier.SourceLocation.t
+
+  type 'a jump_to = {
+    documentation : 'a option;
+    implementation : 'a jump_to_impl option;
+  }
+
+  type annotation =
+    | Definition of Paths.Identifier.SourceLocation.t
+    | Value of Path.Value.t jump_to
+    | Module of Path.Module.t jump_to
+    | ModuleType of Path.ModuleType.t jump_to
+    | Type of Path.Type.t jump_to
+
+  type 'a with_pos = 'a * (int * int)
+
+  type t = annotation with_pos list
+end =
+  Source_info
+
 module rec Source_page : sig
-  module Source_info : sig
-    type 'a jump_to_impl =
-      | Unresolved of 'a
-      | Resolved of Identifier.SourceLocation.t
-
-    type 'a jump_to = {
-      documentation : 'a option;
-      implementation : 'a jump_to_impl option;
-    }
-
-    type annotation =
-      | Definition of Paths.Identifier.SourceLocation.t
-      | Value of Path.Value.t jump_to
-      | Module of Path.Module.t jump_to
-      | ModuleType of Path.ModuleType.t jump_to
-      | Type of Path.Type.t jump_to
-
-    type 'a with_pos = 'a * (int * int)
-
-    type t = annotation with_pos list
-  end
-
   type t = {
     id : Identifier.SourcePage.t;
     digest : Digest.t;
+    root : Root.t;
     (* source : Source.t option; *)
     linked : bool;  (** Whether this unit has been linked. *)
     source_info : Source_info.t;

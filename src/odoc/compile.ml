@@ -280,10 +280,10 @@ let compile ~resolver ~parent_cli_spec ~hidden ~children ~output
                 then Ok (Some id)
                 else err_not_parent ()
             | { iv = `LeafPage _; _ } -> err_not_parent ())
-        | Unit_content _ | Odoc_file.Page_content _ ->
+        | Unit_content _ | Page_content _ | Impl_content _ ->
             Error
-              (`Msg "Specified source-parent should be a page but is a module.")
-        )
+              (`Msg
+                "Specified source-parent should be a source tree but is not."))
     | None -> Ok None)
     >>= fun source_id_opt ->
     handle_file_ext ext >>= fun input_type ->

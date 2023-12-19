@@ -10,6 +10,8 @@ type lookup_unit_result =
 
 type lookup_page_result = Lang.Page.t option
 
+type lookup_impl_result = Lang.Source_page.t option
+
 type root =
   | Resolved of (Odoc_model.Root.t * Identifier.Module.t * Component.Module.t)
   | Forward
@@ -17,6 +19,7 @@ type root =
 type resolver = {
   open_units : string list;
   lookup_unit : string -> lookup_unit_result;
+  lookup_impl : string -> lookup_impl_result;
   lookup_page : string -> lookup_page_result;
 }
 
@@ -431,6 +434,9 @@ let lookup_page name env =
 let lookup_unit name env =
   match env.resolver with None -> None | Some r -> Some (r.lookup_unit name)
 
+let lookup_impl name env =
+  match env.resolver with None -> None | Some r -> r.lookup_impl name
+
 type 'a scope = {
   filter : Component.Element.any -> ([< Component.Element.any ] as 'a) option;
   check : (t -> ([< Component.Element.any ] as 'a) -> 'a amb_err option) option;
@@ -820,6 +826,9 @@ let open_page page env = add_docs page.Lang.Page.content env
 let env_of_page page resolver =
   let initial_env = open_page page empty in
   set_resolver initial_env resolver |> open_units resolver
+
+let env_of_impl _impl resolver =
+  set_resolver empty resolver |> open_units resolver
 
 let env_for_reference resolver =
   set_resolver empty resolver |> open_units resolver

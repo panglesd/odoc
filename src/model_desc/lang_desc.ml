@@ -17,8 +17,8 @@ let inline_status =
     | `Inline -> C0 "`Inline")
 
 let source_info =
-  let open Lang.Source_info in
-  Record [ F ("id", (fun t -> t.id), Option identifier) ]
+  Record
+    [ (* F ("id", (fun t -> t.Lang.Source_info.id), Option identifier)  *) ]
 
 (** {3 Module} *)
 
@@ -682,7 +682,7 @@ and compilation_unit_t =
         ( "canonical",
           (fun t -> (t.canonical :> Paths.Path.t option)),
           Option path );
-      F ("sources", (fun t -> t.source_info), Option source_info);
+      (* F ("sources", (fun t -> t.source_info), Option source_info); *)
     ]
 
 (** {3 Page} *)

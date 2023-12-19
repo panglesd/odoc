@@ -246,6 +246,13 @@ let build_link_env_for_unit t m =
   let resolver = build ~imports_map t in
   Env.env_of_unit m ~linking:true resolver
 
+let build_compile_env_for_impl t m =
+  (* add_unit_to_cache (Odoc_file.Unit_content m); *)
+  (* let imports_map = build_imports_map m in *)
+  (* TODO *)
+  let resolver = build (* ~imports_map *) t in
+  Env.env_of_impl m resolver
+
 let build_env_for_page t p =
   add_unit_to_cache (Odoc_file.Page_content p);
   let resolver = build { t with important_digests = false } in

@@ -430,13 +430,15 @@ module Compile_src = struct
         in
         Fs.File.(set_ext ".odoc" output)
 
-  let compile_source directories output parent input warnings_options =
+  let compile_source directories output source_parent_file source_path input
+      warnings_options =
     let input = Fs.File.of_string input in
     let output = output_file ~output ~input in
     let resolver =
       Resolver.create ~important_digests:true ~directories ~open_modules:[]
     in
-    Source.compile ~resolver ~parent ~output ~warnings_options input
+    Source.compile ~resolver ~source_parent_file ~source_path ~output
+      ~warnings_options input
 
   let arg_page_output =
     let open Or_error in
@@ -456,13 +458,6 @@ module Compile_src = struct
     Arg.conv (parse, print)
 
   let cmd =
-    let parent =
-      let doc = "Parent page or subpage." in
-      Arg.(
-        required
-        & opt (some string) None
-        & info ~docs ~docv:"PARENT" ~doc [ "parent" ])
-    in
     let dst =
       let doc =
         Format.sprintf
@@ -480,10 +475,30 @@ module Compile_src = struct
       let doc = "Input $(i,.cmt) file." in
       Arg.(required & pos 0 (some file) None & info ~doc ~docv:"FILE" [])
     in
+    let source_parent_file =
+      let doc =
+        ".odoc file of the parent of the page containing the source code for \
+         this compilation unit."
+      in
+      Arg.(
+        required
+        & opt (some convert_fpath) None
+        & info [ "source-parent-file" ] ~doc ~docv:"PARENT.odoc")
+    in
+    let source_path =
+      let doc =
+        "The basename of the source file. This is used to place the source \
+         file within the source_parent."
+      in
+      Arg.(
+        required
+        & opt (some convert_source_name) None
+        & info [ "source-name" ] ~doc ~docv:"NAME")
+    in
     Term.(
       const handle_error
-      $ (const compile_source $ odoc_file_directories $ dst $ parent $ input
-       $ warnings_options))
+      $ (const compile_source $ odoc_file_directories $ dst $ source_parent_file
+       $ source_path $ input $ warnings_options))
 
   let info ~docs =
     let doc =

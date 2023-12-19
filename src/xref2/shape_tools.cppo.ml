@@ -20,9 +20,9 @@ let rec shape_of_id env :
   fun id ->
     match id.iv with
     | `Root (_, name) -> begin
-        match Env.lookup_unit (ModuleName.to_string name) env with
-        | Some (Env.Found unit) -> (
-          match unit.shape_info with | Some (shape, _) -> Some shape | None -> None)
+        match Env.lookup_impl (ModuleName.to_string name) env with
+        | Some impl -> (
+          match impl.shape_info with | Some (shape, _) -> Some shape | None -> None)
         | _ -> None
       end
     | `Module (parent, name) ->
@@ -64,9 +64,9 @@ let rec shape_of_module_path env : _ -> Shape.t option =
     match path with
     | `Resolved _ -> None
     | `Root name -> (
-        match Env.lookup_unit name env with
-        | Some (Env.Found unit) -> (
-            match unit.shape_info with
+        match Env.lookup_impl name env with
+        | Some impl -> (
+            match impl.shape_info with
             | Some (shape, _) -> Some shape
             | None -> None)
         | _ -> None)
@@ -113,9 +113,9 @@ let lookup_shape :
     type env = unit
     let fuel = 10
     let read_unit_shape ~unit_name =
-      match Env.lookup_unit unit_name env with
-      | Some (Found unit) -> (
-        match unit.shape_info with | Some (shape, _) -> Some shape | None -> None)
+      match Env.lookup_impl unit_name env with
+      | Some impl -> (
+        match impl.shape_info with | Some (shape, _) -> Some shape | None -> None)
       | _ -> None
     let find_shape _ _ = raise Not_found
   end) in
@@ -123,22 +123,20 @@ let lookup_shape :
   result >>= fun result ->
   result.uid >>= fun uid ->
   unit_of_uid uid >>= fun unit_name ->
-  match Env.lookup_unit unit_name env with
-  | None 
-  | Some Forward_reference
-  | Some (Not_found) -> None
-  | Some (Found unit) -> 
+  match Env.lookup_impl unit_name env with
+  | None -> None
+  | Some impl -> 
     let uid_to_id =
-      match unit.shape_info with
+      match impl.shape_info with
       | Some (_, uid_to_id) -> uid_to_id
       | None -> Odoc_model.Compat.empty_map
     in
     match Shape.Uid.Map.find_opt uid uid_to_id with
     | Some x -> Some x
     | None -> (
-      match unit.source_info with
-      | Some {id = Some id ; _} -> Some (MkId.source_location_mod id)
-      | _ -> None)
+      match impl with
+      | {id = id ; _} -> Some (MkId.source_location_mod id)
+      (* | _ -> None *))
 
 
 let lookup_def :

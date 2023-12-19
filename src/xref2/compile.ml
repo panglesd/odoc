@@ -72,12 +72,12 @@ let rec unit env t =
   (* in *)
   { t with content = content env t.id t.content (* ; source_info *) }
 
-and source_page env sp =
-  let open Source_page in
-  { sp with source_info = source_info_infos env sp.source_info }
+(* and source_page env sp = *)
+(*   let open Source_page in *)
+(*   { sp with source_info = source_info_infos env sp.source_info } *)
 
 and source_info_infos env infos =
-  let open Source_page.Source_info in
+  let open Source_info in
   let map_doc f v =
     let documentation =
       match v.documentation with Some p -> Some (f p) | None -> None
@@ -898,5 +898,8 @@ and type_expression : Env.t -> Id.LabelParent.t -> _ -> _ =
 
 let compile ~filename env compilation_unit =
   Lookup_failures.catch_failures ~filename (fun () -> unit env compilation_unit)
+
+let compile_impl ~filename _env impl =
+  Lookup_failures.catch_failures ~filename (fun () -> impl)
 
 let resolve_page _resolver y = y

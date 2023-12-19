@@ -17,18 +17,26 @@ val read_cmti :
   make_root:make_root ->
   parent:Identifier.ContainerPage.t option ->
   filename:string ->
-  source_id_opt:Identifier.SourcePage.t option ->
-  cmt_filename_opt:string option ->
-  count_occurrences:bool ->
+  (* source_id_opt:Identifier.SourcePage.t option -> *)
+  (* cmt_filename_opt:string option -> *)
+  (* count_occurrences:bool -> *)
   (Lang.Compilation_unit.t, Error.t) result Error.with_warnings
 
 val read_cmt :
   make_root:make_root ->
   parent:Identifier.ContainerPage.t option ->
   filename:string ->
-  source_id_opt:Identifier.SourcePage.t option ->
-  count_occurrences:bool ->
+  (* source_id_opt:Identifier.SourcePage.t option -> *)
+  (* count_occurrences:bool -> *)
   (Lang.Compilation_unit.t, Error.t) result Error.with_warnings
+
+val read_impl :
+  make_root:make_root ->
+  (* parent:Identifier.ContainerPage.t option -> *)
+  filename:string ->
+  (* source_id_opt:Identifier.SourcePage.t option -> *)
+  (* count_occurrences:bool -> *)
+  (Lang.Source_page.t, Error.t) result Error.with_warnings
 
 val read_cmi :
   make_root:make_root ->

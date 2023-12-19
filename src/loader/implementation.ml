@@ -374,14 +374,18 @@ let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
             process_occurrences env traverse_infos loc_to_id local_ident_to_loc
             |> add_definitions loc_to_id
           in
-          ( Some (shape, Shape.Uid.Tbl.to_map uid_to_id),
+          ( 
             Some
               {
-                Odoc_model.Lang.Source_info.id = source_id;
-                infos = source_infos;
+                Odoc_model.Lang.Source_page.id = source_id|> Option.get;
+                source_info = source_infos;
+                digest = failwith "TODO" ;
+                root = failwith "TODO";
+                linked = false;
+                shape_info = Some (shape, Shape.Uid.Tbl.to_map uid_to_id);
               } )
-      | _, _, _ -> (Some (shape, Odoc_model.Compat.empty_map), None))
-  | None -> (None, None)
+      | _, _, _ -> (None))
+  | None -> (None)
 
 #else
 
