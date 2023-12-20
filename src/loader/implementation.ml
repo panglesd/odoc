@@ -340,13 +340,16 @@ let add_definitions loc_to_id occurrences =
       (Odoc_model.Lang.Source_info.Definition id, pos_of_loc loc) :: acc)
     loc_to_id occurrences
 
-let read_cmt_infos source_id cmt_info =
+let read_cmt_infos source_id cmt_info digest root =
   match Odoc_model.Compat.shape_of_cmt_infos cmt_info with
   | Some shape -> (
       let uid_to_loc = cmt_info.cmt_uid_to_loc in
-      match (source_id, cmt_info.cmt_annots) with
-      | source_id, Implementation impl ->
-         let fake_root_id = Odoc_model.Paths.Identifier.Mk.root (None, Odoc_model.Names.ModuleName.make_std "fake_root") in
+      match cmt_info.cmt_annots with
+      | Implementation impl ->
+          let fake_root_id =
+            Odoc_model.Paths.Identifier.Mk.root
+              (None, Odoc_model.Names.ModuleName.make_std "fake_root")
+          in
           let env = Env.of_structure fake_root_id impl in
           let traverse_infos =
             Typedtree_traverse.of_cmt env impl |> List.rev
@@ -359,26 +362,23 @@ let read_cmt_infos source_id cmt_info =
           and local_ident_to_loc = IdentHashtbl.create 10
           and uid_to_id = UidHashtbl.create 10 in
           let () =
-            match source_id with
-            | source_id ->
-                populate_local_defs source_id traverse_infos loc_to_id
-                  local_ident_to_loc;
-                populate_global_defs env source_id loc_to_id uid_to_loc
-                  uid_to_id
+            populate_local_defs source_id traverse_infos loc_to_id
+              local_ident_to_loc;
+            populate_global_defs env source_id loc_to_id uid_to_loc uid_to_id
           in
           let source_infos =
             process_occurrences env traverse_infos loc_to_id local_ident_to_loc
             |> add_definitions loc_to_id
           in
-            {
-              Odoc_model.Lang.Source_page.id = source_id;
-              source_info = source_infos;
-              digest = failwith "TODO";
-              root = failwith "TODO";
-              linked = false;
-              shape_info = Some (shape, Shape.Uid.Tbl.to_map uid_to_id);
-            }
-      | _, _ -> failwith "TODO")
+          {
+            Odoc_model.Lang.Source_page.id = source_id;
+            source_info = source_infos;
+            digest;
+            root;
+            linked = false;
+            shape_info = Some (shape, Shape.Uid.Tbl.to_map uid_to_id);
+          }
+      | _ -> failwith "TODO")
   | None -> failwith "TODO"
 
 #else

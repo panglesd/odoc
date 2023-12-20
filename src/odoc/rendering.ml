@@ -13,11 +13,12 @@ end
 
 type source = Source.t
 
-let ignored_source_arg = failwith "TODO"
+let ignored_source_arg () = failwith "TODO"
 
 let documents_of_unit ~warnings_options ~syntax ~source ~renderer ~extra unit =
   Odoc_model.Error.catch_warnings (fun () ->
-      if source <> None then Odoc_model.Error.raise_warning ignored_source_arg;
+      if source <> None then
+        Odoc_model.Error.raise_warning (ignored_source_arg ());
       renderer.Renderer.extra_documents ~syntax extra (CU unit))
   |> Odoc_model.Error.handle_warnings ~warnings_options
   >>= fun extra_docs ->

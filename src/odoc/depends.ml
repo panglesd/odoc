@@ -82,7 +82,7 @@ let deps_of_odoc_file ~deps input =
   match unit.content with
   | Page_content _ | Source_tree_content _ ->
       Ok () (* XXX something should certainly be done here *)
-  | Impl_content _ -> failwith "TODO"
+  | Impl_content _ -> (* failwith "TODO" *) Ok ()
   | Unit_content unit ->
       List.iter unit.Odoc_model.Lang.Compilation_unit.imports ~f:(fun import ->
           match import with

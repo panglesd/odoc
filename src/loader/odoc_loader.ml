@@ -42,13 +42,13 @@ exception Not_an_interface
 
 exception Make_root_error of string
 
-let read_cmt_infos source_id ~filename () =
+let read_cmt_infos source_id ~filename root digest () =
   match Cmt_format.read_cmt filename with
   | exception Cmi_format.Error _ -> raise Corrupted
   | cmt_info -> (
       match cmt_info.cmt_annots with
       | Implementation _ ->
-          Implementation.read_cmt_infos source_id cmt_info
+          Implementation.read_cmt_infos source_id cmt_info digest root
       | _ -> raise Not_an_implementation)
 
 
@@ -189,19 +189,19 @@ let read_cmi ~make_root ~parent ~filename () =
         (* ~source_info:None *) sg
   | _ -> raise Corrupted
 
-let read_impl ~make_root:_ ~filename ~source_id () =
+let read_impl ~make_root ~filename ~source_id () =
   match Cmt_format.read_cmt filename with
   | exception Cmi_format.Error (Not_an_interface _) ->
       raise Not_an_implementation
   | cmt_info -> (
-      let _name = cmt_info.cmt_modname in
+      let name = cmt_info.cmt_modname in
       let _sourcefile =
         ( cmt_info.cmt_sourcefile,
           cmt_info.cmt_source_digest,
           cmt_info.cmt_builddir )
       in
-      let _interface = cmt_info.cmt_interface_digest in
-      let _imports = cmt_info.cmt_imports in
+      let interface = cmt_info.cmt_interface_digest in
+      let imports = cmt_info.cmt_imports in
       match cmt_info.cmt_annots with
       (* | Packed (_, files) -> *)
       (*     let id = *)
@@ -231,11 +231,25 @@ let read_impl ~make_root:_ ~filename ~source_id () =
       (*     make_compilation_unit ~make_root ~imports ~interface ~sourcefile ~name *)
       (*       ~id (\* ~source_info:None *\) content *)
       | Implementation _impl ->
+          let digest =
+            match interface with
+            | Some digest -> (digest)
+            | None -> (
+                match List.assoc name imports with
+                | Some digest -> (digest)
+                | None -> raise Corrupted
+                | exception Not_found -> raise Corrupted)
+          in
+          let root =
+            match make_root ~module_name:name ~digest with
+            | Ok root -> root
+            | Error (`Msg m) -> raise (Make_root_error m)
+          in
           let (* shape_info, source_info *) impl =
-            read_cmt_infos source_id ~filename ()
+            read_cmt_infos source_id ~filename root digest ()
           in
           (* compilation_unit_of_sig ~make_root ~imports ~interface ~sourcefile *)
-      (*   ~name ~id ?canonical (\* ?shape_info ~source_info *\) sg *)
+          (*   ~name ~id ?canonical (\* ?shape_info ~source_info *\) sg *)
           impl
       | _ -> raise Not_an_implementation)
 

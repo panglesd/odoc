@@ -511,7 +511,7 @@ module Compile_src = struct
        should be the same as the one passed to $(i,odoc compile \
        --source-name)."
     in
-    Term.info "source-tree" ~docs ~doc
+    Term.info "compile-src" ~docs ~doc
 end
 
 module Indexing = struct

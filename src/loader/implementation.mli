@@ -8,6 +8,8 @@ val read_cmt_infos :
   (*   Odoc_model.Compat.shape_uid_map) *)
   (* option *)
   (* *  *)
+  string ->
+  Odoc_model.Root.t ->
   Odoc_model.Lang.Source_page.t
 (** Extract all implementation information from a [cmt]: the shape, and the
     {{!Odoc_model.Lang.Source_info.infos}source infos} (local and global
