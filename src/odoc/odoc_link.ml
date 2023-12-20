@@ -4,6 +4,10 @@ let link_page ~resolver ~filename page =
   let env = Resolver.build_env_for_page resolver page in
   Odoc_xref2.Link.resolve_page ~filename env page
 
+let link_impl ~resolver ~filename impl =
+  let env = Resolver.build_link_env_for_impl resolver impl in
+  Odoc_xref2.Link.resolve_impl ~filename env impl
+
 let link_unit ~resolver ~filename m =
   let open Odoc_model in
   let open Lang.Compilation_unit in
@@ -29,6 +33,15 @@ let from_odoc ~resolver ~warnings_options input output =
   | Source_tree_content st ->
       Odoc_file.save_source_tree output ~warnings:[] st;
       Ok (`Source_tree st)
+  | Impl_content impl ->
+      link_impl ~resolver ~filename impl
+      |> handle_warnings ~input_warnings ~warnings_options
+      >>= fun (impl, warnings) ->
+      Odoc_file.save_impl output ~warnings impl;
+      Ok (`Impl impl)
+      (* Odoc_file.save_source_tree output ~warnings:[] st; *)
+      (* Ok (`Source_tree st) *)
+      (* failwith "TODO" *)
   | Page_content page ->
       link_page ~resolver ~filename page
       |> handle_warnings ~input_warnings ~warnings_options
@@ -46,9 +59,9 @@ let from_odoc ~resolver ~warnings_options input output =
          a different version of the compiler, provided the compiler
          itself doesn't break cross-version marshalling! This ability
          is currently being used by voodoo. *)
-      let m =
-        let open Odoc_model.Lang.Compilation_unit in
-        { m with shape_info = None }
-      in
+      (* let m = *)
+      (*   let open Odoc_model.Lang.Compilation_unit in *)
+      (*   { m (\* with shape_info = None *\) } *)
+      (* in *)
       Odoc_file.save_unit output ~warnings m;
       Ok (`Module m)

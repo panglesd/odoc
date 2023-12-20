@@ -42,13 +42,14 @@ exception Not_an_interface
 
 exception Make_root_error of string
 
-(* let read_cmt_infos source_id_opt id ~filename ~count_occurrences () = *)
-(*   match Cmt_format.read_cmt filename with *)
-(*   | exception Cmi_format.Error _ -> raise Corrupted *)
-(*   | cmt_info -> ( *)
-(*       match cmt_info.cmt_annots with *)
-(*       | Implementation _ -> Implementation.read_cmt_infos source_id_opt id cmt_info ~count_occurrences *)
-(*       | _ -> raise Not_an_implementation) *)
+let read_cmt_infos source_id ~filename () =
+  match Cmt_format.read_cmt filename with
+  | exception Cmi_format.Error _ -> raise Corrupted
+  | cmt_info -> (
+      match cmt_info.cmt_annots with
+      | Implementation _ ->
+          Implementation.read_cmt_infos source_id cmt_info
+      | _ -> raise Not_an_implementation)
 
 
 let make_compilation_unit ~make_root ~imports ~interface ?sourcefile ~name ~id
@@ -88,6 +89,7 @@ let make_compilation_unit ~make_root ~imports ~interface ?sourcefile ~name ~id
     expansion = None;
     linked = false;
     canonical;
+    locs = None;
     (* source_info; *)
     (* shape_info; *)
   }
@@ -187,6 +189,57 @@ let read_cmi ~make_root ~parent ~filename () =
         (* ~source_info:None *) sg
   | _ -> raise Corrupted
 
+let read_impl ~make_root:_ ~filename ~source_id () =
+  match Cmt_format.read_cmt filename with
+  | exception Cmi_format.Error (Not_an_interface _) ->
+      raise Not_an_implementation
+  | cmt_info -> (
+      let _name = cmt_info.cmt_modname in
+      let _sourcefile =
+        ( cmt_info.cmt_sourcefile,
+          cmt_info.cmt_source_digest,
+          cmt_info.cmt_builddir )
+      in
+      let _interface = cmt_info.cmt_interface_digest in
+      let _imports = cmt_info.cmt_imports in
+      match cmt_info.cmt_annots with
+      (* | Packed (_, files) -> *)
+      (*     let id = *)
+      (*       Odoc_model.Paths.Identifier.Mk.root *)
+      (*         (parent, Odoc_model.Names.ModuleName.make_std name) *)
+      (*     in *)
+      (*     let items = *)
+      (*       List.map *)
+      (*         (fun file -> *)
+      (*           let pref = Misc.chop_extensions file in *)
+      (*           Astring.String.Ascii.capitalize (Filename.basename pref)) *)
+      (*         files *)
+      (*     in *)
+      (*     let items = List.sort String.compare items in *)
+      (*     let items = *)
+      (*       List.map *)
+      (*         (fun name -> *)
+      (*           let id = *)
+      (*             Odoc_model.Paths.Identifier.Mk.module_ *)
+      (*               (id, Odoc_model.Names.ModuleName.make_std name) *)
+      (*           in *)
+      (*           let path = `Root name in *)
+      (*           { Odoc_model.Lang.Compilation_unit.Packed.id; path }) *)
+      (*         items *)
+      (*     in *)
+      (*     let content = Odoc_model.Lang.Compilation_unit.Pack items in *)
+      (*     make_compilation_unit ~make_root ~imports ~interface ~sourcefile ~name *)
+      (*       ~id (\* ~source_info:None *\) content *)
+      | Implementation _impl ->
+          let (* shape_info, source_info *) impl =
+            read_cmt_infos source_id ~filename ()
+          in
+          (* compilation_unit_of_sig ~make_root ~imports ~interface ~sourcefile *)
+      (*   ~name ~id ?canonical (\* ?shape_info ~source_info *\) sg *)
+          impl
+      | _ -> raise Not_an_implementation)
+
+
 (** Catch errors from reading the object files and some internal errors *)
 let wrap_errors ~filename f =
   Odoc_model.Error.catch_errors_and_warnings (fun () ->
@@ -207,7 +260,8 @@ let read_cmti ~make_root ~parent ~filename (* ~source_id_opt ~cmt_filename_opt ~
 let read_cmt ~make_root ~parent ~filename (* ~source_id_opt ~count_occurrences *) =
   wrap_errors ~filename (read_cmt ~make_root ~parent ~filename (* ~source_id_opt ~count_occurrences *))
 
-let read_impl = failwith "TODO"
+let read_impl ~make_root ~filename ~source_id = (* failwith "TODO" *)
+  wrap_errors ~filename (read_impl ~make_root ~source_id ~filename)
 
 let read_cmi ~make_root ~parent ~filename =
   wrap_errors ~filename (read_cmi ~make_root ~parent ~filename)

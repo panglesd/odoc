@@ -241,7 +241,7 @@ module Make (Syntax : SYNTAX) = struct
   end
 
   module Source_page : sig
-    val url : Paths.Identifier.SourcePage.t -> Url.t
+    (* val url : Paths.Identifier.SourcePage.t -> Url.t *)
     val source :
       Paths.Identifier.SourcePage.t ->
       Syntax_highlighter.infos ->
@@ -250,7 +250,7 @@ module Make (Syntax : SYNTAX) = struct
       Source_page.t
   end = struct
     let path id = Url.Path.from_identifier id
-    let url id = Url.from_path (path id)
+    (* let url id = Url.from_path (path id) *)
 
     let to_link { Lang.Source_info.documentation; implementation } =
       let documentation =
@@ -1812,9 +1812,8 @@ module Make (Syntax : SYNTAX) = struct
       (*   | Some { id = Some id; _ } -> Some (Source_page.url id) *)
       (*   | _ -> None *)
       (* in *)
-      let page =
-        make_expansion_page (* ~source_anchor *) url [ unit_doc ] items
-      in
+      let source_anchor = source_anchor t.locs in
+      let page = make_expansion_page ~source_anchor url [ unit_doc ] items in
       Document.Page page
 
     let page (t : Odoc_model.Lang.Page.t) =
@@ -1921,6 +1920,7 @@ module Make (Syntax : SYNTAX) = struct
 
   let record = record
 
-  let source_page id syntax_info infos source_code =
-    Document.Source_page (Source_page.source id syntax_info infos source_code)
+  let source_page (v : Odoc_model.Lang.Source_page.t) syntax_info source_code =
+    Document.Source_page
+      (Source_page.source v.id syntax_info v.source_info source_code)
 end

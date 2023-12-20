@@ -21,15 +21,15 @@ let type_path : Env.t -> Paths.Path.Type.t -> Paths.Path.Type.t =
       | Ok p' -> `Resolved Lang_of.(Path.resolved_type (empty ()) p')
       | Error _ -> p)
 
-and value_path : Env.t -> Paths.Path.Value.t -> Paths.Path.Value.t =
- fun env p ->
-  match p with
-  | `Resolved _ -> p
-  | _ -> (
-      let cp = Component.Of_Lang.(value_path (empty ()) p) in
-      match Tools.resolve_value_path env cp with
-      | Ok p' -> `Resolved Lang_of.(Path.resolved_value (empty ()) p')
-      | Error _ -> p)
+(* and value_path : Env.t -> Paths.Path.Value.t -> Paths.Path.Value.t = *)
+(*  fun env p -> *)
+(*   match p with *)
+(*   | `Resolved _ -> p *)
+(*   | _ -> ( *)
+(*       let cp = Component.Of_Lang.(value_path (empty ()) p) in *)
+(*       match Tools.resolve_value_path env cp with *)
+(*       | Ok p' -> `Resolved Lang_of.(Path.resolved_value (empty ()) p') *)
+(*       | Error _ -> p) *)
 
 and module_type_path :
     Env.t -> Paths.Path.ModuleType.t -> Paths.Path.ModuleType.t =
@@ -76,27 +76,27 @@ let rec unit env t =
 (*   let open Source_page in *)
 (*   { sp with source_info = source_info_infos env sp.source_info } *)
 
-and source_info_infos env infos =
-  let open Source_info in
-  let map_doc f v =
-    let documentation =
-      match v.documentation with Some p -> Some (f p) | None -> None
-    in
-    { v with documentation }
-  in
-  List.map
-    (function
-      | v, pos ->
-          let v =
-            match v with
-            | Value v -> Value (map_doc (value_path env) v)
-            | Module v -> Module (map_doc (module_path env) v)
-            | ModuleType v -> ModuleType (map_doc (module_type_path env) v)
-            | Type v -> Type (map_doc (type_path env) v)
-            | Definition _ as d -> d
-          in
-          (v, pos))
-    infos
+(* and source_info_infos env infos = *)
+(*   let open Source_info in *)
+(*   let map_doc f v = *)
+(*     let documentation = *)
+(*       match v.documentation with Some p -> Some (f p) | None -> None *)
+(*     in *)
+(*     { v with documentation } *)
+(*   in *)
+(*   List.map *)
+(*     (function *)
+(*       | v, pos -> *)
+(*           let v = *)
+(*             match v with *)
+(*             | Value v -> Value (map_doc (value_path env) v) *)
+(*             | Module v -> Module (map_doc (module_path env) v) *)
+(*             | ModuleType v -> ModuleType (map_doc (module_type_path env) v) *)
+(*             | Type v -> Type (map_doc (type_path env) v) *)
+(*             | Definition _ as d -> d *)
+(*           in *)
+(*           (v, pos)) *)
+(*     infos *)
 
 and content env id =
   let open Compilation_unit in

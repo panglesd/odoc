@@ -473,6 +473,7 @@ module rec Compilation_unit : sig
     content : content;
     expansion : Signature.t option;
     linked : bool;  (** Whether this unit has been linked. *)
+    locs : Identifier.SourceLocation.t option;
     canonical : Path.Module.t option;
         (* source_info : Source_info.t option; *)
         (* shape_info : *)

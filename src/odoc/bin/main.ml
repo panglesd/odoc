@@ -41,17 +41,17 @@ let convert_fpath =
 let convert_src_fpath =
   let parse inp =
     match Arg.(conv_parser file) inp with
-    | Ok s -> Result.Ok (Html_page.Source.File (Fs.File.of_string s))
+    | Ok s -> Result.Ok (Rendering.Source.File (Fs.File.of_string s))
     | Error _ as e -> e
-  and print = Html_page.Source.pp in
+  and print = Rendering.Source.pp in
   Arg.conv (parse, print)
 
 let convert_src_dir =
   let parse inp =
     match Arg.(conv_parser dir) inp with
-    | Ok s -> Result.Ok (Html_page.Source.Root (Fs.File.of_string s))
+    | Ok s -> Result.Ok (Rendering.Source.Root (Fs.File.of_string s))
     | Error _ as e -> e
-  and print = Html_page.Source.pp in
+  and print = Rendering.Source.pp in
   Arg.conv (parse, print)
 
 (** On top of the conversion 'string', split into segs. *)
@@ -183,8 +183,11 @@ end = struct
         Fs.File.(set_ext ".odoc" output)
 
   let compile hidden directories resolve_fwd_refs dst package_opt
-      parent_name_opt open_modules children input warnings_options
-      source_parent_file source_name cmt_filename_opt count_occurrences =
+      parent_name_opt open_modules children input
+      warnings_options
+        (* source_parent_file source_name *)
+        (* cmt_filename_opt *)
+        (* count_occurrences *) =
     let open Or_error in
     let resolver =
       Resolver.create ~important_digests:(not resolve_fwd_refs) ~directories
@@ -202,25 +205,25 @@ end = struct
             (`Cli_error
               "Either --package or --parent should be specified, not both")
     in
-    let source =
-      match (source_parent_file, source_name) with
-      | Some parent, Some name -> Ok (Some (parent, name))
-      | Some _, None | None, Some _ ->
-          Error
-            (`Cli_error
-              "--source-parent-file and --source-name must be passed at the \
-               same time.")
-      | None, None -> Ok None
-    in
-    (if Fs.File.get_ext input = ".cmt" && cmt_filename_opt <> None then
-       Error (`Cli_error "--cmt is redundant if the input is a cmt file")
-     else Ok ())
-    >>= fun () ->
+    (* let source = *)
+    (*   match (source_parent_file, source_name) with *)
+    (*   | Some parent, Some name -> Ok (Some (parent, name)) *)
+    (*   | Some _, None | None, Some _ -> *)
+    (*       Error *)
+    (*         (`Cli_error *)
+    (* "--source-parent-file and --source-name must be passed at the \ *)
+       (*            same time.") *)
+    (*   | None, None -> Ok None *)
+    (* in *)
+    (* (if Fs.File.get_ext input = ".cmt" && cmt_filename_opt <> None then *)
+    (*    Error (`Cli_error "--cmt is redundant if the input is a cmt file") *)
+    (*  else Ok ()) *)
+    (* >>= fun () -> *)
     parent_cli_spec >>= fun parent_cli_spec ->
-    source >>= fun source ->
+    (* source >>= fun source -> *)
     Fs.Directory.mkdir_p (Fs.File.dirname output);
     Compile.compile ~resolver ~parent_cli_spec ~hidden ~children ~output
-      ~warnings_options ~source ~cmt_filename_opt ~count_occurrences input
+      ~warnings_options (* ~source ~cmt_filename_opt ~count_occurrences *) input
 
   let input =
     let doc = "Input $(i,.cmti), $(i,.cmt), $(i,.cmi) or $(i,.mld) file." in
@@ -245,32 +248,32 @@ end = struct
     Arg.(
       value & opt_all string default & info ~docv:"CHILD" ~doc [ "c"; "child" ])
 
-  let source_parent_file =
-    let doc =
-      ".odoc file of the parent of the page containing the source code for \
-       this compilation unit."
-    in
-    Arg.(
-      value
-      & opt (some convert_fpath) None
-      & info [ "source-parent-file" ] ~doc ~docv:"PARENT.odoc")
+  (* let source_parent_file = *)
+  (*   let doc = *)
+  (* ".odoc file of the parent of the page containing the source code for \ *)
+     (*      this compilation unit." *)
+  (*   in *)
+  (*   Arg.( *)
+  (*     value *)
+  (*     & opt (some convert_fpath) None *)
+  (*     & info [ "source-parent-file" ] ~doc ~docv:"PARENT.odoc") *)
 
-  let source_name =
-    let doc =
-      "The basename of the source file. This is used to place the source file \
-       within the source_parent."
-    in
-    Arg.(
-      value
-      & opt (some convert_source_name) None
-      & info [ "source-name" ] ~doc ~docv:"NAME")
+  (* let source_name = *)
+  (*   let doc = *)
+  (* "The basename of the source file. This is used to place the source file \ *)
+     (*      within the source_parent." *)
+  (*   in *)
+  (*   Arg.( *)
+  (*     value *)
+  (*     & opt (some convert_source_name) None *)
+  (*     & info [ "source-name" ] ~doc ~docv:"NAME") *)
 
-  let source_cmt =
-    let doc =
-      "The .cmt file to use for source code related operations, such as source \
-       code rendering."
-    in
-    Arg.(value & opt (some file) None & info [ "cmt" ] ~doc ~docv:"CMT")
+  (* let source_cmt = *)
+  (*   let doc = *)
+  (* "The .cmt file to use for source code related operations, such as source \ *)
+     (*      code rendering." *)
+  (*   in *)
+  (*   Arg.(value & opt (some file) None & info [ "cmt" ] ~doc ~docv:"CMT") *)
 
   let cmd =
     let package_opt =
@@ -293,18 +296,19 @@ end = struct
       let doc = "Try resolving forward references." in
       Arg.(value & flag & info ~doc [ "r"; "resolve-fwd-refs" ])
     in
-    let count_occurrences =
-      let doc =
-        "Count occurrences in implementation. Useful in search ranking."
-      in
-      Arg.(value & flag & info ~doc [ "count-occurrences" ])
-    in
+    (* let count_occurrences = *)
+    (*   let doc = *)
+    (*     "Count occurrences in implementation. Useful in search ranking." *)
+    (*   in *)
+    (*   Arg.(value & flag & info ~doc [ "count-occurrences" ]) *)
+    (* in *)
     Term.(
       const handle_error
       $ (const compile $ hidden $ odoc_file_directories $ resolve_fwd_refs $ dst
        $ package_opt $ parent_opt $ open_modules $ children $ input
-       $ warnings_options $ source_parent_file $ source_name $ source_cmt
-       $ count_occurrences))
+       $ warnings_options
+         (*  $ source_parent_file $ source_name $ source_cmt *)
+         (* $ count_occurrences *)))
 
   let info ~docs =
     let man =
@@ -709,10 +713,40 @@ end = struct
 
   module Generate = struct
     let generate extra _hidden output_dir syntax extra_suffix input_file
-        warnings_options =
+        warnings_options source_file source_root =
       let file = Fs.File.of_string input_file in
+      let source =
+        match (source_root, source_file) with
+        | Some x, None -> Some x
+        | None, Some x -> Some x
+        | None, None -> None
+        | Some _, Some _ ->
+            Printf.eprintf "ERROR: Can't use both source and source-root\n%!";
+            exit 1
+      in
       Rendering.generate_odoc ~renderer:R.renderer ~warnings_options ~syntax
-        ~output:output_dir ~extra_suffix extra file
+        ~output:output_dir ~extra_suffix ~source extra file
+
+    let source_file =
+      let doc =
+        "Source code for the compilation unit. It must have been compiled with \
+         --source-parent passed."
+      in
+      Arg.(
+        value
+        & opt (some convert_src_fpath) None
+        & info [ "source" ] ~doc ~docv:"file.ml")
+
+    let source_root =
+      let doc =
+        "Source code root for the compilation unit. Used to find the source \
+         file from the value of --source-name it was compiled with. \
+         Incompatible with --source-file."
+      in
+      Arg.(
+        value
+        & opt (some convert_src_dir) None
+        & info [ "source-root" ] ~doc ~docv:"dir")
 
     let cmd =
       let syntax =
@@ -726,7 +760,8 @@ end = struct
       Term.(
         const handle_error
         $ (const generate $ R.extra_args $ hidden $ dst ~create:true () $ syntax
-         $ extra_suffix $ input_odocl $ warnings_options))
+         $ extra_suffix $ input_odocl $ warnings_options $ source_file
+         $ source_root))
 
     let info ~docs =
       let doc =
@@ -933,15 +968,15 @@ module Odoc_html_args = struct
     in
     Arg.(value & flag & info ~doc [ "as-json" ])
 
-  let source_file =
-    let doc =
-      "Source code for the compilation unit. It must have been compiled with \
-       --source-parent passed."
-    in
-    Arg.(
-      value
-      & opt (some convert_src_fpath) None
-      & info [ "source" ] ~doc ~docv:"file.ml")
+  (* let source_file = *)
+  (*   let doc = *)
+  (* "Source code for the compilation unit. It must have been compiled with \ *)
+     (*      --source-parent passed." *)
+  (*   in *)
+  (*   Arg.( *)
+  (*     value *)
+  (*     & opt (some convert_src_fpath) None *)
+  (*     & info [ "source" ] ~doc ~docv:"file.ml") *)
 
   let assets =
     let doc =
@@ -951,40 +986,39 @@ module Odoc_html_args = struct
     Arg.(
       value & opt_all convert_fpath [] & info [ "asset" ] ~doc ~docv:"file.ext")
 
-  let source_root =
-    let doc =
-      "Source code root for the compilation unit. Used to find the source file \
-       from the value of --source-name it was compiled with. Incompatible with \
-       --source-file."
-    in
-    Arg.(
-      value
-      & opt (some convert_src_dir) None
-      & info [ "source-root" ] ~doc ~docv:"dir")
+  (* let source_root = *)
+  (*   let doc = *)
+  (* "Source code root for the compilation unit. Used to find the source file \ *)
+     (*      from the value of --source-name it was compiled with. Incompatible with \ *)
+     (*      --source-file." *)
+  (*   in *)
+  (*   Arg.( *)
+  (*     value *)
+  (*     & opt (some convert_src_dir) None *)
+  (*     & info [ "source-root" ] ~doc ~docv:"dir") *)
 
   let extra_args =
     let config semantic_uris closed_details indent theme_uri support_uri
-        search_uris flat as_json source_file assets source_root =
+        search_uris flat as_json assets =
       let open_details = not closed_details in
-      let source =
-        match (source_root, source_file) with
-        | Some x, None -> Some x
-        | None, Some x -> Some x
-        | None, None -> None
-        | Some _, Some _ ->
-            Printf.eprintf "ERROR: Can't use both source and source-root\n%!";
-            exit 1
-      in
+      (* let source = *)
+      (*   match (source_root, source_file) with *)
+      (*   | Some x, None -> Some x *)
+      (*   | None, Some x -> Some x *)
+      (*   | None, None -> None *)
+      (*   | Some _, Some _ -> *)
+      (*       Printf.eprintf "ERROR: Can't use both source and source-root\n%!"; *)
+      (*       exit 1 *)
+      (* in *)
       let html_config =
         Odoc_html.Config.v ~theme_uri ~support_uri ~search_uris ~semantic_uris
           ~indent ~flat ~open_details ~as_json ()
       in
-      { Html_page.html_config; source; assets }
+      { Html_page.html_config (* ; source *); assets }
     in
     Term.(
       const config $ semantic_uris $ closed_details $ indent $ theme_uri
-      $ support_uri $ search_uri $ flat $ as_json $ source_file $ assets
-      $ source_root)
+      $ support_uri $ search_uri $ flat $ as_json $ assets)
 end
 
 module Odoc_html = Make_renderer (Odoc_html_args)
@@ -1352,6 +1386,7 @@ let () =
       Odoc_html.generate ~docs:section_pipeline;
       Support_files_command.(cmd, info ~docs:section_pipeline);
       Source_tree.(cmd, info ~docs:section_pipeline);
+      Compile_src.(cmd, info ~docs:section_pipeline);
       Indexing.(cmd, info ~docs:section_pipeline);
       Odoc_manpage.generate ~docs:section_generators;
       Odoc_latex.generate ~docs:section_generators;

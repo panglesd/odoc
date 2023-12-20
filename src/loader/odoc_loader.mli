@@ -34,7 +34,7 @@ val read_impl :
   make_root:make_root ->
   (* parent:Identifier.ContainerPage.t option -> *)
   filename:string ->
-  (* source_id_opt:Identifier.SourcePage.t option -> *)
+  source_id:Identifier.SourcePage.t ->
   (* count_occurrences:bool -> *)
   (Lang.Source_page.t, Error.t) result Error.with_warnings
 

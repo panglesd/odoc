@@ -80,6 +80,7 @@ let root_name root = Odoc_model.Root.Odoc_file.name root.Odoc_model.Root.file
 let unit_name
     ( Odoc_file.Unit_content { root; _ }
     | Page_content { root; _ }
+    | Impl_content { root; _ }
     | Source_tree_content { root; _ } ) =
   root_name root
 
@@ -139,7 +140,7 @@ let lookup_unit_by_name ap target_name =
   let first_unit u =
     match u with
     | Odoc_file.Unit_content m -> Some m
-    | Page_content _ | Source_tree_content _ -> None
+    | Impl_content _ | Page_content _ | Source_tree_content _ -> None
   in
   let rec find_ambiguous tl =
     match find_map first_unit tl with
@@ -193,10 +194,23 @@ let lookup_page ap target_name =
   let is_page u =
     match u with
     | Odoc_file.Page_content p -> Some p
-    | Unit_content _ | Source_tree_content _ -> None
+    | Impl_content _ | Unit_content _ | Source_tree_content _ -> None
   in
   let units = load_units_from_name ap target_name in
   match find_map is_page units with Some (p, _) -> Some p | None -> None
+
+(** Lookup an implementation.
+
+    TODO: Warning on ambiguous lookup. *)
+let lookup_impl ap target_name =
+  let target_name = "src-" ^ target_name in
+  let is_impl u =
+    match u with
+    | Odoc_file.Impl_content p -> Some p
+    | Page_content _ | Unit_content _ | Source_tree_content _ -> None
+  in
+  let units = load_units_from_name ap target_name in
+  match find_map is_impl units with Some (p, _) -> Some p | None -> None
 
 (** Add the current unit to the cache. No need to load other units with the same
     name. *)
@@ -204,6 +218,7 @@ let add_unit_to_cache u =
   let target_name =
     (match u with
     | Odoc_file.Page_content _ -> "page-"
+    | Impl_content _ -> (* failwith "TODO" *) "src-"
     | Unit_content _ -> ""
     | Source_tree_content _ -> "page-")
     ^ unit_name u
@@ -229,16 +244,29 @@ let build_compile_env_for_unit
   add_unit_to_cache (Odoc_file.Unit_content m);
   let imports_map = build_imports_map m in
   let lookup_unit = lookup_unit ~important_digests ~imports_map ap
-  and lookup_page = lookup_page ap in
-  let resolver = { Env.open_units; lookup_unit; lookup_page } in
+  and lookup_page = lookup_page ap
+  and lookup_impl = (* failwith "TODO" *) lookup_impl ap in
+  let resolver = { Env.open_units; lookup_unit; lookup_page; lookup_impl } in
   Env.env_of_unit m ~linking:false resolver
 
 (** [important_digests] and [imports_map] only apply to modules. *)
 let build ?(imports_map = StringMap.empty)
     { important_digests; ap; open_modules = open_units } =
   let lookup_unit = lookup_unit ~important_digests ~imports_map ap
-  and lookup_page = lookup_page ap in
-  { Env.open_units; lookup_unit; lookup_page }
+  and lookup_page = lookup_page ap
+  and lookup_impl = (* failwith "TODO"  *) lookup_impl ap in
+  { Env.open_units; lookup_unit; lookup_page; lookup_impl }
+
+let build_compile_env_for_impl t m =
+  (* add_unit_to_cache (Odoc_file.Unit_content m); *)
+  (* let imports_map = build_imports_map m in *)
+  (* let lookup_unit = lookup_unit ~important_digests ~imports_map ap *)
+  (* and lookup_page = lookup_page ap *)
+  (* and lookup_impl = failwith "TODO" in *)
+  (* let resolver = { Env.open_units; lookup_unit; lookup_page; lookup_impl } in *)
+  (* Env.env_of_unit m ~linking:false resolver *)
+  let resolver = build (* ~imports_map *) t in
+  Env.env_of_impl m resolver
 
 let build_link_env_for_unit t m =
   add_unit_to_cache (Odoc_file.Unit_content m);
@@ -246,7 +274,7 @@ let build_link_env_for_unit t m =
   let resolver = build ~imports_map t in
   Env.env_of_unit m ~linking:true resolver
 
-let build_compile_env_for_impl t m =
+let build_link_env_for_impl t m =
   (* add_unit_to_cache (Odoc_file.Unit_content m); *)
   (* let imports_map = build_imports_map m in *)
   (* TODO *)
@@ -273,6 +301,6 @@ let resolve_import t target_name =
         | Ok root -> (
             match root.Odoc_model.Root.file with
             | Compilation_unit _ -> Some root
-            | Page _ -> loop tl))
+            | Impl _ | Page _ -> loop tl))
   in
   loop (Accessible_paths.find t.ap target_name)

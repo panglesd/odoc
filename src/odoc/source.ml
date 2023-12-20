@@ -1,12 +1,10 @@
-open Astring
 open Odoc_model
-open Odoc_model.Names
 open Or_error
 
-let resolve_and_substitute ~resolver ~make_root input_file =
+let resolve_and_substitute ~resolver ~make_root ~source_id input_file =
   let filename = Fs.File.to_string input_file in
   let impl =
-    Odoc_loader.read_impl ~make_root (* ~parent *) ~filename
+    Odoc_loader.read_impl ~make_root (* ~parent *) ~filename ~source_id
     |> Error.raise_errors_and_warnings
   in
   let env = Resolver.build_compile_env_for_impl resolver impl in
@@ -55,7 +53,7 @@ let compile ~resolver ~output ~warnings_options ~source_path ~source_parent_file
   let make_root = root_of_implementation ~source_id in
   let result =
     Error.catch_errors_and_warnings (fun () ->
-        resolve_and_substitute ~resolver ~make_root input)
+        resolve_and_substitute ~resolver ~make_root ~source_id input)
   in
   (* Extract warnings to write them into the output file *)
   let _, warnings = Error.unpack_warnings result in

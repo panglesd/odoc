@@ -340,14 +340,14 @@ let add_definitions loc_to_id occurrences =
       (Odoc_model.Lang.Source_info.Definition id, pos_of_loc loc) :: acc)
     loc_to_id occurrences
 
-let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
+let read_cmt_infos source_id cmt_info =
   match Odoc_model.Compat.shape_of_cmt_infos cmt_info with
   | Some shape -> (
       let uid_to_loc = cmt_info.cmt_uid_to_loc in
-      match (source_id_opt, count_occurrences, cmt_info.cmt_annots) with
-      | (Some _ as source_id), _, Implementation impl
-      | source_id, true, Implementation impl ->
-          let env = Env.of_structure id impl in
+      match (source_id, cmt_info.cmt_annots) with
+      | source_id, Implementation impl ->
+         let fake_root_id = Odoc_model.Paths.Identifier.Mk.root (None, Odoc_model.Names.ModuleName.make_std "fake_root") in
+          let env = Env.of_structure fake_root_id impl in
           let traverse_infos =
             Typedtree_traverse.of_cmt env impl |> List.rev
             (* Information are accumulated in a list. We need to have the
@@ -360,11 +360,7 @@ let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
           and uid_to_id = UidHashtbl.create 10 in
           let () =
             match source_id with
-            | None -> ()
-            (* populate [loc_to_id], [ident_to_id] and [uid_to_id] only when
-               rendering source code, as these are only used to compute source
-               locations id *)
-            | Some source_id ->
+            | source_id ->
                 populate_local_defs source_id traverse_infos loc_to_id
                   local_ident_to_loc;
                 populate_global_defs env source_id loc_to_id uid_to_loc
@@ -374,18 +370,16 @@ let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
             process_occurrences env traverse_infos loc_to_id local_ident_to_loc
             |> add_definitions loc_to_id
           in
-          ( 
-            Some
-              {
-                Odoc_model.Lang.Source_page.id = source_id|> Option.get;
-                source_info = source_infos;
-                digest = failwith "TODO" ;
-                root = failwith "TODO";
-                linked = false;
-                shape_info = Some (shape, Shape.Uid.Tbl.to_map uid_to_id);
-              } )
-      | _, _, _ -> (None))
-  | None -> (None)
+            {
+              Odoc_model.Lang.Source_page.id = source_id;
+              source_info = source_infos;
+              digest = failwith "TODO";
+              root = failwith "TODO";
+              linked = false;
+              shape_info = Some (shape, Shape.Uid.Tbl.to_map uid_to_id);
+            }
+      | _, _ -> failwith "TODO")
+  | None -> failwith "TODO"
 
 #else
 

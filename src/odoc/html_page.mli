@@ -16,18 +16,14 @@
 
 open Odoc_document
 
-module Source : sig
-  type t = File of Fpath.t | Root of Fpath.t
+(* module Source : sig *)
+(*   type t = File of Fpath.t | Root of Fpath.t *)
 
-  val pp : Format.formatter -> t -> unit
-end
+(*   val pp : Format.formatter -> t -> unit *)
+(* end *)
 
-type source = Source.t
+(* type source = Source.t *)
 
-type args = {
-  html_config : Odoc_html.Config.t;
-  source : source option;
-  assets : Fpath.t list;
-}
+type args = { html_config : Odoc_html.Config.t; assets : Fpath.t list }
 
 val renderer : args Renderer.t

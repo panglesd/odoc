@@ -1,8 +1,23 @@
 open Odoc_document
 open Or_error
 
-let documents_of_unit ~warnings_options ~syntax ~renderer ~extra unit =
+module Source = struct
+  type t = File of Fpath.t | Root of Fpath.t
+
+  let pp fmt = function
+    | File f -> Format.fprintf fmt "File: %a" Fpath.pp f
+    | Root f -> Format.fprintf fmt "File: %a" Fpath.pp f
+
+  (* let to_string f = Format.asprintf "%a" pp f *)
+end
+
+type source = Source.t
+
+let ignored_source_arg = failwith "TODO"
+
+let documents_of_unit ~warnings_options ~syntax ~source ~renderer ~extra unit =
   Odoc_model.Error.catch_warnings (fun () ->
+      if source <> None then Odoc_model.Error.raise_warning ignored_source_arg;
       renderer.Renderer.extra_documents ~syntax extra (CU unit))
   |> Odoc_model.Error.handle_warnings ~warnings_options
   >>= fun extra_docs ->
@@ -16,15 +31,55 @@ let documents_of_page ~warnings_options ~syntax ~renderer ~extra page =
   |> Odoc_model.Error.handle_warnings ~warnings_options
   >>= fun extra_docs -> Ok (Renderer.document_of_page ~syntax page :: extra_docs)
 
-let documents_of_odocl ~warnings_options ~renderer ~extra ~syntax input =
+let documents_of_implementation ~warnings_options:_ ~syntax impl source =
+  match source with
+  | Some source -> (
+      let source_file =
+        match source with
+        | Source.File f -> f
+        | Root f ->
+            let open Odoc_model.Paths.Identifier in
+            let rec get_path_dir : SourceDir.t -> Fpath.t = function
+              | { iv = `SourceDir (d, f); _ } -> Fpath.(get_path_dir d / f)
+              | { iv = `Page _; _ } -> f
+            in
+            let get_path : SourcePage.t -> Fpath.t = function
+              | { iv = `SourcePage (d, f); _ } -> Fpath.(get_path_dir d / f)
+            in
+            get_path impl.Odoc_model.Lang.Source_page.id
+      in
+      match Fs.File.read source_file with
+      | Error (`Msg msg) ->
+          Error (`Msg (Format.sprintf "Couldn't load source file: %s" msg))
+      | Ok source_code ->
+          let syntax_info =
+            Syntax_highlighter.syntax_highlighting_locs source_code
+          in
+          Ok
+            [
+              Odoc_document.Renderer.document_of_source ~syntax impl syntax_info
+                source_code;
+            ])
+  | None ->
+      Error
+        (`Msg
+          "--source or --source-root should be passed when generating \
+           documents for an implementation.")
+
+let documents_of_odocl ~warnings_options ~renderer ~extra ~source ~syntax input
+    =
   Odoc_file.load input >>= fun unit ->
   match unit.content with
   | Odoc_file.Page_content odoctree ->
       documents_of_page ~warnings_options ~syntax ~renderer ~extra odoctree
   | Source_tree_content srctree ->
       Ok (Renderer.documents_of_source_tree ~syntax srctree)
+  | Impl_content impl ->
+      (* Renderer. *)
+      documents_of_implementation ~warnings_options ~syntax impl source
   | Unit_content odoctree ->
-      documents_of_unit ~warnings_options ~syntax ~renderer ~extra odoctree
+      documents_of_unit ~warnings_options ~source ~syntax ~renderer ~extra
+        odoctree
 
 let documents_of_input ~renderer ~extra ~resolver ~warnings_options ~syntax
     input =
@@ -32,7 +87,10 @@ let documents_of_input ~renderer ~extra ~resolver ~warnings_options ~syntax
   Odoc_link.from_odoc ~resolver ~warnings_options input output >>= function
   | `Source_tree st -> Ok (Renderer.documents_of_source_tree ~syntax st)
   | `Page page -> Ok [ Renderer.document_of_page ~syntax page ]
-  | `Module m -> documents_of_unit ~warnings_options ~syntax ~renderer ~extra m
+  | `Impl impl -> Ok [ Renderer.documents_of_implementation ~syntax impl [] "" ]
+  | `Module m ->
+      documents_of_unit ~warnings_options ~source:None ~syntax ~renderer ~extra
+        m
 
 let render_document renderer ~output:root_dir ~extra_suffix ~extra doc =
   let pages = renderer.Renderer.render extra doc in
@@ -59,8 +117,8 @@ let render_odoc ~resolver ~warnings_options ~syntax ~renderer ~output extra file
   Ok ()
 
 let generate_odoc ~syntax ~warnings_options ~renderer ~output ~extra_suffix
-    extra file =
-  documents_of_odocl ~warnings_options ~renderer ~extra ~syntax file
+    ~source extra file =
+  documents_of_odocl ~warnings_options ~renderer ~source ~extra ~syntax file
   >>= fun docs ->
   List.iter (render_document renderer ~output ~extra_suffix ~extra) docs;
   Ok ()
@@ -71,7 +129,9 @@ let targets_odoc ~resolver ~warnings_options ~syntax ~renderer ~output:root_dir
     if Fpath.get_ext odoctree = ".odoc" then
       documents_of_input ~renderer ~extra ~resolver ~warnings_options ~syntax
         odoctree
-    else documents_of_odocl ~warnings_options ~renderer ~extra ~syntax odoctree
+    else
+      documents_of_odocl ~warnings_options ~renderer ~extra ~syntax ~source:None
+        odoctree
   in
   docs >>= fun docs ->
   List.iter

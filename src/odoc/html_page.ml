@@ -16,25 +16,9 @@
 
 open Odoc_model
 
-module Source = struct
-  type t = File of Fpath.t | Root of Fpath.t
+type args = { html_config : Odoc_html.Config.t; assets : Fpath.t list }
 
-  let pp fmt = function
-    | File f -> Format.fprintf fmt "File: %a" Fpath.pp f
-    | Root f -> Format.fprintf fmt "File: %a" Fpath.pp f
-
-  (* let to_string f = Format.asprintf "%a" pp f *)
-end
-
-type source = Source.t
-
-type args = {
-  html_config : Odoc_html.Config.t;
-  source : source option;
-  assets : Fpath.t list;
-}
-
-let render { html_config; source = _; assets = _ } page =
+let render { html_config; assets = _ } page =
   Odoc_html.Generator.render ~config:html_config page
 
 (* let source_documents source_info source ~syntax = *)
