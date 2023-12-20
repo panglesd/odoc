@@ -47,6 +47,7 @@ end = struct
   let find t name =
     let uname = Astring.String.Ascii.capitalize name ^ ".odoc" in
     let lname = Astring.String.Ascii.uncapitalize name ^ ".odoc" in
+    Format.printf "uname is %s and lname is %s\n%!" uname lname;
     let rec loop acc = function
       | [] -> acc
       | directory :: dirs -> (
@@ -203,13 +204,15 @@ let lookup_page ap target_name =
 
     TODO: Warning on ambiguous lookup. *)
 let lookup_impl ap target_name =
-  let target_name = "src-" ^ target_name in
+  let target_name = "src-" ^ Astring.String.Ascii.uncapitalize target_name in
   let is_impl u =
     match u with
     | Odoc_file.Impl_content p -> Some p
     | Page_content _ | Unit_content _ | Source_tree_content _ -> None
   in
+  Format.printf "Loading unit from name %s\n%!" target_name;
   let units = load_units_from_name ap target_name in
+  Format.printf "Found %d unit\n%!" (List.length units);
   match find_map is_impl units with Some (p, _) -> Some p | None -> None
 
 (** Add the current unit to the cache. No need to load other units with the same

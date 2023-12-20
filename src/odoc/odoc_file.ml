@@ -52,8 +52,8 @@ let save_source_tree file ~warnings src_page =
   let dir = Fs.File.dirname file in
   let base = Fs.File.(to_string @@ basename file) in
   let file =
-    if Astring.String.is_prefix ~affix:"src-" base then file
-    else Fs.File.create ~directory:dir ~name:("src-" ^ base)
+    if Astring.String.is_prefix ~affix:"srctree-" base then file
+    else Fs.File.create ~directory:dir ~name:("srctree-" ^ base)
   in
   save_unit file src_page.Lang.SourceTree.root
     { content = Source_tree_content src_page; warnings }

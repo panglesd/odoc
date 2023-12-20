@@ -53,7 +53,7 @@ let parse_parent_child_reference s =
   in
   match String.cut ~sep:"-" s with
   | Some ("page", n) -> Ok (Lang.Page.Page_child (unquote n))
-  | Some ("src", n) -> Ok (Source_tree_child (unquote n))
+  | Some ("srctree", n) -> Ok (Source_tree_child (unquote n))
   | Some ("asset", n) -> Ok (Asset_child (unquote n))
   | Some ("module", n) ->
       Ok (Module_child (unquote (String.Ascii.capitalize n)))

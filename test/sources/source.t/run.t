@@ -66,6 +66,8 @@ Files containing some values:
 Source pages require a parent:
 
   $ odoc compile -c module-a -c src-source -c src-source2 root.mld
+  ERROR: Failed to parse child reference: Unrecognized kind: src
+  [1]
 
 Compile the modules:
 
@@ -74,7 +76,144 @@ Compile the modules:
 Compile the pages without --source:
 
   $ odoc compile a.cmt
+  uname is CamlinternalFormatBasics.odoc and lname is camlinternalFormatBasics.odoc
+  uname is Stdlib.odoc and lname is stdlib.odoc
+  uname is Stdlib.odoc and lname is stdlib.odoc
   $ odoc link -I . a.odoc
+  uname is Stdlib.odoc and lname is stdlib.odoc
+  trying to find the shape A
+  Loading unit from name src-a
+  uname is Src-a.odoc and lname is src-a.odoc
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
   $ odoc html-generate --indent -o html a.odocl
 
 No source links are generated in the documentation:
@@ -85,230 +224,196 @@ Now, compile the pages with the --source option:
 
   $ printf "a.ml\n" > source_tree.map
   $ odoc source-tree -I . --parent page-root -o src-source.odoc source_tree.map
+  odoc: option '-o': Output file must be prefixed with 'srctree-'.
+  Usage: odoc source-tree [OPTION]… FILE
+  Try 'odoc source-tree --help' or 'odoc --help' for more information.
+  [2]
 
   $ odoc compile -I . --source-name a.ml --source-parent-file src-source.odoc a.cmt
+  odoc: unknown option '--source-name'.
+        unknown option '--source-parent-file'.
+  Usage: odoc compile [--child=CHILD] [--open=MODULE] [--resolve-fwd-refs] [OPTION]… FILE
+  Try 'odoc compile --help' or 'odoc --help' for more information.
+  [2]
   $ odoc link -I . a.odoc
+  uname is Stdlib.odoc and lname is stdlib.odoc
+  trying to find the shape A
+  Loading unit from name src-a
+  uname is Src-a.odoc and lname is src-a.odoc
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
+  trying to find the shape A
+  Loading unit from name src-a
+  Found 0 unit
+  Not finding it
   $ odoc link -I . page-root.odoc
+  odoc: FILE.odoc argument: no 'page-root.odoc' file or directory
+  Usage: odoc link [--open=MODULE] [OPTION]… FILE.odoc
+  Try 'odoc link --help' or 'odoc --help' for more information.
+  [2]
   $ odoc link -I . src-source.odoc
+  odoc: FILE.odoc argument: no 'src-source.odoc' file or directory
+  Usage: odoc link [--open=MODULE] [OPTION]… FILE.odoc
+  Try 'odoc link --help' or 'odoc --help' for more information.
+  [2]
   $ odoc html-generate --indent -o html src-source.odocl
+  odoc: FILE.odocl argument: no 'src-source.odocl' file or directory
+  Usage: odoc html-generate [OPTION]… FILE.odocl
+  Try 'odoc html-generate --help' or 'odoc --help' for more information.
+  [2]
   $ odoc html-generate --indent -o html page-root.odocl
+  odoc: FILE.odocl argument: no 'page-root.odocl' file or directory
+  Usage: odoc html-generate [OPTION]… FILE.odocl
+  Try 'odoc html-generate --help' or 'odoc --help' for more information.
+  [2]
   $ odoc html-generate --source a.ml --indent -o html a.odocl
+  odoc: internal error, uncaught exception:
+        Failure("TODO")
+        Raised at Stdlib.failwith in file "stdlib.ml", line 29, characters 17-33
+        Called from Odoc_odoc__Rendering.ignored_source_arg in file "src/odoc/rendering.ml" (inlined), line 16, characters 28-43
+        Called from Odoc_odoc__Rendering.documents_of_unit.(fun) in file "src/odoc/rendering.ml", line 21, characters 39-62
+        Called from Odoc_model__Error.catch_warnings.(fun) in file "src/model/error.ml", line 89, characters 18-22
+        Called from Odoc_model__Error.with_ref in file "src/model/error.ml", line 67, characters 12-16
+        Re-raised at Odoc_model__Error.with_ref in file "src/model/error.ml", line 72, characters 4-11
+        Called from Odoc_odoc__Rendering.documents_of_unit in file "src/odoc/rendering.ml", line 19, characters 2-202
+        Called from Odoc_odoc__Rendering.generate_odoc in file "src/odoc/rendering.ml", line 122, characters 2-76
+        Called from Cmdliner_term.app.(fun) in file "cmdliner_term.ml", line 24, characters 19-24
+        Called from Cmdliner_term.app.(fun) in file "cmdliner_term.ml", line 22, characters 12-19
+        Called from Cmdliner_eval.run_parser in file "cmdliner_eval.ml", line 34, characters 37-44
+  [2]
   $ odoc support-files -o html
 
 Source links generated in the documentation:
 
   $ grep source_link html/A/index.html -B 2
-    <header class="odoc-preamble">
-     <h1>Module <code><span>A</span></code>
-      <a href="../root/source/a.ml.html" class="source_link">Source</a>
-  --
-      <div class="spec type anchored" id="type-t">
-       <a href="#type-t" class="anchor"></a>
-       <a href="../root/source/a.ml.html#type-t" class="source_link">Source</a>
-  --
-      <div class="spec type anchored" id="type-truc">
-       <a href="#type-truc" class="anchor"></a>
-       <a href="../root/source/a.ml.html#type-truc" class="source_link">Source
-  --
-      <div class="spec value anchored" id="val-xazaz">
-       <a href="#val-xazaz" class="anchor"></a>
-       <a href="../root/source/a.ml.html#val-xazaz" class="source_link">Source
-  --
-      <div class="spec module anchored" id="module-Yoyo">
-       <a href="#module-Yoyo" class="anchor"></a>
-       <a href="../root/source/a.ml.html#module-Yoyo" class="source_link">
-  --
-      <div class="spec value anchored" id="val-segr">
-       <a href="#val-segr" class="anchor"></a>
-       <a href="../root/source/a.ml.html#val-segr" class="source_link">Source
-  --
-      <div class="spec value anchored" id="val-y">
-       <a href="#val-y" class="anchor"></a>
-       <a href="../root/source/a.ml.html#val-y" class="source_link">Source</a>
-  --
-      <div class="spec value anchored" id="val-z">
-       <a href="#val-z" class="anchor"></a>
-       <a href="../root/source/a.ml.html#val-z" class="source_link">Source</a>
-  --
-      <div class="spec value anchored" id="val-z'">
-       <a href="#val-z'" class="anchor"></a>
-       <a href="../root/source/a.ml.html#val-z'" class="source_link">Source</a>
-  --
-      <div class="spec module anchored" id="module-A">
-       <a href="#module-A" class="anchor"></a>
-       <a href="../root/source/a.ml.html#module-A" class="source_link">Source
-  --
-      <div class="spec module anchored" id="module-B">
-       <a href="#module-B" class="anchor"></a>
-       <a href="../root/source/a.ml.html#module-A" class="source_link">Source
-  --
-      <div class="spec module-type anchored" id="module-type-T">
-       <a href="#module-type-T" class="anchor"></a>
-       <a href="../root/source/a.ml.html#module-type-T" class="source_link">
-  --
-      <div class="spec module-type anchored" id="module-type-U">
-       <a href="#module-type-U" class="anchor"></a>
-       <a href="../root/source/a.ml.html#module-type-U" class="source_link">
-  --
-      <div class="spec type anchored" id="type-ext">
-       <a href="#type-ext" class="anchor"></a>
-       <a href="../root/source/a.ml.html#type-ext" class="source_link">Source
-  --
-      <div class="spec type extension anchored" id="extension-decl-Foo">
-       <a href="#extension-decl-Foo" class="anchor"></a>
-       <a href="../root/source/a.ml.html#extension-Foo" class="source_link">
-  --
-      <div class="spec exception anchored" id="exception-Exn">
-       <a href="#exception-Exn" class="anchor"></a>
-       <a href="../root/source/a.ml.html#exception-Exn" class="source_link">
-  --
-      <div class="spec class anchored" id="class-cls">
-       <a href="#class-cls" class="anchor"></a>
-       <a href="../root/source/a.ml.html#class-cls" class="source_link">Source
-  --
-      <div class="spec class anchored" id="class-cls'">
-       <a href="#class-cls'" class="anchor"></a>
-       <a href="../root/source/a.ml.html#class-cls'" class="source_link">Source
-  --
-      <div class="spec class-type anchored" id="class-type-ct">
-       <a href="#class-type-ct" class="anchor"></a>
-       <a href="../root/source/a.ml.html#class-type-ct" class="source_link">
-  --
-      <div class="spec value anchored" id="val-x">
-       <a href="#val-x" class="anchor"></a>
-       <a href="../root/source/a.ml.html#val-x" class="source_link">Source</a>
-  --
-      <div class="spec module anchored" id="module-X">
-       <a href="#module-X" class="anchor"></a>
-       <a href="../root/source/a.ml.html#module-X" class="source_link">Source
-  --
-      <div class="spec type anchored" id="type-a1">
-       <a href="#type-a1" class="anchor"></a>
-       <a href="../root/source/a.ml.html#type-a1" class="source_link">Source
-  --
-      <div class="spec type anchored" id="type-a2">
-       <a href="#type-a2" class="anchor"></a>
-       <a href="../root/source/a.ml.html#type-a2" class="source_link">Source
-  --
-      <div class="spec module anchored" id="module-F">
-       <a href="#module-F" class="anchor"></a>
-       <a href="../root/source/a.ml.html#module-F" class="source_link">Source
-  --
-      <div class="spec module anchored" id="module-FM">
-       <a href="#module-FM" class="anchor"></a>
-       <a href="../root/source/a.ml.html#module-FM" class="source_link">Source
-  --
-      <div class="spec module anchored" id="module-FF">
-       <a href="#module-FF" class="anchor"></a>
-       <a href="../root/source/a.ml.html#module-FF" class="source_link">Source
-  --
-      <div class="spec module anchored" id="module-FF2">
-       <a href="#module-FF2" class="anchor"></a>
-       <a href="../root/source/a.ml.html#module-FF2" class="source_link">Source
+  [1]
 
 Ids generated in the source code:
 
   $ cat html/root/source/a.ml.html | tr '> ' '\n\n' | grep '^id'
-  id="L1"
-  id="L2"
-  id="L3"
-  id="L4"
-  id="L5"
-  id="L6"
-  id="L7"
-  id="L8"
-  id="L9"
-  id="L10"
-  id="L11"
-  id="L12"
-  id="L13"
-  id="L14"
-  id="L15"
-  id="L16"
-  id="L17"
-  id="L18"
-  id="L19"
-  id="L20"
-  id="L21"
-  id="L22"
-  id="L23"
-  id="L24"
-  id="L25"
-  id="L26"
-  id="L27"
-  id="L28"
-  id="L29"
-  id="L30"
-  id="L31"
-  id="L32"
-  id="L33"
-  id="L34"
-  id="L35"
-  id="L36"
-  id="L37"
-  id="L38"
-  id="L39"
-  id="L40"
-  id="L41"
-  id="L42"
-  id="L43"
-  id="L44"
-  id="L45"
-  id="L46"
-  id="L47"
-  id="L48"
-  id="L49"
-  id="L50"
-  id="L51"
-  id="L52"
-  id="L53"
-  id="L54"
-  id="L55"
-  id="L56"
-  id="L57"
-  id="L58"
-  id="L59"
-  id="L60"
-  id="L61"
-  id="type-t"
-  id="type-truc"
-  id="type-truc.constructor-A"
-  id="type-truc.constructor-B"
-  id="val-xazaz"
-  id="module-Yoyo"
-  id="module-Yoyo.type-bli"
-  id="module-Yoyo.type-bli.constructor-Aa"
-  id="module-Yoyo.type-bli.constructor-Bb"
-  id="val-segr"
-  id="val-{x}2"
-  id="val-y"
-  id="val-z"
-  id="local_a_1"
-  id="val-z'"
-  id="local_a_2"
-  id="module-A"
-  id="module-B"
-  id="module-type-T"
-  id="module-type-U"
-  id="type-ext"
-  id="extension-Foo"
-  id="extension-Bar"
-  id="exception-Exn"
-  id="class-cls"
-  id="class-cls'"
-  id="class-type-ct"
-  id="val-x"
-  id="module-X"
-  id="module-X.type-t"
-  id="module-X.type-t"
-  id="type-a1"
-  id="type-a2"
-  id="module-F"
-  id="module-F.argument-1-M.module-A"
-  id="module-F.module-B"
-  id="module-FM"
-  id="local_A_3"
-  id="module-FF"
-  id="module-FF2"
-  id="module-FF2.argument-1-A.module-E"
-  id="module-FF2.argument-2-A.module-F"
+  cat: html/root/source/a.ml.html: No such file or directory
+  [1]

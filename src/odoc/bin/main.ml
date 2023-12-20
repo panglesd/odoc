@@ -328,7 +328,7 @@ end = struct
 end
 
 module Source_tree = struct
-  let prefix = "src-tree"
+  let prefix = "srctree-"
 
   let has_src_tree_prefix input =
     input |> Fs.File.basename |> Fs.File.to_string
@@ -497,7 +497,7 @@ module Compile_src = struct
       Arg.(
         required
         & opt (some convert_source_name) None
-        & info [ "source-name" ] ~doc ~docv:"NAME")
+        & info [ "source-path" ] ~doc ~docv:"NAME")
     in
     Term.(
       const handle_error
