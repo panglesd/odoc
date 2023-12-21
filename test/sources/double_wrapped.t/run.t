@@ -3,7 +3,7 @@ Similar to the lookup_def_wrapped test.
 
   $ odoc compile -c module-a -c srctree-source root.mld
 
-  $ printf "a.ml\nmain.ml\n" > source_tree.map
+  $ printf "a.ml\nmain.ml\nmain__.ml\n" > source_tree.map
   $ odoc source-tree -I . --parent page-root -o srctree-source.odoc source_tree.map
 
   $ ocamlc -c -o main__A.cmo a.ml -bin-annot -I .
@@ -12,6 +12,7 @@ Similar to the lookup_def_wrapped test.
 
   $ odoc compile-src --source-path a.ml --source-parent-file srctree-source.odoc -I . main__A.cmt
   $ odoc compile -I . main__A.cmt
+  $ odoc compile-src --source-path main__.ml --source-parent-file srctree-source.odoc -I . main__.cmt
   $ odoc compile -I . main__.cmt
   $ odoc compile-src --source-path main.ml --source-parent-file srctree-source.odoc -I . main.cmt
   $ odoc compile -I . main.cmt
@@ -19,6 +20,7 @@ Similar to the lookup_def_wrapped test.
   $ odoc link -I . main.odoc
   $ odoc link -I . src-main__A.odoc
   $ odoc link -I . src-main.odoc
+  $ odoc link -I . src-main__.odoc
   $ odoc link -I . main__A.odoc
   $ odoc link -I . main__.odoc
 
@@ -55,16 +57,15 @@ Look if all the source files are generated:
     </nav>
     <header class="odoc-preamble">
      <h1>Module <code><span>Main.A</span></code>
-      <a href="../../root/source/main.ml.html#module-A" class="source_link">
-       Source
-      </a>
+      <a href="../../root/source/a.ml.html" class="source_link">Source</a>
      </h1>
     </header>
     <div class="odoc-content">
      <div class="odoc-spec">
       <div class="spec value anchored" id="val-x">
        <a href="#val-x" class="anchor"></a>
-       <code><span><span class="keyword">val</span> x : int</span></code>
+       <a href="../../root/source/a.ml.html#val-x" class="source_link">Source
+       </a><code><span><span class="keyword">val</span> x : int</span></code>
       </div>
      </div>
     </div>
