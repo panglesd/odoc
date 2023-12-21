@@ -20,11 +20,10 @@ let rec shape_of_id env :
   fun id ->
     match id.iv with
     | `Root (_, name) -> begin
-        Format.printf "trying to find the shape %s\n%!" (ModuleName.to_string name);
         match Env.lookup_impl (ModuleName.to_string name) env with
         | Some impl -> (
           match impl.shape_info with | Some (shape, _) -> Some shape | None -> None)
-        | _ ->         Format.printf "Not finding it\n%!";None
+        | _ -> None
       end
     | `Module (parent, name) ->
         proj parent Kind.Module (ModuleName.to_string name)

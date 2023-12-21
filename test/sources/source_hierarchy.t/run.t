@@ -13,7 +13,6 @@ The source tree page
 
   $ printf "lib/a.ml\nlib/b.ml\n" > source.map
   $ odoc source-tree -I . --parent page-root source.map
-  uname is Page-root.odoc and lname is page-root.odoc
 
   $ ls
   a.cmi
@@ -39,14 +38,8 @@ Even if there is no cmti, two compilations would happen.
 
   $ odoc compile-src -I . --source-path lib/a.ml --source-parent-file srctree-source.odoc a.cmt
   $ odoc compile -I . a.cmti
-  uname is CamlinternalFormatBasics.odoc and lname is camlinternalFormatBasics.odoc
-  uname is Stdlib.odoc and lname is stdlib.odoc
-  uname is Stdlib.odoc and lname is stdlib.odoc
   $ odoc compile-src -I . --source-path lib/b.ml --source-parent-file srctree-source.odoc b.cmt
   $ odoc compile -I . b.cmti
-  uname is CamlinternalFormatBasics.odoc and lname is camlinternalFormatBasics.odoc
-  uname is Stdlib.odoc and lname is stdlib.odoc
-  uname is Stdlib.odoc and lname is stdlib.odoc
 
   $ ls
   a.cmi
@@ -74,39 +67,10 @@ Even if there is no cmti, two compilations would happen.
 Linking everything.
 
   $ odoc link -I . page-root.odoc
-  uname is Stdlib.odoc and lname is stdlib.odoc
-  uname is B.odoc and lname is b.odoc
-  uname is A.odoc and lname is a.odoc
   $ odoc link -I . a.odoc
-  uname is Stdlib.odoc and lname is stdlib.odoc
-  trying to find the shape A
-  Loading unit from name src-a
-  uname is Src-a.odoc and lname is src-a.odoc
-  Found 1 unit
-  Loading unit from name src-a
-  Found 1 unit
-  trying to find the shape A
-  Loading unit from name src-a
-  Found 1 unit
-  Loading unit from name src-a
-  Found 1 unit
   $ odoc link -I . src-a.odoc
-  uname is Stdlib.odoc and lname is stdlib.odoc
   $ odoc link -I . b.odoc
-  uname is Stdlib.odoc and lname is stdlib.odoc
-  trying to find the shape B
-  Loading unit from name src-b
-  uname is Src-b.odoc and lname is src-b.odoc
-  Found 1 unit
-  Loading unit from name src-b
-  Found 1 unit
-  trying to find the shape B
-  Loading unit from name src-b
-  Found 1 unit
-  Loading unit from name src-b
-  Found 1 unit
   $ odoc link -I . src-b.odoc
-  uname is Stdlib.odoc and lname is stdlib.odoc
   $ odoc link -I . srctree-source.odoc
 
 Html generation.
