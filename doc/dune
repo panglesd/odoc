@@ -34,6 +34,7 @@
   (universe) ; Benchmark depends on the running time of odoc commands
   (glob_files *.mld)
   (glob_files *.js)
+   (glob_files driver.ml)
   (glob_files library_mlds/*)
   (glob_files examples/*.ml*))
  (action
@@ -46,3 +47,8 @@
  (action
   (progn
    (diff driver.mld driver.mld.corrected))))
+
+(library
+ (name nothing)
+  (modules driver)
+ (libraries bos))

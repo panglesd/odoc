@@ -18,11 +18,14 @@ First, we need to initialise MDX with some libraries and helpful values:
 #install_printer Fpath.pp;;
 #print_length 655360;;
 #print_depth 10;;
-open Bos;;
-let (>>=) = Result.bind;;
-let (>>|=) m f = m >>= fun x -> Ok (f x);;
-let get_ok = function | Ok x -> x | Error (`Msg m) -> failwith m
-let relativize p = Fpath.(v ".." // p) (* this driver is run from the [doc] dir *)
+]}
+{@ocaml exec,file=driver.ml,part=intro[
+open Bos
+let ( >>= ) = Result.bind
+let ( >>|= ) m f = m >>= fun x -> Ok (f x)
+let get_ok = function Ok x -> x | Error (`Msg m) -> failwith m
+let relativize p = Fpath.(v ".." // p)
+(* this driver is run from the [doc] dir *)
 
 (* Whether to instrument with landmarks. Result for each commands will be saved
    to directory [_build/default/doc/landmarks]. *)
@@ -154,8 +157,9 @@ command.
 
 In all of these, we'll capture [stdout] and [stderr] so we can check it later.
 
-{[
-let odoc = Cmd.v "../src/odoc/bin/main.exe" (* This is the just-built odoc binary *)
+{@ocaml file=driver.ml,part=commands,exec[
+let odoc =
+  Cmd.v "../src/odoc/bin/main.exe" (* This is the just-built odoc binary *)
 
 let compile_output = ref [ "" ]
 
@@ -165,21 +169,20 @@ let generate_output = ref [ "" ]
 
 type executed_command = {
   cmd : Cmd.t;
-  time : float; (** Running time in seconds. *)
+  time : float;  (** Running time in seconds. *)
   output_file : Fpath.t option;
 }
 
 (* Record the commands executed, their running time and optionally the path to
    the produced file. *)
-let commands = ref [ ]
+let commands = ref []
 
 let instrument_dir =
-  lazy (
-    let dir = Fpath.v "landmarks" in
-    OS.Dir.delete dir |> get_ok;
-    OS.Dir.create dir |> get_ok |> ignore;
-    dir
-  )
+  lazy
+    (let dir = Fpath.v "landmarks" in
+     OS.Dir.delete dir |> get_ok;
+     OS.Dir.create dir |> get_ok |> ignore;
+     dir)
 
 (* Environment variables passed to commands. *)
 let env = OS.Env.current () |> get_ok
@@ -188,11 +191,11 @@ let run ?output_file cmd =
   let t_start = Unix.gettimeofday () in
   let env =
     if instrument then
-      let lazy instrument_dir = instrument_dir in
+      let (lazy instrument_dir) = instrument_dir in
       let instrument_out =
         match output_file with
         | Some outf ->
-            Fpath.(/) instrument_dir (Fpath.basename outf ^ ".json")
+            Fpath.( / ) instrument_dir (Fpath.basename outf ^ ".json")
             |> Fpath.to_string
         | None -> "temporary:" ^ Fpath.to_string instrument_dir
       in
@@ -201,7 +204,9 @@ let run ?output_file cmd =
         env
     else env
   in
-  let r = OS.Cmd.(run_out ~env ~err:OS.Cmd.err_run_out cmd |> to_lines) |> get_ok in
+  let r =
+    OS.Cmd.(run_out ~env ~err:OS.Cmd.err_run_out cmd |> to_lines) |> get_ok
+  in
   let t_end = Unix.gettimeofday () in
   let time = t_end -. t_start in
   commands := { cmd; time; output_file } :: !commands;
@@ -211,10 +216,11 @@ let add_prefixed_output cmd list prefix lines =
   if List.length lines > 0 then
     list :=
       !list
-      @ Bos.Cmd.to_string cmd :: List.map (fun l -> prefix ^ ": " ^ l) lines
+      @ (Bos.Cmd.to_string cmd :: List.map (fun l -> prefix ^ ": " ^ l) lines)
 
-let compile file ?(count_occurrences = true) ?parent ?(output_dir = Fpath.v "./")
-    ?(ignore_output = false) ?source_args children =
+let compile file ?(count_occurrences = true) ?parent
+    ?(output_dir = Fpath.v "./") ?(ignore_output = false) ?source_args children
+    =
   let output_basename =
     let ext = Fpath.get_ext file in
     let basename = Fpath.basename (Fpath.rem_ext file) in
@@ -223,7 +229,7 @@ let compile file ?(count_occurrences = true) ?parent ?(output_dir = Fpath.v "./"
     | ".cmt" | ".cmti" | ".cmi" -> basename ^ ".odoc"
     | _ -> failwith ("bad extension: " ^ ext)
   in
-  let output_file = Fpath.(/) output_dir output_basename in
+  let output_file = Fpath.( / ) output_dir output_basename in
   let open Cmd in
   let source_args =
     match source_args with
@@ -236,12 +242,14 @@ let compile file ?(count_occurrences = true) ?parent ?(output_dir = Fpath.v "./"
   let cmt_arg =
     let cmt_file = Fpath.set_ext ".cmt" file in
     if Fpath.get_ext file = ".cmti" then
-    match Bos.OS.File.exists cmt_file with
-    | Ok true -> Cmd.(v "--cmt" % p cmt_file)
-    | _ -> Cmd.empty
+      match Bos.OS.File.exists cmt_file with
+      | Ok true -> Cmd.(v "--cmt" % p cmt_file)
+      | _ -> Cmd.empty
     else Cmd.empty
   in
-  let occ = if count_occurrences then Cmd.v "--count-occurrences" else Cmd.empty in
+  let occ =
+    if count_occurrences then Cmd.v "--count-occurrences" else Cmd.empty
+  in
   let cmd =
     odoc % "compile" % Fpath.to_string file %% source_args %% occ %% cmt_arg
     % "-I" % "." % "-o" % p output_file
@@ -260,31 +268,30 @@ let link ?(ignore_output = false) file =
   let open Cmd in
   let output_file = Fpath.set_ext "odocl" file in
   let cmd = odoc % "link" % p file % "-o" % p output_file % "-I" % "." in
-  let cmd = if Fpath.to_string file = "stdlib.odoc" then cmd % "--open=\"\"" else cmd in
+  let cmd =
+    if Fpath.to_string file = "stdlib.odoc" then cmd % "--open=\"\"" else cmd
+  in
   let lines = run ~output_file cmd in
   if not ignore_output then
     add_prefixed_output cmd link_output (Fpath.to_string file) lines
 
-let html_generate ?(ignore_output = false) ?(assets = []) ?(search_uris = []) file source =
+let html_generate ?(ignore_output = false) ?(assets = []) ?(search_uris = [])
+    file source =
   let open Cmd in
   let source =
     match source with None -> empty | Some source -> v "--source" % p source
   in
   let assets =
-    List.fold_left
-      (fun acc filename -> acc % "--asset" % filename)
-      empty
-      assets
+    List.fold_left (fun acc filename -> acc % "--asset" % filename) empty assets
   in
   let search_uris =
     List.fold_left
       (fun acc filename -> acc % "--search-uri" % p filename)
-      empty
-      search_uris
+      empty search_uris
   in
   let cmd =
-    odoc % "html-generate" %% source % p file %% assets %% search_uris % "-o" % "html"
-    % "--theme-uri" % "odoc" % "--support-uri" % "odoc"
+    odoc % "html-generate" %% source % p file %% assets %% search_uris % "-o"
+    % "html" % "--theme-uri" % "odoc" % "--support-uri" % "odoc"
   in
   let lines = run cmd in
   if not ignore_output then
@@ -302,6 +309,18 @@ let count_occurrences output =
 ]}
 
 
+{[
+# !compile_output;;
+- : string list = [""]
+# (* Not showing output from 'odoc link' as it is unstable. !link_output *);;
+# !source_tree_output;;
+Line 1, characters 2-20:
+Error: Unbound value source_tree_output
+# !generate_output;;
+- : string list = [""]
+]}
+
+    
 We'll now make some library lists. We have not only external dependency
 libraries, but [odoc] itself is also separated into libraries. These two
 sets of libraries will be documented in different sections, so we'll keep them
@@ -311,8 +330,9 @@ a hardcoded path.
 Additionally we'll also construct a list containing the extra documentation pages. Finally let's create a list mapping the section to its parent, which matches
 the hierarchy declared above.
 
-{[
-let dep_libraries_core = [
+{@ocaml file=driver.ml,part=deps,exec[
+let dep_libraries_core =
+  [
     "odoc-parser";
     "astring";
     "cmdliner";
@@ -322,9 +342,10 @@ let dep_libraries_core = [
     "fmt";
     "stdlib";
     "yojson";
-];;
+  ]
 
-let extra_deps = [
+let extra_deps =
+  [
     "base";
     "core_kernel";
     "bin_prot";
@@ -334,22 +355,38 @@ let extra_deps = [
     "ppx_sexp_conv";
     "ppx_hash";
     "core";
-]
+  ]
 
 let dep_libraries =
-    match Sys.getenv_opt "ODOC_BENCHMARK" with
-    | Some "true" -> dep_libraries_core @ extra_deps
-    | _ -> dep_libraries_core
+  match Sys.getenv_opt "ODOC_BENCHMARK" with
+  | Some "true" -> dep_libraries_core @ extra_deps
+  | _ -> dep_libraries_core
 
-let odoc_libraries = [
-    "odoc_xref_test"; "odoc_xref2"; "odoc_odoc"; "odoc_html_support_files";
-    "odoc_model_desc"; "odoc_model"; "odoc_manpage"; "odoc_loader";
-    "odoc_latex"; "odoc_html"; "odoc_document"; "odoc_examples"; "odoc_parser";
-    "ocamlary"; "odoc_search" ; "odoc_html_frontend" ; "odoc_json_index" ];;
+let odoc_libraries =
+  [
+    "odoc_xref_test";
+    "odoc_xref2";
+    "odoc_odoc";
+    "odoc_html_support_files";
+    "odoc_model_desc";
+    "odoc_model";
+    "odoc_manpage";
+    "odoc_loader";
+    "odoc_latex";
+    "odoc_html";
+    "odoc_document";
+    "odoc_examples";
+    "odoc_parser";
+    "ocamlary";
+    "odoc_search";
+    "odoc_html_frontend";
+    "odoc_json_index";
+  ]
 
-let all_libraries = dep_libraries @ odoc_libraries;;
+let all_libraries = dep_libraries @ odoc_libraries
 
-let extra_docs = [
+let extra_docs =
+  [
     "interface";
     "driver";
     "parent_child_spec";
@@ -358,12 +395,11 @@ let extra_docs = [
     "dune";
     "ocamldoc_differences";
     "api_reference";
-]
+  ]
 
 let parents =
-    let add_parent p l = List.map (fun lib -> (lib, p)) l in
-    (add_parent "deps" dep_libraries) @ (add_parent "odoc" odoc_libraries);;
-
+  let add_parent p l = List.map (fun lib -> (lib, p)) l in
+  add_parent "deps" dep_libraries @ add_parent "odoc" odoc_libraries
 ]}
 
 [odoc] operates on the compiler outputs. We need to find them for both the files compiled by Dune within this project and those in libraries we compile against.
@@ -371,7 +407,7 @@ The following uses [ocamlfind] to locate the library paths for our dependencies.
 us the absolute path, we also have a short function here to relativize it based on our current working
 directory to ensure the log of commands we collect is as reproducible as possible.
 
-{[
+{@ocaml file=driver.ml,part=ocamlfind,exec[
 let ocamlfind = Cmd.v "ocamlfind"
 
 let reach t ~from =
@@ -392,10 +428,7 @@ let lib_path lib =
   run cmd |> List.hd |> relativize_path
 
 let lib_paths =
-  List.fold_right
-    (fun lib acc ->
-      (lib, lib_path lib) :: acc)
-    dep_libraries []
+  List.fold_right (fun lib acc -> (lib, lib_path lib) :: acc) dep_libraries []
 ]}
 
 We need a function to find [odoc] inputs from the given search path. [odoc]
@@ -403,7 +436,7 @@ operates on [.cmti], [.cmt], or [.cmi] files, in order of preference, and the fo
 function finds all matching files starting from the given path. Then it returns an [Fpath.Set.t]
 that contains the [Fpath.t] values representing the absolute file path, without its extension.
 
-{[
+{@ocaml file=driver.ml,part=findunits,exec[
 let find_units p =
   OS.Dir.fold_contents ~dotfiles:true
     (fun p acc ->
@@ -419,13 +452,13 @@ let find_units p =
         not @@ Astring.String.is_infix ~affix:"ocamldoc" (Fpath.to_string f))
       l
   in
-  List.fold_right Fpath.Set.add l Fpath.Set.empty;;
+  List.fold_right Fpath.Set.add l Fpath.Set.empty
 ]}
 
 Since the units returned by this function have their extension stripped, we need
 function to find the best file to use with this basename.
 
-{[
+{@ocaml file=driver.ml,part=bestfile,exec[
 let best_file base =
   List.map (fun ext -> Fpath.add_ext ext base) [ "cmti"; "cmt"; "cmi" ]
   |> List.find (fun f -> Bos.OS.File.exists f |> get_ok)
@@ -436,14 +469,14 @@ in order to namespace them. This is achieved by prefixing the namespace module a
 a double underscore, so we can tell by the existence of a double underscore that
 a module is intended to be hidden. The following predicate tests for that condition:
 
-{[
+{@ocaml file=driver.ml,part=ishidden,exec[
 let is_hidden path = Astring.String.is_infix ~affix:"__" (Fpath.to_string path)
 ]}
 
 To build the documentation, we start with these files. With the following function, we'll call [odoc compile-deps] on the file to
 find all other compilation units upon which it depends:
 
-{[
+{@ocaml file=driver.ml,part=compiledeps,exec[
 type compile_deps = { digest : Digest.t; deps : (string * Digest.t) list }
 
 let compile_deps f =
@@ -461,7 +494,7 @@ For each compiled odoc file, we'll need to remember some options given at
 enable the feature at compile time, we need to provide the source file at html
 generation.
 
-{[
+{@ocaml file=driver.ml,part=unit,exec[
 type unit = {
   file : Fpath.t;
   ignore_output : bool;
@@ -478,13 +511,15 @@ linked and passed to [html-generate] just as other pages and compilation units.
 It is used as the [source-parent] for all units for which we could provide
 sources.
 
-{[
+{@ocaml file=driver.ml,part=sourcerendering,exec[
 let source_tree_output = ref [ "" ]
 
 let source_tree ?(ignore_output = false) ~parent ~output file =
   let open Cmd in
   let parent = v "--parent" % ("page-\"" ^ parent ^ "\"") in
-  let cmd = odoc % "source-tree" % "-I" % "." %% parent % "-o" % p output % p file in
+  let cmd =
+    odoc % "source-tree" % "-I" % "." %% parent % "-o" % p output % p file
+  in
   let lines = run cmd in
   if not ignore_output then
     add_prefixed_output cmd source_tree_output (Fpath.to_string file) lines
@@ -526,20 +561,21 @@ let source_files_of_odoc_module lib module_ =
 
 let compile_source_tree units =
   let sources =
-    List.filter_map (fun (_, _, _, file) -> Option.map Fpath.to_string file) units
+    List.filter_map
+      (fun (_, _, _, file) -> Option.map Fpath.to_string file)
+      units
   in
   let source_map = Fpath.v "source.map" in
   let () = Bos.OS.File.write_lines source_map sources |> get_ok in
   let () = source_tree ~parent:"odoc" ~output:odoc_source_tree source_map in
-  { file = odoc_source_tree ; ignore_output = false ; source = None ; assets = [] }
-
+  { file = odoc_source_tree; ignore_output = false; source = None; assets = [] }
 ]}
 
 Let's now put together a list of all possible modules. We'll keep track of
 which library they're in, and whether that library is a part of [odoc] or a dependency
 library.
 
-{[
+{@ocaml file=driver.ml,part=odocunits,exec[
 let odoc_all_unit_paths = find_units ".." |> get_ok
 
 let odoc_units =
@@ -556,9 +592,400 @@ let odoc_units =
           else acc)
         odoc_all_unit_paths [])
     odoc_libraries
-]}
+][
+{err@mdx-error[
+val odoc_all_unit_paths : Fpath.set = <abstr>
+val odoc_units : (string * string * Fpath.t * Fpath.t option) list list =
+  [[("odoc", "odoc_xref_test",
+     ../test/xref2/lib/.odoc_xref_test.objs/byte/odoc_xref_test__Common,
+     None);
+    ("odoc", "odoc_xref_test",
+     ../test/xref2/lib/.odoc_xref_test.objs/byte/odoc_xref_test, None)];
+   [("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Utils,
+     Some src/xref2/utils.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Type_of,
+     Some src/xref2/type_of.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Tools,
+     Some src/xref2/tools.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Subst,
+     Some src/xref2/subst.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Strengthen,
+     Some src/xref2/strengthen.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Shape_tools,
+     Some src/xref2/shape_tools.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Ref_tools,
+     Some src/xref2/ref_tools.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Lookup_failures,
+     Some src/xref2/lookup_failures.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Link,
+     Some src/xref2/link.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Lang_of,
+     Some src/xref2/lang_of.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Ident,
+     Some src/xref2/ident.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Find,
+     Some src/xref2/find.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Expand_tools,
+     Some src/xref2/expand_tools.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Errors,
+     Some src/xref2/errors.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Env,
+     Some src/xref2/env.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Cpath,
+     Some src/xref2/cpath.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Component,
+     Some src/xref2/component.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Compile,
+     Some src/xref2/compile.ml);
+    ("odoc", "odoc_xref2",
+     ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Cfrag,
+     Some src/xref2/cfrag.ml);
+    ("odoc", "odoc_xref2", ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2,
+     None)];
+   [("odoc", "odoc_odoc", ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Url,
+     Some src/odoc/url.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Support_files,
+     Some src/odoc/support_files.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Source_tree,
+     Some src/odoc/source_tree.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Resolver,
+     Some src/odoc/resolver.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Rendering,
+     Some src/odoc/rendering.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Or_error,
+     Some src/odoc/or_error.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Odoc_link,
+     Some src/odoc/odoc_link.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Odoc_file,
+     Some src/odoc/odoc_file.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Occurrences,
+     Some src/odoc/occurrences.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Man_page,
+     Some src/odoc/man_page.ml);
+    ("odoc", "odoc_odoc", ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Latex,
+     Some src/odoc/latex.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Indexing,
+     Some src/odoc/indexing.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Html_page,
+     Some src/odoc/html_page.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Html_fragment,
+     Some src/odoc/html_fragment.ml);
+    ("odoc", "odoc_odoc", ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Fs,
+     Some src/odoc/fs.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Depends,
+     Some src/odoc/depends.ml);
+    ("odoc", "odoc_odoc",
+     ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Compile,
+     Some src/odoc/compile.ml);
+    ("odoc", "odoc_odoc", ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc, None)];
+   [("odoc", "odoc_html_support_files",
+     ../src/html_support_files/.odoc_html_support_files.objs/byte/odoc_html_support_files,
+     Some src/html_support_files/odoc_html_support_files.ml)];
+   [("odoc", "odoc_model_desc",
+     ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Type_desc,
+     Some src/model_desc/type_desc.ml);
+    ("odoc", "odoc_model_desc",
+     ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Paths_desc,
+     Some src/model_desc/paths_desc.ml);
+    ("odoc", "odoc_model_desc",
+     ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Lang_desc,
+     Some src/model_desc/lang_desc.ml);
+    ("odoc", "odoc_model_desc",
+     ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Comment_desc,
+     Some src/model_desc/comment_desc.ml);
+    ("odoc", "odoc_model_desc",
+     ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc, None)];
+   [("odoc", "odoc_model",
+     ../test/model/semantics/.odoc_model_semantics_test.objs/byte/odoc_model_semantics_test__Test,
+     None);
+    ("odoc", "odoc_model",
+     ../test/model/semantics/.odoc_model_semantics_test.objs/byte/odoc_model_semantics_test,
+     None);
+    ("odoc", "odoc_model",
+     ../test/model/semantics/.odoc_model_semantics_test.inline-tests/.odoc_model_semantics_test.inline-tests.eobjs/byte/dune__exe__Inline_test_runner_odoc_model_semantics_test,
+     None);
+    ("odoc", "odoc_model",
+     ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Type_desc,
+     None);
+    ("odoc", "odoc_model",
+     ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Paths_desc,
+     None);
+    ("odoc", "odoc_model",
+     ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Lang_desc,
+     None);
+    ("odoc", "odoc_model",
+     ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Comment_desc,
+     None);
+    ("odoc", "odoc_model",
+     ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc, None);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Semantics,
+     Some src/model/semantics.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Root,
+     Some src/model/root.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Reference,
+     Some src/model/reference.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Predefined,
+     Some src/model/predefined.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Paths_types,
+     Some src/model/paths_types.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Paths,
+     Some src/model/paths.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Names,
+     Some src/model/names.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Location_,
+     Some src/model/location_.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Lang,
+     Some src/model/lang.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Fold,
+     Some src/model/fold.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Error,
+     Some src/model/error.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Compat,
+     Some src/model/compat.ml);
+    ("odoc", "odoc_model",
+     ../src/model/.odoc_model.objs/byte/odoc_model__Comment,
+     Some src/model/comment.ml);
+    ("odoc", "odoc_model", ../src/model/.odoc_model.objs/byte/odoc_model__,
+     None);
+    ("odoc", "odoc_model", ../src/model/.odoc_model.objs/byte/odoc_model,
+     Some src/model/odoc_model.ml)];
+   [("odoc", "odoc_manpage",
+     ../src/manpage/.odoc_manpage.objs/byte/odoc_manpage__Link,
+     Some src/manpage/link.ml);
+    ("odoc", "odoc_manpage",
+     ../src/manpage/.odoc_manpage.objs/byte/odoc_manpage__Generator,
+     Some src/manpage/generator.ml);
+    ("odoc", "odoc_manpage",
+     ../src/manpage/.odoc_manpage.objs/byte/odoc_manpage, None)];
+   [("odoc", "odoc_loader",
+     ../src/loader/.odoc_loader.objs/byte/odoc_loader__Typedtree_traverse,
+     Some src/loader/typedtree_traverse.pp.ml);
+    ("odoc", "odoc_loader",
+     ../src/loader/.odoc_loader.objs/byte/odoc_loader__Implementation,
+     Some src/loader/implementation.pp.ml);
+    ("odoc", "odoc_loader",
+     ../src/loader/.odoc_loader.objs/byte/odoc_loader__Ident_env,
+     Some src/loader/ident_env.pp.ml);
+    ("odoc", "odoc_loader",
+     ../src/loader/.odoc_loader.objs/byte/odoc_loader__Doc_attr,
+     Some src/loader/doc_attr.pp.ml);
+    ("odoc", "odoc_loader",
+     ../src/loader/.odoc_loader.objs/byte/odoc_loader__Cmti,
+     Some src/loader/cmti.pp.ml);
+    ("odoc", "odoc_loader",
+     ../src/loader/.odoc_loader.objs/byte/odoc_loader__Cmt,
+     Some src/loader/cmt.pp.ml);
+    ("odoc", "odoc_loader",
+     ../src/loader/.odoc_loader.objs/byte/odoc_loader__Cmi,
+     Some src/loader/cmi.pp.ml);
+    ("odoc", "odoc_loader",
+     ../src/loader/.odoc_loader.objs/byte/odoc_loader__, None);
+    ("odoc", "odoc_loader", ../src/loader/.odoc_loader.objs/byte/odoc_loader,
+     Some src/loader/odoc_loader.pp.ml)];
+   [("odoc", "odoc_latex",
+     ../src/latex/.odoc_latex.objs/byte/odoc_latex__Types,
+     Some src/latex/types.ml);
+    ("odoc", "odoc_latex",
+     ../src/latex/.odoc_latex.objs/byte/odoc_latex__Raw,
+     Some src/latex/raw.ml);
+    ("odoc", "odoc_latex",
+     ../src/latex/.odoc_latex.objs/byte/odoc_latex__Generator,
+     Some src/latex/generator.ml);
+    ("odoc", "odoc_latex", ../src/latex/.odoc_latex.objs/byte/odoc_latex,
+     None)];
+   [("odoc", "odoc_html",
+     ../src/search/.odoc_html_frontend.objs/byte/odoc_html_frontend, None);
+    ("odoc", "odoc_html",
+     ../src/html_support_files/.odoc_html_support_files.objs/byte/odoc_html_support_files,
+     None);
+    ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html__Utils,
+     Some src/html/utils.ml);
+    ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html__Types,
+     Some src/html/types.ml);
+    ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html__Link,
+     Some src/html/link.ml);
+    ("odoc", "odoc_html",
+     ../src/html/.odoc_html.objs/byte/odoc_html__Html_source,
+     Some src/html/html_source.ml);
+    ("odoc", "odoc_html",
+     ../src/html/.odoc_html.objs/byte/odoc_html__Html_page,
+     Some src/html/html_page.ml);
+    ("odoc", "odoc_html",
+     ../src/html/.odoc_html.objs/byte/odoc_html__Html_fragment_json,
+     Some src/html/html_fragment_json.ml);
+    ("odoc", "odoc_html",
+     ../src/html/.odoc_html.objs/byte/odoc_html__Generator,
+     Some src/html/generator.ml);
+    ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html__Config,
+     Some src/html/config.ml);
+    ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html__, None);
+    ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html,
+     Some src/html/odoc_html.ml)];
+   [("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Utils,
+     Some src/document/utils.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Url,
+     Some src/document/url.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Types,
+     Some src/document/types.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Targets,
+     Some src/document/targets.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Renderer,
+     Some src/document/renderer.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Reason,
+     Some src/document/reason.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__ML,
+     Some src/document/ML.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Generator_signatures,
+     Some src/document/generator_signatures.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Generator,
+     Some src/document/generator.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Doctree,
+     Some src/document/doctree.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Compat,
+     Some src/document/compat.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Comment,
+     Some src/document/comment.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document__Codefmt,
+     Some src/document/codefmt.ml);
+    ("odoc", "odoc_document",
+     ../src/document/.odoc_document.objs/byte/odoc_document, None)];
+   [("odoc", "odoc_examples",
+     ../doc/examples/.odoc_examples.objs/byte/odoc_examples__Wrapping, None);
+    ("odoc", "odoc_examples",
+     ../doc/examples/.odoc_examples.objs/byte/odoc_examples__Unexposed, None);
+    ("odoc", "odoc_examples",
+     ../doc/examples/.odoc_examples.objs/byte/odoc_examples__Resolution,
+     None);
+    ("odoc", "odoc_examples",
+     ../doc/examples/.odoc_examples.objs/byte/odoc_examples__Markup, None);
+    ("odoc", "odoc_examples",
+     ../doc/examples/.odoc_examples.objs/byte/odoc_examples__Expansion, None);
+    ("odoc", "odoc_examples",
+     ../doc/examples/.odoc_examples.objs/byte/odoc_examples__, None);
+    ("odoc", "odoc_examples",
+     ../doc/examples/.odoc_examples.objs/byte/odoc_examples, None)];
+   [("odoc", "odoc_parser",
+     ../src/parser/test/.odoc_parser_test.objs/byte/odoc_parser_test__Test_tables,
+     None);
+    ("odoc", "odoc_parser",
+     ../src/parser/test/.odoc_parser_test.objs/byte/odoc_parser_test__Test,
+     None);
+    ("odoc", "odoc_parser",
+     ../src/parser/test/.odoc_parser_test.objs/byte/odoc_parser_test, None);
+    ("odoc", "odoc_parser",
+     ../src/parser/test/.odoc_parser_test.inline-tests/.odoc_parser_test.inline-tests.eobjs/byte/dune__exe__Inline_test_runner_odoc_parser_test,
+     None);
+    ("odoc", "odoc_parser",
+     ../src/parser/.odoc_parser.objs/byte/odoc_parser__Warning,
+     Some src/parser/warning.ml);
+    ("odoc", "odoc_parser",
+     ../src/parser/.odoc_parser.objs/byte/odoc_parser__Token,
+     Some src/parser/token.ml);
+    ("odoc", "odoc_parser",
+     ../src/parser/.odoc_parser.objs/byte/odoc_parser__Syntax,
+     Some src/parser/syntax.ml);
+    ("odoc", "odoc_parser",
+     ../src/parser/.odoc_parser.objs/byte/odoc_parser__Parse_error,
+     Some src/parser/parse_error.ml);
+    ("odoc", "odoc_parser",
+     ../src/parser/.odoc_parser.objs/byte/odoc_parser__Loc,
+     Some src/parser/loc.ml);
+    ("odoc", "odoc_parser",
+     ../src/parser/.odoc_parser.objs/byte/odoc_parser__Lexer,
+     Some src/parser/lexer.ml);
+    ("odoc", "odoc_parser",
+     ../src/parser/.odoc_parser.objs/byte/odoc_parser__Compat,
+     Some src/parser/compat.ml);
+    ("odoc", "odoc_parser",
+     ../src/parser/.odoc_parser.objs/byte/odoc_parser__Ast,
+     Some src/parser/ast.ml);
+    ("odoc", "odoc_parser",
+     ../src/parser/.odoc_parser.objs/byte/odoc_parser__, None);
+    ("odoc", "odoc_parser", ../src/parser/.odoc_parser.objs/byte/odoc_parser,
+     Some src/parser/odoc_parser.ml)];
+   [("odoc", "ocamlary", ../test/generators/ocamlary, None);
+    ("odoc", "ocamlary", ../src/ocamlary/.ocamlary.objs/byte/ocamlary, None)];
+   [("odoc", "odoc_search",
+     ../src/search/.odoc_search.objs/byte/odoc_search__Text,
+     Some src/search/text.ml);
+    ("odoc", "odoc_search",
+     ../src/search/.odoc_search.objs/byte/odoc_search__Html,
+     Some src/search/html.ml);
+    ("odoc", "odoc_search",
+     ../src/search/.odoc_search.objs/byte/odoc_search__Entry,
+     Some src/search/entry.ml);
+    ("odoc", "odoc_search", ../src/search/.odoc_search.objs/byte/odoc_search,
+     None)];
+   [("odoc", "odoc_html_frontend",
+     ../src/search/.odoc_html_frontend.objs/byte/odoc_html_frontend, None)];
+   [("odoc", "odoc_json_index",
+     ../src/search/json_index/.odoc_json_index.objs/byte/odoc_json_index__Json_search,
+     None);
+    ("odoc", "odoc_json_index",
+     ../src/search/json_index/.odoc_json_index.objs/byte/odoc_json_index__Json_display,
+     None);
+    ("odoc", "odoc_json_index",
+     ../src/search/json_index/.odoc_json_index.objs/byte/odoc_json_index,
+     None)]]
+]err}]}
 
-{[
+{@ocaml file=driver.ml,part=allunits,exec[
 let all_units =
   let lib_units =
     List.map
@@ -567,31 +994,1271 @@ let all_units =
           (fun p acc -> ("deps", lib, p, None) :: acc)
           (find_units p |> get_ok)
           [])
-      lib_paths in
+      lib_paths
+  in
   odoc_units @ lib_units |> List.flatten
-]}
+][
+{err@mdx-error[
+val all_units : (string * string * Fpath.t * Fpath.t option) list =
+  [("odoc", "odoc_xref_test",
+    ../test/xref2/lib/.odoc_xref_test.objs/byte/odoc_xref_test__Common, None);
+   ("odoc", "odoc_xref_test",
+    ../test/xref2/lib/.odoc_xref_test.objs/byte/odoc_xref_test, None);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Utils,
+    Some src/xref2/utils.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Type_of,
+    Some src/xref2/type_of.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Tools,
+    Some src/xref2/tools.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Subst,
+    Some src/xref2/subst.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Strengthen,
+    Some src/xref2/strengthen.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Shape_tools,
+    Some src/xref2/shape_tools.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Ref_tools,
+    Some src/xref2/ref_tools.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Lookup_failures,
+    Some src/xref2/lookup_failures.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Link,
+    Some src/xref2/link.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Lang_of,
+    Some src/xref2/lang_of.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Ident,
+    Some src/xref2/ident.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Find,
+    Some src/xref2/find.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Expand_tools,
+    Some src/xref2/expand_tools.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Errors,
+    Some src/xref2/errors.ml);
+   ("odoc", "odoc_xref2", ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Env,
+    Some src/xref2/env.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Cpath,
+    Some src/xref2/cpath.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Component,
+    Some src/xref2/component.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Compile,
+    Some src/xref2/compile.ml);
+   ("odoc", "odoc_xref2",
+    ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2__Cfrag,
+    Some src/xref2/cfrag.ml);
+   ("odoc", "odoc_xref2", ../src/xref2/.odoc_xref2.objs/byte/odoc_xref2,
+    None);
+   ("odoc", "odoc_odoc", ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Url,
+    Some src/odoc/url.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Support_files,
+    Some src/odoc/support_files.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Source_tree,
+    Some src/odoc/source_tree.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Resolver,
+    Some src/odoc/resolver.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Rendering,
+    Some src/odoc/rendering.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Or_error,
+    Some src/odoc/or_error.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Odoc_link,
+    Some src/odoc/odoc_link.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Odoc_file,
+    Some src/odoc/odoc_file.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Occurrences,
+    Some src/odoc/occurrences.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Man_page,
+    Some src/odoc/man_page.ml);
+   ("odoc", "odoc_odoc", ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Latex,
+    Some src/odoc/latex.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Indexing,
+    Some src/odoc/indexing.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Html_page,
+    Some src/odoc/html_page.ml);
+   ("odoc", "odoc_odoc",
+    ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Html_fragment,
+    Some src/odoc/html_fragment.ml);
+   ("odoc", "odoc_odoc", ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Fs,
+    Some src/odoc/fs.ml);
+   ("odoc", "odoc_odoc", ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Depends,
+    Some src/odoc/depends.ml);
+   ("odoc", "odoc_odoc", ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc__Compile,
+    Some src/odoc/compile.ml);
+   ("odoc", "odoc_odoc", ../src/odoc/.odoc_odoc.objs/byte/odoc_odoc, None);
+   ("odoc", "odoc_html_support_files",
+    ../src/html_support_files/.odoc_html_support_files.objs/byte/odoc_html_support_files,
+    Some src/html_support_files/odoc_html_support_files.ml);
+   ("odoc", "odoc_model_desc",
+    ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Type_desc,
+    Some src/model_desc/type_desc.ml);
+   ("odoc", "odoc_model_desc",
+    ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Paths_desc,
+    Some src/model_desc/paths_desc.ml);
+   ("odoc", "odoc_model_desc",
+    ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Lang_desc,
+    Some src/model_desc/lang_desc.ml);
+   ("odoc", "odoc_model_desc",
+    ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Comment_desc,
+    Some src/model_desc/comment_desc.ml);
+   ("odoc", "odoc_model_desc",
+    ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc, None);
+   ("odoc", "odoc_model",
+    ../test/model/semantics/.odoc_model_semantics_test.objs/byte/odoc_model_semantics_test__Test,
+    None);
+   ("odoc", "odoc_model",
+    ../test/model/semantics/.odoc_model_semantics_test.objs/byte/odoc_model_semantics_test,
+    None);
+   ("odoc", "odoc_model",
+    ../test/model/semantics/.odoc_model_semantics_test.inline-tests/.odoc_model_semantics_test.inline-tests.eobjs/byte/dune__exe__Inline_test_runner_odoc_model_semantics_test,
+    None);
+   ("odoc", "odoc_model",
+    ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Type_desc,
+    None);
+   ("odoc", "odoc_model",
+    ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Paths_desc,
+    None);
+   ("odoc", "odoc_model",
+    ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Lang_desc,
+    None);
+   ("odoc", "odoc_model",
+    ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc__Comment_desc,
+    None);
+   ("odoc", "odoc_model",
+    ../src/model_desc/.odoc_model_desc.objs/byte/odoc_model_desc, None);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Semantics,
+    Some src/model/semantics.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Root,
+    Some src/model/root.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Reference,
+    Some src/model/reference.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Predefined,
+    Some src/model/predefined.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Paths_types,
+    Some src/model/paths_types.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Paths,
+    Some src/model/paths.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Names,
+    Some src/model/names.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Location_,
+    Some src/model/location_.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Lang,
+    Some src/model/lang.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Fold,
+    Some src/model/fold.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Error,
+    Some src/model/error.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Compat,
+    Some src/model/compat.ml);
+   ("odoc", "odoc_model",
+    ../src/model/.odoc_model.objs/byte/odoc_model__Comment,
+    Some src/model/comment.ml);
+   ("odoc", "odoc_model", ../src/model/.odoc_model.objs/byte/odoc_model__,
+    None);
+   ("odoc", "odoc_model", ../src/model/.odoc_model.objs/byte/odoc_model,
+    Some src/model/odoc_model.ml);
+   ("odoc", "odoc_manpage",
+    ../src/manpage/.odoc_manpage.objs/byte/odoc_manpage__Link,
+    Some src/manpage/link.ml);
+   ("odoc", "odoc_manpage",
+    ../src/manpage/.odoc_manpage.objs/byte/odoc_manpage__Generator,
+    Some src/manpage/generator.ml);
+   ("odoc", "odoc_manpage",
+    ../src/manpage/.odoc_manpage.objs/byte/odoc_manpage, None);
+   ("odoc", "odoc_loader",
+    ../src/loader/.odoc_loader.objs/byte/odoc_loader__Typedtree_traverse,
+    Some src/loader/typedtree_traverse.pp.ml);
+   ("odoc", "odoc_loader",
+    ../src/loader/.odoc_loader.objs/byte/odoc_loader__Implementation,
+    Some src/loader/implementation.pp.ml);
+   ("odoc", "odoc_loader",
+    ../src/loader/.odoc_loader.objs/byte/odoc_loader__Ident_env,
+    Some src/loader/ident_env.pp.ml);
+   ("odoc", "odoc_loader",
+    ../src/loader/.odoc_loader.objs/byte/odoc_loader__Doc_attr,
+    Some src/loader/doc_attr.pp.ml);
+   ("odoc", "odoc_loader",
+    ../src/loader/.odoc_loader.objs/byte/odoc_loader__Cmti,
+    Some src/loader/cmti.pp.ml);
+   ("odoc", "odoc_loader",
+    ../src/loader/.odoc_loader.objs/byte/odoc_loader__Cmt,
+    Some src/loader/cmt.pp.ml);
+   ("odoc", "odoc_loader",
+    ../src/loader/.odoc_loader.objs/byte/odoc_loader__Cmi,
+    Some src/loader/cmi.pp.ml);
+   ("odoc", "odoc_loader",
+    ../src/loader/.odoc_loader.objs/byte/odoc_loader__, None);
+   ("odoc", "odoc_loader", ../src/loader/.odoc_loader.objs/byte/odoc_loader,
+    Some src/loader/odoc_loader.pp.ml);
+   ("odoc", "odoc_latex",
+    ../src/latex/.odoc_latex.objs/byte/odoc_latex__Types,
+    Some src/latex/types.ml);
+   ("odoc", "odoc_latex", ../src/latex/.odoc_latex.objs/byte/odoc_latex__Raw,
+    Some src/latex/raw.ml);
+   ("odoc", "odoc_latex",
+    ../src/latex/.odoc_latex.objs/byte/odoc_latex__Generator,
+    Some src/latex/generator.ml);
+   ("odoc", "odoc_latex", ../src/latex/.odoc_latex.objs/byte/odoc_latex,
+    None);
+   ("odoc", "odoc_html",
+    ../src/search/.odoc_html_frontend.objs/byte/odoc_html_frontend, None);
+   ("odoc", "odoc_html",
+    ../src/html_support_files/.odoc_html_support_files.objs/byte/odoc_html_support_files,
+    None);
+   ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html__Utils,
+    Some src/html/utils.ml);
+   ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html__Types,
+    Some src/html/types.ml);
+   ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html__Link,
+    Some src/html/link.ml);
+   ("odoc", "odoc_html",
+    ../src/html/.odoc_html.objs/byte/odoc_html__Html_source,
+    Some src/html/html_source.ml);
+   ("odoc", "odoc_html",
+    ../src/html/.odoc_html.objs/byte/odoc_html__Html_page,
+    Some src/html/html_page.ml);
+   ("odoc", "odoc_html",
+    ../src/html/.odoc_html.objs/byte/odoc_html__Html_fragment_json,
+    Some src/html/html_fragment_json.ml);
+   ("odoc", "odoc_html",
+    ../src/html/.odoc_html.objs/byte/odoc_html__Generator,
+    Some src/html/generator.ml);
+   ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html__Config,
+    Some src/html/config.ml);
+   ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html__, None);
+   ("odoc", "odoc_html", ../src/html/.odoc_html.objs/byte/odoc_html,
+    Some src/html/odoc_html.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Utils,
+    Some src/document/utils.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Url,
+    Some src/document/url.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Types,
+    Some src/document/types.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Targets,
+    Some src/document/targets.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Renderer,
+    Some src/document/renderer.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Reason,
+    Some src/document/reason.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__ML,
+    Some src/document/ML.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Generator_signatures,
+    Some src/document/generator_signatures.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Generator,
+    Some src/document/generator.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Doctree,
+    Some src/document/doctree.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Compat,
+    Some src/document/compat.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Comment,
+    Some src/document/comment.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document__Codefmt,
+    Some src/document/codefmt.ml);
+   ("odoc", "odoc_document",
+    ../src/document/.odoc_document.objs/byte/odoc_document, None);
+   ("odoc", "odoc_examples",
+    ../doc/examples/.odoc_examples.objs/byte/odoc_examples__Wrapping, None);
+   ("odoc", "odoc_examples",
+    ../doc/examples/.odoc_examples.objs/byte/odoc_examples__Unexposed, None);
+   ("odoc", "odoc_examples",
+    ../doc/examples/.odoc_examples.objs/byte/odoc_examples__Resolution, None);
+   ("odoc", "odoc_examples",
+    ../doc/examples/.odoc_examples.objs/byte/odoc_examples__Markup, None);
+   ("odoc", "odoc_examples",
+    ../doc/examples/.odoc_examples.objs/byte/odoc_examples__Expansion, None);
+   ("odoc", "odoc_examples",
+    ../doc/examples/.odoc_examples.objs/byte/odoc_examples__, None);
+   ("odoc", "odoc_examples",
+    ../doc/examples/.odoc_examples.objs/byte/odoc_examples, None);
+   ("odoc", "odoc_parser",
+    ../src/parser/test/.odoc_parser_test.objs/byte/odoc_parser_test__Test_tables,
+    None);
+   ("odoc", "odoc_parser",
+    ../src/parser/test/.odoc_parser_test.objs/byte/odoc_parser_test__Test,
+    None);
+   ("odoc", "odoc_parser",
+    ../src/parser/test/.odoc_parser_test.objs/byte/odoc_parser_test, None);
+   ("odoc", "odoc_parser",
+    ../src/parser/test/.odoc_parser_test.inline-tests/.odoc_parser_test.inline-tests.eobjs/byte/dune__exe__Inline_test_runner_odoc_parser_test,
+    None);
+   ("odoc", "odoc_parser",
+    ../src/parser/.odoc_parser.objs/byte/odoc_parser__Warning,
+    Some src/parser/warning.ml);
+   ("odoc", "odoc_parser",
+    ../src/parser/.odoc_parser.objs/byte/odoc_parser__Token,
+    Some src/parser/token.ml);
+   ("odoc", "odoc_parser",
+    ../src/parser/.odoc_parser.objs/byte/odoc_parser__Syntax,
+    Some src/parser/syntax.ml);
+   ("odoc", "odoc_parser",
+    ../src/parser/.odoc_parser.objs/byte/odoc_parser__Parse_error,
+    Some src/parser/parse_error.ml);
+   ("odoc", "odoc_parser",
+    ../src/parser/.odoc_parser.objs/byte/odoc_parser__Loc,
+    Some src/parser/loc.ml);
+   ("odoc", "odoc_parser",
+    ../src/parser/.odoc_parser.objs/byte/odoc_parser__Lexer,
+    Some src/parser/lexer.ml);
+   ("odoc", "odoc_parser",
+    ../src/parser/.odoc_parser.objs/byte/odoc_parser__Compat,
+    Some src/parser/compat.ml);
+   ("odoc", "odoc_parser",
+    ../src/parser/.odoc_parser.objs/byte/odoc_parser__Ast,
+    Some src/parser/ast.ml);
+   ("odoc", "odoc_parser",
+    ../src/parser/.odoc_parser.objs/byte/odoc_parser__, None);
+   ("odoc", "odoc_parser", ../src/parser/.odoc_parser.objs/byte/odoc_parser,
+    Some src/parser/odoc_parser.ml);
+   ("odoc", "ocamlary", ../test/generators/ocamlary, None);
+   ("odoc", "ocamlary", ../src/ocamlary/.ocamlary.objs/byte/ocamlary, None);
+   ("odoc", "odoc_search",
+    ../src/search/.odoc_search.objs/byte/odoc_search__Text,
+    Some src/search/text.ml);
+   ("odoc", "odoc_search",
+    ../src/search/.odoc_search.objs/byte/odoc_search__Html,
+    Some src/search/html.ml);
+   ("odoc", "odoc_search",
+    ../src/search/.odoc_search.objs/byte/odoc_search__Entry,
+    Some src/search/entry.ml);
+   ("odoc", "odoc_search", ../src/search/.odoc_search.objs/byte/odoc_search,
+    None);
+   ("odoc", "odoc_html_frontend",
+    ../src/search/.odoc_html_frontend.objs/byte/odoc_html_frontend, None);
+   ("odoc", "odoc_json_index",
+    ../src/search/json_index/.odoc_json_index.objs/byte/odoc_json_index__Json_search,
+    None);
+   ("odoc", "odoc_json_index",
+    ../src/search/json_index/.odoc_json_index.objs/byte/odoc_json_index__Json_display,
+    None);
+   ("odoc", "odoc_json_index",
+    ../src/search/json_index/.odoc_json_index.objs/byte/odoc_json_index,
+    None);
+   ("deps", "odoc-parser",
+    ../../install/default/lib/odoc-parser/odoc_parser__Warning, None);
+   ("deps", "odoc-parser",
+    ../../install/default/lib/odoc-parser/odoc_parser__Token, None);
+   ("deps", "odoc-parser",
+    ../../install/default/lib/odoc-parser/odoc_parser__Syntax, None);
+   ("deps", "odoc-parser",
+    ../../install/default/lib/odoc-parser/odoc_parser__Parse_error, None);
+   ("deps", "odoc-parser",
+    ../../install/default/lib/odoc-parser/odoc_parser__Loc, None);
+   ("deps", "odoc-parser",
+    ../../install/default/lib/odoc-parser/odoc_parser__Lexer, None);
+   ("deps", "odoc-parser",
+    ../../install/default/lib/odoc-parser/odoc_parser__Compat, None);
+   ("deps", "odoc-parser",
+    ../../install/default/lib/odoc-parser/odoc_parser__Ast, None);
+   ("deps", "odoc-parser",
+    ../../install/default/lib/odoc-parser/odoc_parser__, None);
+   ("deps", "odoc-parser", ../../install/default/lib/odoc-parser/odoc_parser,
+    None);
+   ("deps", "astring", ../../../../../.opam/default/lib/astring/astring,
+    None);
+   ("deps", "cmdliner", ../../../../../.opam/default/lib/cmdliner/cmdliner,
+    None);
+   ("deps", "fpath", ../../../../../.opam/default/lib/fpath/fpath, None);
+   ("deps", "result", ../../../../../.opam/default/lib/result/result, None);
+   ("deps", "tyxml", ../../../../../.opam/default/lib/tyxml/tyxml_xml, None);
+   ("deps", "tyxml", ../../../../../.opam/default/lib/tyxml/tyxml_svg, None);
+   ("deps", "tyxml", ../../../../../.opam/default/lib/tyxml/tyxml_html, None);
+   ("deps", "tyxml", ../../../../../.opam/default/lib/tyxml/tyxml, None);
+   ("deps", "tyxml", ../../../../../.opam/default/lib/tyxml/functor/xml_wrap,
+    None);
+   ("deps", "tyxml",
+    ../../../../../.opam/default/lib/tyxml/functor/xml_stream, None);
+   ("deps", "tyxml", ../../../../../.opam/default/lib/tyxml/functor/xml_sigs,
+    None);
+   ("deps", "tyxml",
+    ../../../../../.opam/default/lib/tyxml/functor/xml_print, None);
+   ("deps", "tyxml", ../../../../../.opam/default/lib/tyxml/functor/xml_iter,
+    None);
+   ("deps", "tyxml",
+    ../../../../../.opam/default/lib/tyxml/functor/svg_types, None);
+   ("deps", "tyxml", ../../../../../.opam/default/lib/tyxml/functor/svg_sigs,
+    None);
+   ("deps", "tyxml", ../../../../../.opam/default/lib/tyxml/functor/svg_f,
+    None);
+   ("deps", "tyxml",
+    ../../../../../.opam/default/lib/tyxml/functor/html_types, None);
+   ("deps", "tyxml",
+    ../../../../../.opam/default/lib/tyxml/functor/html_sigs, None);
+   ("deps", "tyxml", ../../../../../.opam/default/lib/tyxml/functor/html_f,
+    None);
+   ("deps", "fmt", ../../../../../.opam/default/lib/fmt/fmt_tty, None);
+   ("deps", "fmt", ../../../../../.opam/default/lib/fmt/fmt_cli, None);
+   ("deps", "fmt", ../../../../../.opam/default/lib/fmt/fmt, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/unix/unixLabels,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/unix/unix, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/threads/thread,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/threads/event,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/str/str, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Weak,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Unit,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Uchar,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Type,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Sys,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__StringLabels, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__String,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__StdLabels, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Stack,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Set,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Seq,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__Semaphore, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Scanf,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Result,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Random,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Queue,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Printf,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__Printexc, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Parsing,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__Out_channel, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Option,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Oo,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Obj,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__Nativeint, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Mutex,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__MoreLabels, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Marshal,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Map,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__ListLabels, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__List,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Lexing,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Lazy,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Int64,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Int32,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Int,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__In_channel, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Hashtbl,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Gc,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Fun,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Format,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Float,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__Filename, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__Ephemeron, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Either,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Effect,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Domain,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Digest,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__Condition, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Complex,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Char,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__Callback, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__BytesLabels, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Bytes,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Buffer,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Bool,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__Bigarray, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Atomic,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/stdlib__ArrayLabels, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Array,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib__Arg,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/stdlib, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/std_exit, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/runtime_events/runtime_events,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/ratio, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/profiling/profiling, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/num, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/nat, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/dynlink/dynlink,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/x86_proc, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/x86_masm, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/x86_gas, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/x86_dsl, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/x86_ast, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/warnings, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/variable, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/var_within_closure,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/untypeast, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/unbox_specialised_args,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/unbox_free_vars_of_closures,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/unbox_closures,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/un_anf, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typetexp, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/types, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typeopt, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typemod, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typedtree, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typedecl_variance,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typedecl_unboxed,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typedecl_separability,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typedecl_properties,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typedecl_immediacy,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typedecl, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typecore, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/typeclass, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/type_immediacy,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/traverse_for_exported_symbols,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/translprim, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/translobj, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/translmod, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/translcore, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/translclass, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/translattribute,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/trace, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/topstart, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/topprinters, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/topmain, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/toploop, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/tophooks, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/topeval, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/topdirs, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/topcommon, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/tmc, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/terminfo, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/tast_mapper, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/tast_iterator, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/targetint, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/tag, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/syntaxerr, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/symtable, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/symbol, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/switch, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/subst, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/stypes, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/strongly_connected_components,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/strmatch, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/static_exception,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/split, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/spill, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/simplify_primitives,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/simplify_common,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/simplify_boxed_integer_ops_intf,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/simplify_boxed_integer_ops,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/simplif, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/simple_value_approx,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/signature_group,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/share_constants,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/shape, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/set_of_closures_origin,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/set_of_closures_id,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/semantics_of_primitives,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/selection, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/selectgen, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/scheduling, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/schedgen, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/runtimedef, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/remove_unused_program_constructs,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/remove_unused_closure_vars,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/remove_unused_arguments,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/remove_free_vars_equal_to_args,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/reloadgen, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/reload, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/reg, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/ref_to_variables,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/rec_check, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/projection, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/profile, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/proc, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printtyped, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printtyp, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printpat, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printmach, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printlinear, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printlambda, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printinstr, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printcmm, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printclambda_primitives,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printclambda, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/printast, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/primitive, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/predef, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/pprintast, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/pparse, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/polling, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/persistent_env,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/patterns, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/path, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/pass_wrapper, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/parsetree, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/parser, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/parse, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/parmatch, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/parameter, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/outcometree, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/optmaindriver, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/optmain, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/opterrors, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/optcompile, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/oprint, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/opcodes, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/numbers, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/mutable_variable,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/mtype, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/misc, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/meta, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/matching, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/makedepend, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/maindriver, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/main_args, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/main, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/mach, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/longident, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/location, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/local_store, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/load_path, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/liveness, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/linscan, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/linkage_name, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/linearize, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/linear_format, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/linear, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/lift_let_to_initialize_symbol,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/lift_constants,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/lift_code, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/lexer, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/lazy_backtrack,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/lambda, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/invariant_params,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/interval, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/internal_variable_names,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/interf, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/int_replace_polymorphic_compare,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/instruct, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/inlining_transforms,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/inlining_stats_types,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/inlining_stats,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/inlining_decision_intf,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/inlining_decision,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/inlining_cost, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/inline_and_simplify_aux,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/inline_and_simplify,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/initialize_symbol_to_let_symbol,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/inconstant_idents,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/includemod_errorprinter,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/includemod, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/includecore, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/includeclass, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/import_approx, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/identifiable, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/ident, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/id_types, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/genprintval, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/freshening, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/flambda_utils, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/flambda_to_clambda,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/flambda_middle_end,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/flambda_iterators,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/flambda_invariants,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/flambda, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/find_recursive_functions,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/extract_projections,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/expunge, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/export_info_for_pack,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/export_info, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/export_id, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/errortrace, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/errors, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/envaux, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/env, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/emitenv, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/emitcode, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/emitaux, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/emit, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/effect_analysis,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/domainstate, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/docstrings, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/dll, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/diffing_with_keys,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/diffing, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/depend, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/debuginfo, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/deadcode, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/datarepr, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/dataflow, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/ctype, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/convert_primitives,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/consistbl, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/config_main, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/config_boot, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/config, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/compmisc, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/compilenv, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/compile_common,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/compile, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/compilation_unit,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/compenv, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/comballoc, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/coloring, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmxs_format, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmx_format, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmt_format, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmt2annot, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmo_format, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmmgen_state, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmmgen, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmm_invariants,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmm_helpers, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmm, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/cmi_format, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/closure_origin,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/closure_offsets,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/closure_middle_end,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/closure_id, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/closure_element,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/closure_conversion_aux,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/closure_conversion,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/closure, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/clflags, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/clambda_primitives,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/clambda, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/ccomp, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/camlinternalMenhirLib,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/bytesections, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/bytepackager, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/bytelink, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/bytelibrarian, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/bytegen, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/builtin_attributes,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/build_path_prefix_map,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/build_export_info,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/btype, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/branch_relaxation_intf,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/branch_relaxation,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/binutils, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/backend_var, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/backend_intf, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/augment_specialised_args,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/attr_helper, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/asttypes, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/ast_mapper, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/ast_iterator, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/ast_invariants,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/ast_helper, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/asmpackager, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/asmlink, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/asmlibrarian, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/asmgen, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/arg_helper, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/arch, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/annot, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/allocated_const,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/alias_analysis,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/afl_instrument,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/CSEgen, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/compiler-libs/CSE, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/camlinternalOO,
+    None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/camlinternalMod,
+    None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/camlinternalLazy, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/camlinternalFormatBasics, None);
+   ("deps", "stdlib",
+    ../../../../../.opam/default/lib/ocaml/camlinternalFormat, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/big_int, None);
+   ("deps", "stdlib", ../../../../../.opam/default/lib/ocaml/arith_status,
+    None);
+   ("deps", "yojson", ../../../../../.opam/default/lib/yojson/yojson__T,
+    None);
+   ("deps", "yojson", ../../../../../.opam/default/lib/yojson/yojson__Safe,
+    None);
+   ("deps", "yojson", ../../../../../.opam/default/lib/yojson/yojson__Raw,
+    None);
+   ("deps", "yojson",
+    ../../../../../.opam/default/lib/yojson/yojson__Lexer_utils, None);
+   ("deps", "yojson", ../../../../../.opam/default/lib/yojson/yojson__Common,
+    None);
+   ("deps", "yojson", ../../../../../.opam/default/lib/yojson/yojson__Codec,
+    None);
+   ("deps", "yojson", ../../../../../.opam/default/lib/yojson/yojson__Basic,
+    None);
+   ("deps", "yojson", ../../../../../.opam/default/lib/yojson/yojson__, None);
+   ("deps", "yojson", ../../../../../.opam/default/lib/yojson/yojson, None)]
+]err}]}
 
 Generate the {!api_reference} page to list Odoc's libraries:
 
-{[
+{@ocaml file=driver.ml,part=api_ref_gen,exec[
 let update_api_reference_page () =
   let libs =
-    List.sort String.compare odoc_libraries
-    |> List.map String.capitalize_ascii
+    List.sort String.compare odoc_libraries |> List.map String.capitalize_ascii
   in
-  OS.File.with_oc (Fpath.v "api_reference.mld") (fun oc () ->
+  OS.File.with_oc
+    (Fpath.v "api_reference.mld")
+    (fun oc () ->
       let pf = Printf.fprintf in
       pf oc "{0 API Reference}\n\n";
       List.iter (pf oc "- {!%s}\n") libs;
-      Ok ()
-    ) ()
-  |> get_ok
-  |> get_ok
+      Ok ())
+    ()
+  |> get_ok |> get_ok
 ]}
 
 Now we'll compile all of the parent [.mld] files. To ensure that the parents are compiled before the children, we start with [odoc.mld], then [deps.mld], and so on. The result of this file is a list of the resulting [odoc] files.
 
-{[
+{@ocaml file=driver.ml,part=compile_mlds,exec[
 let search_file = "index.js"
 
 let compile_mlds () =
@@ -601,7 +2268,8 @@ let compile_mlds () =
   let mkmld x = Fpath.(add_ext "mld" (v x)) in
   ignore
     (compile (mkmld "odoc")
-       ("src-source" :: "page-deps" :: List.map mkpage (odoc_libraries @ extra_docs)));
+       ("src-source" :: "page-deps"
+       :: List.map mkpage (odoc_libraries @ extra_docs)));
   ignore (compile (mkmld "deps") ~parent:"odoc" (List.map mkpage dep_libraries));
   let extra_odocs =
     List.map
@@ -616,24 +2284,30 @@ let compile_mlds () =
         let parent = List.assoc library parents in
         let children =
           List.filter_map
-            (fun (parent, lib, child, _) ->
+            (fun (_parent, lib, child, _) ->
               if lib = library then Some (Fpath.basename child |> mkmod)
               else None)
             all_units
         in
-        ignore (compile (mkmld ("library_mlds/"^library)) ~parent children);
+        ignore (compile (mkmld ("library_mlds/" ^ library)) ~parent children);
         "page-" ^ library ^ ".odoc")
       all_libraries
   in
-  { file = Fpath.v "page-odoc.odoc" ; ignore_output = false ; source = None ; assets = [] } ::
-  List.map
-    (fun f -> { file = Fpath.v f ; ignore_output = false ; source = None; assets = [] })
-    ( "page-deps.odoc" :: odocs @ extra_odocs)
+  {
+    file = Fpath.v "page-odoc.odoc";
+    ignore_output = false;
+    source = None;
+    assets = [];
+  }
+  :: List.map
+       (fun f ->
+         { file = Fpath.v f; ignore_output = false; source = None; assets = [] })
+       (("page-deps.odoc" :: odocs) @ extra_odocs)
 ]}
 
 Now we get to the compilation phase. For each unit, we query its dependencies, then recursively call to compile these dependencies. Once this is done we compile the unit itself. If the unit has already been compiled we don't do anything. Note that we aren't checking the hashes of the dependencies which a build system should do to ensure that the module being compiled is the correct one. Again we benefit from the fact that we're creating the docs for one leaf package and that there must be no module name clashes in its dependencies. The result of this function is a list of the resulting [odoc] files.
 
-{[
+{@ocaml file=driver.ml,part=compile_all,exec[
 let compile_all () =
   let mld_odocs = compile_mlds () in
   let source_tree = compile_source_tree all_units in
@@ -647,7 +2321,7 @@ let compile_all () =
       let deps = compile_deps file |> get_ok in
       let files =
         List.fold_left
-          (fun acc (dep_name, digest) ->
+          (fun acc (dep_name, _digest) ->
             match
               List.find_opt
                 (fun (_, _, f, _) ->
@@ -663,22 +2337,22 @@ let compile_all () =
       let ignore_output = parent = "deps" in
       let source_args = source_args impl in
       compile file ~parent:lib ?source_args ~ignore_output [];
-      { file = output ; ignore_output ; source = impl; assets = [] } :: files
+      { file = output; ignore_output; source = impl; assets = [] } :: files
   in
   source_tree
   :: List.fold_left
-    (fun acc (parent, lib, dep, impl) ->
-      acc @ rec_compile ?impl parent lib (best_file dep))
-      [] all_units
-   @ mld_odocs
+       (fun acc (parent, lib, dep, impl) ->
+         acc @ rec_compile ?impl parent lib (best_file dep))
+       [] all_units
+  @ mld_odocs
 ]}
 
 Linking is now straightforward. We link all [odoc] files.
 
-{[
+{@ocaml file=driver.ml,part=link_all,exec[
 let link_all odoc_files =
   List.map
-    (fun ({ file = odoc_file ; ignore_output ; _ } as unit) ->
+    (fun ({ file = odoc_file; ignore_output; _ } as unit) ->
       ignore (link ~ignore_output odoc_file);
       { unit with file = Fpath.set_ext "odocl" odoc_file })
     odoc_files
@@ -688,14 +2362,17 @@ Now we simply run [odoc html-generate] over all of the resulting [odocl] files.
 This will generate sources, as well as documentation for non-hidden units.
 We notify the generator that the javascript file to use for search is [index.js].
 
-{[
+{@ocaml file=driver.ml,part=generate_all,exec[
 let generate_all odocl_files =
-  let relativize_opt = function None -> None | Some file -> Some (relativize file) in
-  let search_uris = [Fpath.v "minisearch.js"; Fpath.v "index.js"] in
+  let relativize_opt = function
+    | None -> None
+    | Some file -> Some (relativize file)
+  in
+  let search_uris = [ Fpath.v "minisearch.js"; Fpath.v "index.js" ] in
   List.iter
-     (fun ({file = f ; ignore_output = _ ; source ; assets}) ->
-     ignore(html_generate ~assets ~search_uris f (relativize_opt source)))
-     odocl_files;
+    (fun { file = f; ignore_output = _; source; assets } ->
+      ignore (html_generate ~assets ~search_uris f (relativize_opt source)))
+    odocl_files;
   support_files ()
 ]}
 
@@ -704,14 +2381,15 @@ Finally, we generate an index of all values, types, ... This index is meant to b
 
 Search engines written in OCaml can also call the [Odoc_model.Fold.unit] and  [Odoc_model.Fold.page] function, in conjunction with [Odoc_search.Entry.entry_of_item] in order to get an OCaml value of each element to be indexed.
 
-{[
+{@ocaml file=driver.ml,part=index_generate,exec[
 let index_generate ?(ignore_output = false) () =
   let open Cmd in
   let files =
     OS.Dir.contents (Fpath.v ".")
     |> get_ok
     |> List.filter (Fpath.has_ext "odocl")
-    |> List.filter (fun p -> not (String.equal "src-source.odocl" (Fpath.filename p)))
+    |> List.filter (fun p ->
+           not (String.equal "src-source.odocl" (Fpath.filename p)))
     |> List.filter (fun p -> not (is_hidden p))
     |> List.map Fpath.to_string
   in
@@ -734,10 +2412,11 @@ We turn the JSON index into a javascript file. In order to never block the UI, t
 
 In this driver, we use the minisearch javascript library. For more involved application, we could use [index.js] to call a server-side search engine via an API call.
 
-{[
-  let js_index () =
-    let index = Bos.OS.File.read Fpath.(v "html" / "index.json") |> get_ok in
- Bos.OS.File.writef (Fpath.v search_file) {|
+{@ocaml file=driver.ml,part=js_generate,exec[
+let js_index () =
+  let index = Bos.OS.File.read Fpath.(v "html" / "index.json") |> get_ok in
+  Bos.OS.File.writef (Fpath.v search_file)
+    {|
  let documents =
    %s
  ;
@@ -765,22 +2444,25 @@ In this driver, we use the minisearch javascript library. For more involved appl
    let result = miniSearch.search(query);
    postMessage(result.slice(0,200).map(a => a.display));
  }
- |} index |> get_ok ;
-    Bos.OS.Cmd.run Bos.Cmd.(v "cp" % search_file % "html/") |> get_ok;
-    Bos.OS.Cmd.run Bos.Cmd.(v "cp" % "minisearch.js" % "html/") |> get_ok;
+ |}
+    index
+  |> get_ok;
+  Bos.OS.Cmd.run Bos.Cmd.(v "cp" % search_file % "html/") |> get_ok;
+  Bos.OS.Cmd.run Bos.Cmd.(v "cp" % "minisearch.js" % "html/") |> get_ok
 ]}
 
 
 
 The following code executes all of the above, and we're done!
 
-{[
-let compiled = compile_all () in
-let linked = link_all compiled in
-let () = index_generate () in
-let _ = js_index () in
-let _ = count_occurrences (Fpath.v "occurrences-odoc_and_deps.odoc") in
-generate_all linked
+{@ocaml file=driver.ml,part=exec_all,exec[
+let _ =
+  let compiled = compile_all () in
+  let linked = link_all compiled in
+  let () = index_generate () in
+  let _ = js_index () in
+  let _ = count_occurrences (Fpath.v "occurrences-odoc_and_deps.odoc") in
+  generate_all linked
 ]}
 
 Let's see if there was any output from the [odoc] invocations:
@@ -837,25 +2519,43 @@ $ find html/odoc/odoc_html | sort
 html/odoc/odoc_html
 html/odoc/odoc_html/index.html
 html/odoc/odoc_html/Odoc_html
+html/odoc/odoc_html/Odoc_html__
 html/odoc/odoc_html/Odoc_html/Config
+html/odoc/odoc_html/Odoc_html__Config
 html/odoc/odoc_html/Odoc_html/Config/index.html
+html/odoc/odoc_html/Odoc_html__Config/index.html
 html/odoc/odoc_html/Odoc_html_frontend
 html/odoc/odoc_html/Odoc_html_frontend/index.html
 html/odoc/odoc_html/Odoc_html/Generator
+html/odoc/odoc_html/Odoc_html__Generator
 html/odoc/odoc_html/Odoc_html/Generator/index.html
+html/odoc/odoc_html/Odoc_html__Generator/index.html
 html/odoc/odoc_html/Odoc_html/Html_fragment_json
+html/odoc/odoc_html/Odoc_html__Html_fragment_json
 html/odoc/odoc_html/Odoc_html/Html_fragment_json/index.html
+html/odoc/odoc_html/Odoc_html__Html_fragment_json/index.html
 html/odoc/odoc_html/Odoc_html/Html_page
+html/odoc/odoc_html/Odoc_html__Html_page
 html/odoc/odoc_html/Odoc_html/Html_page/index.html
+html/odoc/odoc_html/Odoc_html__Html_page/index.html
+html/odoc/odoc_html/Odoc_html__Html_source
+html/odoc/odoc_html/Odoc_html__Html_source/index.html
 html/odoc/odoc_html/Odoc_html/index.html
+html/odoc/odoc_html/Odoc_html__/index.html
 html/odoc/odoc_html/Odoc_html/Json
 html/odoc/odoc_html/Odoc_html/Json/index.html
 html/odoc/odoc_html/Odoc_html/Link
+html/odoc/odoc_html/Odoc_html__Link
 html/odoc/odoc_html/Odoc_html/Link/index.html
+html/odoc/odoc_html/Odoc_html__Link/index.html
 html/odoc/odoc_html/Odoc_html/Link/Path
 html/odoc/odoc_html/Odoc_html/Link/Path/index.html
 html/odoc/odoc_html/Odoc_html/Types
+html/odoc/odoc_html/Odoc_html__Types
 html/odoc/odoc_html/Odoc_html/Types/index.html
+html/odoc/odoc_html/Odoc_html__Types/index.html
+html/odoc/odoc_html/Odoc_html__Utils
+html/odoc/odoc_html/Odoc_html__Utils/index.html
 ]}
 
 Some code to analyze the list of executed commands:
