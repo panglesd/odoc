@@ -219,8 +219,16 @@ end = struct
     parent_cli_spec >>= fun parent_cli_spec ->
     source >>= fun source ->
     Fs.Directory.mkdir_p (Fs.File.dirname output);
+    let start = Unix.gettimeofday () in
     Compile.compile ~resolver ~parent_cli_spec ~hidden ~children ~output
       ~warnings_options ~source ~cmt_filename_opt ~count_occurrences input
+    >>= fun () ->
+    let time_compiling = Unix.gettimeofday () -. start in
+    let file_profiling =
+      Fpath.set_ext (* Fpath.get_ext output ^  *) "log_compile" output
+    in
+    Bos.OS.File.write file_profiling
+      (Format.asprintf "time_compiling: %f\n" time_compiling)
 
   let input =
     let doc = "Input $(i,.cmti), $(i,.cmt), $(i,.cmi) or $(i,.mld) file." in
@@ -492,14 +500,23 @@ end = struct
     | None -> Fs.File.(set_ext ".odocl" input)
 
   let link directories input_file output_file warnings_options open_modules =
+    let open Or_error in
     let input = Fs.File.of_string input_file in
     let output = get_output_file ~output_file ~input in
     let resolver =
       Resolver.create ~important_digests:false ~directories ~open_modules
     in
-    match Odoc_link.from_odoc ~resolver ~warnings_options input output with
+    let start = Unix.gettimeofday () in
+    (match Odoc_link.from_odoc ~resolver ~warnings_options input output with
     | Error _ as e -> e
-    | Ok _ -> Ok ()
+    | Ok _ -> Ok ())
+    >>= fun () ->
+    let time_linking = Unix.gettimeofday () -. start in
+    let file_profiling =
+      Fpath.set_ext (* Fpath.get_ext output ^  *) "log_link" output
+    in
+    Bos.OS.File.write file_profiling
+      (Format.asprintf "time_linking: %f\n" time_linking)
 
   let dst =
     let doc =
@@ -566,12 +583,21 @@ end = struct
   module Process = struct
     let process extra _hidden directories output_dir syntax input_file
         warnings_options =
+      let open Or_error in
       let resolver =
         Resolver.create ~important_digests:false ~directories ~open_modules:[]
       in
       let file = Fs.File.of_string input_file in
       Rendering.render_odoc ~renderer:R.renderer ~resolver ~warnings_options
         ~syntax ~output:output_dir extra file
+      >>= fun (time_linking, time_rendering, time_documenting) ->
+      let file_profiling =
+        Fpath.set_ext (* Fpath.get_ext file ^  *) "log_process" file
+      in
+      Bos.OS.File.write file_profiling
+        (Format.asprintf
+           "time_linking: %f\n time_rendering: %f\ntime_documenting: %f\n"
+           time_linking time_rendering time_documenting)
 
     let cmd =
       let syntax =
@@ -602,9 +628,17 @@ end = struct
   module Generate = struct
     let generate extra _hidden output_dir syntax extra_suffix input_file
         warnings_options =
+      let open Or_error in
       let file = Fs.File.of_string input_file in
       Rendering.generate_odoc ~renderer:R.renderer ~warnings_options ~syntax
         ~output:output_dir ~extra_suffix extra file
+      >>= fun (time_documenting, time_rendering) ->
+      let file_profiling =
+        Fpath.set_ext (* Fpath.get_ext file ^  *) "log_generate" file
+      in
+      Bos.OS.File.write file_profiling
+        (Format.asprintf "time_rendering: %f\ntime_documenting: %f\n"
+           time_rendering time_documenting)
 
     let cmd =
       let syntax =

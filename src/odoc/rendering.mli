@@ -9,7 +9,7 @@ val render_odoc :
   output:Fs.directory ->
   'a ->
   Fpath.t ->
-  (unit, [> msg ]) result
+  (float * float * float, [> msg ]) result
 
 val generate_odoc :
   syntax:Renderer.syntax ->
@@ -19,7 +19,7 @@ val generate_odoc :
   extra_suffix:string option ->
   'a ->
   Fpath.t ->
-  (unit, [> msg ]) result
+  (float * float, [> msg ]) result
 
 val targets_odoc :
   resolver:Resolver.t ->
