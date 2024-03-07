@@ -98,7 +98,7 @@ let rec read_core_type env container ctyp =
           Class(p, params)
     | Ttyp_alias(typ, var) ->
         let typ = read_core_type env container typ in
-          Alias(typ, var)
+          Alias(typ, var.txt)
     | Ttyp_variant(fields, closed, present) ->
         let open TypeExpr.Polymorphic_variant in
         let elements =
@@ -141,7 +141,8 @@ let rec read_core_type env container ctyp =
                (frag, typ))
             pack_fields
         in
-          Package {path; substitutions}
+        Package {path; substitutions}
+    | Ttyp_open (_, _, typ) -> read_core_type env container typ
 
 let read_value_description env parent vd =
   let open Signature in

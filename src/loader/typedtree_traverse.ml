@@ -25,11 +25,11 @@ module Analysis = struct
         in
         let () =
           match pat_desc with
-          | Tpat_var (id, loc) -> (
+          | Tpat_var (id, loc, _) -> (
               match maybe_localvalue id loc.loc with
               | Some x -> poses := x :: !poses
               | None -> ())
-          | Tpat_alias (_, id, loc) -> (
+          | Tpat_alias (_, id, loc, _) -> (
               match maybe_localvalue id loc.loc with
               | Some x -> poses := x :: !poses
               | None -> ())

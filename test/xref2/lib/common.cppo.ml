@@ -32,7 +32,7 @@ let cmt_of_string s =
     let env = Compmisc.initial_env () in
     let l = Lexing.from_string s in
     let p = Parse.implementation l in
-    Typemod.type_implementation "" "" "" env p
+    Typemod.type_implementation "" "" env p
 
 let parent = Odoc_model.Paths.Identifier.Mk.page (None, Odoc_model.Names.PageName.make_std "None")
 let id = Odoc_model.Paths.Identifier.Mk.root (Some parent, Odoc_model.Names.ModuleName.make_std "Root")

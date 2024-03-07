@@ -1,4 +1,4 @@
-#if OCAML_VERSION >= (4, 14, 0)
+(* #if OCAML_VERSION >= (4, 14, 0) *)
 
 open Odoc_model.Paths
 open Odoc_model.Names
@@ -109,8 +109,8 @@ let unit_of_uid uid =
 
 let lookup_shape : Env.t -> Shape.t -> Identifier.SourceLocation.t option =
  fun env query ->
-  let module Reduce = Shape.Make_reduce (struct
-    type env = unit
+  let module Reduce = Shape_reduce.Make (struct
+    (* type env = unit *)
     let fuel = 10
     let read_unit_shape ~unit_name =
       match Env.lookup_impl unit_name env with
@@ -119,11 +119,11 @@ let lookup_shape : Env.t -> Shape.t -> Identifier.SourceLocation.t option =
           | Some (shape, _) -> Some shape
           | None -> None)
       | _ -> None
-    let find_shape _ _ = raise Not_found
+    (* let find_shape _ _ = raise Not_found *)
   end) in
-  let result = try Some (Reduce.reduce () query) with Not_found -> None in
-  result >>= fun result ->
-  result.uid >>= fun uid ->
+  let result = try Some (Reduce.reduce_for_uid Ocaml_env.empty query) with Not_found -> None in
+  result >>= (function Resolved uid ->
+  (* result.uid >>= fun uid -> *)
   unit_of_uid uid >>= fun unit_name ->
   match Env.lookup_impl unit_name env with
   | None -> None
@@ -164,20 +164,3 @@ let lookup_module_type_path = lookup_kind_path Kind.Module_type
 
 let lookup_class_type_path = lookup_kind_path Kind.Class_type
 
-#else
-
-type t = unit
-
-let lookup_def _ _id = None
-
-let lookup_value_path _ _id = None
-
-let lookup_module_path _ _id = None
-
-let lookup_type_path _ _id = None
-
-let lookup_module_type_path _ _id = None
-
-let lookup_class_type_path _ _id = None
-
-#endif
