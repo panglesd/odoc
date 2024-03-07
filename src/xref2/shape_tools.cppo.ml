@@ -137,7 +137,7 @@ let lookup_shape : Env.t -> Shape.t -> Identifier.SourceLocation.t option =
       | Some x -> Some x
       | None -> (
           match impl with
-          | { id; _ } -> Some (MkId.source_location_mod id)))
+          | { id; _ } -> Some (MkId.source_location_mod id))))
 
 let lookup_def :
     Env.t -> Identifier.NonSrc.t -> Identifier.SourceLocation.t option =

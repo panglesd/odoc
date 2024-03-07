@@ -340,7 +340,6 @@ let add_definitions loc_to_id occurrences =
       (Odoc_model.Lang.Source_info.Definition id, pos_of_loc loc) :: acc)
     loc_to_id occurrences
 
-<<<<<<< Updated upstream
 let read_cmt_infos source_id shape_info impl digest root imports =
   match shape_info with
   | Some (shape, uid_to_loc) ->
@@ -387,124 +386,6 @@ let read_cmt_infos source_id shape_info impl digest root imports =
         shape_info;
         imports;
       }
-
-||||||| Stash base
-let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
-  match Odoc_model.Compat.shape_of_cmt_infos cmt_info with
-  | Some shape -> (
-    let uid_to_loc = cmt_info.cmt_uid_to_decl in
-    let loc_of_item_declaration =
-      function
-        Typedtree.Value v -> v.val_loc
-      | Value_binding vb  -> vb.vb_loc
-      | Type t -> t.typ_loc
-      | Constructor cd -> cd.cd_loc
-      | Extension_constructor ex -> ex.ext_loc
-      | Label l -> l.ld_loc
-      | Module m -> m.md_loc
-      | Module_substitution ms -> ms.ms_loc
-      | Module_binding mb -> mb.mb_loc
-      | Module_type mt -> mt.mtd_loc
-      | Class c-> c.ci_loc
-      | Class_type ct -> ct.ci_loc in
-    let uid_to_loc = Shape.Uid.Tbl.map uid_to_loc loc_of_item_declaration in
-      match (source_id_opt, count_occurrences, cmt_info.cmt_annots) with
-      | (Some _ as source_id), _, Implementation impl
-      | source_id, true, Implementation impl ->
-          let env = Env.of_structure id impl in
-          let traverse_infos =
-            Typedtree_traverse.of_cmt env impl |> List.rev
-            (* Information are accumulated in a list. We need to have the
-               first info first in the list, to assign anchors with increasing
-               numbers, so that adding some content at the end of a file does
-               not modify the anchors for existing anchors. *)
-          in
-          let loc_to_id = LocHashtbl.create 10
-          and local_ident_to_loc = IdentHashtbl.create 10
-          and uid_to_id = UidHashtbl.create 10 in
-          let () =
-            match source_id with
-            | None -> ()
-            (* populate [loc_to_id], [ident_to_id] and [uid_to_id] only when
-               rendering source code, as these are only used to compute source
-               locations id *)
-            | Some source_id ->
-                populate_local_defs source_id traverse_infos loc_to_id
-                  local_ident_to_loc;
-                populate_global_defs env source_id loc_to_id uid_to_loc
-                  uid_to_id
-          in
-          let source_infos =
-            process_occurrences env traverse_infos loc_to_id local_ident_to_loc
-            |> add_definitions loc_to_id
-          in
-          ( Some (shape, Shape.Uid.Tbl.to_map uid_to_id),
-            Some
-              {
-                Odoc_model.Lang.Source_info.id = source_id;
-                infos = source_infos;
-              } )
-      | _, _, _ -> (Some (shape, Odoc_model.Compat.empty_map), None))
-  | None -> (None, None)
-=======
-let read_cmt_infos source_id_opt id cmt_info ~count_occurrences =
-  match Odoc_model.Compat.shape_of_cmt_infos cmt_info with
-  | Some shape -> (
-    let uid_to_loc = cmt_info.cmt_uid_to_decl in
-    let loc_of_item_declaration =
-      function
-        Typedtree.Value v -> v.val_loc
-      | Value_binding vb  -> vb.vb_loc
-      | Type t -> t.typ_loc
-      | Constructor cd -> cd.cd_loc
-      | Extension_constructor ex -> ex.ext_loc
-      | Label l -> l.ld_loc
-      | Module m -> m.md_loc
-      | Module_substitution ms -> ms.ms_loc
-      | Module_binding mb -> mb.mb_loc
-      | Module_type mt -> mt.mtd_loc
-      | Class c-> c.ci_loc
-      | Class_type ct -> ct.ci_loc in
-    let uid_to_loc = Shape.Uid.Tbl.map uid_to_loc loc_of_item_declaration in
-      match (source_id_opt, count_occurrences, cmt_info.cmt_annots) with
-      | (Some _ as source_id), _, Implementation impl
-      | source_id, true, Implementation impl ->
-          let env = Env.of_structure id impl in
-          let traverse_infos =
-            Typedtree_traverse.of_cmt env impl |> List.rev
-            (* Information are accumulated in a list. We need to have the
-               first info first in the list, to assign anchors with increasing
-               numbers, so that adding some content at the end of a file does
-               not modify the anchors for existing anchors. *)
-          in
-          let loc_to_id = LocHashtbl.create 10
-          and local_ident_to_loc = IdentHashtbl.create 10
-          and uid_to_id = UidHashtbl.create 10 in
-          let () =
-            match source_id with
-            | None -> ()
-            (* populate [loc_to_id], [ident_to_id] and [uid_to_id] only when
-               rendering source code, as these are only used to compute source
-               locations id *)
-            | Some source_id ->
-                populate_local_defs source_id traverse_infos loc_to_id
-                  local_ident_to_loc;
-                populate_global_defs env source_id loc_to_id uid_to_loc
-                  uid_to_id
-          in
-          let source_infos =
-            process_occurrences env traverse_infos loc_to_id local_ident_to_loc
-            |> add_definitions loc_to_id
-          in
-          ( Some (shape, Shape.Uid.Tbl.to_map uid_to_id),
-            Some
-              {
-                Odoc_model.Lang.Source_info.id = source_id;
-                infos = source_infos;
-              } )
-      | _, _, _ -> (Some (shape, Odoc_model.Compat.empty_map), None))
-  | None -> (None, None)
->>>>>>> Stashed changes
 
 #else
 
