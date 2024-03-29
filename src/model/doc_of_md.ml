@@ -18,7 +18,10 @@ open Cmarkit
    newlines. [n] being the number of columns until … in (** … *). We
    need to remember how much we trimmed on each line in order to patch
    the locations reported by cmarkit. Below we keep pass that info
-   around using the [~locator] argument. *)
+   around using the [~locator] argument.
+
+   This is not needed in [md] files, but the code is kept in case we
+   add support for markdown in docstrings. *)
 
 let comment_col ~location = location.Lexing.pos_cnum - location.Lexing.pos_bol
 
