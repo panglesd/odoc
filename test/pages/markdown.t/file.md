@@ -11,3 +11,9 @@ A little text
 Some **emphasized** and _italic_ text.
 
 [text][!val-x] and [!val-y]
+
+| Un  | Deux | Trois |
+|-----|------|-------|
+| One | Two  | Three |
+| Un  | Dos  | Tres  |
+

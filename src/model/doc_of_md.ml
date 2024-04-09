@@ -282,6 +282,11 @@ let code_span_to_inline_element ~locator cs m (is, warns) =
   let code = Inline.Code_span.code cs in
   (Loc.at loc (`Code_span code) :: is, warns)
 
+let math_span_to_inline_element ~locator ms m (is, warns) =
+  let loc = meta_to_loc ~locator m in
+  let tex = Inline.Math_span.tex ms in
+  (Loc.at loc (`Math_span tex) :: is, warns)
+
 let raw_html_to_inline_element ~locator html m (is, warns) =
   let loc = meta_to_loc ~locator m in
   let html = String.concat "\n" (List.map Block_line.tight_to_string html) in
@@ -413,6 +418,8 @@ and inline_to_inline_elements ~locator defs acc i : inlines_acc =
   | Inline.Strong_emphasis (e, m) ->
       emphasis_to_inline_element ~locator defs `Bold e m acc
   | Inline.Text (t, m) -> text_to_inline_elements ~locator t m acc
+  | Inline.Ext_math_span (ms, m) ->
+      math_span_to_inline_element ~locator ms m acc
   | _ -> assert false
 
 (* Block translations *)
@@ -481,6 +488,12 @@ let code_block_to_nestable_block_element ~locator cb m (bs, warns) =
             (* (metadata, Loc.at code_loc code) *)
           in
           (Loc.at loc (`Code_block code_block) :: bs, warns))
+
+let math_block_to_nestable_block_element ~locator mb m (bs, warns) =
+  let loc = meta_to_loc ~locator m in
+  let math = Block.Code_block.code mb in
+  let math = String.concat "\n" (List.map Block_line.to_string math) in
+  (Loc.at loc (`Math_block math) :: bs, warns)
 
 let html_block_to_nestable_block_element ~locator html m (bs, warns) =
   let loc = meta_to_loc ~locator m in
@@ -555,6 +568,44 @@ let rec list_to_nestable_block_element ~locator defs l m (bs, warns) =
   let items, warns = List.fold_left (add_item ~locator) ([], warns) ritems in
   (Loc.at loc (`List (kind, style, items)) :: bs, warns)
 
+and table_to_nestable_block_element ~locator defs tbl m (bs, warns) =
+  let loc = meta_to_loc ~locator m in
+  let style = `Light (* Note this is a layout property of ocamldoc *) in
+  let _col_count = Block.Table.col_count tbl in
+  (* TODO: use col_count *)
+  let add_cell typ (acc, warns) ((cell, _) : Inline.t * Block.Table.cell_layout)
+      =
+    let content, warns =
+      inline_to_inline_elements ~locator defs ([], warns) cell
+    in
+    let loc = Loc.span (List.map Loc.location content) in
+    let cell : Ast.nestable_block_element Ast.with_location =
+      Loc.at loc (`Paragraph content)
+    in
+    (([ cell ], typ) :: acc, warns)
+  in
+  let add_cells (acc, warns) typ
+      (cells : (Inline.t * Block.Table.cell_layout) list) =
+    let res, warns =
+      List.fold_left (add_cell typ) ([], warns) (List.rev cells)
+    in
+    (res :: acc, warns)
+  in
+  let add_row ~locator:_ (acc, warns) (row, _meta) =
+    match row with
+    | `Header cells, _ -> add_cells (acc, warns) `Header cells
+    | `Data cells, _ -> add_cells (acc, warns) `Data cells
+    | `Sep _, _ -> (acc, warns)
+  in
+  let rows = List.rev (Block.Table.rows tbl) in
+  let (items : Ast.nestable_block_element Ast.grid), warns =
+    List.fold_left (add_row ~locator) ([], warns) rows
+  in
+  (* TODO: alignement *)
+  let table = `Table ((items, None), style) in
+  let res = (Loc.at loc table :: bs, warns) in
+  res
+
 and block_to_nestable_block_elements ~locator defs acc b : nestable_ast_acc =
   match b with
   | Block.Blocks (bs, _) ->
@@ -574,6 +625,10 @@ and block_to_nestable_block_elements ~locator defs acc b : nestable_ast_acc =
       thematic_break_to_nestable_block_element ~locator m acc
   | Block.Blank_line _ | Block.Link_reference_definition _ ->
       (* layout cases *) acc
+  | Block.Ext_table (tbl, m) ->
+      table_to_nestable_block_element ~locator defs tbl m acc
+  | Block.Ext_math_block (math, m) ->
+      math_block_to_nestable_block_element ~locator math m acc
   | _ -> assert false
 
 let rec block_to_ast ~locator defs acc b : ast_acc =
