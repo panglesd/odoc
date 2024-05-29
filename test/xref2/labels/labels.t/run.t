@@ -58,7 +58,7 @@ There are two references in N, one should point to a local label and the other t
     <header class="odoc-preamble">
      <h1>Module <code><span>Test.N</span></code></h1>
     </header>
-    <nav class="odoc-toc">
+    <nav class="odoc-toc odoc-local-toc">
      <ul><li><a href="#B">An other conflicting label</a></li></ul>
     </nav>
     <div class="odoc-content">
@@ -90,7 +90,7 @@ The second occurence of 'B' in the main page should be disambiguated
     <header class="odoc-preamble">
      <h1>Module <code><span>Test</span></code></h1>
     </header>
-    <nav class="odoc-toc">
+    <nav class="odoc-toc odoc-local-toc">
      <ul><li><a href="#A">First label</a></li>
       <li><a href="#B">Floating label</a></li>
       <li><a href="#B_2">Dupplicate B</a></li>
