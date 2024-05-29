@@ -10,7 +10,7 @@ A quick test to repro the issue found in #342
 The table of content:
 
   $ cat html/Foo/index.html | grep "odoc-toc" -A 9
-    <nav class="odoc-toc">
+    <nav class="odoc-toc odoc-local-toc">
      <ul>
       <li>
        <a href="#references--and-with-text-in-title">References <code>A</code>

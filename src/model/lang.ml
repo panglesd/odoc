@@ -542,6 +542,22 @@ module rec Page : sig
 end =
   Page
 
+module rec Sidebar : sig
+  type library = {
+    (* root : Odoc_model.Paths.Identifier.Page.t; *)
+    name : string;
+    units : Paths.Identifier.RootModule.t list;
+  }
+
+  type t = {
+    (* package : Odoc_model.Paths.Identifier.Page.t; *)
+    name : string;
+    pages : (Comment.link_content * Paths.Identifier.Page.t) list;
+    libraries : library list;
+  }
+end =
+  Sidebar
+
 module rec SourceTree : sig
   type t = {
     name : Identifier.Page.t;

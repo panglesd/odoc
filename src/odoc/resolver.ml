@@ -40,6 +40,8 @@ module Named_roots : sig
 
   val create : (string * Fs.Directory.t) list -> current_root:string -> t
 
+  val all_of : ?root:string -> ext:string -> t -> (Fs.File.t list, error) result
+
   val find_by_path :
     ?root:string -> t -> path:Fs.File.t -> (Fs.File.t option, error) result
 
@@ -112,6 +114,21 @@ end = struct
         let flat = populate_flat_namespace ~root in
         Hashtbl.replace cache package { p with flat = Visited flat };
         Ok (Hashtbl.find_all flat name)
+    | None -> Error NoPackage
+
+  let all_of ?root ~ext { table; current_root } =
+    let my_root = match root with None -> current_root | Some pkg -> pkg in
+    let return flat =
+      let values = flat |> Hashtbl.to_seq_values |> List.of_seq in
+      let values = List.filter (Fpath.has_ext ext) values in
+      Ok values
+    in
+    match Hashtbl.find_opt table my_root with
+    | Some { flat = Visited flat; _ } -> return flat
+    | Some ({ flat = Unvisited root; _ } as p) ->
+        let flat = populate_flat_namespace ~root in
+        Hashtbl.replace table my_root { p with flat = Visited flat };
+        return flat
     | None -> Error NoPackage
 end
 
@@ -385,6 +402,51 @@ type t = {
   libs : Named_roots.t option;
   open_modules : string list;
 }
+
+let all_pages ({ pages; _ } : t) =
+  let all_pages =
+    match pages with
+    | None -> Ok []
+    | Some pages -> Named_roots.all_of pages ~ext:"odocl"
+  in
+  let all_pages =
+    match all_pages with Ok x -> x | Error _ -> failwith "TODO"
+  in
+  let find_id page =
+    let units = load_units_from_files [ page ] in
+    let is_page u =
+      match u with
+      | Odoc_file.Page_content p -> Some p
+      | Impl_content _ | Unit_content _ | Source_tree_content _ -> None
+    in
+    match find_map is_page units with
+    | Some (p, _) -> p
+    | None -> failwith ("Page not found by name: " ^ Fpath.to_string page)
+  in
+  let all_pages = List.map find_id all_pages in
+  (* List.map (fun p -> p.Odoc_model.Lang.Page.name) all_pages *) all_pages
+
+let all_units ~library ({ libs; _ } : t) =
+  let all_libs =
+    match libs with
+    | None -> Ok []
+    | Some libs -> Named_roots.all_of ~root:library libs ~ext:"odocl"
+  in
+  let all_libs = match all_libs with Ok x -> x | Error _ -> failwith "TODO" in
+  let find_id lib =
+    let units = load_units_from_files [ lib ] in
+    let is_lib u =
+      match u with
+      | Odoc_file.Unit_content p -> Some p
+      | Impl_content _ | Page_content _ | Source_tree_content _ -> None
+    in
+    match find_map is_lib units with Some (p, _) -> Some p | None -> None
+    (* failwith *)
+    (*   ("Page " ^ library ^ " not found by name: " *)
+    (*   ^ string_of_int (List.length units)) *)
+  in
+  let all_libs = List.filter_map find_id all_libs in
+  List.map (fun p -> p.Odoc_model.Lang.Compilation_unit.id) all_libs
 
 type roots = {
   page_roots : (string * Fs.Directory.t) list;

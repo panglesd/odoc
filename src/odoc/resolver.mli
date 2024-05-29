@@ -41,6 +41,11 @@ val create :
 
 val lookup_page : t -> string -> Odoc_model.Lang.Page.t option
 
+val all_pages : t -> Odoc_model.Lang.Page.t list
+
+val all_units :
+  library:string -> t -> Odoc_model.Comment.Identifier.Id.root_module list
+
 (** Helpers for creating xref2 env. *)
 
 val build_compile_env_for_unit :

@@ -296,7 +296,7 @@ body {
 }
 
 body.odoc {
-  max-width: 132ex;
+  max-width: 190ex;
   display: grid;
   grid-template-columns: min-content 1fr;
   column-gap: 4ex;
@@ -829,17 +829,26 @@ td.def-doc *:first-child {
   top: var(--toc-top)
 }
 
+.odoc-local-toc {
+  grid-row-start: 3;
+  grid-row-end: 5;
+  grid-column: 1;
+}
+
+.odoc-global-toc {
+  grid-row-start: 3;
+  grid-row-end: 5;
+  grid-column: 3;
+}
+
 .odoc-toc {
   --toc-top: 20px;
-  width: 28ex;
+  width: 38ex;
   background: var(--toc-background);
   overflow: auto;
   color: var(--toc-color);
   padding-left: 2ex;
   padding-right: 2ex;
-  grid-row-start: 3;
-  grid-row-end: 5;
-  grid-column: 1;
   height: fit-content;
   border: solid 1px var(--border);
   border-radius: 5px;
@@ -860,6 +869,10 @@ td.def-doc *:first-child {
 .odoc-sidebar ul li a:hover {
   box-shadow: none;
   text-decoration: underline;
+}
+
+.current_unit {
+  background-color: var(--anchor-color);
 }
 
 :root {
