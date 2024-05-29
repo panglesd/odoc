@@ -25,8 +25,8 @@ Contains some ambiguous labels:
 
 The table of content should point to unique anchors:
 
-  $ sed -n '/<nav class="odoc-toc">$/,/<\/nav>/p' html/test/Test/index.html
-    <nav class="odoc-toc">
+  $ sed -n '/<nav class="odoc-toc odoc-local-toc">$/,/<\/nav>/p' html/test/Test/index.html
+    <nav class="odoc-toc odoc-local-toc">
      <ul>
       <li><a href="#section-1">Section 1</a>
        <ul><li><a href="#example">Example</a></li></ul>

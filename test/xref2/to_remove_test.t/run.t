@@ -1,22 +1,9 @@
-
-  $ mkdir _odoc
- $ odoc compile --output-dir _odoc/ --parent-id pkg/doc/dir1 my_page.mld
- $ odoc compile --output-dir _odoc/ --parent-id pkg/doc file.mld
- $ odoc compile --output-dir _odoc/ --parent-id pkg/lib/libname unit.cmt
-
- $ tree _odoc
-
- $ odoc link _odoc/pkg/doc/page-file.odoc 2>&1 >/dev/null | grep 'Failure'
- [1]
- $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/page-file.odoc
- $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/dir1/page-my_page.odoc
- $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/lib/libname/unit.odoc
-
-
   $ ocamlc -c -bin-annot unit.ml
 
   $ odoc compile --output-dir _odoc/ --parent-id pkg/doc/dir1 my_page.mld
+  $ odoc compile --output-dir _odoc/ --parent-id pkg/doc/dir1 dir1/index.mld
   $ odoc compile --output-dir _odoc/ --parent-id pkg/doc file.mld
+  $ odoc compile --output-dir _odoc/ --parent-id pkg/doc index.mld
   $ odoc compile --output-dir _odoc/ --parent-id pkg/lib/libname unit.cmt
 
   $ odoc link _odoc/pkg/doc/page-file.odoc 2>&1 >/dev/null | grep 'Failure'
@@ -29,6 +16,10 @@ Same directory used twice
   $ odoc link -P pkg:_odoc/pkg/doc -P pkg2:_odoc/pkg/doc _odoc/pkg/doc/page-file.odoc
   ERROR: Arguments given to -P and -L cannot be included in each others
   [1]
+  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/page-file.odoc
+  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/page-index.odoc
+  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/dir1/page-my_page.odoc
+  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/lib/libname/unit.odoc
 
 # Two directories given relatively
  Right input:
@@ -82,6 +73,37 @@ Testing detection of package:
   Warning: Failed to resolve reference unresolvedroot(#/pkg/dir1/my_page) Couldn't find page "#/pkg/dir1/my_page"
   File "file.mld", line 3, characters 0-18:
   Warning: Failed to resolve reference unresolvedroot(#my_page) Couldn't find page "#my_page"
+
+
+  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/dir1/page-my_page.odoc
+  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/dir1/page-index.odoc
+  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/page-index.odoc
+  $ odoc sidebar --name "pkg" -P pkg:_odoc/pkg/doc/ -L libname:_odoc/pkg/lib/libname -o sidebar.odoc
+  $ odoc html-generate --sidebar sidebar.odoc -o /tmp/html _odoc/pkg/doc/page-file.odocl
+  pkg.doc.dir1.index
+  pkg.doc.index
+  pkg.doc.file
+  pkg.doc.dir1.my_page
+  $ odoc html-generate --sidebar sidebar.odoc -o /tmp/html _odoc/pkg/doc/dir1/page-my_page.odocl
+  pkg.doc.dir1.index
+  pkg.doc.index
+  pkg.doc.file
+  pkg.doc.dir1.my_page
+  $ odoc html-generate --sidebar sidebar.odoc -o /tmp/html _odoc/pkg/doc/dir1/page-index.odocl
+  pkg.doc.dir1.index
+  pkg.doc.index
+  pkg.doc.file
+  pkg.doc.dir1.my_page
+  $ odoc html-generate --sidebar sidebar.odoc -o /tmp/html _odoc/pkg/doc/page-index.odocl
+  pkg.doc.dir1.index
+  pkg.doc.index
+  pkg.doc.file
+  pkg.doc.dir1.my_page
+  $ odoc html-generate --sidebar sidebar.odoc -o /tmp/html _odoc/pkg/lib/libname/unit.odocl
+  pkg.doc.dir1.index
+  pkg.doc.index
+  pkg.doc.file
+  pkg.doc.dir1.my_page
 
 Testing missing file:
   $ rm _odoc/pkg/doc/dir1/page-my_page.odoc*
