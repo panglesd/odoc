@@ -263,6 +263,14 @@ let compile_sidebars output_dir dir all =
       output_file)
     all
 
+let index : linked list -> _ =
+ fun linked ->
+  let input_files =
+    linked |> List.map (fun l -> l.output_file) |> Fpath.Set.of_list
+  in
+  Odoc.compile_index ~marshall:true ~input_files ();
+  Odoc.compile_index ~marshall:false ~input_files ()
+
 let html_generate : Fpath.t -> Fpath.t Util.StringMap.t -> linked list -> _ =
  fun output_dir sidebars linked ->
   let html_generate : linked -> unit =

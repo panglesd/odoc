@@ -31,6 +31,13 @@ val sidebar :
   unit ->
   unit
 
+val compile_index :
+  ?ignore_output:bool ->
+  ?dst:string ->
+  marshall:bool ->
+  input_files:Fpath.set ->
+  unit ->
+  unit
 val html_generate :
   output_dir:string ->
   ?sidebar:Fpath.t ->
