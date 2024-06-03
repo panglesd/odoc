@@ -227,6 +227,14 @@ let link : compiled list -> _ =
   in
   Fiber.List.map link compiled |> List.concat
 
+let index : linked list -> _ =
+ fun linked ->
+  let input_files =
+    linked |> List.map (fun l -> l.output_file) |> Fpath.Set.of_list
+  in
+  Odoc.compile_index ~marshall:true ~input_files ();
+  Odoc.compile_index ~marshall:false ~input_files ()
+
 let html_generate : Fpath.t -> linked list -> _ =
  fun output_dir linked ->
   let html_generate : linked -> unit =
