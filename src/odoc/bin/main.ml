@@ -482,7 +482,7 @@ module Indexing = struct
     match (dst, marshall) with
     | Some file, _ -> Fs.File.of_string file
     | None, `JSON -> Fs.File.of_string "index.json"
-    | None, `Marshall -> Fs.File.of_string "index-index.odoc"
+    | None, `Marshall -> Fs.File.of_string "index.odoc-index"
 
   let index dst marshall warnings_options inputs_in_file inputs =
     let marshall = if marshall then `Marshall else `JSON in
@@ -501,8 +501,9 @@ module Indexing = struct
     let dst =
       let doc =
         "Output file path. Non-existing intermediate directories are created. \
-         Defaults to index.json, or index-index.odoc if --marshall is passed \
-         (in which case, the $(i,index-) prefix is mandatory)."
+         Defaults to index.json, or index.odoc-index if --marshall is passed \
+         (in which case, the .odoc-index file extension is mandatory)."
+         (* This is not checked for now *)
       in
       Arg.(
         value & opt (some string) None & info ~docs ~docv:"PATH" ~doc [ "o" ])
