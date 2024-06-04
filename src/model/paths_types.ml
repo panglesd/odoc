@@ -553,6 +553,11 @@ module rec Reference : sig
 
   type tag_only_child_module = [ `TChildModule ]
 
+  type tag_page_path =
+    [ `TPath (* {!identifier/} *)
+    | `TRootDir (* {!/identifier} *)
+    | `TCurrentPackage (* {!//identifier} *) ]
+
   type tag_any =
     [ `TModule
     | `TModuleType
@@ -569,6 +574,7 @@ module rec Reference : sig
     | `TInstanceVariable
     | `TLabel
     | `TPage
+    | `TPath
     | `TChildPage
     | `TChildModule
     | `TUnknown ]
@@ -590,7 +596,13 @@ module rec Reference : sig
     | `TType
     | `TPage
     | `TChildPage
-    | `TChildModule ]
+    | `TChildModule
+    | tag_page_path ]
+
+  type page_path =
+    [ `Root of string * tag_page_path
+    | `Slash of page_path * string (* {!page_path/identifier} *) ]
+  (** @canonical Odoc_model.Paths.Reference.PagePath.t *)
 
   type signature =
     [ `Resolved of Resolved_reference.signature
@@ -629,6 +641,7 @@ module rec Reference : sig
     [ `Resolved of Resolved_reference.label_parent
     | `Root of string * tag_label_parent
     | `Dot of label_parent * string
+    | `Slash of page_path * string (* {!path/page} *)
     | `Module of signature * ModuleName.t
     | `ModuleType of signature * ModuleTypeName.t
     | `Class of signature * ClassName.t
@@ -742,14 +755,16 @@ module rec Reference : sig
 
   type page =
     [ `Resolved of Resolved_reference.page
-    | `Root of string * [ `TPage | `TUnknown ]
-    | `Dot of label_parent * string ]
+    | `Root of string * [ `TPage | `TUnknown | tag_page_path ]
+    | `Dot of label_parent * string
+    | `Slash of page_path * string (* {!page_path/identifier} *) ]
   (** @canonical Odoc_model.Paths.Reference.Page.t *)
 
   type any =
     [ `Resolved of Resolved_reference.any
-    | `Root of string * tag_any
+    | `Root of string * [ tag_any | tag_page_path ]
     | `Dot of label_parent * string
+    | `Slash of page_path * string (* {!page_path/identifier} *)
     | `Module of signature * ModuleName.t
     | `ModuleType of signature * ModuleTypeName.t
     | `Type of signature * TypeName.t

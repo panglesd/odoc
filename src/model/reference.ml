@@ -31,7 +31,7 @@ let deprecated_reference_kind location kind replacement =
 
 (* http://caml.inria.fr/pub/docs/manual-ocaml/ocamldoc.html#sec359. *)
 let match_ocamldoc_reference_kind (_location as loc) s :
-    Paths.Reference.tag_any option =
+    [> Paths.Reference.tag_any ] option =
   let d = deprecated_reference_kind in
   match s with
   | "module" -> Some `TModule
@@ -59,7 +59,7 @@ let match_ocamldoc_reference_kind (_location as loc) s :
   | _ -> None
 
 let match_extra_odoc_reference_kind (_location as loc) s :
-    Paths.Reference.tag_any option =
+    [> Paths.Reference.tag_any ] option =
   let d = deprecated_reference_kind in
   match s with
   | "class-type" -> Some `TClassType
@@ -90,21 +90,22 @@ let match_extra_odoc_reference_kind (_location as loc) s :
 
    A secondary reason to delay parsing, and store strings in the token list, is
    that we need the strings for user-friendly error reporting. *)
-let match_reference_kind location s : Paths.Reference.tag_any =
+let match_reference_kind location s : [> Paths.Reference.tag_any ] =
   match s with
-  | None -> `TUnknown
-  | Some s -> (
+  | `None -> `TUnknown
+  | `Prefixed s | `Old_prefix s -> (
       let result =
         match match_ocamldoc_reference_kind location s with
-        | Some kind -> Some kind
+        | Some _ as kind -> kind
         | None -> match_extra_odoc_reference_kind location s
       in
       match result with
       | Some kind -> kind
       | None -> unknown_reference_qualifier s location |> Error.raise_exception)
+  | `End_in_slash -> `TPath
 
 type token = {
-  kind : string option;
+  kind : [ `None | `Prefixed of string | `End_in_slash ];
   identifier : string;
   location : Location_.span;
 }
@@ -118,14 +119,18 @@ let tokenize location s : token list =
     match s.[index] with
     | exception Invalid_argument _ ->
         let identifier, location = identifier_ended started_at index in
-        { kind = None; identifier; location } :: tokens
+        { kind = `None; identifier; location } :: tokens
     | '-' when open_parenthesis_count = 0 ->
         let identifier, location = identifier_ended started_at index in
         scan_kind identifier location index (index - 1) tokens
     | '.' when open_parenthesis_count = 0 ->
         let identifier, location = identifier_ended started_at index in
         scan_identifier index 0 (index - 1)
-          ({ kind = None; identifier; location } :: tokens)
+          ({ kind = `None; identifier; location } :: tokens)
+    | '/' when open_parenthesis_count = 0 ->
+        let identifier, location = identifier_ended started_at index in
+        scan_path index (index - 1)
+          ({ kind = `None; identifier; location } :: tokens)
     | ')' ->
         scan_identifier started_at
           (open_parenthesis_count + 1)
@@ -170,15 +175,31 @@ let tokenize location s : token list =
         let kind, location = kind_ended identifier_location started_at index in
         scan_identifier index 0 (index - 1)
           ({ kind; identifier; location } :: tokens)
+    | '/' ->
+        let kind, location = kind_ended identifier_location started_at index in
+        scan_path index (index - 1) ({ kind; identifier; location } :: tokens)
     | _ ->
         scan_kind identifier identifier_location started_at (index - 1) tokens
   and kind_ended identifier_location started_at index =
     let offset = index + 1 in
     let length = started_at - offset in
-    let kind = Some (String.sub s offset length) in
+    let kind = `Prefixed (String.sub s offset length) in
     let location = Location_.in_string s ~offset ~length location in
     let location = Location_.span [ location; identifier_location ] in
     (kind, location)
+  and scan_path started_at index tokens =
+    (* The parsing rules are different for [/]-separated components. [-"".()] are
+       no longer meaningful. *)
+    match s.[index] with
+    | exception Invalid_argument _ -> path_ended started_at index :: tokens
+    | '/' -> scan_path index (index - 1) (path_ended started_at index :: tokens)
+    | _ -> scan_path started_at (index - 1) tokens
+  and path_ended started_at index =
+    let offset = index + 1 in
+    let length = started_at - offset in
+    let identifier = String.sub s offset length in
+    let location = Location_.in_string s ~offset ~length location in
+    { kind = `End_in_slash; identifier; location }
   in
 
   scan_identifier (String.length s) 0 (String.length s - 1) [] |> List.rev
@@ -194,6 +215,7 @@ let expected allowed location =
   in
   expected_err allowed location
 
+(* Parse references that do not contain a [/]. Raises errors and warnings. *)
 let parse whole_reference_location s :
     Paths.Reference.t Error.with_errors_and_warnings =
   let open Paths.Reference in
@@ -269,6 +291,27 @@ let parse whole_reference_location s :
         )
   in
 
+  let rec page_path identifier next_token tokens : PagePath.t =
+    match (next_token.kind, tokens) with
+    | `End_in_slash, [] when next_token.identifier = "" ->
+        (* {!/} *)
+        `Root (identifier, `TRootDir)
+    | `End_in_slash, [ { kind = `End_in_slash; identifier = ""; _ } ]
+      when next_token.identifier = "" ->
+        (* {!//} *)
+        `Root (identifier, `TCurrentPackage)
+    | `End_in_slash, [] ->
+        (* {!identifier} *)
+        `Slash (`Root (next_token.identifier, `TPath), identifier)
+    | `End_in_slash, next_token' :: tokens' ->
+        (* {!path/identifier} *)
+        `Slash (page_path next_token.identifier next_token' tokens', identifier)
+    | (`None | `Prefixed _), _ ->
+        (* This is not really expected *)
+        expected [ "path separated components" ] next_token.location
+        |> Error.raise_exception
+  in
+
   let rec label_parent { kind; identifier; location } tokens : LabelParent.t =
     let kind = match_reference_kind location kind in
     match tokens with
@@ -297,6 +340,8 @@ let parse whole_reference_location s :
         | `TClassType ->
             `ClassType
               (signature next_token tokens, ClassTypeName.make_std identifier)
+        | `TPath ->
+            (page_path identifier next_token tokens :> LabelParent.t)
         | _ ->
             expected
               [ "module"; "module-type"; "type"; "class"; "class-type" ]
@@ -311,14 +356,16 @@ let parse whole_reference_location s :
       | None -> new_kind
       | Some (old_kind_string, old_kind_location) -> (
           let old_kind =
-            match_reference_kind old_kind_location (Some old_kind_string)
+            match_reference_kind old_kind_location (`Old_prefix old_kind_string)
           in
           match new_kind with
           | `TUnknown -> old_kind
           | _ ->
               (if old_kind <> new_kind then
                  let new_kind_string =
-                   match kind with Some s -> s | None -> ""
+                   match kind with
+                   | `None | `End_in_slash -> ""
+                   | `Prefixed s -> s
                  in
                  reference_kinds_do_not_match old_kind_string new_kind_string
                    whole_reference_location
@@ -384,7 +431,9 @@ let parse whole_reference_location s :
             not_allowed ~what:"Page label"
               ~in_what:"the last component of a reference path" ~suggestion
               location
-            |> Error.raise_exception)
+            |> Error.raise_exception
+        | `TPath ->
+            (page_path identifier next_token tokens :> Paths.Reference.t))
   in
 
   let old_kind, s, location =

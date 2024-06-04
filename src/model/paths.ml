@@ -1171,4 +1171,8 @@ module Reference = struct
   module Page = struct
     type t = Paths_types.Reference.page
   end
+
+  module PagePath = struct
+    type t = Paths_types.Reference.page_path
+  end
 end
