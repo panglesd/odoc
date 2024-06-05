@@ -203,8 +203,8 @@ module General_paths = struct
       | `TValue -> C0 "`TValue"
       | `TChildPage -> C0 "`TChildPage"
       | `TChildModule -> C0 "`TChildModule"
-      | `TPath -> C0 "`TPath"
-      | `TRootDir -> C0 "`TRootDir"
+      | `TRelativePath -> C0 "`TRelativePath"
+      | `TAbsolutePath -> C0 "`TAbsolutePath"
       | `TCurrentPackage -> C0 "`TCurrentPackage")
 
   let rec path : p t =

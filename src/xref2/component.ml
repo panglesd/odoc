@@ -1657,8 +1657,8 @@ module Fmt = struct
 
   and module_reference_page_path c ppf (r : Reference.PagePath.t) =
     match r with
-    | `Root (name, `TPath) -> fpf ppf "./%s" name
-    | `Root (name, `TRootDir) -> fpf ppf "/%s" name
+    | `Root (name, `TRelativePath) -> fpf ppf "./%s" name
+    | `Root (name, `TAbsolutePath) -> fpf ppf "/%s" name
     | `Root (name, `TCurrentPackage) -> fpf ppf "//%s" name
     | `Slash (parent, name) ->
         fpf ppf "%a/%s" (module_reference_page_path c) parent name

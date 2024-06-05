@@ -554,8 +554,8 @@ module rec Reference : sig
   type tag_only_child_module = [ `TChildModule ]
 
   type tag_page_path =
-    [ `TPath (* {!identifier/} *)
-    | `TRootDir (* {!/identifier} *)
+    [ `TRelativePath (* {!identifier/} *)
+    | `TAbsolutePath (* {!/identifier} *)
     | `TCurrentPackage (* {!//identifier} *) ]
 
   type tag_any =
@@ -574,7 +574,7 @@ module rec Reference : sig
     | `TInstanceVariable
     | `TLabel
     | `TPage
-    | `TPath
+    | `TRelativePath
     | `TChildPage
     | `TChildModule
     | `TUnknown ]

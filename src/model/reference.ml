@@ -102,7 +102,7 @@ let match_reference_kind location s : [> Paths.Reference.tag_any ] =
       match result with
       | Some kind -> kind
       | None -> unknown_reference_qualifier s location |> Error.raise_exception)
-  | `End_in_slash -> `TPath
+  | `End_in_slash -> `TRelativePath
 
 type token = {
   kind : [ `None | `Prefixed of string | `End_in_slash ];
@@ -295,17 +295,17 @@ let parse whole_reference_location s :
     match (next_token.kind, tokens) with
     | `End_in_slash, [] when next_token.identifier = "" ->
         (* {!/identifier} *)
-        `Root (identifier, `TRootDir)
-    | (`End_in_slash, ".", _), [] ->
+        `Root (identifier, `TAbsolutePath)
+    | `End_in_slash, [] when next_token.identifier = "." ->
         (* {!./identifier} *)
-        `Root (identifier, `TPath)
+        `Root (identifier, `TRelativePath)
     | `End_in_slash, [ { kind = `End_in_slash; identifier = ""; _ } ]
       when next_token.identifier = "" ->
         (* {!//identifier} *)
         `Root (identifier, `TCurrentPackage)
     | `End_in_slash, [] ->
         (* {!identifier'/identifier} *)
-        `Slash (`Root (next_token.identifier, `TPath), identifier)
+        `Slash (`Root (next_token.identifier, `TRelativePath), identifier)
     | `End_in_slash, next_token' :: tokens' ->
         (* {!page_path/identifier} *)
         `Slash (page_path next_token.identifier next_token' tokens', identifier)
@@ -321,7 +321,7 @@ let parse whole_reference_location s :
     | [] -> (
         match kind with
         | ( `TUnknown | `TModule | `TModuleType | `TType | `TClass | `TClassType
-          | `TPage | `TPath ) as kind ->
+          | `TPage | `TRelativePath ) as kind ->
             `Root (identifier, kind)
         | _ ->
             expected
@@ -343,16 +343,16 @@ let parse whole_reference_location s :
         | `TClassType ->
             `ClassType
               (signature next_token tokens, ClassTypeName.make_std identifier)
-        | `TPath -> (page_path identifier next_token tokens :> LabelParent.t)
+        | `TRelativePath ->
+            (page_path identifier next_token tokens :> LabelParent.t)
         | _ ->
             expected
               [ "module"; "module-type"; "type"; "class"; "class-type" ]
               location
             |> Error.raise_exception)
   and label_parent_parent next_token tokens identifier =
-    match next_token with
-    | `End_in_slash, _, _ ->
-        (page_path identifier next_token tokens :> LabelParent.t)
+    match next_token.kind with
+    | `End_in_slash -> (page_path identifier next_token tokens :> LabelParent.t)
     | _ -> `Dot (label_parent next_token tokens, identifier)
   in
 
@@ -439,7 +439,7 @@ let parse whole_reference_location s :
               ~in_what:"the last component of a reference path" ~suggestion
               location
             |> Error.raise_exception
-        | `TPath ->
+        | `TRelativePath ->
             (page_path identifier next_token tokens :> Paths.Reference.t))
   in
 
