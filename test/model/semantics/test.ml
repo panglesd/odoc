@@ -2692,3 +2692,179 @@ let%expect_test _ =
         {"value":[{"`Paragraph":[{"`Code_span":"\"\"foo\""}]}],"warnings":["File \"f.ml\", line 1, characters 2-9:\nUnmatched quotation!"]} |}]
   end in
   ()
+
+let%expect_test _ =
+  let module Reference_path = struct
+    (* Absolute references *)
+
+    let abs =
+      test "{!/foo/bar}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Root":["foo","`TRootDir"]},"bar"]},[]]}]}],"warnings":[]} |}]
+
+    let abs_label_parent_page =
+      test "{!/foo/bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Slash":[{"`Root":["foo","`TRootDir"]},"bar"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    let abs_label_parent_module =
+      test "{!/foo/Bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Slash":[{"`Root":["foo","`TRootDir"]},"Bar"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    (* References to current package root *)
+
+    let root_to_page =
+      test "{!//foo/bar}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Root":["foo","`TCurrentPackage"]},"bar"]},[]]}]}],"warnings":[]} |}]
+
+    let root_to_module =
+      test "{!//foo/Bar}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Root":["foo","`TCurrentPackage"]},"Bar"]},[]]}]}],"warnings":[]} |}]
+
+    let root_label_parent_page =
+      test "{!//foo/bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Slash":[{"`Root":["foo","`TCurrentPackage"]},"bar"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    let root_label_parent_module =
+      test "{!//foo/Bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Slash":[{"`Root":["foo","`TCurrentPackage"]},"Bar"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    (* Relative paths *)
+
+    let relative =
+      test "{!foo/bar}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Root":["foo","`TPath"]},"bar"]},[]]}]}],"warnings":[]} |}]
+
+    let relative =
+      test "{!foo/bar/baz}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Slash":[{"`Root":["foo","`TPath"]},"bar"]},"baz"]},[]]}]}],"warnings":[]} |}]
+
+    let relative_module =
+      test "{!foo/Bar}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Root":["foo","`TPath"]},"Bar"]},[]]}]}],"warnings":[]} |}]
+
+    let relative_label_parent_page =
+      test "{!foo/bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Slash":[{"`Root":["foo","`TPath"]},"bar"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    let relative_label_parent_module =
+      test "{!foo/Bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Slash":[{"`Root":["foo","`TPath"]},"Bar"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    let dot_relative =
+      test "{!./bar}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Root":[".","`TPath"]},"bar"]},[]]}]}],"warnings":[]} |}]
+
+    let dot_relative_module =
+      test "{!./Bar}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Root":[".","`TPath"]},"Bar"]},[]]}]}],"warnings":[]} |}]
+
+    let dot_relative_label_parent_page =
+      test "{!./bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Root":["bar","`TPath"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    let dot_relative_label_parent_module =
+      test "{!./Bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Dot":[{"`Root":["Bar","`TPath"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    (* Prefix *)
+
+    let abs_label_parent_page_prefix =
+      test "{!/foo/bar.section-label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Label":[{"`Slash":[{"`Root":["foo","`TRootDir"]},"bar"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    let abs_label_parent_module_prefix =
+      test "{!/foo/Bar.section-label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Label":[{"`Slash":[{"`Root":["foo","`TRootDir"]},"Bar"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    let root_label_parent_page_prefix =
+      test "{!//foo/bar.section-label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Label":[{"`Slash":[{"`Root":["foo","`TCurrentPackage"]},"bar"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    let root_label_parent_module_prefix =
+      test "{!//foo/Bar.section-label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Label":[{"`Slash":[{"`Root":["foo","`TCurrentPackage"]},"Bar"]},"label"]},[]]}]}],"warnings":[]} |}]
+
+    (* Errors *)
+
+    let err_abs_only =
+      test "{!/}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Code_span":"/"}]}],"warnings":["File \"f.ml\", line 1, characters 3-3:\nIdentifier in reference should not be empty."]} |}]
+
+    let err_relative_only =
+      test "{!foo/}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Code_span":"foo/"}]}],"warnings":["File \"f.ml\", line 1, characters 6-6:\nIdentifier in reference should not be empty."]} |}]
+
+    let err_tag_after_slash =
+      test "{!foo/module-Bar}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Code_span":"foo/module-Bar"}]}],"warnings":["File \"f.ml\", line 1, characters 2-5:\nExpected 'module-', 'module-type-', or an unqualified reference."]} |}]
+
+    let err_root_only =
+      test "{!//}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Code_span":"//"}]}],"warnings":["File \"f.ml\", line 1, characters 4-4:\nIdentifier in reference should not be empty."]} |}]
+
+    let err_relative_empty =
+      test "{!foo/}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Code_span":"foo/"}]}],"warnings":["File \"f.ml\", line 1, characters 6-6:\nIdentifier in reference should not be empty."]} |}]
+
+    let err_dot_relative_empty =
+      test "{!./}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Code_span":"./"}]}],"warnings":["File \"f.ml\", line 1, characters 4-4:\nIdentifier in reference should not be empty."]} |}]
+
+    (* Old kind compatibility *)
+
+    let oldkind_abs_page =
+      test "{!label:/foo.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Label":[{"`Root":["foo","`TRootDir"]},"label"]},[]]}]}],"warnings":["File \"f.ml\", line 1, characters 2-7:\n'label' is deprecated, use 'section' instead."]} |}]
+
+    let oldkind_abs_module =
+      test "{!label:/Foo.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Label":[{"`Root":["Foo","`TRootDir"]},"label"]},[]]}]}],"warnings":["File \"f.ml\", line 1, characters 2-7:\n'label' is deprecated, use 'section' instead."]} |}]
+
+    let oldkind_relative_page =
+      test "{!label:foo/bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Label":[{"`Slash":[{"`Root":["foo","`TPath"]},"bar"]},"label"]},[]]}]}],"warnings":["File \"f.ml\", line 1, characters 2-7:\n'label' is deprecated, use 'section' instead."]} |}]
+
+    let oldkind_relative_module =
+      test "{!label:foo/Bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Label":[{"`Slash":[{"`Root":["foo","`TPath"]},"Bar"]},"label"]},[]]}]}],"warnings":["File \"f.ml\", line 1, characters 2-7:\n'label' is deprecated, use 'section' instead."]} |}]
+
+    let oldkind_root_page =
+      test "{!label://foo/bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Label":[{"`Slash":[{"`Root":["foo","`TCurrentPackage"]},"bar"]},"label"]},[]]}]}],"warnings":["File \"f.ml\", line 1, characters 2-7:\n'label' is deprecated, use 'section' instead."]} |}]
+
+    let oldkind_root_module =
+      test "{!label://foo/Bar.label}";
+      [%expect
+        {| {"value":[{"`Paragraph":[{"`Reference":[{"`Label":[{"`Slash":[{"`Root":["foo","`TCurrentPackage"]},"Bar"]},"label"]},[]]}]}],"warnings":["File \"f.ml\", line 1, characters 2-7:\n'label' is deprecated, use 'section' instead."]} |}]
+  end in
+  ()
