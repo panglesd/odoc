@@ -514,7 +514,7 @@ let run libs verbose odoc_dir html_dir stats nb_workers =
       (fun () ->
         let compiled = Compile.compile odoc_dir all in
         let linked = Compile.link compiled in
-        let () = Compile.index linked in
+        let () = Compile.index linked (* bookmark pass all here*) in
         let () = Compile.html_generate html_dir linked in
         let _ = Odoc.support_files html_dir in
         ())
