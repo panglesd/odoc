@@ -65,6 +65,7 @@ module Reference = struct
     | `Resolved r -> render_resolved r
     | `Root (n, _) -> n
     | `Dot (p, f) -> render_unresolved (p :> t) ^ "." ^ f
+    | `Slash (p, f) -> render_unresolved (p :> t) ^ "/" ^ f
     | `Module (p, f) ->
         render_unresolved (p :> t) ^ "." ^ ModuleName.to_string f
     | `ModuleType (p, f) ->

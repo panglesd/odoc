@@ -585,6 +585,7 @@ module Fmt = struct
   type path = Odoc_model.Paths.Path.t
   type rpath = Odoc_model.Paths.Path.Resolved.t
   open Odoc_model.Names
+  open Odoc_model.Paths
 
   let fpf = Format.fprintf
 
@@ -1654,13 +1655,23 @@ module Fmt = struct
           (parent :> t)
           (LabelName.to_string name)
 
-  and model_reference c ppf (r : Odoc_model.Paths.Reference.t) =
-    let open Odoc_model.Paths.Reference in
+  and module_reference_page_path c ppf (r : Reference.PagePath.t) =
+    match r with
+    | `Root (name, `TPath) -> fpf ppf "./%s" name
+    | `Root (name, `TRootDir) -> fpf ppf "/%s" name
+    | `Root (name, `TCurrentPackage) -> fpf ppf "//%s" name
+    | `Slash (parent, name) ->
+        fpf ppf "%a/%s" (module_reference_page_path c) parent name
+
+  and model_reference c ppf (r : Reference.t) =
+    let open Reference in
     match r with
     | `Resolved r' -> Format.fprintf ppf "r(%a)" (model_resolved_reference c) r'
     | `Root (name, _) -> Format.fprintf ppf "unresolvedroot(%s)" name
     | `Dot (parent, str) ->
         Format.fprintf ppf "%a.%s" (model_reference c) (parent :> t) str
+    | `Slash (parent, str) ->
+        Format.fprintf ppf "%a/%s" (module_reference_page_path c) parent str
     | `Module (parent, name) ->
         Format.fprintf ppf "%a.%s" (model_reference c)
           (parent :> t)

@@ -61,6 +61,7 @@ module General_paths = struct
   type id_t = Paths.Identifier.t
 
   type tag = Paths.Reference.tag_any
+  type tag_page_path = Paths.Reference.tag_page_path
 
   let rec identifier : Paths.Identifier.t t =
     Variant
@@ -181,7 +182,7 @@ module General_paths = struct
         | `SourceLocationMod parent ->
             C ("`SourceLocationMod", (parent :> id_t), identifier))
 
-  let reference_tag : tag t =
+  let reference_tag : [< tag | tag_page_path ] t =
     Variant
       (function
       | `TClass -> C0 "`TClass"
@@ -201,7 +202,10 @@ module General_paths = struct
       | `TUnknown -> C0 "`TUnknown"
       | `TValue -> C0 "`TValue"
       | `TChildPage -> C0 "`TChildPage"
-      | `TChildModule -> C0 "`TChildModule")
+      | `TChildModule -> C0 "`TChildModule"
+      | `TPath -> C0 "`TPath"
+      | `TRootDir -> C0 "`TRootDir"
+      | `TCurrentPackage -> C0 "`TCurrentPackage")
 
   let rec path : p t =
     Variant
@@ -289,6 +293,8 @@ module General_paths = struct
       | `Resolved x -> C ("`Resolved", x, resolved_reference)
       | `Root (x1, x2) -> C ("`Root", (x1, x2), Pair (string, reference_tag))
       | `Dot (x1, x2) -> C ("`Dot", ((x1 :> r), x2), Pair (reference, string))
+      | `Slash (x1, x2) ->
+          C ("`Slash", ((x1 :> r), x2), Pair (reference, string))
       | `Module (x1, x2) ->
           C ("`Module", ((x1 :> r), x2), Pair (reference, Names.modulename))
       | `ModuleType (x1, x2) ->
