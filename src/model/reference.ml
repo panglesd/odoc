@@ -294,17 +294,20 @@ let parse whole_reference_location s :
   let rec page_path identifier next_token tokens : PagePath.t =
     match (next_token.kind, tokens) with
     | `End_in_slash, [] when next_token.identifier = "" ->
-        (* {!/} *)
+        (* {!/identifier} *)
         `Root (identifier, `TRootDir)
+    | (`End_in_slash, ".", _), [] ->
+        (* {!./identifier} *)
+        `Root (identifier, `TPath)
     | `End_in_slash, [ { kind = `End_in_slash; identifier = ""; _ } ]
       when next_token.identifier = "" ->
-        (* {!//} *)
+        (* {!//identifier} *)
         `Root (identifier, `TCurrentPackage)
     | `End_in_slash, [] ->
-        (* {!identifier} *)
+        (* {!identifier'/identifier} *)
         `Slash (`Root (next_token.identifier, `TPath), identifier)
     | `End_in_slash, next_token' :: tokens' ->
-        (* {!path/identifier} *)
+        (* {!page_path/identifier} *)
         `Slash (page_path next_token.identifier next_token' tokens', identifier)
     | (`None | `Prefixed _), _ ->
         (* This is not really expected *)
@@ -318,7 +321,7 @@ let parse whole_reference_location s :
     | [] -> (
         match kind with
         | ( `TUnknown | `TModule | `TModuleType | `TType | `TClass | `TClassType
-          | `TPage ) as kind ->
+          | `TPage | `TPath ) as kind ->
             `Root (identifier, kind)
         | _ ->
             expected
@@ -327,7 +330,7 @@ let parse whole_reference_location s :
             |> Error.raise_exception)
     | next_token :: tokens -> (
         match kind with
-        | `TUnknown -> `Dot (label_parent next_token tokens, identifier)
+        | `TUnknown -> label_parent_parent next_token tokens identifier
         | `TModule ->
             `Module (signature next_token tokens, ModuleName.make_std identifier)
         | `TModuleType ->
@@ -340,13 +343,17 @@ let parse whole_reference_location s :
         | `TClassType ->
             `ClassType
               (signature next_token tokens, ClassTypeName.make_std identifier)
-        | `TPath ->
-            (page_path identifier next_token tokens :> LabelParent.t)
+        | `TPath -> (page_path identifier next_token tokens :> LabelParent.t)
         | _ ->
             expected
               [ "module"; "module-type"; "type"; "class"; "class-type" ]
               location
             |> Error.raise_exception)
+  and label_parent_parent next_token tokens identifier =
+    match next_token with
+    | `End_in_slash, _, _ ->
+        (page_path identifier next_token tokens :> LabelParent.t)
+    | _ -> `Dot (label_parent next_token tokens, identifier)
   in
 
   let start_from_last_component { kind; identifier; location } old_kind tokens =
