@@ -62,4 +62,4 @@ val save_index :
 val load_index :
   Fs.File.t ->
   (Odoc_search.Entry.t Paths.Identifier.Hashtbl.Any.t, [> msg ]) result
-(** Load an [.odoc] file. *)
+(** Load a [.odoc-index] file. *)
