@@ -24,9 +24,9 @@ val link :
   unit
 val compile_index :
   ?ignore_output:bool ->
-  ?dst:string ->
-  marshall:bool ->
-  input_files:Fpath.set ->
+  dst:Fpath.t ->
+  json:bool ->
+  include_rec:Fpath.set ->
   unit ->
   unit
 val html_generate :
