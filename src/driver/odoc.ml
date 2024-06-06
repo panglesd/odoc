@@ -142,21 +142,15 @@ let sidebar ?(ignore_output = false) ~docs ~libs ~output_file ~page_root () =
   if not ignore_output then
     add_prefixed_output cmd link_output (Fpath.to_string output_file) lines
 
-let compile_index ?(ignore_output = false) ?dst ~marshall ~input_files () =
-  let dst =
-    Fpath.v
-    @@
-    match dst with
-    | Some dst -> dst
-    | None when marshall -> "index.odoc-index"
-    | None -> "index.json"
+let compile_index ?(ignore_output = false) ~dst ~json ~include_rec () =
+  let include_rec =
+    Fpath.Set.fold
+      (fun path acc -> Cmd.(acc % "--include-rec" % p path))
+      include_rec Cmd.empty
   in
-  let input_files =
-    Fpath.Set.fold (fun path acc -> Cmd.(acc % p path)) input_files Cmd.empty
-  in
-  let marshall = if marshall then Cmd.v "--marshall" else Cmd.empty in
+  let json = if json then Cmd.v "--json" else Cmd.empty in
   let cmd =
-    Cmd.(odoc % "compile-index" %% marshall %% v "-o" % p dst %% input_files)
+    Cmd.(odoc % "compile-index" %% json %% v "-o" % p dst %% include_rec)
   in
   let desc = "Generating search index" in
   let lines = submit desc cmd (Some dst) in

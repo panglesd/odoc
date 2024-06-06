@@ -11,6 +11,6 @@ val link : compiled list -> linked list
 val compile_sidebars :
   Fpath.t -> Fpath.t -> Packages.set -> Fpath.t Util.StringMap.t
 
-val index : linked list -> unit
+val index : Fpath.t -> Packages.set -> unit
 
 val html_generate : Fpath.t -> Fpath.t Util.StringMap.t -> linked list -> unit
