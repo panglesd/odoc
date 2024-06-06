@@ -1,30 +1,11 @@
 open Bos
+open Cmd_outputs
 
 type compile_deps = { digest : Digest.t; deps : (string * Digest.t) list }
 
 let odoc = Cmd.v "./_build/default/src/odoc/bin/main.exe"
 (* This is the just-built odoc binary *)
 
-let submit desc cmd output_file =
-  match Worker_pool.submit desc cmd output_file with
-  | Ok x -> x
-  | Error exn -> raise exn
-
-let compile_output = ref [ "" ]
-
-let compile_src_output = ref [ "" ]
-
-let link_output = ref [ "" ]
-
-let generate_output = ref [ "" ]
-
-let source_tree_output = ref [ "" ]
-
-let add_prefixed_output cmd list prefix lines =
-  if List.length lines > 0 then
-    list :=
-      !list
-      @ (Bos.Cmd.to_string cmd :: List.map (fun l -> prefix ^ ": " ^ l) lines)
 
 let compile_deps f =
   let cmd = Cmd.(odoc % "compile-deps" % Fpath.to_string f) in

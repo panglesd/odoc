@@ -234,6 +234,26 @@ let index_one output_dir pkgname _pkg =
   Odoc.compile_index ~json:false ~dst ~include_rec ()
 let index odoc_dir pkgs = Util.StringMap.iter (index_one odoc_dir) pkgs
 
+let sherlodoc_index_one ~html_dir ~odoc_dir pkgname _pkg_content =
+  ignore @@ Bos.OS.Dir.create Fpath.(html_dir / pkgname);
+  let format = `js in
+  let inputs = [ Fpath.(odoc_dir / pkgname / "index.odoc-index") ] in
+  let dst = Fpath.(html_dir / pkgname / "sherlodoc_db.js") in
+  Sherlodoc.index ~format ~inputs ~dst ()
+
+let sherlodoc ~html_dir ~odoc_dir pkgs =
+  ignore @@ Bos.OS.Dir.create html_dir;
+  Sherlodoc.js Fpath.(html_dir / "sherlodoc.js");
+  Util.StringMap.iter (sherlodoc_index_one ~html_dir ~odoc_dir) pkgs;
+  let format = `marshal in
+  let dst = Fpath.(html_dir / "sherlodoc_db.marshal") in
+  let inputs =
+    pkgs |> Util.StringMap.bindings
+    |> List.map (fun (pkgname, _pkg) ->
+           Fpath.(odoc_dir / pkgname / "index.odoc-index"))
+  in
+  Sherlodoc.index ~format ~inputs ~dst ()
+
 let html_generate : Fpath.t -> linked list -> _ =
  fun output_dir linked ->
   let html_generate : linked -> unit =
