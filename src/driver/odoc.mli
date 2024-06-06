@@ -50,11 +50,6 @@ val html_generate :
   unit
 val support_files : Fpath.t -> string list
 
-val compile_output : string list ref
-val compile_src_output : string list ref
-val link_output : string list ref
-val generate_output : string list ref
-val source_tree_output : string list ref
 val count_occurrences : Fpath.t -> string list
 val source_tree :
   ?ignore_output:bool -> parent:string -> output:Fpath.t -> Fpath.t -> unit
