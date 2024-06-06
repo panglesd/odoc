@@ -1866,7 +1866,6 @@ module Make (Syntax : SYNTAX) = struct
           (link_content, x, Odoc_model.Paths.Identifier.equal x root_id)
         in
         let path = Odoc_model.Paths.Identifier.fullname x in
-        Format.printf "%s\n%!" (String.concat "." path);
         (payload, path)
       in
       let title t =
