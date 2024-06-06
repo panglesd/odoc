@@ -162,6 +162,10 @@ let module_type_lookup_to_signature_lookup env (ref, cp, m) =
   >>= Tools.assert_not_functor
   >>= fun sg -> Ok ((ref :> Resolved.Signature.t), `ModuleType cp, sg)
 
+let page_path_lookup_to_signature_lookup = function
+  | `S r -> Ok r
+  | `P _ as r -> wrong_kind_error [ `S ] r
+
 let type_lookup_to_class_signature_lookup =
   let resolved p' cs = Ok ((p' :> Resolved.ClassSignature.t), cs) in
   fun env -> function
@@ -178,11 +182,7 @@ let type_lookup_to_class_signature_lookup =
 module Page_path = struct
   type t = page_path_lookup_result
 
-  let path_in_env _env _parent_path _name : t ref_result =
-    (* Not implemented *)
-    Error (`Wrong_kind ([ `S; `Page ], `Page_path))
-
-  let root_in_env _env _root : t ref_result =
+  let in_env _env _page_path : t ref_result =
     (* Not implemented *)
     Error (`Wrong_kind ([ `S; `Page ], `Page_path))
 end
@@ -666,11 +666,8 @@ let rec resolve_label_parent_reference env (r : LabelParent.t) =
   | `Root (name, `TChildModule) ->
       resolve_signature_reference env (`Root (name, `TModule)) >>= fun s ->
       Ok (`S s)
-  | `Slash (parent_path, name) ->
-      Page_path.path_in_env env parent_path name >>= fun r ->
-      Ok (r :> label_parent_lookup_result)
-  | `Root (_, #Reference.tag_page_path) as page_path ->
-      Page_path.root_in_env env page_path >>= fun r ->
+  | `Page_path page_path ->
+      Page_path.in_env env page_path >>= fun r ->
       Ok (r :> label_parent_lookup_result)
 
 and resolve_fragment_type_parent_reference (env : Env.t)
@@ -737,6 +734,8 @@ and resolve_signature_reference :
               (MT.of_component env mt
                  (`ModuleType (parent_cp, name))
                  (`ModuleType (parent, name))))
+    | `Page_path page_path ->
+        Page_path.in_env env page_path >>= page_path_lookup_to_signature_lookup
   in
   resolve env'
 
@@ -920,10 +919,8 @@ let resolve_reference : _ -> Reference.t -> _ =
     | `InstanceVariable (parent, name) ->
         resolve_class_signature_reference env parent >>= fun p ->
         MV.in_class_signature env p name >>= resolved1
-    | `Slash (parent_path, name) ->
-        Page_path.path_in_env env parent_path name >>= resolved_page_path_lookup
-    | `Root (_, #Reference.tag_page_path) as page_path ->
-        Page_path.root_in_env env page_path >>= resolved_page_path_lookup
+    | `Page_path page_path ->
+        Page_path.in_env env page_path >>= resolved_page_path_lookup
 
 let resolve_module_reference env m =
   Odoc_model.Error.catch_warnings (fun () -> resolve_module_reference env m)

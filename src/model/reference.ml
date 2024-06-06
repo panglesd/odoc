@@ -81,6 +81,8 @@ let match_extra_odoc_reference_kind (_location as loc) s :
       Some `TValue
   | _ -> None
 
+type reference_kind = [ Paths.Reference.tag_any | `TRelativePath ]
+
 (* Ideally, [tokenize] would call this on every reference kind annotation during
    tokenization, when generating the token list. However, that constrains the
    phantom tag type to be the same for all tokens in the list (because lists are
@@ -90,7 +92,7 @@ let match_extra_odoc_reference_kind (_location as loc) s :
 
    A secondary reason to delay parsing, and store strings in the token list, is
    that we need the strings for user-friendly error reporting. *)
-let match_reference_kind location s : [> Paths.Reference.tag_any ] =
+let match_reference_kind location s : reference_kind =
   match s with
   | `None -> `TUnknown
   | `Prefixed s | `Old_prefix s -> (
@@ -220,6 +222,30 @@ let parse whole_reference_location s :
     Paths.Reference.t Error.with_errors_and_warnings =
   let open Paths.Reference in
   let open Names in
+  let rec page_path identifier next_token tokens : PagePath.t =
+    match (next_token.kind, tokens) with
+    | `End_in_slash, [] when next_token.identifier = "" ->
+        (* {!/identifier} *)
+        `Root (identifier, `TAbsolutePath)
+    | `End_in_slash, [] when next_token.identifier = "." ->
+        (* {!./identifier} *)
+        `Root (identifier, `TRelativePath)
+    | `End_in_slash, [ { kind = `End_in_slash; identifier = ""; _ } ]
+      when next_token.identifier = "" ->
+        (* {!//identifier} *)
+        `Root (identifier, `TCurrentPackage)
+    | `End_in_slash, [] ->
+        (* {!identifier'/identifier} *)
+        `Slash (`Root (next_token.identifier, `TRelativePath), identifier)
+    | `End_in_slash, next_token' :: tokens' ->
+        (* {!page_path/identifier} *)
+        `Slash (page_path next_token.identifier next_token' tokens', identifier)
+    | (`None | `Prefixed _), _ ->
+        (* This is not really expected *)
+        expected [ "path separated components" ] next_token.location
+        |> Error.raise_exception
+  in
+
   let rec signature { kind; identifier; location } tokens : Signature.t =
     let kind = match_reference_kind location kind in
     match tokens with
@@ -227,6 +253,7 @@ let parse whole_reference_location s :
         match kind with
         | (`TUnknown | `TModule | `TModuleType) as kind ->
             `Root (identifier, kind)
+        | `TRelativePath -> `Page_path (`Root (identifier, `TRelativePath))
         | _ ->
             expected [ "module"; "module-type" ] location
             |> Error.raise_exception)
@@ -239,6 +266,7 @@ let parse whole_reference_location s :
         | `TModuleType ->
             `ModuleType
               (signature next_token tokens, ModuleTypeName.make_std identifier)
+        | `TRelativePath -> `Page_path (page_path identifier next_token tokens)
         | _ ->
             expected [ "module"; "module-type" ] location
             |> Error.raise_exception)
@@ -291,38 +319,15 @@ let parse whole_reference_location s :
         )
   in
 
-  let rec page_path identifier next_token tokens : PagePath.t =
-    match (next_token.kind, tokens) with
-    | `End_in_slash, [] when next_token.identifier = "" ->
-        (* {!/identifier} *)
-        `Root (identifier, `TAbsolutePath)
-    | `End_in_slash, [] when next_token.identifier = "." ->
-        (* {!./identifier} *)
-        `Root (identifier, `TRelativePath)
-    | `End_in_slash, [ { kind = `End_in_slash; identifier = ""; _ } ]
-      when next_token.identifier = "" ->
-        (* {!//identifier} *)
-        `Root (identifier, `TCurrentPackage)
-    | `End_in_slash, [] ->
-        (* {!identifier'/identifier} *)
-        `Slash (`Root (next_token.identifier, `TRelativePath), identifier)
-    | `End_in_slash, next_token' :: tokens' ->
-        (* {!page_path/identifier} *)
-        `Slash (page_path next_token.identifier next_token' tokens', identifier)
-    | (`None | `Prefixed _), _ ->
-        (* This is not really expected *)
-        expected [ "path separated components" ] next_token.location
-        |> Error.raise_exception
-  in
-
   let rec label_parent { kind; identifier; location } tokens : LabelParent.t =
     let kind = match_reference_kind location kind in
     match tokens with
     | [] -> (
         match kind with
         | ( `TUnknown | `TModule | `TModuleType | `TType | `TClass | `TClassType
-          | `TPage | `TRelativePath ) as kind ->
+          | `TPage ) as kind ->
             `Root (identifier, kind)
+        | `TRelativePath -> `Page_path (`Root (identifier, `TRelativePath))
         | _ ->
             expected
               [ "module"; "module-type"; "type"; "class"; "class-type"; "page" ]
@@ -330,7 +335,7 @@ let parse whole_reference_location s :
             |> Error.raise_exception)
     | next_token :: tokens -> (
         match kind with
-        | `TUnknown -> label_parent_parent next_token tokens identifier
+        | `TUnknown -> `Dot (label_parent next_token tokens, identifier)
         | `TModule ->
             `Module (signature next_token tokens, ModuleName.make_std identifier)
         | `TModuleType ->
@@ -343,17 +348,12 @@ let parse whole_reference_location s :
         | `TClassType ->
             `ClassType
               (signature next_token tokens, ClassTypeName.make_std identifier)
-        | `TRelativePath ->
-            (page_path identifier next_token tokens :> LabelParent.t)
+        | `TRelativePath -> `Page_path (page_path identifier next_token tokens)
         | _ ->
             expected
               [ "module"; "module-type"; "type"; "class"; "class-type" ]
               location
             |> Error.raise_exception)
-  and label_parent_parent next_token tokens identifier =
-    match next_token.kind with
-    | `End_in_slash -> (page_path identifier next_token tokens :> LabelParent.t)
-    | _ -> `Dot (label_parent next_token tokens, identifier)
   in
 
   let start_from_last_component { kind; identifier; location } old_kind tokens =
@@ -381,7 +381,10 @@ let parse whole_reference_location s :
     in
 
     match tokens with
-    | [] -> `Root (identifier, kind)
+    | [] -> (
+        match kind with
+        | #Paths.Reference.tag_any as kind -> `Root (identifier, kind)
+        | `TRelativePath -> `Page_path (`Root (identifier, `TRelativePath)))
     | next_token :: tokens -> (
         match kind with
         | `TUnknown -> `Dot (label_parent next_token tokens, identifier)
@@ -439,8 +442,7 @@ let parse whole_reference_location s :
               ~in_what:"the last component of a reference path" ~suggestion
               location
             |> Error.raise_exception
-        | `TRelativePath ->
-            (page_path identifier next_token tokens :> Paths.Reference.t))
+        | `TRelativePath -> `Page_path (page_path identifier next_token tokens))
   in
 
   let old_kind, s, location =

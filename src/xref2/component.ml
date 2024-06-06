@@ -1655,13 +1655,13 @@ module Fmt = struct
           (parent :> t)
           (LabelName.to_string name)
 
-  and module_reference_page_path c ppf (r : Reference.PagePath.t) =
+  and model_reference_page_path c ppf (r : Reference.PagePath.t) =
     match r with
     | `Root (name, `TRelativePath) -> fpf ppf "./%s" name
     | `Root (name, `TAbsolutePath) -> fpf ppf "/%s" name
     | `Root (name, `TCurrentPackage) -> fpf ppf "//%s" name
     | `Slash (parent, name) ->
-        fpf ppf "%a/%s" (module_reference_page_path c) parent name
+        fpf ppf "%a/%s" (model_reference_page_path c) parent name
 
   and model_reference c ppf (r : Reference.t) =
     let open Reference in
@@ -1670,8 +1670,7 @@ module Fmt = struct
     | `Root (name, _) -> Format.fprintf ppf "unresolvedroot(%s)" name
     | `Dot (parent, str) ->
         Format.fprintf ppf "%a.%s" (model_reference c) (parent :> t) str
-    | `Slash (parent, str) ->
-        Format.fprintf ppf "%a/%s" (module_reference_page_path c) parent str
+    | `Page_path p -> model_reference_page_path c ppf p
     | `Module (parent, name) ->
         Format.fprintf ppf "%a.%s" (model_reference c)
           (parent :> t)

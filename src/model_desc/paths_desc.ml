@@ -61,7 +61,6 @@ module General_paths = struct
   type id_t = Paths.Identifier.t
 
   type tag = Paths.Reference.tag_any
-  type tag_page_path = Paths.Reference.tag_page_path
 
   let rec identifier : Paths.Identifier.t t =
     Variant
@@ -182,7 +181,7 @@ module General_paths = struct
         | `SourceLocationMod parent ->
             C ("`SourceLocationMod", (parent :> id_t), identifier))
 
-  let reference_tag : [< tag | tag_page_path ] t =
+  let reference_tag : tag t =
     Variant
       (function
       | `TClass -> C0 "`TClass"
@@ -202,10 +201,7 @@ module General_paths = struct
       | `TUnknown -> C0 "`TUnknown"
       | `TValue -> C0 "`TValue"
       | `TChildPage -> C0 "`TChildPage"
-      | `TChildModule -> C0 "`TChildModule"
-      | `TRelativePath -> C0 "`TRelativePath"
-      | `TAbsolutePath -> C0 "`TAbsolutePath"
-      | `TCurrentPackage -> C0 "`TCurrentPackage")
+      | `TChildModule -> C0 "`TChildModule")
 
   let rec path : p t =
     Variant
@@ -287,14 +283,28 @@ module General_paths = struct
       | `SubstitutedT c -> C ("`SubstitutedT", (c :> rp), resolved_path)
       | `SubstitutedCT c -> C ("`SubstitutedCT", (c :> rp), resolved_path))
 
+  and page_path_reference : Paths.Reference.PagePath.t t =
+    let tag_page_path =
+      Variant
+        (function
+        | `TRelativePath -> C0 "`TRelativePath"
+        | `TAbsolutePath -> C0 "`TAbsolutePath"
+        | `TCurrentPackage -> C0 "`TCurrentPackage")
+    in
+    Variant
+      (function
+      | `Root (identifier, kind) ->
+          C ("`Root", (identifier, kind), Pair (string, tag_page_path))
+      | `Slash (parent, identifier) ->
+          C ("`Slash", (parent, identifier), Pair (page_path_reference, string)))
+
   and reference : r t =
     Variant
       (function
       | `Resolved x -> C ("`Resolved", x, resolved_reference)
       | `Root (x1, x2) -> C ("`Root", (x1, x2), Pair (string, reference_tag))
       | `Dot (x1, x2) -> C ("`Dot", ((x1 :> r), x2), Pair (reference, string))
-      | `Slash (x1, x2) ->
-          C ("`Slash", ((x1 :> r), x2), Pair (reference, string))
+      | `Page_path x -> C ("`Page_path", x, page_path_reference)
       | `Module (x1, x2) ->
           C ("`Module", ((x1 :> r), x2), Pair (reference, Names.modulename))
       | `ModuleType (x1, x2) ->
