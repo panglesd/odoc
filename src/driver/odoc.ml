@@ -116,7 +116,7 @@ let link ?(ignore_output = false) ~input_file:file ~includes ~docs ~libs () =
   if not ignore_output then
     add_prefixed_output cmd link_output (Fpath.to_string file) lines
 
-let sidebar ?(ignore_output = false) ~docs ~libs ~output_file ~name () =
+let sidebar ?(ignore_output = false) ~docs ~libs ~output_file () =
   let open Cmd in
   let docs =
     List.fold_left
@@ -132,9 +132,7 @@ let sidebar ?(ignore_output = false) ~docs ~libs ~output_file ~name () =
         v "-L" % s %% acc)
       Cmd.empty libs
   in
-  let cmd =
-    odoc % "sidebar" % "-o" % p output_file %% docs %% libs % "--name" % name
-  in
+  let cmd = odoc % "sidebar" % "-o" % p output_file %% docs %% libs in
   let desc = Printf.sprintf "Sidebar for %s" (Fpath.to_string output_file) in
 
   let lines = submit desc cmd (Some output_file) in

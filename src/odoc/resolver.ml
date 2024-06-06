@@ -403,11 +403,11 @@ type t = {
   open_modules : string list;
 }
 
-let all_pages ({ pages; _ } : t) =
+let all_pages ?root ({ pages; _ } : t) =
   let all_pages =
     match pages with
     | None -> Ok []
-    | Some pages -> Named_roots.all_of pages ~ext:"odocl"
+    | Some pages -> Named_roots.all_of ?root pages ~ext:"odocl"
   in
   let all_pages =
     match all_pages with Ok x -> x | Error _ -> failwith "TODO"
