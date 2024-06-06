@@ -549,10 +549,15 @@ module rec Sidebar : sig
     units : Paths.Identifier.RootModule.t list;
   }
 
+  type pages = {
+    (* root : Odoc_model.Paths.Identifier.Page.t; *)
+    page_name : string;
+    pages : (Comment.link_content * Paths.Identifier.Page.t) list;
+  }
+
   type t = {
     (* package : Odoc_model.Paths.Identifier.Page.t; *)
-    name : string;
-    pages : (Comment.link_content * Paths.Identifier.Page.t) list;
+    pages : pages list;
     libraries : library list;
   }
 end =

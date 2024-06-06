@@ -1848,16 +1848,23 @@ module Make (Syntax : SYNTAX) = struct
 
     let sidebar root_id (v : Odoc_model.Lang.Sidebar.t) =
       let root_id = (root_id :> Paths.Identifier.t) in
+      let compare_id id1 id2 =
+        let name id = Paths.Identifier.name (id :> Paths.Identifier.t) in
+        let name1 = name id1 and name2 = name id2 in
+        match (name1, name2) with
+        | "index", _ -> -1
+        | _, "index" -> 1
+        | _ -> String.compare name1 name2
+      in
       (* Sorting is by alphabetical order, but index is put first *)
       let pages =
-        List.sort
-          (fun (_, id1) (_, id2) ->
-            let name id = Paths.Identifier.name (id :> Paths.Identifier.t) in
-            let name1 = name id1 and name2 = name id2 in
-            match (name1, name2) with
-            | "index", _ -> -1
-            | _, "index" -> 1
-            | _ -> String.compare name1 name2)
+        List.map
+          (fun { Odoc_model.Lang.Sidebar.pages; page_name } ->
+            {
+              Odoc_model.Lang.Sidebar.page_name;
+              pages =
+                List.sort (fun (_, id1) (_, id2) -> compare_id id1 id2) pages;
+            })
           v.pages
       in
       let prepare (link_content, x) =
@@ -1872,7 +1879,7 @@ module Make (Syntax : SYNTAX) = struct
         block
           (Inline [ inline (Inline.Styled (`Bold, [ inline (Inline.Text t) ])) ])
       in
-      let pages =
+      let page_hierarchy { Odoc_model.Lang.Sidebar.page_name; pages } =
         if List.is_empty pages then []
         else
           let pages = List.map prepare pages in
@@ -1896,8 +1903,9 @@ module Make (Syntax : SYNTAX) = struct
 
           let pages = Hierarchy.to_sidebar convert hierarchy in
           let pages = [ block (Block.List (Block.Unordered, [ pages ])) ] in
-          [ title "Pages" ] @ pages
+          [ title @@ page_name ^ "'s Pages" ] @ pages
       in
+      let page_hierarchies = List.concat_map page_hierarchy pages in
       let units =
         let item id =
           let id = (id :> Paths.Identifier.t) in
@@ -1926,7 +1934,7 @@ module Make (Syntax : SYNTAX) = struct
       in
       let units = block (Block.List (Block.Unordered, units)) in
       let units = [ title "Libraries"; units ] in
-      pages @ units
+      page_hierarchies @ units
 
     let compilation_unit ?sidebar:sb (t : Odoc_model.Lang.Compilation_unit.t) =
       let url = Url.Path.from_identifier t.id in

@@ -733,7 +733,7 @@ module Sidebar = struct
 
   open Or_error
 
-  let sidebar page_roots lib_roots output_file name warnings_options =
+  let sidebar page_roots lib_roots output_file warnings_options =
     let output = Fs.File.of_string output_file in
     (if
        not
@@ -749,9 +749,7 @@ module Sidebar = struct
     let lib_roots =
       List.map ~f:(fun (libname, root) -> (libname, root)) lib_roots
     in
-    match
-      Sidebar.compile ~lib_roots ~page_roots ~warnings_options ~name ~output
-    with
+    match Sidebar.compile ~lib_roots ~page_roots ~warnings_options ~output with
     | Error _ as e -> e
     | Ok _ -> Ok ()
 
@@ -766,18 +764,10 @@ module Sidebar = struct
       & opt (some string) None
       & info ~docs ~docv:"PATH.odocl" ~doc [ "o" ])
 
-  let mname =
-    let doc = "TODO" in
-    Arg.(
-      required
-      & opt (some string) None
-      & info ~docs ~docv:"TODO" ~doc [ "name" ])
-
   let page_roots =
     let doc =
-      "Specifies a directory PATH containing pages that can be referenced by \
-       {!/pkgname/pagename}. A pkgname can be specified in the -P command only \
-       once. All the trees specified by this option must be disjoint."
+      "Specifies a directory PATH containing pages that should be included in \
+       the sidebar (TODO)."
     in
     Arg.(
       value
@@ -798,7 +788,7 @@ module Sidebar = struct
   let cmd =
     Term.(
       const handle_error
-      $ (const sidebar $ page_roots $ lib_roots $ dst $ mname $ warnings_options))
+      $ (const sidebar $ page_roots $ lib_roots $ dst $ warnings_options))
 
   let info ~docs =
     let doc = "TODO" in

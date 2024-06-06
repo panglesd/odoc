@@ -28,7 +28,6 @@ val sidebar :
   docs:(string * Fpath.t) list ->
   libs:(string * Fpath.t) list ->
   output_file:Fpath.t ->
-  name:string ->
   unit ->
   unit
 

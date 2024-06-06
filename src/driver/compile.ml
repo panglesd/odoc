@@ -259,7 +259,7 @@ let compile_sidebars output_dir dir all =
       let output_file = Fpath.( / ) dir package_name in
       Odoc.sidebar
         ~docs:[ (package_name, output_dir / package_name / "doc") ]
-        ~libs ~output_file ~name:package_name ();
+        ~libs ~output_file ();
       output_file)
     all
 
