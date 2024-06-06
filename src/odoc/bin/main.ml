@@ -766,18 +766,17 @@ module Sidebar = struct
       & opt (some string) None
       & info ~docs ~docv:"PATH.odocl" ~doc [ "o" ])
 
-  let mname =
+  let page_root =
     let doc = "TODO" in
     Arg.(
       required
       & opt (some string) None
-      & info ~docs ~docv:"TODO" ~doc [ "name" ])
+      & info ~docs ~docv:"TODO" ~doc [ "page-root" ])
 
   let page_roots =
     let doc =
-      "Specifies a directory PATH containing pages that can be referenced by \
-       {!/pkgname/pagename}. A pkgname can be specified in the -P command only \
-       once. All the trees specified by this option must be disjoint."
+      "Specifies a directory PATH containing pages that should be included in \
+       the sidebar (TODO)."
     in
     Arg.(
       value
@@ -798,7 +797,8 @@ module Sidebar = struct
   let cmd =
     Term.(
       const handle_error
-      $ (const sidebar $ page_roots $ lib_roots $ dst $ mname $ warnings_options))
+      $ (const sidebar $ page_roots $ lib_roots $ dst $ page_root
+       $ warnings_options))
 
   let info ~docs =
     let doc = "TODO" in
