@@ -270,7 +270,7 @@ let index_one output_dir pkgname _pkg =
   Odoc.compile_index ~json:false ~dst ~include_rec ()
 let index odoc_dir pkgs = Util.StringMap.iter (index_one odoc_dir) pkgs
 
-let sherlodoc_index_one ~html_dir ~odoc_dir pkgname _pkg_content =
+let sherlodoc_index_one ~html_dir ~odoc_dir pkgname =
   ignore @@ Bos.OS.Dir.create Fpath.(html_dir / pkgname);
   let format = `js in
   let inputs = [ Fpath.(odoc_dir / pkgname / "index.odoc-index") ] in
@@ -280,12 +280,13 @@ let sherlodoc_index_one ~html_dir ~odoc_dir pkgname _pkg_content =
 let sherlodoc ~html_dir ~odoc_dir pkgs =
   ignore @@ Bos.OS.Dir.create html_dir;
   Sherlodoc.js Fpath.(html_dir / "sherlodoc.js");
-  Util.StringMap.iter (sherlodoc_index_one ~html_dir ~odoc_dir) pkgs;
+  let pkgl = Util.StringMap.bindings pkgs |> List.map fst in
+  Fiber.List.iter (sherlodoc_index_one ~html_dir ~odoc_dir) pkgl;
   let format = `marshal in
   let dst = Fpath.(html_dir / "sherlodoc_db.marshal") in
   let inputs =
-    pkgs |> Util.StringMap.bindings
-    |> List.map (fun (pkgname, _pkg) ->
+    pkgl
+    |> Fiber.List.map (fun pkgname ->
            Fpath.(odoc_dir / pkgname / "index.odoc-index"))
   in
   Sherlodoc.index ~format ~inputs ~dst ()
