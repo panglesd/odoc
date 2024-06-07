@@ -104,6 +104,7 @@ let compile_to_marshall ~output ~warnings_options files =
   Ok (Odoc_file.save_index output final_index)
 
 let compile out_format ~output ~warnings_options includes =
+
   let files =
     List.concat_map
       (fun include_rec ->
@@ -112,7 +113,8 @@ let compile out_format ~output ~warnings_options includes =
           [] include_rec)
       includes
   in
-
-  match out_format with
-  | `JSON -> compile_to_json ~output ~warnings_options files
-  | `Marshall -> compile_to_marshall ~output ~warnings_options files
+  if files = [] then Error (`Msg "No .odocl files were included")
+  else
+    match out_format with
+    | `JSON -> compile_to_json ~output ~warnings_options files
+    | `Marshall -> compile_to_marshall ~output ~warnings_options files
