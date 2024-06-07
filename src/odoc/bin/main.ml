@@ -18,7 +18,6 @@ let convert_syntax : Odoc_document.Renderer.syntax Arg.conv =
   in
   (syntax_parser, syntax_printer)
 
-
 (** create default to false *)
 let convert_directory ?(create = false) () : Fs.Directory.t Arg.conv =
   let dir_parser, dir_printer = Arg.string in
@@ -494,8 +493,7 @@ module Indexing = struct
         Result.Error
           (`Msg
             "At least one of --include-rec must be passed to odoc compile-index")
-    | _ ->
-        Indexing.compile marshall ~output ~warnings_options include_rec
+    | _ -> Indexing.compile marshall ~output ~warnings_options include_rec
   let cmd =
     let dst =
       let doc =
@@ -513,7 +511,8 @@ module Indexing = struct
          generated index."
       in
       Arg.(
-        value & opt_all (convert_directory ()) []
+        value
+        & opt_all (convert_directory ()) []
         & info ~doc ~docv:"DIR" [ "include-rec" ])
     in
     let json =
