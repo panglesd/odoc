@@ -12,6 +12,9 @@
   select a result, and enter to follow the selected link. (@EmileTrotignon, #1088)
 - OCaml 5.2.0 compatibility (@Octachron, #1094, #1112)
 - New driver package (@jonludlam, #1121)
+- Path-references to hierarchical pages and modules (@Julow, #1142)
+  Absolute (`{!/foo}`), relative (`{!./foo}`) and package-local (`{!//foo}`)
+  are added.
 
 ### Changed
 
