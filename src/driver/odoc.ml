@@ -6,7 +6,6 @@ type compile_deps = { digest : Digest.t; deps : (string * Digest.t) list }
 let odoc = Cmd.v "./_build/default/src/odoc/bin/main.exe"
 (* This is the just-built odoc binary *)
 
-
 let compile_deps f =
   let cmd = Cmd.(odoc % "compile-deps" % Fpath.to_string f) in
   let desc = Printf.sprintf "Compile deps for %s" (Fpath.to_string f) in
@@ -98,9 +97,11 @@ let link ?(ignore_output = false) ~input_file:file ~includes ~docs ~libs
   if not ignore_output then
     add_prefixed_output cmd link_output (Fpath.to_string file) lines
 
-let compile_index ?(ignore_output = false) ~dst ~json ~include_rec ()=
+let compile_index ?(ignore_output = false) ~dst ~json ~include_rec () =
   let include_rec =
-    Fpath.Set.fold (fun path acc -> Cmd.(acc % "--include-rec" % p path)) include_rec Cmd.empty
+    Fpath.Set.fold
+      (fun path acc -> Cmd.(acc % "--include-rec" % p path))
+      include_rec Cmd.empty
   in
   let json = if json then Cmd.v "--json" else Cmd.empty in
   let cmd =

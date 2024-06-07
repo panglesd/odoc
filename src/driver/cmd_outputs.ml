@@ -1,4 +1,3 @@
-
 let submit desc cmd output_file =
   match Worker_pool.submit desc cmd output_file with
   | Ok x -> x
