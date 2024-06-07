@@ -16,7 +16,8 @@ let index ?(ignore_output = false) ~format ~inputs ~dst ?favored_prefixes () =
   in
   let inputs = Cmd.(inputs |> List.map p |> of_list) in
   let cmd =
-    Cmd.(sherlodoc % "index" %% format %% favored_prefixes %% inputs % "-o" % p dst)
+    Cmd.(
+      sherlodoc % "index" %% format %% favored_prefixes %% inputs % "-o" % p dst)
   in
   let lines = submit desc cmd (Some dst) in
   if not ignore_output then

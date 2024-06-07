@@ -295,7 +295,10 @@ let html_generate : Fpath.t -> Fpath.t Util.StringMap.t -> linked list -> _ =
   let html_generate : linked -> unit =
    fun l ->
     let sidebar = Util.StringMap.find_opt l.package_name sidebars in
-    Odoc.html_generate ?sidebar
+    let search_uris =
+      Fpath.[ v l.package_name / "sherlodoc_db.js"; v "sherlodoc.js" ]
+    in
+    Odoc.html_generate ~search_uris ?sidebar
       ~output_dir:(Fpath.to_string output_dir)
       ~input_file:l.output_file ?source:l.src ();
     Atomic.incr Stats.stats.generated_units

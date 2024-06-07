@@ -66,20 +66,38 @@ passing directly the name of the files.
 
   $ printf "main.odocl\npage-page.odocl\nj.odocl\n" > index_map
   $ odoc compile-index -o index1.json --file-list index_map
+  odoc: unknown option '--file-list'.
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
 
 Or equivalently:
 
   $ printf "main.odocl\npage-page.odocl\n" > index_map
   $ odoc compile-index -o index2.json --file-list index_map j.odocl
+  odoc: unknown option '--file-list'.
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
 
 Or equivalently:
 
   $ odoc compile-index main.odocl page-page.odocl j.odocl
+  odoc: too many arguments, don't know what to do with 'main.odocl', 'page-page.odocl', 'j.odocl'
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
 
 Let's check that the previous commands are indeed independent:
 
   $ diff index.json index1.json
+  diff: index.json: No such file or directory
+  diff: index1.json: No such file or directory
+  [2]
   $ diff index.json index2.json
+  diff: index.json: No such file or directory
+  diff: index2.json: No such file or directory
+  [2]
 
 Let's now test the --marshall flag.
 We compare:
@@ -87,29 +105,71 @@ We compare:
 - Directly outputing a json file
 
   $ odoc compile-index -o index-main.odoc --marshall main.odocl
+  odoc: unknown option '--marshall'.
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
   $ odoc compile-index -o main.json index-main.odoc
+  odoc: too many arguments, don't know what to do with 'index-main.odoc'
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
   $ cat main.json | jq sort | jq '.[]' -c | sort > main1.json
+  cat: main.json: No such file or directory
 
   $ odoc compile-index -o main.json main.odocl
+  odoc: too many arguments, don't know what to do with 'main.odocl'
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
   $ cat main.json | jq sort | jq '.[]' -c | sort > main2.json
+  cat: main.json: No such file or directory
 
   $ diff main1.json main2.json
 
   $ odoc compile-index -o index-j.odoc --marshall j.odocl
+  odoc: unknown option '--marshall'.
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
   $ odoc compile-index -o j.json index-j.odoc
+  odoc: too many arguments, don't know what to do with 'index-j.odoc'
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
   $ cat j.json | jq sort | jq '.[]' -c | sort > j1.json
+  cat: j.json: No such file or directory
 
   $ odoc compile-index -o j.json j.odocl
+  odoc: too many arguments, don't know what to do with 'j.odocl'
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
   $ cat j.json | jq sort | jq '.[]' -c | sort > j2.json
+  cat: j.json: No such file or directory
 
   $ diff j1.json j2.json
 
   $ odoc compile-index -o index-page.odoc --marshall page-page.odocl
+  odoc: unknown option '--marshall'.
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
   $ odoc compile-index -o page.json index-page.odoc
+  odoc: too many arguments, don't know what to do with 'index-page.odoc'
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
   $ cat page.json | jq sort | jq '.[]' -c | sort > page1.json
+  cat: page.json: No such file or directory
 
   $ odoc compile-index -o page.json page-page.odocl
+  odoc: too many arguments, don't know what to do with 'page-page.odocl'
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
   $ cat page.json | jq sort | jq '.[]' -c | sort > page2.json
+  cat: page.json: No such file or directory
 
   $ diff page1.json page2.json
 
@@ -117,9 +177,15 @@ Now, we compare the combination of the three marshalled files (index-main.odoc,
 index-page.odoc, index-j.odoc).
 
   $ odoc compile-index -o all.json index-page.odoc index-j.odoc index-main.odoc
+  odoc: too many arguments, don't know what to do with 'index-page.odoc', 'index-j.odoc', 'index-main.odoc'
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
   $ cat all.json | jq sort | jq '.[]' -c | sort > all1.json
+  cat: all.json: No such file or directory
 
   $ cat index.json | jq sort | jq '.[]' -c | sort > all2.json
+  cat: index.json: No such file or directory
   $ diff all1.json all2.json
 
 The json index file contains a json array, each element of the array corresponding to
@@ -132,133 +198,19 @@ An index entry contains:
 
 The index file, one entry per line:
   $ cat index.json | jq sort | jq '.[]' -c
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Type","name":"tdzdz"},{"kind":"Constructor","name":"A"}],"doc":"","kind":{"kind":"Constructor","args":{"kind":"Tuple","vals":["int","int"]},"res":"tdzdz"},"display":{"url":"page/Main/index.html#type-tdzdz.A","html":"<code class=\"entry-kind\">cons</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.tdzdz.</span><span class=\"entry-name\">A</span><code class=\"entry-rhs\"> : int * int -&gt; tdzdz</code></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Type","name":"tdzdz"},{"kind":"Constructor","name":"B"}],"doc":"Bliiiiiiiiiii","kind":{"kind":"Constructor","args":{"kind":"Tuple","vals":["int list","int"]},"res":"tdzdz"},"display":{"url":"page/Main/index.html#type-tdzdz.B","html":"<code class=\"entry-kind\">cons</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.tdzdz.</span><span class=\"entry-name\">B</span><code class=\"entry-rhs\"> : int list * int -&gt; tdzdz</code></code><div class=\"entry-comment\"><div><p>Bliiiiiiiiiii</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"J"}],"doc":"a paragraph two","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/J/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">J</span></code><div class=\"entry-comment\"><div><p>a paragraph two</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"}],"doc":"x + 1","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/Main/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div><p><code class=\"odoc-katex-math\">x + 1</code></p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"}],"doc":"a paragraph two","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/Main/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div><p>a paragraph two</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"}],"doc":"a paragraph","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/Main/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div><p>a paragraph</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"}],"doc":"and another","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/Main/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div><p>and another</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"}],"doc":"and this is a paragraph","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/Main/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div><p>and this is a paragraph</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"}],"doc":"blibli","kind":{"kind":"Doc","subkind":"CodeBlock"},"display":{"url":"page/Main/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div><pre class=\"language-ocaml\"><code>blibli</code></pre></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"}],"doc":"verbatim","kind":{"kind":"Doc","subkind":"Verbatim"},"display":{"url":"page/Main/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div><pre>verbatim</pre></div></div>"}}
-  {"id":[{"kind":"Page","name":"page"}],"doc":"A paragraph","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">page</span></code><div class=\"entry-comment\"><div><p>A paragraph</p></div></div>"}}
-  {"id":[{"kind":"Page","name":"page"}],"doc":"a list of things","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">page</span></code><div class=\"entry-comment\"><div><p>a list <em>of</em> things</p></div></div>"}}
-  {"id":[{"kind":"Page","name":"page"}],"doc":"bliblib","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">page</span></code><div class=\"entry-comment\"><div><p>bliblib</p></div></div>"}}
-  {"id":[{"kind":"Page","name":"page"}],"doc":"and code","kind":{"kind":"Doc","subkind":"CodeBlock"},"display":{"url":"page/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">page</span></code><div class=\"entry-comment\"><div><pre class=\"language-ocaml\"><code>and code</code></pre></div></div>"}}
-  {"id":[{"kind":"Page","name":"page"}],"doc":"some verbatim","kind":{"kind":"Doc","subkind":"Verbatim"},"display":{"url":"page/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">page</span></code><div class=\"entry-comment\"><div><pre>some verbatim</pre></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"I"}],"doc":"x + 1","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/Main/I/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">I</span></code><div class=\"entry-comment\"><div><p><code class=\"odoc-katex-math\">x + 1</code></p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"I"}],"doc":"a paragraph","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/Main/I/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">I</span></code><div class=\"entry-comment\"><div><p>a paragraph</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"I"}],"doc":"and another","kind":{"kind":"Doc","subkind":"Paragraph"},"display":{"url":"page/Main/I/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">I</span></code><div class=\"entry-comment\"><div><p>and another</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"I"}],"doc":"blibli","kind":{"kind":"Doc","subkind":"CodeBlock"},"display":{"url":"page/Main/I/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">I</span></code><div class=\"entry-comment\"><div><pre class=\"language-ocaml\"><code>blibli</code></pre></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"I"}],"doc":"verbatim","kind":{"kind":"Doc","subkind":"Verbatim"},"display":{"url":"page/Main/I/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">I</span></code><div class=\"entry-comment\"><div><pre>verbatim</pre></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Label","name":"this-is-a-title"}],"doc":"this is a title","kind":{"kind":"Doc","subkind":"Heading"},"display":{"url":"page/Main/index.html#this-is-a-title","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">this-is-a-title</span></code><div class=\"entry-comment\"><div><p>this is a title</p></div></div>"}}
-  {"id":[{"kind":"Page","name":"page"},{"kind":"Label","name":"a-title"}],"doc":"A title","kind":{"kind":"Doc","subkind":"Heading"},"display":{"url":"page/index.html#a-title","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"prefix-name\">page.</span><span class=\"entry-name\">a-title</span></code><div class=\"entry-comment\"><div><p>A title</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"J"}],"doc":"a paragraph one","kind":{"kind":"Module"},"display":{"url":"page/J/index.html","html":"<code class=\"entry-kind\">mod</code><code class=\"entry-title\"><span class=\"entry-name\">J</span></code><div class=\"entry-comment\"><div><p>a paragraph one</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"}],"doc":"","kind":{"kind":"Module"},"display":{"url":"page/Main/index.html","html":"<code class=\"entry-kind\">mod</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"I"}],"doc":"","kind":{"kind":"Module"},"display":{"url":"page/Main/index.html#module-I","html":"<code class=\"entry-kind\">mod</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">I</span></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"M"}],"doc":"","kind":{"kind":"Module"},"display":{"url":"page/Main/index.html#module-M","html":"<code class=\"entry-kind\">mod</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">M</span></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"X"}],"doc":"","kind":{"kind":"Module"},"display":{"url":"page/Main/index.html#module-X","html":"<code class=\"entry-kind\">mod</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">X</span></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Type","name":"t"}],"doc":"A comment","kind":{"kind":"TypeDecl","private":false,"manifest":"int","constraints":[]},"display":{"url":"page/Main/index.html#type-t","html":"<code class=\"entry-kind\">type</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">t</span><code class=\"entry-rhs\"> = int</code></code><div class=\"entry-comment\"><div><p>A comment</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Type","name":"tdzdz"}],"doc":"A comment aaaaaaaaaa","kind":{"kind":"TypeDecl","private":false,"manifest":null,"constraints":[]},"display":{"url":"page/Main/index.html#type-tdzdz","html":"<code class=\"entry-kind\">type</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">tdzdz</span><code class=\"entry-rhs\"> = A of int * int | B of int list * int</code></code><div class=\"entry-comment\"><div><p>A comment aaaaaaaaaa</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"M"},{"kind":"Type","name":"t"}],"doc":"dsdsd","kind":{"kind":"TypeDecl","private":false,"manifest":null,"constraints":[]},"display":{"url":"page/Main/M/index.html#type-t","html":"<code class=\"entry-kind\">type</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.M.</span><span class=\"entry-name\">t</span></code><div class=\"entry-comment\"><div><p>dsdsd</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"J"},{"kind":"Value","name":"uu"}],"doc":"","kind":{"kind":"Value","type":"int"},"display":{"url":"page/J/index.html#val-uu","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">J.</span><span class=\"entry-name\">uu</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem2"}],"doc":"lorem 2","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/index.html#val-lorem2","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">lorem2</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div><p>lorem 2</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem3"}],"doc":"lorem 3","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/index.html#val-lorem3","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">lorem3</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div><p>lorem 3</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem4"}],"doc":"lorem 4","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/index.html#val-lorem4","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">lorem4</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div><p>lorem 4</p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"lorem"}],"doc":"lorem 1 and a link","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/index.html#val-lorem","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">lorem</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div><p>lorem 1 and a <span>link</span></p></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"uu"}],"doc":"","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/index.html#val-uu","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">uu</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"v"}],"doc":"a reference , and some formatted content with code and\ncode blocks","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/index.html#val-v","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">v</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div><p>a reference <span><code>t</code></span>, and some <em>formatted</em> <b>content</b> with <code>code</code> and</p><pre class=\"language-ocaml\"><code>code blocks</code></pre></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"x"}],"doc":"","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/index.html#val-x","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">x</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Value","name":"y"}],"doc":"","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/index.html#val-y","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.</span><span class=\"entry-name\">y</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"I"},{"kind":"Value","name":"x"}],"doc":"","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/I/index.html#val-x","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.I.</span><span class=\"entry-name\">x</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"I"},{"kind":"Value","name":"y"}],"doc":"","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/I/index.html#val-y","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.I.</span><span class=\"entry-name\">y</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div></div></div>"}}
-  {"id":[{"kind":"Root","name":"Main"},{"kind":"Module","name":"X"},{"kind":"Value","name":"c"}],"doc":"A value inside a module","kind":{"kind":"Value","type":"int"},"display":{"url":"page/Main/X/index.html#val-c","html":"<code class=\"entry-kind\">val</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.X.</span><span class=\"entry-name\">c</span><code class=\"entry-rhs\"> : int</code></code><div class=\"entry-comment\"><div><p>A value inside a module</p></div></div>"}}
+  cat: index.json: No such file or directory
 
 and the first entries formatted:
 
   $ cat index.json | jq sort | head -n 33
-  [
-    {
-      "id": [
-        {
-          "kind": "Root",
-          "name": "Main"
-        },
-        {
-          "kind": "Type",
-          "name": "tdzdz"
-        },
-        {
-          "kind": "Constructor",
-          "name": "A"
-        }
-      ],
-      "doc": "",
-      "kind": {
-        "kind": "Constructor",
-        "args": {
-          "kind": "Tuple",
-          "vals": [
-            "int",
-            "int"
-          ]
-        },
-        "res": "tdzdz"
-      },
-      "display": {
-        "url": "page/Main/index.html#type-tdzdz.A",
-        "html": "<code class=\"entry-kind\">cons</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.tdzdz.</span><span class=\"entry-name\">A</span><code class=\"entry-rhs\"> : int * int -&gt; tdzdz</code></code><div class=\"entry-comment\"><div></div></div>"
-      }
-    },
+  cat: index.json: No such file or directory
 
 Here is the list of ids for entries. Multiple IDs exists as standalone
 paragraphs, codeblocks, etc. use their parent ID (they don't have one for
 themselves).
 
   $ cat index.json | jq -r '.[].id | map(.kind + "-" + .name) | join(".")' | sort
-  Page-page
-  Page-page
-  Page-page
-  Page-page
-  Page-page
-  Page-page.Label-a-title
-  Root-J
-  Root-J
-  Root-J.Value-uu
-  Root-Main
-  Root-Main
-  Root-Main
-  Root-Main
-  Root-Main
-  Root-Main
-  Root-Main
-  Root-Main
-  Root-Main.Label-this-is-a-title
-  Root-Main.Module-I
-  Root-Main.Module-I
-  Root-Main.Module-I
-  Root-Main.Module-I
-  Root-Main.Module-I
-  Root-Main.Module-I
-  Root-Main.Module-I.Value-x
-  Root-Main.Module-I.Value-y
-  Root-Main.Module-M
-  Root-Main.Module-M.Type-t
-  Root-Main.Module-X
-  Root-Main.Module-X.Value-c
-  Root-Main.Type-t
-  Root-Main.Type-tdzdz
-  Root-Main.Type-tdzdz.Constructor-A
-  Root-Main.Type-tdzdz.Constructor-B
-  Root-Main.Value-lorem
-  Root-Main.Value-lorem2
-  Root-Main.Value-lorem3
-  Root-Main.Value-lorem4
-  Root-Main.Value-uu
-  Root-Main.Value-v
-  Root-Main.Value-x
-  Root-Main.Value-y
+  cat: index.json: No such file or directory
 
 Now, from the index.json file, we need to create the scripts and put them as specified with --search-uri
 Those should be javascript file. They will be run in their declared order, in a webworker (so as not to block UI).
@@ -269,6 +221,8 @@ Here is an example of such search script generation, using the fuse.js search en
 
   $ printf "let documents = " > index.js
   $ cat index.json >> index.js
+  cat: index.json: No such file or directory
+  [1]
 
   $ cat << EOF >> index.js
   > 
@@ -297,8 +251,10 @@ Passing an inexistent file:
 
   $ printf "inexistent.odocl\n" > index_map
   $ odoc compile-index --file-list index_map
-  File "inexistent.odocl":
-  Warning: File does not exist
+  odoc: unknown option '--file-list'.
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
 
 Passing an odoc file which is neither a compilation unit nor a page:
 
@@ -307,19 +263,22 @@ Passing an odoc file which is neither a compilation unit nor a page:
   $ odoc source-tree -I . --parent page -o srctree-source.odoc source_tree.map
 
   $ odoc compile-index srctree-source.odoc
-  File "srctree-source.odoc":
-  Warning: Only pages and unit are allowed as input when generating an index
+  odoc: too many arguments, don't know what to do with 'srctree-source.odoc'
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
 
 Passing a file which is not a correctly marshalled one:
 
   $ echo hello > my_file
   $ odoc compile-index my_file
-  File "my_file":
-  Warning: Error while unmarshalling "my_file": End_of_file
-  
+  odoc: too many arguments, don't know what to do with 'my_file'
+  Usage: odoc compile-index [--include-rec=DIR] [--json] [OPTION]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
 
 Passing no file:
 
   $ odoc compile-index
-  ERROR: At least one of --file-list or an .odocl file must be passed to odoc compile-index
+  ERROR: At least one of --include-rec must be passed to odoc compile-index
   [1]

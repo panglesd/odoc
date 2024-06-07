@@ -6,7 +6,6 @@ type compile_deps = { digest : Digest.t; deps : (string * Digest.t) list }
 let odoc = Cmd.v "./_build/default/src/odoc/bin/main.exe"
 (* This is the just-built odoc binary *)
 
-
 let compile_deps f =
   let cmd = Cmd.(odoc % "compile-deps" % Fpath.to_string f) in
   let desc = Printf.sprintf "Compile deps for %s" (Fpath.to_string f) in

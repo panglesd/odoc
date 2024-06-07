@@ -108,13 +108,11 @@ let compile out_format ~output ~warnings_options includes =
     List.concat_map
       (fun include_rec ->
         Fs.Directory.fold_files_rec ~ext:"odocl"
-          (fun files file ->
-            file :: files)
+          (fun files file -> file :: files)
           [] include_rec)
       includes
   in
 
   match out_format with
   | `JSON -> compile_to_json ~output ~warnings_options files
-  | `Marshall ->
-      compile_to_marshall ~output ~warnings_options files
+  | `Marshall -> compile_to_marshall ~output ~warnings_options files
