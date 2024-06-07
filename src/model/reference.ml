@@ -246,6 +246,13 @@ let parse whole_reference_location s :
         |> Error.raise_exception
   in
 
+  let dot_or_slash (type parent) (dot : _ -> _ -> parent) identifier next_token
+      tokens : [ `Page_path of PagePath.t | `Dot of parent * string ] =
+    match next_token.kind with
+    | `End_in_slash -> `Page_path (page_path identifier next_token tokens)
+    | _ -> `Dot (dot next_token tokens, identifier)
+  in
+
   let rec signature { kind; identifier; location } tokens : Signature.t =
     let kind = match_reference_kind location kind in
     match tokens with
@@ -260,7 +267,7 @@ let parse whole_reference_location s :
     | next_token :: tokens -> (
         match kind with
         | `TUnknown ->
-            `Dot ((parent next_token tokens :> LabelParent.t), identifier)
+            (dot_or_slash parent identifier next_token tokens :> Signature.t)
         | `TModule ->
             `Module (signature next_token tokens, ModuleName.make_std identifier)
         | `TModuleType ->
@@ -335,7 +342,9 @@ let parse whole_reference_location s :
             |> Error.raise_exception)
     | next_token :: tokens -> (
         match kind with
-        | `TUnknown -> `Dot (label_parent next_token tokens, identifier)
+        | `TUnknown ->
+            (dot_or_slash label_parent identifier next_token tokens
+              :> LabelParent.t)
         | `TModule ->
             `Module (signature next_token tokens, ModuleName.make_std identifier)
         | `TModuleType ->
@@ -387,7 +396,9 @@ let parse whole_reference_location s :
         | `TRelativePath -> `Page_path (`Root (identifier, `TRelativePath)))
     | next_token :: tokens -> (
         match kind with
-        | `TUnknown -> `Dot (label_parent next_token tokens, identifier)
+        | `TUnknown ->
+            (dot_or_slash label_parent identifier next_token tokens
+              :> Paths.Reference.t)
         | `TModule ->
             `Module (signature next_token tokens, ModuleName.make_std identifier)
         | `TModuleType ->
