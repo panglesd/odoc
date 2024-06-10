@@ -1861,7 +1861,7 @@ module Make (Syntax : SYNTAX) = struct
           (Inline [ inline (Inline.Styled (`Bold, [ inline (Inline.Text t) ])) ])
       in
       let page_hierarchy { Odoc_model.Lang.Sidebar.page_name; pages } =
-        if List.is_empty pages then []
+        if pages = [] then []
         else
           let pages = List.map prepare pages in
           let hierarchy =
