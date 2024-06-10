@@ -741,9 +741,7 @@ module Sidebar = struct
             (List.rev_append
                (List.map ~f:snd lib_roots)
                (List.map ~f:snd page_roots)))
-     then
-       Error
-         (`Msg "Arguments given to -P and -L cannot be included in each others")
+     then Error (`Msg "Paths given to all -P and -L options must be disjoint")
      else Ok ())
     >>= fun () ->
     let lib_roots =
@@ -755,35 +753,31 @@ module Sidebar = struct
 
   let dst =
     let doc =
-      "Output file path. Non-existing intermediate directories are created. If \
-       absent outputs a $(i,.odocl) file in the same directory as the input \
-       file with the same basename."
+      "Output file path. Non-existing intermediate directories are created."
     in
     Arg.(
-      required
-      & opt (some string) None
-      & info ~docs ~docv:"PATH.odocl" ~doc [ "o" ])
+      required & opt (some string) None & info ~docs ~docv:"PATH" ~doc [ "o" ])
 
   let page_roots =
     let doc =
       "Specifies a directory PATH containing pages that should be included in \
-       the sidebar (TODO)."
+       the sidebar, under the NAME section."
     in
     Arg.(
       value
       & opt_all convert_named_root []
-      & info ~docs ~docv:"pkgname:PATH" ~doc [ "P" ])
+      & info ~docs ~docv:"NAME:PATH" ~doc [ "P" ])
 
   let lib_roots =
     let doc =
-      "Specifies a library called libname containing the modules in PATH. \
-       Modules can be referenced both using the flat module namespace \
-       {!Module} and the absolute reference {!/libname/Module}."
+      "Specifies a directory PATH containing units that should be included in \
+       the sidebar, as part of the LIBNAME library."
     in
+
     Arg.(
       value
       & opt_all convert_named_root []
-      & info ~docs ~docv:"libname:PATH" ~doc [ "L" ])
+      & info ~docs ~docv:"LIBNAME:PATH" ~doc [ "L" ])
 
   let cmd =
     Term.(
@@ -791,7 +785,11 @@ module Sidebar = struct
       $ (const sidebar $ page_roots $ lib_roots $ dst $ warnings_options))
 
   let info ~docs =
-    let doc = "TODO" in
+    let doc =
+      "Generate a sidebar file from a list of pages and units. The generated \
+       file ought to be passed to the --sidebar argument of the html-generate \
+       command."
+    in
     Term.info ~docs ~doc "sidebar"
 end
 
@@ -894,11 +892,11 @@ end = struct
         & info [ "source-root" ] ~doc ~docv:"dir")
 
     let sidebar =
-      let doc = "TODO" in
+      let doc = "Use FILE to generate the global sidebar." in
       Arg.(
         value
         & opt (some convert_fpath) None
-        & info [ "sidebar" ] ~doc ~docv:"file")
+        & info [ "sidebar" ] ~doc ~docv:"FILE")
 
     let cmd =
       let syntax =
