@@ -543,23 +543,14 @@ end =
   Page
 
 module rec Sidebar : sig
-  type library = {
-    (* root : Odoc_model.Paths.Identifier.Page.t; *)
-    name : string;
-    units : Paths.Identifier.RootModule.t list;
-  }
+  type library = { name : string; units : Paths.Identifier.RootModule.t list }
 
   type pages = {
-    (* root : Odoc_model.Paths.Identifier.Page.t; *)
     page_name : string;
     pages : (Comment.link_content * Paths.Identifier.Page.t) list;
   }
 
-  type t = {
-    (* package : Odoc_model.Paths.Identifier.Page.t; *)
-    pages : pages list;
-    libraries : library list;
-  }
+  type t = { pages : pages list; libraries : library list }
 end =
   Sidebar
 

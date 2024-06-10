@@ -492,7 +492,9 @@ module Page = struct
     in
     let subpages = subpages ~config @@ Doctree.Subpages.compute p in
     let resolve = Link.Current url in
-    let sidebar = Option.map (block ~config ~resolve) sidebar in
+    let sidebar =
+      (Option.map (block ~config ~resolve) sidebar :> any Html.elt list option)
+    in
     let i = Doctree.Shift.compute ~on_sub i in
     let uses_katex = Doctree.Math.has_math_elements p in
     let toc = Toc.gen_toc ~config ~resolve ~path:url i in

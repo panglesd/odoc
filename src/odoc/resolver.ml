@@ -403,50 +403,46 @@ type t = {
   open_modules : string list;
 }
 
+let all_roots ?root named_roots =
+  let all_files =
+    match Named_roots.all_of ?root named_roots ~ext:"odocl" with
+    | Ok x -> x
+    | Error NoPackage -> []
+  in
+  let load page =
+    match Odoc_file.load_root page with Error _ -> None | Ok root -> Some root
+  in
+  List.filter_map load all_files
+
 let all_pages ?root ({ pages; _ } : t) =
-  let all_pages =
-    match pages with
-    | None -> Ok []
-    | Some pages -> Named_roots.all_of ?root pages ~ext:"odocl"
+  let filter (root : Odoc_model.Root.t) =
+    match root with
+    | {
+     file = Page { title; _ };
+     id = { iv = #Odoc_model.Paths.Identifier.Page.t_pv; _ } as id;
+     _;
+    } ->
+        Some (id, title)
+    | _ -> None
   in
-  let all_pages =
-    match all_pages with Ok x -> x | Error _ -> failwith "TODO"
-  in
-  let find_id page =
-    let units = load_units_from_files [ page ] in
-    let is_page u =
-      match u with
-      | Odoc_file.Page_content p -> Some p
-      | Impl_content _ | Unit_content _ | Source_tree_content _ -> None
-    in
-    match find_map is_page units with
-    | Some (p, _) -> p
-    | None -> failwith ("Page not found by name: " ^ Fpath.to_string page)
-  in
-  let all_pages = List.map find_id all_pages in
-  (* List.map (fun p -> p.Odoc_model.Lang.Page.name) all_pages *) all_pages
+  match pages with
+  | None -> []
+  | Some pages -> List.filter_map filter @@ all_roots ?root pages
 
 let all_units ~library ({ libs; _ } : t) =
-  let all_libs =
-    match libs with
-    | None -> Ok []
-    | Some libs -> Named_roots.all_of ~root:library libs ~ext:"odocl"
+  let filter (root : Odoc_model.Root.t) =
+    match root with
+    | {
+     file = Compilation_unit _;
+     id = { iv = #Odoc_model.Paths.Identifier.RootModule.t_pv; _ } as id;
+     _;
+    } ->
+        Some id
+    | _ -> None
   in
-  let all_libs = match all_libs with Ok x -> x | Error _ -> failwith "TODO" in
-  let find_id lib =
-    let units = load_units_from_files [ lib ] in
-    let is_lib u =
-      match u with
-      | Odoc_file.Unit_content p -> Some p
-      | Impl_content _ | Page_content _ | Source_tree_content _ -> None
-    in
-    match find_map is_lib units with Some (p, _) -> Some p | None -> None
-    (* failwith *)
-    (*   ("Page " ^ library ^ " not found by name: " *)
-    (*   ^ string_of_int (List.length units)) *)
-  in
-  let all_libs = List.filter_map find_id all_libs in
-  List.map (fun p -> p.Odoc_model.Lang.Compilation_unit.id) all_libs
+  match libs with
+  | None -> []
+  | Some libs -> List.filter_map filter @@ all_roots ~root:library libs
 
 type roots = {
   page_roots : (string * Fs.Directory.t) list;
