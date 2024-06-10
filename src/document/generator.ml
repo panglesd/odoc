@@ -1812,7 +1812,7 @@ module Make (Syntax : SYNTAX) = struct
             let rec add_to_dir (l : (string * 'a t) list) =
               match l with
               | [] -> [ (name, Dir (add_entry_to_dir (None, []) payload rest)) ]
-              | (name2, Dir d) :: q when String.equal name name2 ->
+              | (name2, Dir d) :: q when name = name2 ->
                   (name2, Dir (add_entry_to_dir d payload rest)) :: q
               | d :: q -> d :: add_to_dir q
             in
@@ -1886,7 +1886,11 @@ module Make (Syntax : SYNTAX) = struct
           let pages = [ block (Block.List (Block.Unordered, [ pages ])) ] in
           [ title @@ page_name ^ "'s Pages" ] @ pages
       in
-      let page_hierarchies = List.concat_map page_hierarchy v.pages in
+      let rec concat_map acc f = function
+        | hd :: tl -> concat_map (List.rev_append (f hd) acc) f tl
+        | [] -> List.rev acc
+      in
+      let page_hierarchies = concat_map [] page_hierarchy v.pages in
       let units =
         let item id =
           let id = (id :> Paths.Identifier.t) in
@@ -1908,8 +1912,8 @@ module Make (Syntax : SYNTAX) = struct
               Some elem
         in
         List.map
-          (fun Odoc_model.Lang.Sidebar.{ units; name } ->
-            let units = List.filter_map item units in
+          (fun { Odoc_model.Lang.Sidebar.units; name } ->
+            let units = filter_map [] item units in
             [ title name; block (List (Block.Unordered, units)) ])
           v.libraries
       in
@@ -1919,7 +1923,9 @@ module Make (Syntax : SYNTAX) = struct
 
     let compilation_unit ?sidebar:sb (t : Odoc_model.Lang.Compilation_unit.t) =
       let url = Url.Path.from_identifier t.id in
-      let sidebar = Option.map (sidebar t.id) sb in
+      let sidebar =
+        match sb with None -> None | Some sb -> Some ((sidebar t.id) sb)
+      in
       let unit_doc, items =
         match t.content with
         | Module sign -> signature ~sidebar sign
@@ -1935,7 +1941,9 @@ module Make (Syntax : SYNTAX) = struct
       let url = Url.Path.from_identifier t.name in
       let preamble, items = Sectioning.docs t.content in
       let source_anchor = None in
-      let sidebar = Option.map (sidebar t.name) sb in
+      let sidebar =
+        match sb with None -> None | Some sb -> Some ((sidebar t.name) sb)
+      in
       Document.Page { Page.preamble; items; url; source_anchor; sidebar }
 
     let source_tree t =

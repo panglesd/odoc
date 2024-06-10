@@ -138,7 +138,9 @@ let render_odoc ~resolver ~warnings_options ~syntax ~renderer ~output extra file
 
 let generate_odoc ~syntax ~warnings_options ~renderer ~output ~extra_suffix
     ~source ~sidebar extra file =
-  let sidebar = Option.map Sidebar.read sidebar in
+  let sidebar =
+    match sidebar with None -> None | Some x -> Some (Sidebar.read x)
+  in
   documents_of_odocl ~warnings_options ~renderer ~source ~extra ~syntax ?sidebar
     file
   >>= fun docs ->

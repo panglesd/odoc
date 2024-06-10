@@ -119,17 +119,17 @@ end = struct
   let all_of ?root ~ext { table; current_root } =
     let my_root = match root with None -> current_root | Some pkg -> pkg in
     let return flat =
-      let values = flat |> Hashtbl.to_seq_values |> List.of_seq in
+      let values = Hashtbl.fold (fun _ v acc -> v :: acc) flat [] in
       let values = List.filter (Fpath.has_ext ext) values in
       Ok values
     in
-    match Hashtbl.find_opt table my_root with
-    | Some { flat = Visited flat; _ } -> return flat
-    | Some ({ flat = Unvisited root; _ } as p) ->
+    match Hashtbl.find table my_root with
+    | { flat = Visited flat; _ } -> return flat
+    | { flat = Unvisited root; _ } as p ->
         let flat = populate_flat_namespace ~root in
         Hashtbl.replace table my_root { p with flat = Visited flat };
         return flat
-    | None -> Error NoPackage
+    | exception Not_found -> Error NoPackage
 end
 
 let () = (ignore Named_roots.find_by_name [@warning "-5"])
@@ -403,6 +403,12 @@ type t = {
   open_modules : string list;
 }
 
+let rec filter_map acc f = function
+  | hd :: tl ->
+      let acc = match f hd with Some x -> x :: acc | None -> acc in
+      filter_map acc f tl
+  | [] -> List.rev acc
+
 let all_roots ?root named_roots =
   let all_files =
     match Named_roots.all_of ?root named_roots ~ext:"odocl" with
@@ -412,7 +418,7 @@ let all_roots ?root named_roots =
   let load page =
     match Odoc_file.load_root page with Error _ -> None | Ok root -> Some root
   in
-  List.filter_map load all_files
+  filter_map [] load all_files
 
 let all_pages ?root ({ pages; _ } : t) =
   let filter (root : Odoc_model.Root.t) =
@@ -427,7 +433,7 @@ let all_pages ?root ({ pages; _ } : t) =
   in
   match pages with
   | None -> []
-  | Some pages -> List.filter_map filter @@ all_roots ?root pages
+  | Some pages -> filter_map [] filter @@ all_roots ?root pages
 
 let all_units ~library ({ libs; _ } : t) =
   let filter (root : Odoc_model.Root.t) =
@@ -442,7 +448,7 @@ let all_units ~library ({ libs; _ } : t) =
   in
   match libs with
   | None -> []
-  | Some libs -> List.filter_map filter @@ all_roots ~root:library libs
+  | Some libs -> filter_map [] filter @@ all_roots ~root:library libs
 
 type roots = {
   page_roots : (string * Fs.Directory.t) list;

@@ -14,13 +14,14 @@ let compile ~page_roots ~lib_roots ~output ~warnings_options:_ =
           List.map
             (fun (page_id, title) ->
               let title =
-                Option.value title
-                  ~default:
+                match title with
+                | None ->
                     [
                       Odoc_model.Location_.at
                         (Odoc_model.Location_.span [])
                         (`Word (Odoc_model.Paths.Identifier.name page_id));
                     ]
+                | Some x -> x
               in
               (title, page_id))
             pages
@@ -40,7 +41,7 @@ let compile ~page_roots ~lib_roots ~output ~warnings_options:_ =
   let oc = open_out_bin (Fs.File.to_string file) in
   Marshal.to_channel oc content [];
   close_out oc;
-  Ok ()
+  Result.Ok ()
 
 let read input =
   let ic = open_in_bin (Fs.File.to_string input) in
