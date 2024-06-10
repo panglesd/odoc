@@ -493,7 +493,9 @@ module Page = struct
     let subpages = subpages ~config @@ Doctree.Subpages.compute p in
     let resolve = Link.Current url in
     let sidebar =
-      (Option.map (block ~config ~resolve) sidebar :> any Html.elt list option)
+      match sidebar with
+      | None -> None
+      | Some x -> (Some (block ~config ~resolve x) :> any Html.elt list option)
     in
     let i = Doctree.Shift.compute ~on_sub i in
     let uses_katex = Doctree.Math.has_math_elements p in
