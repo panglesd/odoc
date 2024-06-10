@@ -104,14 +104,13 @@ let compile_to_marshall ~output ~warnings_options files =
   Ok (Odoc_file.save_index output final_index)
 
 let compile out_format ~output ~warnings_options includes =
-
   let files =
-    List.concat_map
-      (fun include_rec ->
-        Fs.Directory.fold_files_rec ~ext:"odocl"
-          (fun files file -> file :: files)
-          [] include_rec)
-      includes
+    includes
+    |> List.map (fun include_rec ->
+           Fs.Directory.fold_files_rec ~ext:"odocl"
+             (fun files file -> file :: files)
+             [] include_rec)
+    |> List.concat
   in
   if files = [] then Error (`Msg "No .odocl files were included")
   else
