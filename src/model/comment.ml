@@ -129,7 +129,7 @@ let rec link_content_of_inline_element :
 and link_content_of_inline_elements l =
   l |> List.map link_content_of_inline_element |> List.concat
 
-let zero_heading docs : link_content option =
+let find_zero_heading docs : link_content option =
   List.find_map
     (fun doc ->
       match doc.Location_.value with
