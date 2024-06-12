@@ -461,7 +461,7 @@ module Breadcrumbs = struct
       | x :: xs -> (
           match Odoc_document.Url.Path.of_list (List.rev (x :: xs)) with
           | Some x -> x :: get_parent_paths xs
-          | None -> get_parent_paths xs)
+          | None -> assert false)
     in
     let to_breadcrumb path =
       let href =

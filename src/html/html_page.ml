@@ -79,7 +79,7 @@ let html_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) =
       let up_url = "../index.html" in
       let parent_name = x.name in
       make_navigation ~up_url [ Html.txt parent_name ]
-  | current :: up :: bs ->
+  | { name = "index"; _ } :: current :: up :: bs | current :: up :: bs ->
       let space = Html.txt " " in
       let sep = [ space; Html.entity "#x00BB"; space ] in
       let html =
