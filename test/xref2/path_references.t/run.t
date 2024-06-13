@@ -61,27 +61,34 @@
   Warning: Failed to resolve reference ./foo is of kind page path but expected page
   File "doc/foo.mld", line 4, characters 9-20:
   Warning: Failed to resolve reference /pkg/foo is of kind page path but expected page
+
   $ odoc link -P pkg:h/pkg/doc -L libname:h/pkg/lib/libname h/pkg/lib/libname/test.odoc
-  File "test.ml", line 11, characters 42-51:
+  File "test.ml", line 12, characters 42-51:
   Warning: Failed to resolve reference ./Test is of kind page path but expected page
-  File "test.ml", line 11, characters 21-41:
+  File "test.ml", line 12, characters 21-41:
   Warning: Failed to resolve reference /pkg/libname/Test is of kind page path but expected page
-  File "test.ml", line 11, characters 3-20:
+  File "test.ml", line 12, characters 3-20:
   Warning: Failed to resolve reference //libname/Test Path '//libname/Test' not found
-  File "test.ml", line 9, characters 19-37:
+  File "test.ml", line 10, characters 19-37:
   Warning: Failed to resolve reference /pkg/subdir/dup is of kind page path but expected page
-  File "test.ml", line 9, characters 3-18:
+  File "test.ml", line 10, characters 3-18:
   Warning: Failed to resolve reference //subdir/dup Path '//subdir/dup' not found
-  File "test.ml", line 7, characters 12-23:
+  File "test.ml", line 8, characters 12-23:
   Warning: Failed to resolve reference /pkg/dup is of kind page path but expected page
-  File "test.ml", line 7, characters 3-11:
+  File "test.ml", line 8, characters 3-11:
   Warning: Failed to resolve reference //dup Path '//dup' not found
-  File "test.ml", line 5, characters 38-44:
+  File "test.ml", line 6, characters 38-44:
   Warning: Failed to resolve reference unresolvedroot(bar) Couldn't find "bar"
-  File "test.ml", line 5, characters 19-37:
+  File "test.ml", line 6, characters 19-37:
   Warning: Failed to resolve reference /pkg/subdir/bar is of kind page path but expected page
-  File "test.ml", line 5, characters 3-18:
+  File "test.ml", line 6, characters 3-18:
   Warning: Failed to resolve reference //subdir/bar Path '//subdir/bar' not found
+  File "test.ml", line 4, characters 34-45:
+  Warning: Failed to resolve reference unresolvedroot(foo) Couldn't find page "foo"
+  File "test.ml", line 4, characters 17-33:
+  Warning: Failed to resolve reference /pkg/foo is of kind page path but expected page
+  File "test.ml", line 4, characters 3-16:
+  Warning: Failed to resolve reference //foo Path '//foo' not found
   File "test.ml", line 3, characters 24-30:
   Warning: Failed to resolve reference unresolvedroot(foo) Couldn't find "foo"
   File "test.ml", line 3, characters 12-23:
@@ -149,6 +156,9 @@ Helper that extracts references in a compact way. Headings help to interpret the
   {"`Reference":[{"`Page_path":{"`Root":["foo","`TCurrentPackage"]}},[]]}
   {"`Reference":[{"`Page_path":{"`Slash":[{"`Root":["pkg","`TAbsolutePath"]},"foo"]}},[]]}
   {"`Reference":[{"`Root":["foo","`TUnknown"]},[]]}
+  {"`Reference":[{"`Page_path":{"`Root":["foo","`TCurrentPackage"]}},[]]}
+  {"`Reference":[{"`Page_path":{"`Slash":[{"`Root":["pkg","`TAbsolutePath"]},"foo"]}},[]]}
+  {"`Reference":[{"`Root":["foo","`TPage"]},[]]}
   ["Page","subdir/bar"]
   {"`Reference":[{"`Page_path":{"`Slash":[{"`Root":["subdir","`TCurrentPackage"]},"bar"]}},[]]}
   {"`Reference":[{"`Page_path":{"`Slash":[{"`Slash":[{"`Root":["pkg","`TAbsolutePath"]},"subdir"]},"bar"]}},[]]}
