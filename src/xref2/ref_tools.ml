@@ -194,13 +194,9 @@ module Page_path = struct
 
   let page_in_env env page_path : page_lookup_result ref_result =
     let tag, path = unpack_page_path [] page_path in
-    match tag with
-    | `TRelativePath | `TAbsolutePath ->
-        Error (`Wrong_kind ([ `Page ], `Page_path))
-    | `TCurrentPackage ->
-        handle_lookup_errors ~tag ~path (Env.lookup_path (Env.Ppage path) env)
-        >>= expect_page ~tag ~path
-        >>= fun p -> Ok (`Identifier p.name, p)
+    handle_lookup_errors ~tag ~path (Env.lookup_path (`Page, tag, path) env)
+    >>= expect_page ~tag ~path
+    >>= fun p -> Ok (`Identifier p.name, p)
 
   let any_in_env env page_path : page_path_lookup_result ref_result =
     (* TODO: Resolve modules *)

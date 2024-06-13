@@ -22,7 +22,7 @@ type root =
   | Resolved of (Odoc_model.Root.t * Identifier.Module.t * Component.Module.t)
   | Forward
 
-type path_query = Ppage of string list  (** [{!//foo/bar}] *)
+type path_query = [ `Page | `Unit ] * Reference.tag_page_path * string list
 
 type resolver = {
   open_units : string list;

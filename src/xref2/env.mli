@@ -19,15 +19,10 @@ type lookup_path_result =
   | Path_not_found
 
 type root =
-  | Resolved of
-      (Root.t * Odoc_model.Paths.Identifier.Module.t * Component.Module.t)
+  | Resolved of (Root.t * Identifier.Module.t * Component.Module.t)
   | Forward
 
-type path_query =
-  (* | Pabs of string list (** [{!/pkgname/foo}] *) *)
-  (* | Prel of string list (** [{!foo/bar}] *) *)
-  | Ppage of string list  (** [{!//foo/bar}] *)
-(* | Pmodule of string * string (** [{!/libname/Foo}] *) *)
+type path_query = [ `Page | `Unit ] * Reference.tag_page_path * string list
 
 type resolver = {
   open_units : string list;

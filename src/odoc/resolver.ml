@@ -398,7 +398,7 @@ let add_unit_to_cache u =
   in
   Hashtbl.add unit_cache target_name [ u ]
 
-let lookup_path _ap ~pages ~libs:_ path_query =
+let lookup_path _ap ~pages ~libs:_ (kind, tag, path) =
   let module Env = Odoc_xref2.Env in
   let ( >>= ) x f = match x with Some x' -> f x' | None -> None in
   let page_path_to_path path =
@@ -412,8 +412,8 @@ let lookup_path _ap ~pages ~libs:_ path_query =
     | Ok x -> x
     | Error NoPackage -> None
   in
-  match path_query with
-  | Env.Ppage path -> (
+  match (kind, tag) with
+  | `Page, `TCurrentPackage -> (
       (* [path] is within the current package root. *)
       let path = Fs.File.of_segs (page_path_to_path path) in
       ( pages >>= fun pages ->
@@ -424,6 +424,7 @@ let lookup_path _ap ~pages ~libs:_ path_query =
       |> function
       | Some page -> Env.Path_page page
       | None -> Env.Path_not_found)
+  | _ -> Env.Path_not_found
 
 type t = {
   important_digests : bool;
