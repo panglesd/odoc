@@ -1803,17 +1803,23 @@ module Make (Syntax : SYNTAX) = struct
       type 'a dir = 'a option * (string * 'a t) list
       and 'a t = Leaf of 'a | Dir of 'a dir
 
+      let rec sort_insert (a, p) l =
+        match l with
+        | [] -> [ (a, p) ]
+        | (t, q) :: rest when compare a t <= 0 -> (a, p) :: (t, q) :: rest
+        | t :: rest -> t :: sort_insert (a, p) rest
+
       let rec add_entry_to_dir (dir : 'a dir) payload path =
         match (path, dir) with
         | [], _ -> assert false
         | [ "index" ], (None, l) -> (Some payload, l)
-        | [ name ], (p, l) -> (p, (name, Leaf payload) :: l)
+        | [ name ], (p, l) -> (p, sort_insert (name, Leaf payload) l)
         | name :: rest, (p, l) ->
             let rec add_to_dir (l : (string * 'a t) list) =
               match l with
               | [] -> [ (name, Dir (add_entry_to_dir (None, []) payload rest)) ]
               | (name2, Dir d) :: q when name = name2 ->
-                  (name2, Dir (add_entry_to_dir d payload rest)) :: q
+                  sort_insert (name2, Dir (add_entry_to_dir d payload rest)) q
               | d :: q -> d :: add_to_dir q
             in
             (p, add_to_dir l)
