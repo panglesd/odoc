@@ -301,6 +301,7 @@ body.odoc {
   grid-template-columns: min-content 1fr;
   column-gap: 10ex;
   row-gap: 2ex;
+  grid-template-rows: auto auto auto 1fr;
 }
 
 body.odoc-src {
