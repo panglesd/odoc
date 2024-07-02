@@ -42,23 +42,26 @@ let html_of_search () =
     div ~a:[ a_class [ "search-inner" ] ] [ search_bar; snake; search_result ])
 
 let sidebar ~sb toc =
+  let sidebar c = [ Html.div ~a:[ Html.a_class [ "odoc-tocs" ] ] c ] in
   match sb with
   | None -> (
       match toc with
       | [] -> []
       | _ ->
-          [
-            Html.nav
-              ~a:[ Html.a_class [ "odoc-toc"; "odoc-local-toc" ] ]
-              (html_of_toc toc);
-          ])
+          sidebar
+            [
+              Html.nav
+                ~a:[ Html.a_class [ "odoc-toc"; "odoc-local-toc" ] ]
+                (html_of_toc toc);
+            ])
   | Some c ->
-      [
-        Html.nav
-          ~a:[ Html.a_class [ "odoc-toc"; "odoc-local-toc" ] ]
-          (html_of_toc toc);
-        Html.nav ~a:[ Html.a_class [ "odoc-toc"; "odoc-global-toc" ] ] c;
-      ]
+      sidebar
+        [
+          Html.nav
+            ~a:[ Html.a_class [ "odoc-toc"; "odoc-local-toc" ] ]
+            (html_of_toc toc);
+          Html.nav ~a:[ Html.a_class [ "odoc-toc"; "odoc-global-toc" ] ] c;
+        ]
 
 let html_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) =
   let make_navigation ~up_url rest =
