@@ -218,7 +218,7 @@ Here is an example of such search script generation, using the fuse.js search en
   $ cat index.json >> index.js
 
   $ cat << EOF >> index.js
-  >
+  > 
   > const options = { keys: ['id', 'doc'] };
   > var idx_fuse = new Fuse(documents, options);
   > onmessage = (m) => {
@@ -269,11 +269,12 @@ Passing a file which is not a correctly marshalled one:
   $ odoc compile-index --include-rec .
   File "./my_file.odocl":
   Warning: Error while unmarshalling "./my_file.odocl": End_of_file
+  
 
 
 
 Passing no file:
 
   $ odoc compile-index
-  ERROR: At least one of --include-rec must be passed to odoc compile-index
+  ERROR: At least one of --file-list or --include-rec or an .odocl file must be passed to odoc compile-index
   [1]

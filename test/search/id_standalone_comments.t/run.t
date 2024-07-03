@@ -8,6 +8,10 @@ Compile and link the documentation
   $ odoc link -I . main.odoc
 
   $ odoc compile-index --json --include-rec .
+We test that you can also pass a .odocl file directly.
+  $ odoc compile-index --json main.odocl -o index2.json
+Indexes should be the same no matter how the inputs were passed.
+  $ diff index.json index2.json
 
 Let's have a look at the links generated for standalone comments search entries:
 
