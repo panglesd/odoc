@@ -1865,9 +1865,12 @@ module Make (Syntax : SYNTAX) = struct
     let sidebar root_id (v : Odoc_model.Lang.Sidebar.t) =
       let root_id = (root_id :> Paths.Identifier.t) in
       let prepare (link_content, x) =
-        let x = (x :> Paths.Identifier.t) in
         let payload =
-          (link_content, x, Odoc_model.Paths.Identifier.equal x root_id)
+          ( link_content,
+            x,
+            Odoc_model.Paths.Identifier.equal
+              (x :> Odoc_model.Paths.Identifier.t)
+              root_id )
         in
         let path = Odoc_model.Paths.Identifier.fullname x in
         (payload, path)
@@ -1875,6 +1878,12 @@ module Make (Syntax : SYNTAX) = struct
       let title t =
         block
           (Inline [ inline (Inline.Styled (`Bold, [ inline (Inline.Text t) ])) ])
+      in
+      let entry_block href content is_highlighted =
+        let target = InternalLink.Resolved href in
+        let link = { InternalLink.target; content; tooltip = None } in
+        let attr = if is_highlighted then [ "current_unit" ] else [] in
+        block (Inline [ inline ~attr @@ Inline.InternalLink link ])
       in
       let page_hierarchy { Odoc_model.Lang.Sidebar.page_name; pages } =
         if pages = [] then []
@@ -1884,20 +1893,10 @@ module Make (Syntax : SYNTAX) = struct
             Hierarchy.make pages |> Hierarchy.remove_common_root
           in
           let convert (content, id, is_highlighted) =
-            let url = Url.from_identifier ~stop_before:false id in
-            match url with
-            | Ok href ->
-                let target = InternalLink.Resolved href in
-                let content = Comment.link_content content in
-                let link = { InternalLink.target; content; tooltip = None } in
-                let attr = if is_highlighted then [ "current_unit" ] else [] in
-                block (Inline [ inline ~attr @@ Inline.InternalLink link ])
-            | Error _ ->
-                let content = Comment.link_content content in
-                (* let attr = if is_highlighted then [ "current_unit" ] else [] in *)
-                block (Inline content)
+            let href = id |> Url.Path.from_identifier |> Url.from_path in
+            let content = Comment.link_content content in
+            entry_block href content is_highlighted
           in
-
           let pages = Hierarchy.to_sidebar convert hierarchy in
           let pages = [ block (Block.List (Block.Unordered, [ pages ])) ] in
           [ title @@ page_name ^ "'s Pages" ] @ pages
@@ -1909,27 +1908,19 @@ module Make (Syntax : SYNTAX) = struct
       let page_hierarchies = concat_map [] page_hierarchy v.pages in
       let units =
         let item id =
-          let id = (id :> Paths.Identifier.t) in
           let href, name, is_highlighted =
-            ( Url.from_identifier ~stop_before:false id,
+            ( id |> Url.Path.from_identifier |> Url.from_path,
               Paths.Identifier.name id,
-              Odoc_model.Paths.Identifier.equal id root_id )
+              Odoc_model.Paths.Identifier.equal
+                (id :> Odoc_model.Paths.Identifier.t)
+                root_id )
           in
-          match href with
-          | Error _ -> None
-          | Ok href ->
-              let target = InternalLink.Resolved href in
-              let content = [ inline @@ Text name ] in
-              let link = { InternalLink.target; content; tooltip = None } in
-              let attr = if is_highlighted then [ "current_unit" ] else [] in
-              let elem =
-                [ block (Inline [ inline ~attr @@ Inline.InternalLink link ]) ]
-              in
-              Some elem
+          let content = [ inline @@ Text name ] in
+          [ entry_block href content is_highlighted ]
         in
         List.map
           (fun { Odoc_model.Lang.Sidebar.units; name } ->
-            let units = filter_map [] item units in
+            let units = List.map item units in
             [ title name; block (List (Block.Unordered, units)) ])
           v.libraries
       in
