@@ -1864,68 +1864,64 @@ module Make (Syntax : SYNTAX) = struct
 
     let sidebar root_id (v : Odoc_model.Lang.Sidebar.t) =
       let root_id = (root_id :> Paths.Identifier.t) in
-      let prepare (link_content, x) =
-        let payload =
-          ( link_content,
-            x,
-            Odoc_model.Paths.Identifier.equal
-              (x :> Odoc_model.Paths.Identifier.t)
-              root_id )
-        in
-        let path = Odoc_model.Paths.Identifier.fullname x in
-        (payload, path)
-      in
       let title t =
         block
           (Inline [ inline (Inline.Styled (`Bold, [ inline (Inline.Text t) ])) ])
       in
-      let entry_block href content is_highlighted =
+      let sidebar_toc_entry id content =
+        let href = id |> Url.Path.from_identifier |> Url.from_path in
+        let is_highlighted =
+          Odoc_model.Paths.Identifier.equal
+            (id :> Odoc_model.Paths.Identifier.t)
+            root_id
+        in
         let target = InternalLink.Resolved href in
         let link = { InternalLink.target; content; tooltip = None } in
         let attr = if is_highlighted then [ "current_unit" ] else [] in
         block (Inline [ inline ~attr @@ Inline.InternalLink link ])
       in
-      let page_hierarchy { Odoc_model.Lang.Sidebar.page_name; pages } =
-        if pages = [] then []
-        else
-          let pages = List.map prepare pages in
-          let hierarchy =
-            Hierarchy.make pages |> Hierarchy.remove_common_root
-          in
-          let convert (content, id, is_highlighted) =
-            let href = id |> Url.Path.from_identifier |> Url.from_path in
-            let content = Comment.link_content content in
-            entry_block href content is_highlighted
-          in
-          let pages = Hierarchy.to_sidebar convert hierarchy in
-          let pages = [ block (Block.List (Block.Unordered, [ pages ])) ] in
-          [ title @@ page_name ^ "'s Pages" ] @ pages
+      let page_hierarchies =
+        let page_hierarchy { Odoc_model.Lang.Sidebar.page_name; pages } =
+          if pages = [] then []
+          else
+            let prepare_for_hierarchy (link_content, x) =
+              let payload = (link_content, x) in
+              let path = Odoc_model.Paths.Identifier.fullname x in
+              (payload, path)
+            in
+            let pages = List.map prepare_for_hierarchy pages in
+            let hierarchy =
+              Hierarchy.make pages |> Hierarchy.remove_common_root
+            in
+            let convert (content, id) =
+              let content = Comment.link_content content in
+              sidebar_toc_entry id content
+            in
+            let pages = Hierarchy.to_sidebar convert hierarchy in
+            let pages = [ block (Block.List (Block.Unordered, [ pages ])) ] in
+            [ title @@ page_name ^ "'s Pages" ] @ pages
+        in
+        let rec concat_map acc f = function
+          | hd :: tl -> concat_map (List.rev_append (f hd) acc) f tl
+          | [] -> List.rev acc
+        in
+        concat_map [] page_hierarchy v.pages
       in
-      let rec concat_map acc f = function
-        | hd :: tl -> concat_map (List.rev_append (f hd) acc) f tl
-        | [] -> List.rev acc
-      in
-      let page_hierarchies = concat_map [] page_hierarchy v.pages in
       let units =
         let item id =
-          let href, name, is_highlighted =
-            ( id |> Url.Path.from_identifier |> Url.from_path,
-              Paths.Identifier.name id,
-              Odoc_model.Paths.Identifier.equal
-                (id :> Odoc_model.Paths.Identifier.t)
-                root_id )
-          in
-          let content = [ inline @@ Text name ] in
-          [ entry_block href content is_highlighted ]
+          let content = [ inline @@ Text (Paths.Identifier.name id) ] in
+          [ sidebar_toc_entry id content ]
         in
-        List.map
-          (fun { Odoc_model.Lang.Sidebar.units; name } ->
-            let units = List.map item units in
-            [ title name; block (List (Block.Unordered, units)) ])
-          v.libraries
+        let units =
+          List.map
+            (fun { Odoc_model.Lang.Sidebar.units; name } ->
+              let units = List.map item units in
+              [ title name; block (List (Block.Unordered, units)) ])
+            v.libraries
+        in
+        let units = block (Block.List (Block.Unordered, units)) in
+        [ title "Libraries"; units ]
       in
-      let units = block (Block.List (Block.Unordered, units)) in
-      let units = [ title "Libraries"; units ] in
       page_hierarchies @ units
 
     let compilation_unit ?sidebar:sb (t : Odoc_model.Lang.Compilation_unit.t) =
