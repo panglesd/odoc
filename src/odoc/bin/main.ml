@@ -18,7 +18,6 @@ let convert_syntax : Odoc_document.Renderer.syntax Arg.conv =
   in
   (syntax_parser, syntax_printer)
 
-(** create default to false *)
 let convert_directory ?(create = false) () : Fs.Directory.t Arg.conv =
   let dir_parser, dir_printer = Arg.string in
   let odoc_dir_parser str =
