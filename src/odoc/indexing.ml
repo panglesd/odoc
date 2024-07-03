@@ -79,12 +79,7 @@ let compile_to_marshall ~output ~warnings_options files =
   let unit u =
     Odoc_model.Fold.unit
       ~f:(fun () item ->
-        let entries =
-          Odoc_search.Entry.entries_of_item
-            (* (u.Odoc_model.Lang.Compilation_unit.id *)
-            (*   :> Odoc_model.Paths.Identifier.t) *)
-            item
-        in
+        let entries = Odoc_search.Entry.entries_of_item item in
         List.iter
           (fun entry -> H.add final_index entry.Odoc_search.Entry.id entry)
           entries)
@@ -93,11 +88,7 @@ let compile_to_marshall ~output ~warnings_options files =
   let page p =
     Odoc_model.Fold.page
       ~f:(fun () item ->
-        let entries =
-          Odoc_search.Entry.entries_of_item
-            (* (p.Odoc_model.Lang.Page.name :> Odoc_model.Paths.Identifier.t) *)
-            item
-        in
+        let entries = Odoc_search.Entry.entries_of_item item in
         List.iter
           (fun entry -> H.add final_index entry.Odoc_search.Entry.id entry)
           entries)
