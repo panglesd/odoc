@@ -1799,7 +1799,23 @@ module Make (Syntax : SYNTAX) = struct
       in
       List.map f t
 
-    module Hierarchy = struct
+    module Hierarchy : sig
+      type 'a dir
+      (** Directory in a filesystem-like abstraction, where files have a ['a]
+          payload and directory can also have a ['a] payload. *)
+
+      val make : ('a * string list) list -> 'a dir
+      (** Create a directory from a list of payload and file path (given as a
+          string list). Files named ["index"] give their payload to their
+          containing directory. *)
+
+      val remove_common_root : 'a dir -> 'a dir
+      (** Returns the deepest subdir containing all files. *)
+
+      val to_sidebar :
+        ?fallback:string -> ('a -> Block.one) -> 'a dir -> Block.t
+      (** Turns a directory into a sidebar,  *)
+    end = struct
       type 'a dir = 'a option * (string * 'a t) list
       and 'a t = Leaf of 'a | Dir of 'a dir
 
