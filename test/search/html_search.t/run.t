@@ -218,7 +218,7 @@ Here is an example of such search script generation, using the fuse.js search en
   $ cat index.json >> index.js
 
   $ cat << EOF >> index.js
-  > 
+  >
   > const options = { keys: ['id', 'doc'] };
   > var idx_fuse = new Fuse(documents, options);
   > onmessage = (m) => {
@@ -250,6 +250,15 @@ Passing an empty folder:
 
   $ mkdir foo
 
+  $ odoc compile-index -o index.odoc
+  ERROR: When generating a binary index, the output must have a .odoc-index file extension
+  [1]
+  $ odoc compile-index -o index.json
+  ERROR: When generating a binary index, the output must have a .odoc-index file extension
+  [1]
+  $ odoc compile-index  --json  -o index.odoc-index
+  ERROR: When generating a json index, the output must have a .json file extension
+  [1]
   $ odoc compile-index --include-rec foo
   ERROR: No .odocl files were included
   [1]
@@ -260,7 +269,6 @@ Passing a file which is not a correctly marshalled one:
   $ odoc compile-index --include-rec .
   File "./my_file.odocl":
   Warning: Error while unmarshalling "./my_file.odocl": End_of_file
-  
 
 
 

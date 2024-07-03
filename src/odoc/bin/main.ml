@@ -477,17 +477,29 @@ module Compile_impl = struct
     in
     Term.info "compile-impl" ~docs ~doc
 end
+let ( >>= ) = Result.bind
 
 module Indexing = struct
   let output_file ~dst marshall =
     match (dst, marshall) with
-    | Some file, _ -> Fs.File.of_string file
-    | None, `JSON -> Fs.File.of_string "index.json"
-    | None, `Marshall -> Fs.File.of_string "index.odoc-index"
+    | Some file, `JSON when not (Fpath.has_ext "json" (Fpath.v file)) ->
+        Error
+          (`Msg
+            "When generating a json index, the output must have a .json file \
+             extension")
+    | Some file, `Marshall when not (Fpath.has_ext "odoc-index" (Fpath.v file))
+      ->
+        Error
+          (`Msg
+            "When generating a binary index, the output must have a \
+             .odoc-index file extension")
+    | Some file, _ -> Ok (Fs.File.of_string file)
+    | None, `JSON -> Ok (Fs.File.of_string "index.json")
+    | None, `Marshall -> Ok (Fs.File.of_string "index.odoc-index")
 
   let index dst json warnings_options include_rec =
     let marshall = if json then `JSON else `Marshall in
-    let output = output_file ~dst marshall in
+    output_file ~dst marshall >>= fun output ->
     match include_rec with
     | [] ->
         Result.Error
@@ -500,7 +512,6 @@ module Indexing = struct
         "Output file path. Non-existing intermediate directories are created. \
          Defaults to index.odoc-index, or index.json if --json is passed (in \
          which case, the .odoc-index file extension is mandatory)."
-        (* This is not checked for now *)
       in
       Arg.(
         value & opt (some string) None & info ~docs ~docv:"PATH" ~doc [ "o" ])
