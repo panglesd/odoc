@@ -24,6 +24,22 @@ let handle_file file ~unit ~page ~occ =
               "Only pages and unit are allowed as input when generating an \
                index"))
 
+let parse_input_file input =
+  let is_sep = function '\n' | '\r' -> true | _ -> false in
+  Fs.File.read input >>= fun content ->
+  let files =
+    String.fields ~empty:false ~is_sep content |> List.rev_map Fs.File.of_string
+  in
+  Ok files
+
+let parse_input_files input =
+  List.fold_left
+    (fun acc file ->
+      acc >>= fun acc ->
+      parse_input_file file >>= fun files -> Ok (files :: acc))
+    (Ok []) input
+  >>= fun files -> Ok (List.concat files)
+
 let compile_to_json ~output ~warnings_options files =
   let output_channel =
     Fs.Directory.mkdir_p (Fs.File.dirname output);
@@ -103,14 +119,18 @@ let compile_to_marshall ~output ~warnings_options files =
   result |> Error.handle_warnings ~warnings_options >>= fun () ->
   Ok (Odoc_file.save_index output final_index)
 
-let compile out_format ~output ~warnings_options includes =
+let compile out_format ~output ~warnings_options ~includes_rec ~inputs_in_file
+    ~odocls =
+  parse_input_files inputs_in_file >>= fun files ->
+  let files = List.rev_append odocls files in
   let files =
-    includes
-    |> List.map (fun include_rec ->
-           Fs.Directory.fold_files_rec ~ext:"odocl"
-             (fun files file -> file :: files)
-             [] include_rec)
-    |> List.concat
+    List.rev_append files
+      (includes_rec
+      |> List.map (fun include_rec ->
+             Fs.Directory.fold_files_rec ~ext:"odocl"
+               (fun files file -> file :: files)
+               [] include_rec)
+      |> List.concat)
   in
   if files = [] then Error (`Msg "No .odocl files were included")
   else

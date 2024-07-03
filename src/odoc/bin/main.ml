@@ -497,15 +497,18 @@ module Indexing = struct
     | None, `JSON -> Ok (Fs.File.of_string "index.json")
     | None, `Marshall -> Ok (Fs.File.of_string "index.odoc-index")
 
-  let index dst json warnings_options include_rec =
+  let index dst json warnings_options includes_rec inputs_in_file inputs =
     let marshall = if json then `JSON else `Marshall in
     output_file ~dst marshall >>= fun output ->
-    match include_rec with
-    | [] ->
+    match (includes_rec, inputs_in_file, inputs) with
+    | [], [], [] ->
         Result.Error
           (`Msg
-            "At least one of --include-rec must be passed to odoc compile-index")
-    | _ -> Indexing.compile marshall ~output ~warnings_options include_rec
+            "At least one of --file-list or --include-rec or an .odocl file \
+             must be passed to odoc compile-index")
+    | _ ->
+        Indexing.compile marshall ~output ~warnings_options ~includes_rec
+          ~inputs_in_file ~odocls:inputs
   let cmd =
     let dst =
       let doc =
@@ -515,6 +518,15 @@ module Indexing = struct
       in
       Arg.(
         value & opt (some string) None & info ~docs ~docv:"PATH" ~doc [ "o" ])
+    in
+    let inputs_in_file =
+      let doc =
+        "Input text file containing a line-separated list of paths to .odocl \
+         files to index."
+      in
+      Arg.(
+        value & opt_all convert_fpath []
+        & info ~doc ~docv:"FILE" [ "file-list" ])
     in
     let include_rec =
       let doc =
@@ -530,9 +542,14 @@ module Indexing = struct
       let doc = "whether to output a json file, or a binary .odoc-index file" in
       Arg.(value & flag & info ~doc [ "json" ])
     in
+    let inputs =
+      let doc = ".odocl file to index" in
+      Arg.(value & pos_all convert_fpath [] & info ~doc ~docv:"FILE" [])
+    in
     Term.(
       const handle_error
-      $ (const index $ dst $ json $ warnings_options $ include_rec))
+      $ (const index $ dst $ json $ warnings_options $ include_rec
+       $ inputs_in_file $ inputs))
 
   let info ~docs =
     let doc =
