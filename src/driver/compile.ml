@@ -242,9 +242,23 @@ let link : compiled list -> _ =
   in
   Fiber.List.map link compiled |> List.concat
 
+let odoc_index_path ~odoc_dir pkgname =
+  Fpath.(odoc_dir / pkgname / "index.odoc-index")
+let sherlodoc_js_index_path_relative_to_html pkgname =
+  Fpath.(v pkgname / "sherlodoc_db.js")
+
+let sherlodoc_js_path_relative_to_html = Fpath.v "sherlodoc.js"
+let sherlodoc_js_index_path ~html_dir pkgname =
+  Fpath.(html_dir // sherlodoc_js_index_path_relative_to_html pkgname)
+
+let sherlodoc_js_path ~html_dir =
+  Fpath.(html_dir // sherlodoc_js_path_relative_to_html)
+
+let sherlodoc_marshall_path ~html_dir =
+  Fpath.(html_dir / "sherlodoc_db.marshal")
 let index_one output_dir pkgname _pkg =
   let dir = Fpath.(output_dir / pkgname) in
-  let dst = Fpath.(dir / "index.odoc-index") in
+  let dst = odoc_index_path ~odoc_dir:output_dir pkgname in
   let include_rec = Fpath.Set.singleton dir in
   Odoc.compile_index ~json:false ~dst ~include_rec ()
 let index odoc_dir pkgs = Util.StringMap.iter (index_one odoc_dir) pkgs
@@ -252,20 +266,19 @@ let index odoc_dir pkgs = Util.StringMap.iter (index_one odoc_dir) pkgs
 let sherlodoc_index_one ~html_dir ~odoc_dir pkgname _pkg_content =
   ignore @@ Bos.OS.Dir.create Fpath.(html_dir / pkgname);
   let format = `js in
-  let inputs = [ Fpath.(odoc_dir / pkgname / "index.odoc-index") ] in
-  let dst = Fpath.(html_dir / pkgname / "sherlodoc_db.js") in
+  let inputs = [ odoc_index_path ~odoc_dir pkgname ] in
+  let dst = sherlodoc_js_index_path ~html_dir pkgname in
   Sherlodoc.index ~format ~inputs ~dst ()
 
 let sherlodoc ~html_dir ~odoc_dir pkgs =
   ignore @@ Bos.OS.Dir.create html_dir;
-  Sherlodoc.js Fpath.(html_dir / "sherlodoc.js");
+  Sherlodoc.js (sherlodoc_js_path ~html_dir);
   Util.StringMap.iter (sherlodoc_index_one ~html_dir ~odoc_dir) pkgs;
   let format = `marshal in
-  let dst = Fpath.(html_dir / "sherlodoc_db.marshal") in
+  let dst = sherlodoc_marshall_path ~html_dir in
   let inputs =
     pkgs |> Util.StringMap.bindings
-    |> List.map (fun (pkgname, _pkg) ->
-           Fpath.(odoc_dir / pkgname / "index.odoc-index"))
+    |> List.map (fun (pkgname, _pkg) -> odoc_index_path ~odoc_dir pkgname)
   in
   Sherlodoc.index ~format ~inputs ~dst ()
 
@@ -274,7 +287,10 @@ let html_generate : Fpath.t -> linked list -> _ =
   let html_generate : linked -> unit =
    fun l ->
     let search_uris =
-      Fpath.[ v l.pkgname / "sherlodoc_db.js"; v "sherlodoc.js" ]
+      [
+        sherlodoc_js_index_path_relative_to_html l.pkgname;
+        sherlodoc_js_path_relative_to_html;
+      ]
     in
     Odoc.html_generate ~search_uris
       ~output_dir:(Fpath.to_string output_dir)
