@@ -1,5 +1,4 @@
 open Bos
-open Cmd_outputs
 
 type compile_deps = { digest : Digest.t; deps : (string * Digest.t) list }
 
@@ -9,7 +8,7 @@ let odoc = Cmd.v "./_build/default/src/odoc/bin/main.exe"
 let compile_deps f =
   let cmd = Cmd.(odoc % "compile-deps" % Fpath.to_string f) in
   let desc = Printf.sprintf "Compile deps for %s" (Fpath.to_string f) in
-  let deps = submit desc cmd None in
+  let deps = Cmd_outputs.submit desc cmd None in
   let l = List.filter_map (Astring.String.cut ~sep:" ") deps in
   let basename = Fpath.(basename (f |> rem_ext)) |> String.capitalize_ascii in
   match List.partition (fun (n, _) -> basename = n) l with
@@ -33,8 +32,9 @@ let compile ~output_dir ~input_file:file ~includes ~parent_id =
   in
   let cmd = cmd % "--parent-id" % parent_id in
   let desc = Printf.sprintf "Compiling %s" (Fpath.to_string file) in
-  let lines = submit desc cmd output_file in
-  add_prefixed_output cmd compile_output (Fpath.to_string file) lines
+  let lines = Cmd_outputs.submit desc cmd output_file in
+  Cmd_outputs.(
+    add_prefixed_output cmd compile_output (Fpath.to_string file) lines)
 
 let compile_impl ~output_dir ~input_file:file ~includes ~parent_id ~source_id =
   let open Cmd in
@@ -58,8 +58,9 @@ let compile_impl ~output_dir ~input_file:file ~includes ~parent_id ~source_id =
   let desc =
     Printf.sprintf "Compiling implementation %s" (Fpath.to_string file)
   in
-  let lines = submit desc cmd output_file in
-  add_prefixed_output cmd compile_output (Fpath.to_string file) lines
+  let lines = Cmd_outputs.submit desc cmd output_file in
+  Cmd_outputs.(
+    add_prefixed_output cmd compile_output (Fpath.to_string file) lines)
 
 let link ?(ignore_output = false) ~input_file:file ~includes ~docs ~libs
     ~current_package () =
@@ -93,9 +94,10 @@ let link ?(ignore_output = false) ~input_file:file ~includes ~docs ~libs
   in
   let desc = Printf.sprintf "Linking %s" (Fpath.to_string file) in
 
-  let lines = submit desc cmd (Some output_file) in
+  let lines = Cmd_outputs.submit desc cmd (Some output_file) in
   if not ignore_output then
-    add_prefixed_output cmd link_output (Fpath.to_string file) lines
+    Cmd_outputs.(
+      add_prefixed_output cmd link_output (Fpath.to_string file) lines)
 
 let compile_index ?(ignore_output = false) ~dst ~json ~include_rec () =
   let include_rec =
@@ -108,9 +110,10 @@ let compile_index ?(ignore_output = false) ~dst ~json ~include_rec () =
     Cmd.(odoc % "compile-index" %% json %% v "-o" % p dst %% include_rec)
   in
   let desc = "Generating search index" in
-  let lines = submit desc cmd (Some dst) in
+  let lines = Cmd_outputs.submit desc cmd (Some dst) in
   if not ignore_output then
-    add_prefixed_output cmd link_output (Fpath.to_string dst) lines
+    Cmd_outputs.(
+      add_prefixed_output cmd link_output (Fpath.to_string dst) lines)
 
 let html_generate ~output_dir ?(ignore_output = false) ?(assets = []) ?source
     ?(search_uris = []) ~input_file:file () =
@@ -131,21 +134,22 @@ let html_generate ~output_dir ?(ignore_output = false) ?(assets = []) ?source
     % output_dir
   in
   let desc = Printf.sprintf "Generating HTML for %s" (Fpath.to_string file) in
-  let lines = submit desc cmd None in
+  let lines = Cmd_outputs.submit desc cmd None in
   if not ignore_output then
-    add_prefixed_output cmd generate_output (Fpath.to_string file) lines
+    Cmd_outputs.(
+      add_prefixed_output cmd generate_output (Fpath.to_string file) lines)
 
 let support_files path =
   let open Cmd in
   let cmd = odoc % "support-files" % "-o" % Fpath.to_string path in
   let desc = "Generating support files" in
-  submit desc cmd None
+  Cmd_outputs.submit desc cmd None
 
 let count_occurrences output =
   let open Cmd in
   let cmd = odoc % "count-occurrences" % "-I" % "." % "-o" % p output in
   let desc = "Counting occurrences" in
-  submit desc cmd None
+  Cmd_outputs.submit desc cmd None
 
 let source_tree ?(ignore_output = false) ~parent ~output file =
   let open Cmd in
@@ -154,15 +158,18 @@ let source_tree ?(ignore_output = false) ~parent ~output file =
     odoc % "source-tree" % "-I" % "." %% parent % "-o" % p output % p file
   in
   let desc = Printf.sprintf "Source tree for %s" (Fpath.to_string file) in
-  let lines = submit desc cmd None in
+  let lines = Cmd_outputs.submit desc cmd None in
   if not ignore_output then
-    add_prefixed_output cmd source_tree_output (Fpath.to_string file) lines
+    Cmd_outputs.(
+      add_prefixed_output cmd source_tree_output (Fpath.to_string file) lines)
 
 let classify dir =
   let open Cmd in
   let cmd = odoc % "classify" % p dir in
   let desc = Printf.sprintf "Classifying %s" (Fpath.to_string dir) in
-  let lines = submit desc cmd None |> List.filter (fun l -> l <> "") in
+  let lines =
+    Cmd_outputs.submit desc cmd None |> List.filter (fun l -> l <> "")
+  in
   List.map
     (fun line ->
       match String.split_on_char ' ' line with
