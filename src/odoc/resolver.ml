@@ -92,7 +92,7 @@ end = struct
     let flat_namespace = Hashtbl.create 42 in
     let () =
       match
-        Fs.Directory.fold_files_rec_result (* bookmark *)
+        Fs.Directory.fold_files_rec_result
           (fun () path ->
             let name = Fpath.filename path in
             Ok (Hashtbl.add flat_namespace name path))
