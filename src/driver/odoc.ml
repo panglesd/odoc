@@ -81,6 +81,22 @@ let compile_impl ~output_dir ~input_file:file ~includes ~parent_id ~source_id =
   let lines = submit desc cmd output_file in
   add_prefixed_output cmd compile_output (Fpath.to_string file) lines
 
+let doc_args docs =
+  let open Cmd in
+  List.fold_left
+    (fun acc (pkgname, path) ->
+      let s = Format.asprintf "%s:%a" pkgname Fpath.pp path in
+      v "-P" % s %% acc)
+    Cmd.empty docs
+
+let lib_args libs =
+  let open Cmd in
+  List.fold_left
+    (fun acc (libname, path) ->
+      let s = Format.asprintf "%s:%a" libname Fpath.pp path in
+      v "-L" % s %% acc)
+    Cmd.empty libs
+
 let link ?(ignore_output = false) ~input_file:file ~includes ~docs ~libs () =
   let open Cmd in
   let output_file = Fpath.set_ext "odocl" file in
@@ -89,20 +105,8 @@ let link ?(ignore_output = false) ~input_file:file ~includes ~docs ~libs () =
       (fun path acc -> Cmd.(acc % "-I" % p path))
       includes Cmd.empty
   in
-  let docs =
-    List.fold_left
-      (fun acc (pkgname, path) ->
-        let s = Format.asprintf "%s:%a" pkgname Fpath.pp path in
-        v "-P" % s %% acc)
-      Cmd.empty docs
-  in
-  let libs =
-    List.fold_left
-      (fun acc (libname, path) ->
-        let s = Format.asprintf "%s:%a" libname Fpath.pp path in
-        v "-L" % s %% acc)
-      Cmd.empty libs
-  in
+  let docs = doc_args docs in
+  let libs = lib_args libs in
   let cmd =
     odoc % "link" % p file % "-o" % p output_file %% includes %% docs %% libs
     % "--enable-missing-root-warning"
@@ -118,20 +122,8 @@ let link ?(ignore_output = false) ~input_file:file ~includes ~docs ~libs () =
 
 let sidebar ?(ignore_output = false) ~docs ~libs ~output_file () =
   let open Cmd in
-  let docs =
-    List.fold_left
-      (fun acc (pkgname, path) ->
-        let s = Format.asprintf "%s:%a" pkgname Fpath.pp path in
-        v "-P" % s %% acc)
-      Cmd.empty docs
-  in
-  let libs =
-    List.fold_left
-      (fun acc (libname, path) ->
-        let s = Format.asprintf "%s:%a" libname Fpath.pp path in
-        v "-L" % s %% acc)
-      Cmd.empty libs
-  in
+  let docs = doc_args docs in
+  let libs = lib_args libs in
   let cmd = odoc % "sidebar" % "-o" % p output_file %% docs %% libs in
   let desc = Printf.sprintf "Sidebar for %s" (Fpath.to_string output_file) in
 
