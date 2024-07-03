@@ -9,6 +9,9 @@ type linked
 val link : compiled list -> linked list
 
 val compile_sidebars :
-  Fpath.t -> Fpath.t -> Packages.set -> Fpath.t Util.StringMap.t
+  odoc_dir:Fpath.t ->
+  output_dir:Fpath.t ->
+  Packages.set ->
+  Fpath.t Util.StringMap.t
 
 val html_generate : Fpath.t -> Fpath.t Util.StringMap.t -> linked list -> unit

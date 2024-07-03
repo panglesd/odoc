@@ -515,8 +515,8 @@ let run libs verbose odoc_dir html_dir stats nb_workers =
         let compiled = Compile.compile odoc_dir all in
         let linked = Compile.link compiled in
         let sidebars =
-          Compile.compile_sidebars odoc_dir
-            (Fpath.( / ) odoc_dir "sidebars")
+          Compile.compile_sidebars ~odoc_dir
+            ~output_dir:(Fpath.( / ) odoc_dir "sidebars")
             all
         in
         let () = Compile.html_generate html_dir sidebars linked in

@@ -244,7 +244,7 @@ let link : compiled list -> _ =
   in
   Fiber.List.map link compiled |> List.concat
 
-let compile_sidebars output_dir dir all =
+let compile_sidebars ~odoc_dir ~output_dir all =
   Util.StringMap.map
     (fun (pkg : Packages.t) ->
       let package_name = pkg.name in
@@ -253,12 +253,12 @@ let compile_sidebars output_dir dir all =
         List.map
           (fun lib ->
             ( lib.Packages.lib_name,
-              output_dir / package_name / "lib" / lib.lib_name ))
+              odoc_dir / package_name / "lib" / lib.lib_name ))
           pkg.Packages.libraries
       in
-      let output_file = Fpath.( / ) dir package_name in
+      let output_file = Fpath.( / ) output_dir package_name in
       Odoc.sidebar
-        ~docs:[ (package_name, output_dir / package_name / "doc") ]
+        ~docs:[ (package_name, odoc_dir / package_name / "doc") ]
         ~libs ~output_file ();
       output_file)
     all
