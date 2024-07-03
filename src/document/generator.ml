@@ -1924,7 +1924,7 @@ module Make (Syntax : SYNTAX) = struct
     let compilation_unit ?sidebar:sb (t : Odoc_model.Lang.Compilation_unit.t) =
       let url = Url.Path.from_identifier t.id in
       let sidebar =
-        match sb with None -> None | Some sb -> Some ((sidebar t.id) sb)
+        match sb with None -> None | Some sb -> Some (sidebar t.id sb)
       in
       let unit_doc, items =
         match t.content with
@@ -1942,7 +1942,7 @@ module Make (Syntax : SYNTAX) = struct
       let preamble, items = Sectioning.docs t.content in
       let source_anchor = None in
       let sidebar =
-        match sb with None -> None | Some sb -> Some ((sidebar t.name) sb)
+        match sb with None -> None | Some sb -> Some (sidebar t.name sb)
       in
       Document.Page { Page.preamble; items; url; source_anchor; sidebar }
 
