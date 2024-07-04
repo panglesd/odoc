@@ -174,7 +174,6 @@ and Page : sig
   type t = {
     preamble : Item.t list;
     items : Item.t list;
-    sidebar : Block.t option;
     url : Url.Path.t;
     source_anchor : Url.t option;
         (** Url to the corresponding source code. Might be a whole source file
@@ -201,6 +200,21 @@ and Asset : sig
   type t = { url : Url.Path.t; src : Fpath.t }
 end =
   Asset
+
+module rec Sidebar : sig
+  module Hierarchy : sig
+    type 'a dir = 'a option * (string * 'a t) list
+    and 'a t = Leaf of 'a | Dir of 'a dir
+  end
+  type pages = {
+    name : string;
+    pages : (Url.Path.t * Inline.one) Hierarchy.dir;
+  }
+  type library = { name : string; units : (Url.Path.t * Inline.one) list }
+
+  type t = { pages : pages list; libraries : library list }
+end =
+  Sidebar
 
 module Document = struct
   type t = Page of Page.t | Source_page of Source_page.t | Asset of Asset.t

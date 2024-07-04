@@ -20,37 +20,35 @@
   $ odoc html-generate --indent --sidebar sidebar.odoc -o html _odoc/pkg/lib/libname/unit.odocl
 
   $ cat html/pkg/doc/index.html | grep odoc-global-toc -A 15
-     <nav class="odoc-toc odoc-global-toc"><b>pkg's Pages</b>
-      <ul>
-       <li><a href="#" class="current_unit">Package <code>pkg</code></a>
-        <ul><li><a href="file.html">File</a></li>
-         <li><a href="dir1/index.html">A directory</a>
-          <ul><li><a href="dir1/my_page.html">My page</a></li></ul>
-         </li>
-        </ul>
-       </li>
-      </ul><b>Libraries</b>
-      <ul>
-       <li><b>libname</b>
-        <ul><li><a href="../lib/libname/Unit/index.html">Unit</a></li></ul>
+     <nav class="odoc-toc odoc-global-toc">
+      <a href="#" class="current_unit">Package <code>pkg</code></a>
+      <ul><li><a href="file.html">File</a></li>
+       <li><a href="dir1/index.html">A directory</a>
+        <ul><li><a href="dir1/my_page.html">My page</a></li></ul>
        </li>
       </ul>
      </nav>
+    </div><div class="odoc-content"></div>
+   </body>
+  </html>
 
   $ cat html/pkg/lib/libname/Unit/index.html | grep odoc-global-toc -A 15
-     <nav class="odoc-toc odoc-global-toc"><b>pkg's Pages</b>
-      <ul>
-       <li><a href="../../../doc/index.html">Package <code>pkg</code></a>
-        <ul><li><a href="../../../doc/file.html">File</a></li>
-         <li><a href="../../../doc/dir1/index.html">A directory</a>
-          <ul><li><a href="../../../doc/dir1/my_page.html">My page</a></li>
-          </ul>
-         </li>
-        </ul>
-       </li>
-      </ul><b>Libraries</b>
-      <ul>
-       <li><b>libname</b>
-        <ul><li><a href="#" class="current_unit">Unit</a></li></ul>
+     <nav class="odoc-toc odoc-global-toc">
+      <a href="../../../doc/index.html">Package <code>pkg</code></a>
+      <ul><li><a href="../../../doc/file.html">File</a></li>
+       <li><a href="../../../doc/dir1/index.html">A directory</a>
+        <ul><li><a href="../../../doc/dir1/my_page.html">My page</a></li></ul>
        </li>
       </ul>
+     </nav>
+    </div>
+    <div class="odoc-content">
+     <div class="odoc-spec">
+      <div class="spec value anchored" id="val-x">
+       <a href="#val-x" class="anchor"></a>
+       <code><span><span class="keyword">val</span> x : int</span></code>
+      </div>
+     </div>
+
+  $ odoc support-files -o html
+  $ cp -r html /tmp/html

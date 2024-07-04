@@ -482,20 +482,24 @@ module Page = struct
         | `Closed | `Open | `Default -> None
         | `Inline -> Some 0)
 
-  let rec include_ ~config { Subpage.content; _ } = page ~config content
+  let rec include_ ~config ~sidebar { Subpage.content; _ } =
+    page ~config ~sidebar content
 
-  and subpages ~config subpages = List.map (include_ ~config) subpages
+  and subpages ~config ~sidebar subpages =
+    List.map (include_ ~config ~sidebar) subpages
 
-  and page ~config p : Odoc_document.Renderer.page =
-    let { Page.preamble; items = i; url; source_anchor; sidebar } =
+  and page ~config ~sidebar p : Odoc_document.Renderer.page =
+    let { Page.preamble; items = i; url; source_anchor } =
       Doctree.Labels.disambiguate_page ~enter_subpages:false p
     in
-    let subpages = subpages ~config @@ Doctree.Subpages.compute p in
+    let subpages = subpages ~config ~sidebar @@ Doctree.Subpages.compute p in
     let resolve = Link.Current url in
     let sidebar =
       match sidebar with
       | None -> None
-      | Some x -> (Some (block ~config ~resolve x) :> any Html.elt list option)
+      | Some sidebar ->
+          (* let sidebar = Odoc_document.Sidebar.to_block sidebar p in *)
+          (Some (block ~config ~resolve sidebar) :> any Html.elt list option)
     in
     let i = Doctree.Shift.compute ~on_sub i in
     let uses_katex = Doctree.Math.has_math_elements p in
@@ -553,8 +557,8 @@ module Page = struct
     { Odoc_document.Renderer.filename; content; children = [] }
 end
 
-let render ~config = function
-  | Document.Page page -> [ Page.page ~config page ]
+let render ~config ~sidebar = function
+  | Document.Page page -> [ Page.page ~config ~sidebar page ]
   | Source_page src -> [ Page.source_page ~config src ]
   | Asset asset -> [ Page.asset ~config asset ]
 

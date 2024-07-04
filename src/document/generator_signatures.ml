@@ -103,9 +103,9 @@ end
 
 module type GENERATOR = sig
   val compilation_unit :
-    ?sidebar:Lang.Sidebar.t -> Lang.Compilation_unit.t -> Document.t
+    (* ?sidebar:Lang.Sidebar.t ->  *) Lang.Compilation_unit.t -> Document.t
 
-  val page : ?sidebar:Lang.Sidebar.t -> Lang.Page.t -> Document.t
+  val page : (* ?sidebar:Lang.Sidebar.t ->  *) Lang.Page.t -> Document.t
 
   val source_tree : Lang.SourceTree.t -> Document.t list
 
@@ -118,4 +118,9 @@ module type GENERATOR = sig
   val type_expr : ?needs_parentheses:bool -> Lang.TypeExpr.t -> text
 
   val record : Lang.TypeDecl.Field.t list -> DocumentedSrc.one list
+
+  (* module Sidebar : sig *)
+  (*   val of_lang : Lang.Sidebar.t -> Sidebar.t *)
+  (*   val to_block : Sidebar.t -> Page.t -> Block.t *)
+  (* end *)
 end

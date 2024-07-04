@@ -17,9 +17,9 @@
 open Odoc_model
 
 val compilation_unit :
-  ?sidebar:Lang.Sidebar.t -> Lang.Compilation_unit.t -> Types.Document.t
+  (* ?sidebar:Lang.Sidebar.t ->  *) Lang.Compilation_unit.t -> Types.Document.t
 
-val page : ?sidebar:Lang.Sidebar.t -> Lang.Page.t -> Types.Document.t
+val page : (* ?sidebar:Lang.Sidebar.t ->  *) Lang.Page.t -> Types.Document.t
 (** Convert compilation unit or page models into a document *)
 
 val source_tree : Lang.SourceTree.t -> Types.Document.t list
@@ -30,3 +30,9 @@ val implementation :
   string ->
   Types.Document.t list
 (** Highlight the source as OCaml syntax *)
+
+(* module Sidebar : sig *)
+(*   open Types *)
+(*   val of_lang : Lang.Sidebar.t -> Sidebar.t *)
+(*   val to_block : Sidebar.t -> Page.t -> Block.t *)
+(* end *)
