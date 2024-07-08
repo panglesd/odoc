@@ -476,9 +476,10 @@ module Compile_impl = struct
     in
     Term.info "compile-impl" ~docs ~doc
 end
-let ( >>= ) = Result.bind
 
 module Indexing = struct
+  open Or_error
+
   let output_file ~dst marshall =
     match (dst, marshall) with
     | Some file, `JSON when not (Fpath.has_ext "json" (Fpath.v file)) ->
