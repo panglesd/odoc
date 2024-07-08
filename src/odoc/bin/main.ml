@@ -499,15 +499,8 @@ module Indexing = struct
   let index dst json warnings_options includes_rec inputs_in_file inputs =
     let marshall = if json then `JSON else `Marshall in
     output_file ~dst marshall >>= fun output ->
-    match (includes_rec, inputs_in_file, inputs) with
-    | [], [], [] ->
-        Result.Error
-          (`Msg
-            "At least one of --file-list or --include-rec or an .odocl file \
-             must be passed to odoc compile-index")
-    | _ ->
-        Indexing.compile marshall ~output ~warnings_options ~includes_rec
-          ~inputs_in_file ~odocls:inputs
+    Indexing.compile marshall ~output ~warnings_options ~includes_rec
+      ~inputs_in_file ~odocls:inputs
   let cmd =
     let dst =
       let doc =

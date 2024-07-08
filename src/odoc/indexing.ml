@@ -123,8 +123,6 @@ let compile out_format ~output ~warnings_options ~includes_rec ~inputs_in_file
                [] include_rec)
       |> List.concat)
   in
-  if files = [] then Error (`Msg "No .odocl files were included")
-  else
-    match out_format with
-    | `JSON -> compile_to_json ~output ~warnings_options files
-    | `Marshall -> compile_to_marshall ~output ~warnings_options files
+  match out_format with
+  | `JSON -> compile_to_json ~output ~warnings_options files
+  | `Marshall -> compile_to_marshall ~output ~warnings_options files

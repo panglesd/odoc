@@ -243,12 +243,18 @@ Testing the warnings/errors for the `compile-index` command:
 Passing an inexistent file:
 
   $ odoc compile-index --include-rec babar
-  ERROR: No .odocl files were included
-  [1]
+  $ odoc compile-index --file-list babar
+  odoc: option '--file-list': no 'babar' file or directory
+  Usage: odoc compile-index [--file-list=FILE] [--include-rec=DIR] [--json] [OPTION]… [FILE]…
+  Try 'odoc compile-index --help' or 'odoc --help' for more information.
+  [2]
 
-Passing an empty folder:
+Passing an empty folder is allowed:
 
   $ mkdir foo
+  $ odoc compile-index --include-rec foo
+
+Wrong file extensions:
 
   $ odoc compile-index -o index.odoc
   ERROR: When generating a binary index, the output must have a .odoc-index file extension
@@ -258,9 +264,6 @@ Passing an empty folder:
   [1]
   $ odoc compile-index  --json  -o index.odoc-index
   ERROR: When generating a json index, the output must have a .json file extension
-  [1]
-  $ odoc compile-index --include-rec foo
-  ERROR: No .odocl files were included
   [1]
 
 Passing a file which is not a correctly marshalled one:
@@ -272,9 +275,6 @@ Passing a file which is not a correctly marshalled one:
   
 
 
-
-Passing no file:
+Passing no file is allowed, generating an empty index:
 
   $ odoc compile-index
-  ERROR: At least one of --file-list or --include-rec or an .odocl file must be passed to odoc compile-index
-  [1]
