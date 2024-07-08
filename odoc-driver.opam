@@ -46,6 +46,12 @@ depends: [
   "sherlodoc"
 ]
 
+pin-depends: [
+  pin-depends: [
+    ["sherlodoc.dev" "git+https://github.com/emiletrotignon/sherlodoc.git#odoc3_compat"]
+  ]
+]
+
 build: [
   ["dune" "subst"] {dev}
   [
