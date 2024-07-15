@@ -12,10 +12,4 @@ val index : Fpath.t -> Packages.set -> unit
 
 val sherlodoc : html_dir:Fpath.t -> odoc_dir:Fpath.t -> Packages.set -> unit
 
-(* val compile_sidebars : *)
-(*   odoc_dir:Fpath.t -> *)
-(*   output_dir:Fpath.t -> *)
-(*   Packages.set -> *)
-(*   Fpath.t Util.StringMap.t *)
-
 val html_generate : Fpath.t -> odoc_dir:Fpath.t -> linked list -> unit

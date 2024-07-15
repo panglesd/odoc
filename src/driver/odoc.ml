@@ -138,7 +138,7 @@ let html_generate ~output_dir ?index ?(ignore_output = false) ?(assets = [])
   in
   let cmd =
     odoc % "html-generate" %% source % p file %% assets %% index %% search_uris
-    % "-o" % output_dir
+    % "-o" % p output_dir
   in
   let desc = Printf.sprintf "Generating HTML for %s" (Fpath.to_string file) in
   let lines = Cmd_outputs.submit desc cmd None in

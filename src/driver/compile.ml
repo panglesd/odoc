@@ -1,6 +1,6 @@
 (* compile *)
 
-type ty = Module of Packages.modulety | Mld of Packages.mld
+type ty = Module of { hidden : bool } | Mld
 
 type impl = { impl : Fpath.t; src : Fpath.t }
 
@@ -57,7 +57,10 @@ let init_stats (pkgs : Packages.t Util.StringMap.t) =
                 (tt, ti, nh, md) lib.modules)
             acc pkg.Packages.libraries
         in
-        (tt, ti, nh, md + List.length pkg.Packages.mlds))
+        ( tt,
+          ti,
+          nh,
+          md + List.length pkg.Packages.mlds + 2 + List.length pkg.libraries ))
       pkgs (0, 0, 0, 0)
   in
   Atomic.set Stats.stats.total_units total;
@@ -66,6 +69,86 @@ let init_stats (pkgs : Packages.t Util.StringMap.t) =
   Atomic.set Stats.stats.total_mlds mlds
 
 open Eio.Std
+
+let compile_landing_page odoc_dir pkg : compiled list =
+  let pkgname = pkg.Packages.name in
+  let driver_page ~output_file ?(include_dirs = Fpath.Set.empty) () =
+    let pkg_args =
+      { docs = [ (pkgname, Fpath.( / ) odoc_dir pkgname) ]; libs = [] }
+    in
+    {
+      m = Mld;
+      output_dir = odoc_dir;
+      output_file;
+      include_dirs;
+      impl = None;
+      pkg_args;
+      package_name = pkgname;
+    }
+  in
+  let title = Format.sprintf "{0 %s}\n" in
+  let compile ~input_file ?(include_dirs = Fpath.Set.empty) ~parent_id () =
+    Odoc.compile ~output_dir:odoc_dir ~input_file ~includes:include_dirs
+      ~parent_id;
+    Atomic.incr Stats.stats.compiled_mlds;
+    Fpath.(odoc_dir // v parent_id / "page-index.odoc")
+  in
+
+  let library_landing_page pkgname (lib : Packages.libty) : compiled =
+    let libname = lib.lib_name in
+    let parent_id = Printf.sprintf "%s/lib/%s" pkgname libname in
+    let input_file = Fpath.(odoc_dir // v parent_id / "index.mld") in
+    let s_of_module m = Format.sprintf "- {!%s}" m.Packages.m_name in
+    let modules = lib.modules |> List.map s_of_module |> String.concat "\n" in
+    let include_dirs = Fpath.(Set.empty |> Set.add (odoc_dir // v parent_id)) in
+    let () =
+      Bos.OS.File.write input_file (title libname ^ modules) |> Result.get_ok
+    in
+    let output_file = compile ~input_file ~include_dirs ~parent_id () in
+    driver_page ~output_file ~include_dirs ()
+  in
+
+  let libraries_landing_page pkg : compiled list =
+    let pkgname = pkg.Packages.name in
+    let parent_id = Printf.sprintf "%s/lib" pkgname in
+    let input_file = Fpath.(odoc_dir // v parent_id / "index.mld") in
+    let s_of_lib (lib : Packages.libty) =
+      Format.sprintf "- {{!%s/index}%s}" lib.lib_name lib.lib_name
+    in
+    let libraries = pkg.libraries |> List.map s_of_lib |> String.concat "\n" in
+    let () =
+      Bos.OS.File.write input_file (title pkgname ^ libraries) |> Result.get_ok
+    in
+    let output_file = compile ~input_file ~parent_id () in
+    driver_page ~output_file ()
+    :: List.map (library_landing_page pkgname) pkg.libraries
+  in
+
+  let package_landing_page =
+    let input_file = Fpath.(odoc_dir // v pkgname / "index.mld") in
+    let documentation =
+      match pkg.mlds with
+      | _ :: _ ->
+          Format.sprintf
+            "{1 Documentation pages}\n\n{{!doc/index}Documentation for %s}"
+            pkgname
+      | [] -> ""
+    in
+    let libraries =
+      match pkg.libraries with
+      | [] -> ""
+      | _ :: _ ->
+          Format.sprintf "{1 Libraries}\n\n{{!lib/index}Libraries for %s}"
+            pkgname
+    in
+    let () =
+      Bos.OS.File.write input_file (title pkgname ^ documentation ^ libraries)
+      |> Result.get_ok
+    in
+    let output_file = compile ~input_file ~parent_id:pkgname () in
+    driver_page ~output_file ()
+  in
+  package_landing_page :: libraries_landing_page pkg
 
 let compile output_dir all =
   let hashes = mk_byhash all in
@@ -140,7 +223,7 @@ let compile output_dir all =
         let output_dir = Fpath.split_base output_file |> fst in
         Ok
           {
-            m = Module modty;
+            m = Module { hidden = modty.m_hidden };
             output_dir;
             output_file;
             include_dirs = includes;
@@ -172,6 +255,7 @@ let compile output_dir all =
           m "Package %s mlds: [%a]" pkg.name
             Fmt.(list ~sep:sp Packages.pp_mld)
             pkg.mlds);
+      let acc = compile_landing_page output_dir pkg @ acc in
       List.fold_left
         (fun acc (mld : Packages.mld) ->
           let output_file = Fpath.(output_dir // mld.Packages.mld_odoc_file) in
@@ -185,7 +269,7 @@ let compile output_dir all =
           in
           let include_dirs = Fpath.Set.add odoc_output_dir include_dirs in
           {
-            m = Mld mld;
+            m = Mld;
             output_dir;
             output_file;
             include_dirs;
@@ -230,7 +314,7 @@ let link : compiled list -> _ =
       | None -> []
     in
     match c.m with
-    | Module m when m.m_hidden ->
+    | Module m when m.hidden ->
         Logs.debug (fun m -> m "not linking %a" Fpath.pp c.output_file);
         impl
     | _ ->
@@ -238,7 +322,7 @@ let link : compiled list -> _ =
         link c.output_file;
         (match c.m with
         | Module _ -> Atomic.incr Stats.stats.linked_units
-        | Mld _ -> Atomic.incr Stats.stats.linked_mlds);
+        | Mld -> Atomic.incr Stats.stats.linked_mlds);
         {
           output_file = Fpath.(set_ext "odocl" c.output_file);
           src = None;
@@ -306,9 +390,8 @@ let html_generate output_dir ~odoc_dir linked =
       ]
     in
     let index = Some (odoc_index_path ~odoc_dir l.package_name) in
-    Odoc.html_generate ~search_uris ?index
-      ~output_dir:(Fpath.to_string output_dir)
-      ~input_file:l.output_file ?source:l.src ();
+    Odoc.html_generate ~search_uris ?index ~output_dir ~input_file:l.output_file
+      ?source:l.src ();
     Atomic.incr Stats.stats.generated_units
   in
   Fiber.List.iter html_generate linked

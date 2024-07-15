@@ -35,7 +35,7 @@ val compile_index :
   unit
 
 val html_generate :
-  output_dir:string ->
+  output_dir:Fpath.t ->
   ?index:Fpath.t ->
   ?ignore_output:bool ->
   ?assets:string list ->
