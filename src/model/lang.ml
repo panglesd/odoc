@@ -531,11 +531,16 @@ module rec Page : sig
     | Source_tree_child of string
     | Asset_child of string
 
+  module Frontmatter : sig
+    type t = (string * string) list
+  end
+
   type t = {
     name : Identifier.Page.t;
     root : Root.t;
     content : Comment.docs;
     children : child list;
+    frontmatter : Frontmatter.t option;
     digest : Digest.t;
     linked : bool;
   }

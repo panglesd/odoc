@@ -130,15 +130,32 @@ and link_content_of_inline_elements l =
   l |> List.map link_content_of_inline_element |> List.concat
 
 let find_zero_heading docs : link_content option =
-  let rec find_map f = function
-    | [] -> None
-    | x :: l -> (
-        match f x with Some _ as result -> result | None -> find_map f l)
-  in
-  find_map
+  List.find_map
     (fun doc ->
       match doc.Location_.value with
       | `Heading ({ heading_level = `Title; _ }, _, h_content) ->
           Some (link_content_of_inline_elements h_content)
       | _ -> None)
     docs
+
+let extract_frontmatter docs : _ =
+  let parse_frontmatter s =
+    let lines = Astring.String.cuts ~sep:"\n" s in
+    List.filter_map (fun line -> Astring.String.cut ~sep:":" line) lines
+  in
+  let extracted =
+    let rec aux acc = function
+      | [] -> None
+      | doc :: l -> (
+          match doc.Location_.value with
+          | `Code_block (Some "fontmatter", content, None) ->
+              Some
+                ( parse_frontmatter content.Location_.value,
+                  List.rev_append acc l )
+          | _ -> aux (doc :: acc) l)
+    in
+    aux [] docs
+  in
+  match extracted with
+  | None -> (None, docs)
+  | Some (fm, docs) -> (Some fm, docs)
