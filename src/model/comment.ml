@@ -148,7 +148,7 @@ let extract_frontmatter docs : _ =
       | [] -> None
       | doc :: l -> (
           match doc.Location_.value with
-          | `Code_block (Some "fontmatter", content, None) ->
+          | `Code_block (Some "frontmatter", content, None) ->
               Some
                 ( parse_frontmatter content.Location_.value,
                   List.rev_append acc l )

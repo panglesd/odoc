@@ -547,13 +547,34 @@ module rec Page : sig
 end =
   Page
 
+module StringMap = Map.Make (String)
+
 module rec Sidebar : sig
   type library = { name : string; units : Paths.Identifier.RootModule.t list }
 
-  type pages = {
-    page_name : string;
-    pages : (Comment.link_content * Paths.Identifier.Page.t) list;
-  }
+  module Forest : sig
+    (* Expects that we are in the odoc 3 settings: only leaf pages. *)
+
+    (* type t = edge list *)
+    (* and edge = string * node *)
+    (* and node = Leaf of Paths.Identifier.Page.t | Tree of t *)
+
+    (* type 'a t =  *)
+    (* (\** Edges are labeled by a string, payload is mandatory only on leaves *\) *)
+    type 'a tree = Node of 'a option * 'a tree StringMap.t | Leaf of 'a
+
+    (* type t = (Comment.link_content option * string * node) list *)
+    (* (\** A forest (list of tree) with edges labelled by the page name *)
+    (*     ([Comment.link_content option]) and the identifier segment ([string]), *)
+    (*     and leaves labelled by [Paths.Identifier.Page.t]. *\) *)
+
+    (* and node = Leaf of Paths.Identifier.Page.t | Tree of t *)
+  end
+
+  type forest_payload =
+    Identifier.Page.t * Comment.link_content option * string list
+
+  type pages = { page_name : string; pages : forest_payload Forest.tree }
 
   type t = { pages : pages list; libraries : library list }
 end =

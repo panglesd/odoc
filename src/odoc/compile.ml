@@ -236,8 +236,19 @@ let mld ~parent_id ~parents_children ~output ~children ~warnings_options input =
   let resolve content =
     let zero_heading = Comment.find_zero_heading content in
     let frontmatter, content = Comment.extract_frontmatter content in
+    let page_order =
+      let frontmatter = Option.value frontmatter ~default:[] in
+      List.find_map
+        (function
+          | "toc", value ->
+              let order = Astring.String.cuts ~sep:" " value in
+              Some order
+          | _ -> None)
+        frontmatter
+      |> Option.value ~default:[]
+    in
     let root =
-      let file = Root.Odoc_file.create_page root_name zero_heading in
+      let file = Root.Odoc_file.create_page root_name zero_heading page_order in
       { Root.id = (name :> Paths.Identifier.OdocId.t); file; digest }
     in
     let page =

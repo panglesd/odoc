@@ -117,6 +117,91 @@ let read_occurrences file =
 
 open Odoc_model.Lang.Sidebar
 
+let build_forest (l : (_ * _ * string list) list) : forest_payload Forest.tree =
+  let rec add forest path payload =
+    match path with
+    | [] -> (
+        match forest with
+        | Forest.Leaf _ ->
+            (* TODO: raise warning, multiple pages at the same place *)
+            Forest.Leaf payload
+        | Node (None, children)
+          when Odoc_model.Lang.StringMap.cardinal children = 0 ->
+            Leaf payload
+        | Node (_, children) ->
+            (* TODO: raise warning, if payload from the node is not None:
+               multiple pages at the same place *)
+            Node (Some payload, children))
+    | seg :: path -> (
+        match forest with
+        | Leaf payload ->
+            Node
+              ( Some payload,
+                Odoc_model.Lang.StringMap.singleton seg
+                  (add
+                     (Node (None, Odoc_model.Lang.StringMap.empty))
+                     path payload) )
+        | Node (p, children) ->
+            let children =
+              Odoc_model.Lang.StringMap.update seg
+                (function
+                  | None ->
+                      let child =
+                        add
+                          (Node (None, Odoc_model.Lang.StringMap.empty))
+                          path payload
+                      in
+                      Some child
+                  | Some forest ->
+                      let child = add forest path payload in
+                      Some child)
+                children
+              (* | [] -> _ :: acc *)
+              (* | (name, _) :: _ when not (String.equal name seg) -> _ *)
+              (* | (_, c) :: q -> *)
+              (*     (seg, add c path payload) :: List.rev_append q acc *)
+            in
+            Node (p, children))
+  in
+  let payloads = (* List.map (fun (a, b, _) -> (a, b)) *) l in
+  let path_of_id (id : Paths.Identifier.Page.t) =
+    let rec path_of_id (id : Paths.Identifier.Page.t option) =
+      match id with
+      | None -> []
+      | Some id -> (
+          match id.iv with
+          | `Page (parent, name) | `LeafPage (parent, name) ->
+              let name = Names.PageName.to_string name in
+              if String.equal name "index" then
+                path_of_id (parent :> Paths.Identifier.Page.t option)
+              else name :: path_of_id (parent :> Paths.Identifier.Page.t option)
+          )
+    in
+
+    List.rev (path_of_id (Some id))
+  in
+  let (* unsorted_ *) forest =
+    List.fold_left
+      (fun forest ((id, _, _) as payload) ->
+        let path = path_of_id id in
+        add forest path payload)
+      (Forest.Node (None, Odoc_model.Lang.StringMap.empty))
+      payloads
+  in
+  (* let rec sort_subforest forest (path, order) = *)
+  (*   match (path, forest) with *)
+  (*   | [], Forest.Leaf _ -> *)
+  (*       forest (\* TODO: warn on toc order on a non index page *\) *)
+  (*   | _ :: _, Leaf _ -> assert false *)
+  (*   | [], Node (_, _) -> _ *)
+  (*   | p :: path, Node (_, _) -> _ *)
+  (* in *)
+  (* let sortings = *)
+  (*   List.map (fun (id, _, sorting) -> (path_of_id id, sorting)) l *)
+  (* in *)
+  (* let forest = List.fold_left sort_subforest unsorted_forest sortings in *)
+  forest
+
 let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
     ~page_roots ~inputs_in_file ~odocls =
   let current_dir = Fs.File.dirname output in
@@ -146,22 +231,23 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
     List.map
       (fun (page_root, _) ->
         let pages = Resolver.all_pages ~root:page_root resolver in
-        let pages =
-          List.map
-            (fun (page_id, title) ->
-              let title =
-                match title with
-                | None ->
-                    [
-                      Odoc_model.Location_.at
-                        (Odoc_model.Location_.span [])
-                        (`Word (Odoc_model.Paths.Identifier.name page_id));
-                    ]
-                | Some x -> x
-              in
-              (title, page_id))
-            pages
-        in
+        (* let pages = *)
+        (*   List.map *)
+        (*     (fun (page_id, title) -> *)
+        (*       let title = *)
+        (*         match title with *)
+        (*         | None -> *)
+        (*             [ *)
+        (*               Odoc_model.Location_.at *)
+        (*                 (Odoc_model.Location_.span []) *)
+        (*                 (`Word (Odoc_model.Paths.Identifier.name page_id)); *)
+        (*             ] *)
+        (*         | Some x -> x *)
+        (*       in *)
+        (*       (title, page_id)) *)
+        (*     pages *)
+        (* in *)
+        let pages = build_forest pages in
         { page_name = page_root; pages })
       page_roots
   in
