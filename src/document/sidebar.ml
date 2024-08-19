@@ -5,6 +5,8 @@ module Hierarchy : sig
   (** Directory in a filesystem-like abstraction, where files have a ['a]
       payload and directory can also have a ['a] payload. *)
 
+  val to_string : 'a dir -> string
+
   val make : ('a * string list) list -> 'a dir
   (** Create a directory from a list of payload and file path (given as a
       string list). Files named ["index"] give their payload to their
@@ -21,6 +23,16 @@ module Hierarchy : sig
 end = struct
   type 'a dir = 'a option * (string * 'a t) list
   and 'a t = Leaf of 'a | Dir of 'a dir
+
+  let rec to_string (payload, l) =
+    let payload =
+      match payload with None -> "NoPayload" | Some _ -> "SomePayload"
+    in
+    let l = List.map (fun (s, t) -> s ^ " -> " ^ to_string_t t) l in
+    let l = String.concat ", " l in
+    "Node (" ^ payload ^ ", " ^ l ^ ")"
+
+  and to_string_t = function Leaf _ -> "Leaf" | Dir d -> to_string d
 
   let of_lang forest =
     let sidebar_toc_entry id content =
@@ -60,14 +72,33 @@ end = struct
       match forest with
       | Node (payload, children) ->
           let order =
-            match payload with None -> [] | Some (_, _, order) -> order
+            match payload with
+            | None ->
+                Odoc_model.Lang.StringMap.bindings children
+                |> List.map (fun (s, _) -> s)
+            | Some (_, _, []) ->
+                Odoc_model.Lang.StringMap.bindings children
+                |> List.map (fun (s, _) -> s)
+            | Some (_, _, order) ->
+                Format.eprintf
+                  "Order is %s!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n%!"
+                  (String.concat ", " order);
+
+                order
           in
           let payload = of_payload payload in
           let children =
             List.filter_map
               (fun name ->
                 match Odoc_model.Lang.StringMap.find_opt name children with
-                | None -> None
+                | None ->
+                    Format.eprintf
+                      "Missing %s!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n%!" name;
+                    Format.eprintf "Recall that available bindings are %s\n%!"
+                      (Odoc_model.Lang.StringMap.bindings children
+                      |> List.map fst |> String.concat ", ");
+
+                    None
                 | Some (Node _ as forest) ->
                     (* let payload = of_payload payload in *)
                     let children = of_lang forest in
@@ -79,7 +110,8 @@ end = struct
           in
           (payload, children)
       | Leaf _ -> failwith "TODO"
-      (* should not happen, but I'm not 100% so I did not write assert false. The types should be closer together and prevent this *)
+      (* should not happen, but I'm not 100% so I did not write assert
+         false. The types should be closer together and prevent this *)
     in
     of_lang forest
 
@@ -152,7 +184,23 @@ let of_lang (v : Odoc_model.Lang.Sidebar.t) : t =
       (* let pages = List.map prepare_for_hierarchy pages in *)
       (* let hierarchy = Hierarchy.make pages |> Hierarchy.remove_common_root in *)
       ignore Hierarchy.make;
-      let hierarchy = Hierarchy.of_lang pages |> Hierarchy.remove_common_root in
+      Format.eprintf "Here is how the sidebar will look like:\n";
+      let rec s_of_sidebar f =
+        match f with
+        | Odoc_model.Lang.Sidebar.Forest.Leaf _ -> "Leaf"
+        | Node (_, sm) ->
+            let l = Odoc_model.Lang.StringMap.to_list sm in
+            let l = List.map (fun (s, f) -> s ^ " -> " ^ s_of_sidebar f) l in
+            let s = String.concat ", " l in
+            "Node (" ^ s ^ ")"
+      in
+      Format.eprintf "%s\n%!" (s_of_sidebar pages);
+      let hierarchy = Hierarchy.of_lang pages in
+      Format.eprintf "After applying of_lang\n%!";
+      Format.eprintf "%s\n%!" (Hierarchy.to_string hierarchy);
+      let hierarchy = hierarchy |> Hierarchy.remove_common_root in
+      Format.eprintf "After removing common root\n%!";
+      Format.eprintf "%s\n%!" (Hierarchy.to_string hierarchy);
       Some { name = page_name; pages = hierarchy }
     in
     Odoc_utils.List.filter_map page_hierarchy v.pages

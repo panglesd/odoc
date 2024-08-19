@@ -6,7 +6,7 @@
   $ odoc compile --output-dir _odoc/ --parent-id pkg/doc index.mld
   $ odoc compile --output-dir _odoc/ --parent-id pkg/lib/libname unit.cmt
 
-  $ odoc_print _odoc/pkg/doc/page-index.odoc
+ $ odoc_print _odoc/pkg/doc/page-index.odoc
 
   $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/page-file.odoc
   $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/dir1/page-my_page.odoc
@@ -15,10 +15,15 @@
   $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/lib/libname/unit.odoc
 
   $ odoc compile-index -P pkg:_odoc/pkg/doc/ -L libname:_odoc/pkg/lib/libname -o sidebar.odoc-index
+
   $ odoc html-generate --indent --index sidebar.odoc-index -o html _odoc/pkg/doc/page-file.odocl
+
   $ odoc html-generate --indent --index sidebar.odoc-index -o html _odoc/pkg/doc/dir1/page-my_page.odocl
+
   $ odoc html-generate --indent --index sidebar.odoc-index -o html _odoc/pkg/doc/dir1/page-index.odocl
+
   $ odoc html-generate --indent --index sidebar.odoc-index -o html _odoc/pkg/doc/page-index.odocl
+
   $ odoc html-generate --indent --index sidebar.odoc-index -o html _odoc/pkg/lib/libname/unit.odocl
 
   $ cat html/pkg/doc/index.html | grep odoc-global-toc -A 15

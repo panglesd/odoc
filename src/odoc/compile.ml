@@ -240,7 +240,7 @@ let mld ~parent_id ~parents_children ~output ~children ~warnings_options input =
       let frontmatter = Option.value frontmatter ~default:[] in
       List.find_map
         (function
-          | "toc", value ->
+          | "toc-order", value ->
               let order = Astring.String.cuts ~sep:" " value in
               Some order
           | _ -> None)
