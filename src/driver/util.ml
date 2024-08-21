@@ -28,8 +28,7 @@ let with_out_to filename f =
       f oc;
       Ok ())
     ()
-  >>= fun r ->
-  Result.get_ok r;
-  Ok ()
+  |> Result.join
+  >>= fun () -> Ok ()
 
 let cp src dst = assert (lines_of_process Cmd.(v "cp" % src % dst) = [])
