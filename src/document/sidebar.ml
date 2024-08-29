@@ -21,62 +21,29 @@ end = struct
   type 'a dir = Directory of 'a * 'a dir list
 
   open Odoc_model.Sidebar
+  open Odoc_model.Paths.Identifier
 
   let of_lang (dir : toc) =
     let rec of_lang ~parent_id (dir : toc) =
-      let index_id =
-        Odoc_model.Paths.Identifier.Mk.leaf_page
-          (parent_id, Odoc_model.Names.PageName.make_std "index")
+      let title, parent_id =
+        match PageToc.dir_payload dir with
+        | Some (title, index_id) -> (Some title, Some (index_id :> Page.t))
+        | None -> (None, (parent_id :> Page.t option))
       in
-      let title, children_order, parent_id =
-        match LPH.find_opt dir.leafs index_id with
-        | Some payload ->
-            (Some payload.title, payload.children_order, Some (index_id :> page))
-        | None -> (None, None, (parent_id :> page option))
-      in
-      let children_order =
-        match children_order with
-        | None ->
-            let leafs :> page list =
-              LPH.fold
-                (fun id _ acc ->
-                  if String.equal "index" (Odoc_model.Paths.Identifier.name id)
-                  then acc
-                  else id :: acc)
-                dir.leafs []
-            in
-            let dirs :> page list =
-              CPH.fold (fun id _ acc -> id :: acc) dir.dirs []
-            in
-            List.sort
-              (fun x y ->
-                String.compare
-                  (Odoc_model.Paths.Identifier.name x)
-                  (Odoc_model.Paths.Identifier.name y))
-              (leafs @ dirs)
-        | Some ch -> ch
-      in
+      let children_order = PageToc.contents dir in
       let entries =
-        List.map
-          (fun (id : Odoc_model.Paths.Identifier.Page.t) ->
-            match id.iv with
-            | `LeafPage _ as iv ->
-                let id = { id with iv } in
-                let { title; children_order = _ } =
-                  LPH.find dir.leafs id
-                  (* TODO LPH.find_opt *)
-                  (* TODO warn on non empty children order if not index page somewhere *)
-                in
+        List.filter_map
+          (fun id ->
+            match id with
+            | id, PageToc.Entry title ->
+                (* TODO warn on non empty children order if not index page somewhere *)
                 let payload =
                   let path = Url.Path.from_identifier id in
                   let content = Comment.link_content title in
                   Some (path, sidebar_toc_entry id content)
                 in
-                Directory (payload, [])
-            | `Page _ as iv ->
-                let id = { id with iv } in
-                let new_dir = CPH.find dir.dirs id (* TODO CPH.find_opt *) in
-                of_lang ~parent_id:(Some id) new_dir)
+                Some (Directory (payload, []))
+            | id, PageToc.Dir dir -> Some (of_lang ~parent_id:(Some id) dir))
           children_order
       in
       let payload =

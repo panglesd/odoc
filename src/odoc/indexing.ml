@@ -146,39 +146,40 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
     List.map
       (fun (page_root, _) ->
         let pages = Resolver.all_pages ~root:page_root resolver in
-        let forest = Odoc_model.Sidebar.PageToc.empty_t () in
         let pages =
-          List.iter
-            (fun (id, title, fm) ->
-              let title =
-                match title with
-                | None ->
-                    [
-                      Location_.at (Location_.span [])
-                        (`Word (Paths.Identifier.name id));
-                    ]
-                | Some x -> x
-              in
-              let children_order =
-                match fm.Frontmatter.children_order with
-                | None -> None
-                | Some co ->
-                    Some
-                      (List.filter_map
-                         (function
-                           | `Resolved (`Identifier id) -> Some id | _ -> None)
-                         co)
-              in
-              let payload = { title; children_order } in
-              Sidebar.PageToc.add forest id payload)
-            (List.filter_map
-               (function
-                 | Paths.Identifier.(({ iv = #LeafPage.t_pv; _ } as id), pl, fm)
-                   ->
-                     Some (id, pl, fm)
-                 | _ -> None)
-               pages);
-          forest
+          let pages =
+            List.map
+              (fun (id, title, fm) ->
+                let title =
+                  match title with
+                  | None ->
+                      [
+                        Location_.at (Location_.span [])
+                          (`Word (Paths.Identifier.name id));
+                      ]
+                  | Some x -> x
+                in
+                let children_order =
+                  match fm.Frontmatter.children_order with
+                  | None -> None
+                  | Some co ->
+                      Some
+                        (List.filter_map
+                           (function
+                             | `Resolved (`Identifier id) -> Some id | _ -> None)
+                           co)
+                in
+                let payload = { PageToc.title; children_order } in
+                (id, payload))
+              (List.filter_map
+                 (function
+                   | Paths.Identifier.(
+                       ({ iv = #LeafPage.t_pv; _ } as id), pl, fm) ->
+                       Some (id, pl, fm)
+                   | _ -> None)
+                 pages)
+          in
+          PageToc.of_list pages
         in
         { ph_name = page_root; pages })
       page_roots
