@@ -33,10 +33,11 @@ struct
         Odoc_model.Paths.Identifier.Mk.leaf_page
           (parent_id, Odoc_model.Names.PageName.make_std "index")
       in
-      let { title; children_order } =
+      let { title; children_order }, parent_id =
         match LPH.find_opt dir.leafs index_id with
-        | Some payload -> payload
-        | None -> { title = None; children_order = None }
+        | Some payload -> (payload, Some (index_id :> page))
+        | None ->
+            ({ title = None; children_order = None }, (parent_id :> page option))
       in
       let children_order =
         match children_order with
@@ -72,10 +73,10 @@ struct
                   (* TODO warn on non empty children order if not index page somewhere *)
                 in
                 let payload =
-                  match (title, parent_id) with
-                  | None, _ | _, None -> None
-                  | Some title, Some parent_id ->
-                      let path = Url.Path.from_identifier parent_id in
+                  match title with
+                  | None -> None
+                  | Some title ->
+                      let path = Url.Path.from_identifier id in
                       let content = Comment.link_content title in
                       Some (path, sidebar_toc_entry id content)
                 in
