@@ -149,7 +149,7 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
         let forest = Odoc_index.Index.PageForest.empty_t () in
         let pages =
           List.iter
-            (fun (id, title) ->
+            (fun (id, title, fm) ->
               (* let title = *)
               (*   match title with *)
               (*   | None -> *)
@@ -160,7 +160,14 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
               (*       ] *)
               (*   | Some x -> x *)
               (* in *)
-              let payload = Odoc_index.Index.{ title; children_order = None } in
+              let children_order =
+                Some
+                  (List.filter_map
+                     (function
+                       | `Resolved (`Identifier id) -> Some id | _ -> None)
+                     fm.Odoc_model.Frontmatter.children_order)
+              in
+              let payload = Odoc_index.Index.{ title; children_order } in
               Odoc_index.Index.PageForest.add forest id
                 payload (* Odoc_index.Index.{ title; id } *))
             (List.filter_map
@@ -170,8 +177,9 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
                           #Odoc_model.Paths.Identifier.LeafPage.t_pv;
                         _;
                       } as id),
-                     pl ) ->
-                     Some (id, pl)
+                     pl,
+                     fm ) ->
+                     Some (id, pl, fm)
                  | _ -> None)
                pages);
           forest
