@@ -115,7 +115,7 @@ let read_occurrences file =
   let htbl : Odoc_occurrences.Table.t = Marshal.from_channel ic in
   htbl
 
-open Odoc_index.Index.Sidebar
+open Odoc_model.Sidebar
 
 let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
     ~page_roots ~inputs_in_file ~odocls =
@@ -146,7 +146,7 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
     List.map
       (fun (page_root, _) ->
         let pages = Resolver.all_pages ~root:page_root resolver in
-        let forest = Odoc_index.Index.PageForest.empty_t () in
+        let forest = Odoc_model.Sidebar.PageToc.empty_t () in
         let pages =
           List.iter
             (fun (id, title, fm) ->
@@ -154,14 +154,13 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
                 match title with
                 | None ->
                     [
-                      Odoc_model.Location_.at
-                        (Odoc_model.Location_.span [])
-                        (`Word (Odoc_model.Paths.Identifier.name id));
+                      Location_.at (Location_.span [])
+                        (`Word (Paths.Identifier.name id));
                     ]
                 | Some x -> x
               in
               let children_order =
-                match fm.Odoc_model.Frontmatter.children_order with
+                match fm.Frontmatter.children_order with
                 | None -> None
                 | Some co ->
                     Some
@@ -170,18 +169,12 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
                            | `Resolved (`Identifier id) -> Some id | _ -> None)
                          co)
               in
-              let payload = Odoc_index.Index.{ title; children_order } in
-              Odoc_index.Index.PageForest.add forest id
-                payload (* Odoc_index.Index.{ title; id } *))
+              let payload = { title; children_order } in
+              Sidebar.PageToc.add forest id payload)
             (List.filter_map
                (function
-                 | ( ({
-                        Odoc_model.Paths.Identifier.iv =
-                          #Odoc_model.Paths.Identifier.LeafPage.t_pv;
-                        _;
-                      } as id),
-                     pl,
-                     fm ) ->
+                 | Paths.Identifier.(({ iv = #LeafPage.t_pv; _ } as id), pl, fm)
+                   ->
                      Some (id, pl, fm)
                  | _ -> None)
                pages);

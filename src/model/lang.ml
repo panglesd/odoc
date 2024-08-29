@@ -544,6 +544,11 @@ module rec Asset : sig
 end =
   Asset
 
+module rec Index : sig
+  type 'a t = { sidebar : Sidebar.t; index : 'a Paths.Identifier.Hashtbl.Any.t }
+end =
+  Index
+
 let umty_of_mty : ModuleType.expr -> ModuleType.U.expr option = function
   | Signature sg -> Some (Signature sg)
   | Path { p_path; _ } -> Some (Path p_path)

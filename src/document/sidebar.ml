@@ -10,9 +10,7 @@ module Hierarchy : sig
   (** Directory in a filesystem-like abstraction, where files have a ['a]
       payload and directory can also have a ['a] payload. *)
 
-  val of_lang :
-    Odoc_index.Index.index_payload Odoc_index.Index.PageForest.t ->
-    (Url.Path.t * Inline.one) option dir
+  val of_lang : Odoc_model.Sidebar.toc -> (Url.Path.t * Inline.one) option dir
 
   val remove_common_root : 'a dir -> 'a dir
   (** Returns the deepest subdir containing all files. *)
@@ -22,10 +20,10 @@ module Hierarchy : sig
 end = struct
   type 'a dir = Directory of 'a * 'a dir list
 
-  open Odoc_index.Index
+  open Odoc_model.Sidebar
 
-  let of_lang (dir : index_payload PageForest.t) =
-    let rec of_lang ~parent_id (dir : index_payload PageForest.t) =
+  let of_lang (dir : toc) =
+    let rec of_lang ~parent_id (dir : toc) =
       let index_id =
         Odoc_model.Paths.Identifier.Mk.leaf_page
           (parent_id, Odoc_model.Names.PageName.make_std "index")
@@ -121,9 +119,9 @@ type library = { name : string; units : (Url.Path.t * Inline.one) list }
 
 type t = { pages : pages list; libraries : library list }
 
-let of_lang (v : Odoc_index.Index.Sidebar.t) =
+let of_lang (v : Odoc_model.Sidebar.t) =
   let pages =
-    let page_hierarchy { Odoc_index.Index.Sidebar.ph_name; pages } =
+    let page_hierarchy { Odoc_model.Sidebar.ph_name; pages } =
       let hierarchy = Hierarchy.of_lang pages |> Hierarchy.remove_common_root in
       Some { name = ph_name; pages = hierarchy }
     in
@@ -136,7 +134,7 @@ let of_lang (v : Odoc_index.Index.Sidebar.t) =
     in
     let units =
       List.map
-        (fun { Odoc_index.Index.Sidebar.units; name } ->
+        (fun { Odoc_model.Sidebar.units; name } ->
           let units = List.map item units in
           { name; units })
         v.libraries

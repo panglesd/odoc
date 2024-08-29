@@ -13,7 +13,6 @@
   odoc_json_index
   odoc_xref2
   odoc_occurrences
-  odoc_index
   tyxml
   unix)
  (instrumentation
