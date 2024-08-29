@@ -371,6 +371,10 @@ module Identifier = struct
   module NonSrc = struct
     type t = Paths_types.Identifier.non_src
     type t_pv = Paths_types.Identifier.non_src_pv
+
+    let equal x y = x.ihash = y.ihash && x.ikey = y.ikey
+
+    let hash x = x.ihash
   end
 
   module SourcePage = struct

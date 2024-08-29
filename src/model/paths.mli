@@ -147,6 +147,8 @@ module Identifier : sig
   module NonSrc : sig
     type t = Id.non_src
     type t_pv = Id.non_src_pv
+    val hash : t -> int
+    val equal : ([< t_pv ] id as 'a) -> 'a -> bool
   end
 
   module SourcePage : sig

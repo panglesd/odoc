@@ -8,7 +8,7 @@ module H = Odoc_model.Paths.Identifier.Hashtbl.Any
 let handle_file file ~unit ~page ~occ =
   match Fpath.basename file with
   | s when String.is_prefix ~affix:"index-" s ->
-      Odoc_file.load_index file >>= fun (_sidebar, index) -> Ok (occ index)
+      Odoc_file.load_index file >>= fun { index; _ } -> Ok (occ index)
   | _ -> (
       Odoc_file.load file >>= fun unit' ->
       match unit' with
@@ -108,14 +108,14 @@ let compile_to_marshall ~output ~warnings_options sidebar files =
   in
   let result = Error.catch_warnings index in
   result |> Error.handle_warnings ~warnings_options >>= fun () ->
-  Ok (Odoc_file.save_index output (sidebar, final_index))
+  Ok (Odoc_file.save_index output { index = final_index; sidebar })
 
 let read_occurrences file =
   let ic = open_in_bin file in
   let htbl : Odoc_occurrences.Table.t = Marshal.from_channel ic in
   htbl
 
-open Odoc_model.Lang.Sidebar
+open Odoc_index.Index.Sidebar
 
 let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
     ~page_roots ~inputs_in_file ~odocls =
@@ -162,7 +162,7 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
               { title; id })
             pages
         in
-        { page_name = page_root; pages })
+        { ph_name = page_root; pages })
       page_roots
   in
   let libraries =

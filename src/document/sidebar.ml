@@ -1,22 +1,43 @@
 open Types
 
-module Hierarchy : sig
-  type 'a dir
-  (** Directory in a filesystem-like abstraction, where files have a ['a]
-      payload and directory can also have a ['a] payload. *)
+module Hierarchy
+(*  : sig *)
+(*   type 'a dir *)
+(*   (\** Directory in a filesystem-like abstraction, where files have a ['a] *)
+(*       payload and directory can also have a ['a] payload. *\) *)
 
-  val make : ('a * string list) list -> 'a dir
-  (** Create a directory from a list of payload and file path (given as a
-      string list). Files named ["index"] give their payload to their
-      containing directory. *)
+(*   val make : ('a * string list) list -> 'a dir *)
+(*   (\** Create a directory from a list of payload and file path (given as a *)
+(*       string list). Files named ["index"] give their payload to their *)
+(*       containing directory. *\) *)
 
-  val remove_common_root : 'a dir -> 'a dir
-  (** Returns the deepest subdir containing all files. *)
+(*   val remove_common_root : 'a dir -> 'a dir *)
+(*   (\** Returns the deepest subdir containing all files. *\) *)
 
-  val to_sidebar : ?fallback:string -> ('a -> Block.one) -> 'a dir -> Block.t
-end = struct
-  type 'a dir = 'a option * (string * 'a t) list
-  and 'a t = Leaf of 'a | Dir of 'a dir
+(*   val to_sidebar : ?fallback:string -> ('a -> Block.one) -> 'a dir -> Block.t *)
+(* end *) =
+struct
+  type 'a dir = Directory of 'a (* option *) * (string * 'a dir) list
+  (* and 'a t = Leaf of 'a | Dir of 'a dir *)
+
+  open Odoc_index.Index
+
+  let of_lang (dir : index_payload Forest.t) =
+    let rec of_lang ~parent_id (dir : index_payload Forest.t) =
+      let index_id =
+        Odoc_model.Paths.Identifier.Mk.leaf_page
+          (parent_id, Odoc_model.Names.PageName.make_std "index")
+      in
+      let _ =
+        match H.find_opt dir index_id with
+        | None -> _
+        | Some { Forest.payload = None; children } -> _
+        | Some { Forest.payload = Some { title; children_order }; children } ->
+            _
+      in
+      _
+    in
+    _
 
   let rec add_entry_to_dir (dir : 'a dir) payload path =
     match (path, dir) with
@@ -65,15 +86,15 @@ type library = { name : string; units : (Url.Path.t * Inline.one) list }
 
 type t = { pages : pages list; libraries : library list }
 
-let of_lang (v : Odoc_model.Lang.Sidebar.t) =
+let of_lang (v : Odoc_index.Index.Sidebar.t) =
   let sidebar_toc_entry id content =
     let href = id |> Url.Path.from_identifier |> Url.from_path in
     let target = Target.Internal (Resolved href) in
     inline @@ Inline.Link { target; content; tooltip = None }
   in
   let pages =
-    let page_hierarchy { Odoc_model.Lang.Sidebar.page_name; pages } =
-      if pages = [] then None
+    let page_hierarchy { Odoc_index.Index.Sidebar.ph_name; pages } =
+      if Odoc_index.Index.H.length pages = 0 then None
       else
         let prepare_for_hierarchy { Odoc_model.Lang.Sidebar.title; id } =
           let path = Url.Path.from_identifier id in
