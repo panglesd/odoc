@@ -139,6 +139,11 @@ module Identifier : sig
     type t_pv = Id.page_pv
   end
 
+  module LeafPage : sig
+    type t = Id.leaf_page
+    type t_pv = Id.leaf_page_pv
+  end
+
   module ContainerPage : sig
     type t = Id.container_page
     type t_pv = Id.container_page_pv
@@ -237,6 +242,8 @@ module Identifier : sig
 
   module Hashtbl : sig
     module Any : Hashtbl.S with type key = Any.t
+    module ContainerPage : Hashtbl.S with type key = ContainerPage.t
+    module LeafPage : Hashtbl.S with type key = LeafPage.t
   end
 
   module Mk : sig

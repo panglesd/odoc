@@ -1,5 +1,10 @@
 open Types
 
+let sidebar_toc_entry id content =
+  let href = id |> Url.Path.from_identifier |> Url.from_path in
+  let target = Target.Internal (Resolved href) in
+  inline @@ Inline.Link { target; content; tooltip = None }
+
 module Hierarchy
 (*  : sig *)
 (*   type 'a dir *)
@@ -17,96 +22,165 @@ module Hierarchy
 (*   val to_sidebar : ?fallback:string -> ('a -> Block.one) -> 'a dir -> Block.t *)
 (* end *) =
 struct
-  type 'a dir = Directory of 'a (* option *) * (string * 'a dir) list
+  type 'a dir = Directory of 'a (* option *) * (* string *  *) 'a dir list
   (* and 'a t = Leaf of 'a | Dir of 'a dir *)
 
   open Odoc_index.Index
 
-  let of_lang (dir : index_payload Forest.t) =
-    let rec of_lang ~parent_id (dir : index_payload Forest.t) =
+  let of_lang (dir : index_payload PageForest.t) =
+    let rec of_lang ~parent_id (dir : index_payload PageForest.t) =
       let index_id =
         Odoc_model.Paths.Identifier.Mk.leaf_page
           (parent_id, Odoc_model.Names.PageName.make_std "index")
       in
-      let _ =
-        match H.find_opt dir index_id with
-        | None -> _
-        | Some { Forest.payload = None; children } -> _
-        | Some { Forest.payload = Some { title; children_order }; children } ->
-            _
+      let { title; children_order } =
+        match LPH.find_opt dir.leafs index_id with
+        | Some payload -> payload
+        | None -> { title = None; children_order = None }
       in
-      _
+      let children_order =
+        match children_order with
+        | None ->
+            let leafs :> page list =
+              LPH.fold
+                (fun id _ acc ->
+                  if String.equal "index" (Odoc_model.Paths.Identifier.name id)
+                  then acc
+                  else id :: acc)
+                dir.leafs []
+            in
+            let dirs :> page list =
+              CPH.fold (fun id _ acc -> id :: acc) dir.dirs []
+            in
+            List.sort
+              (fun x y ->
+                String.compare
+                  (Odoc_model.Paths.Identifier.name x)
+                  (Odoc_model.Paths.Identifier.name y))
+              (leafs @ dirs)
+        | Some ch -> ch
+      in
+      let entries =
+        List.map
+          (fun (id : Odoc_model.Paths.Identifier.Page.t) ->
+            match id.iv with
+            | `LeafPage _ as iv ->
+                let id = { id with iv } in
+                let { title; children_order = _ } =
+                  LPH.find dir.leafs id
+                  (* TODO LPH.find_opt *)
+                  (* TODO warn on non empty children order if not index page somewhere *)
+                in
+                let payload =
+                  match (title, parent_id) with
+                  | None, _ | _, None -> None
+                  | Some title, Some parent_id ->
+                      let path = Url.Path.from_identifier parent_id in
+                      let content = Comment.link_content title in
+                      Some (path, sidebar_toc_entry id content)
+                in
+                Directory (payload, [])
+            | `Page _ as iv ->
+                let id = { id with iv } in
+                let new_dir = CPH.find dir.dirs id (* TODO CPH.find_opt *) in
+                of_lang ~parent_id:(Some id) new_dir)
+          children_order
+      in
+      let payload =
+        match (title, parent_id) with
+        | None, _ | _, None -> None
+        | Some title, Some parent_id ->
+            let path = Url.Path.from_identifier parent_id in
+            let content = Comment.link_content title in
+            Some (path, sidebar_toc_entry parent_id content)
+      in
+      Directory (payload, entries)
     in
-    _
 
-  let rec add_entry_to_dir (dir : 'a dir) payload path =
-    match (path, dir) with
-    | [], _ -> assert false
-    | [ "index" ], (None, l) -> (Some payload, l)
-    | [ name ], (p, l) -> (p, (name, Leaf payload) :: l)
-    | name :: rest, (p, l) ->
-        let rec add_to_dir (l : (string * 'a t) list) =
-          match l with
-          | [] -> [ (name, Dir (add_entry_to_dir (None, []) payload rest)) ]
-          | (name2, Dir d) :: q when name = name2 ->
-              (name2, Dir (add_entry_to_dir d payload rest)) :: q
-          | d :: q -> d :: add_to_dir q
-        in
-        (p, add_to_dir l)
+    of_lang ~parent_id:None dir
 
-  let make l =
-    let empty = (None, []) in
-    let add_entry_to_dir acc (path, payload) =
-      add_entry_to_dir acc path payload
-    in
-    List.fold_left add_entry_to_dir empty l
+  (* let rec add_entry_to_dir (dir : 'a dir) payload path = *)
+  (*   match (path, dir) with *)
+  (*   | [], _ -> assert false *)
+  (*   | [ "index" ], (None, l) -> (Some payload, l) *)
+  (*   | [ name ], (p, l) -> (p, (name, Leaf payload) :: l) *)
+  (*   | name :: rest, (p, l) -> *)
+  (*       let rec add_to_dir (l : (string * 'a t) list) = *)
+  (*         match l with *)
+  (*         | [] -> [ (name, Dir (add_entry_to_dir (None, []) payload rest)) ] *)
+  (*         | (name2, Dir d) :: q when name = name2 -> *)
+  (*             (name2, Dir (add_entry_to_dir d payload rest)) :: q *)
+  (*         | d :: q -> d :: add_to_dir q *)
+  (*       in *)
+  (*       (p, add_to_dir l) *)
+
+  (* let make l = *)
+  (*   let empty = (None, []) in *)
+  (*   let add_entry_to_dir acc (path, payload) = *)
+  (*     add_entry_to_dir acc path payload *)
+  (*   in *)
+  (*   List.fold_left add_entry_to_dir empty l *)
 
   let rec remove_common_root = function
-    | None, [ (_, Dir d) ] -> remove_common_root d
+    | Directory (_, [ d ]) -> remove_common_root d
     | x -> x
 
-  let rec to_sidebar ?(fallback = "root") convert (name, content) =
+  let rec to_sidebar ?(fallback = "root") convert (Directory (name, content)) =
     let name =
       match name with
       | Some v -> convert v
       | None -> block (Block.Inline [ inline (Text fallback) ])
     in
     let content =
-      let content = List.map (t_to_sidebar convert) content in
-      block (Block.List (Block.Unordered, content))
+      match content with
+      | [] -> []
+      | _ :: _ ->
+          let content = List.map (to_sidebar convert) content in
+          [ block (Block.List (Block.Unordered, content)) ]
     in
-    [ name; content ]
+    name :: content
 
-  and t_to_sidebar convert = function
-    | _, Leaf payload -> [ convert payload ]
-    | fallback, Dir d -> to_sidebar ~fallback convert d
+  (* let rec to_sidebar ?(fallback = "root") convert (name, content) = *)
+  (*   let name = *)
+  (*     match name with *)
+  (*     | Some v -> convert v *)
+  (*     | None -> block (Block.Inline [ inline (Text fallback) ]) *)
+  (*   in *)
+  (*   let content = *)
+  (*     let content = List.map (t_to_sidebar convert) content in *)
+  (*     block (Block.List (Block.Unordered, content)) *)
+  (*   in *)
+  (*   [ name; content ] *)
+
+  (* and t_to_sidebar convert = function *)
+  (*   | _, Leaf payload -> [ convert payload ] *)
+  (*   | fallback, Dir d -> to_sidebar ~fallback convert d *)
 end
-type pages = { name : string; pages : (Url.Path.t * Inline.one) Hierarchy.dir }
+type pages = {
+  name : string;
+  pages : (Url.Path.t * Inline.one) option Hierarchy.dir;
+}
 type library = { name : string; units : (Url.Path.t * Inline.one) list }
 
 type t = { pages : pages list; libraries : library list }
 
 let of_lang (v : Odoc_index.Index.Sidebar.t) =
-  let sidebar_toc_entry id content =
-    let href = id |> Url.Path.from_identifier |> Url.from_path in
-    let target = Target.Internal (Resolved href) in
-    inline @@ Inline.Link { target; content; tooltip = None }
-  in
   let pages =
     let page_hierarchy { Odoc_index.Index.Sidebar.ph_name; pages } =
-      if Odoc_index.Index.H.length pages = 0 then None
-      else
-        let prepare_for_hierarchy { Odoc_model.Lang.Sidebar.title; id } =
-          let path = Url.Path.from_identifier id in
-          let payload =
-            let content = Comment.link_content title in
-            (path, sidebar_toc_entry id content)
-          in
-          (payload, path |> Url.Path.to_list |> List.map snd)
-        in
-        let pages = List.map prepare_for_hierarchy pages in
-        let hierarchy = Hierarchy.make pages |> Hierarchy.remove_common_root in
-        Some { name = page_name; pages = hierarchy }
+      (* if Odoc_index.Index.H.length pages = 0 then None *)
+      (* else *)
+      (* let prepare_for_hierarchy { Odoc_model.Lang.Sidebar.title; id } = *)
+      (*   let path = Url.Path.from_identifier id in *)
+      (*   let payload = *)
+      (*     let content = Comment.link_content title in *)
+      (*     (path, sidebar_toc_entry id content) *)
+      (*   in *)
+      (*   (payload, path |> Url.Path.to_list |> List.map snd) *)
+      (* in *)
+      (* let pages = List.map prepare_for_hierarchy pages in *)
+      let hierarchy = Hierarchy.of_lang pages |> Hierarchy.remove_common_root in
+      (* let hierarchy = Hierarchy.make pages |> Hierarchy.remove_common_root in *)
+      Some { name = ph_name; pages = hierarchy }
     in
     Odoc_utils.List.filter_map page_hierarchy v.pages
   in
@@ -117,7 +191,7 @@ let of_lang (v : Odoc_index.Index.Sidebar.t) =
     in
     let units =
       List.map
-        (fun { Odoc_model.Lang.Sidebar.units; name } ->
+        (fun { Odoc_index.Index.Sidebar.units; name } ->
           let units = List.map item units in
           { name; units })
         v.libraries

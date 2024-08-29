@@ -146,21 +146,35 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
     List.map
       (fun (page_root, _) ->
         let pages = Resolver.all_pages ~root:page_root resolver in
+        let forest = Odoc_index.Index.PageForest.empty_t () in
         let pages =
-          List.map
+          List.iter
             (fun (id, title) ->
-              let title =
-                match title with
-                | None ->
-                    [
-                      Odoc_model.Location_.at
-                        (Odoc_model.Location_.span [])
-                        (`Word (Odoc_model.Paths.Identifier.name id));
-                    ]
-                | Some x -> x
-              in
-              { title; id })
-            pages
+              (* let title = *)
+              (*   match title with *)
+              (*   | None -> *)
+              (*       [ *)
+              (*         Odoc_model.Location_.at *)
+              (*           (Odoc_model.Location_.span []) *)
+              (*           (`Word (Odoc_model.Paths.Identifier.name id)); *)
+              (*       ] *)
+              (*   | Some x -> x *)
+              (* in *)
+              let payload = Odoc_index.Index.{ title; children_order = None } in
+              Odoc_index.Index.PageForest.add forest id
+                payload (* Odoc_index.Index.{ title; id } *))
+            (List.filter_map
+               (function
+                 | ( ({
+                        Odoc_model.Paths.Identifier.iv =
+                          #Odoc_model.Paths.Identifier.LeafPage.t_pv;
+                        _;
+                      } as id),
+                     pl ) ->
+                     Some (id, pl)
+                 | _ -> None)
+               pages);
+          forest
         in
         { ph_name = page_root; pages })
       page_roots
