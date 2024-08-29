@@ -180,7 +180,7 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
           in
           PageToc.of_list pages
         in
-        { ph_name = page_root; pages })
+        { hierarchy_name = page_root; pages })
       page_roots
   in
   let libraries =

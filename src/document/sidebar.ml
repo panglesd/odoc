@@ -5,20 +5,18 @@ let sidebar_toc_entry id content =
   let target = Target.Internal (Resolved href) in
   inline @@ Inline.Link { target; content; tooltip = None }
 
-module Hierarchy : sig
-  type 'a dir
-  (** Directory in a filesystem-like abstraction, where files have a ['a]
-      payload and directory can also have a ['a] payload. *)
+module Toc : sig
+  type t
 
-  val of_lang : Odoc_model.Sidebar.toc -> (Url.Path.t * Inline.one) option dir
+  val of_lang : Odoc_model.Sidebar.toc -> t
 
-  val remove_common_root : 'a dir -> 'a dir
+  val remove_common_root : t -> t
   (** Returns the deepest subdir containing all files. *)
 
   val to_sidebar :
-    ?fallback:string -> ('a -> Block.one) -> 'a option dir -> Block.t
+    ?fallback:string -> (Url.Path.t * Inline.one -> Block.one) -> t -> Block.t
 end = struct
-  type 'a dir = Directory of 'a * 'a dir list
+  type t = Item of (Url.Path.t * Inline.one) option * t list
 
   open Odoc_model.Sidebar
   open Odoc_model.Paths.Identifier
@@ -42,7 +40,7 @@ end = struct
                   let content = Comment.link_content title in
                   Some (path, sidebar_toc_entry id content)
                 in
-                Some (Directory (payload, []))
+                Some (Item (payload, []))
             | id, PageToc.Dir dir -> Some (of_lang ~parent_id:(Some id) dir))
           children_order
       in
@@ -54,16 +52,16 @@ end = struct
             let content = Comment.link_content title in
             Some (path, sidebar_toc_entry parent_id content)
       in
-      Directory (payload, entries)
+      Item (payload, entries)
     in
 
     of_lang ~parent_id:None dir
 
   let rec remove_common_root = function
-    | Directory (_, [ d ]) -> remove_common_root d
+    | Item (_, [ d ]) -> remove_common_root d
     | x -> x
 
-  let rec to_sidebar ?(fallback = "root") convert (Directory (name, content)) =
+  let rec to_sidebar ?(fallback = "root") convert (Item (name, content)) =
     let name =
       match name with
       | Some v -> convert v
@@ -78,19 +76,16 @@ end = struct
     in
     name :: content
 end
-type pages = {
-  name : string;
-  pages : (Url.Path.t * Inline.one) option Hierarchy.dir;
-}
+type pages = { name : string; pages : Toc.t }
 type library = { name : string; units : (Url.Path.t * Inline.one) list }
 
 type t = { pages : pages list; libraries : library list }
 
 let of_lang (v : Odoc_model.Sidebar.t) =
   let pages =
-    let page_hierarchy { Odoc_model.Sidebar.ph_name; pages } =
-      let hierarchy = Hierarchy.of_lang pages |> Hierarchy.remove_common_root in
-      Some { name = ph_name; pages = hierarchy }
+    let page_hierarchy { Odoc_model.Sidebar.hierarchy_name; pages } =
+      let hierarchy = Toc.of_lang pages |> Toc.remove_common_root in
+      Some { name = hierarchy_name; pages = hierarchy }
     in
     Odoc_utils.List.filter_map page_hierarchy v.pages
   in
@@ -126,7 +121,7 @@ let to_block (sidebar : t) url =
   let pages =
     Odoc_utils.List.concat_map
       ~f:(fun (p : pages) ->
-        let pages = Hierarchy.to_sidebar render_entry p.pages in
+        let pages = Toc.to_sidebar render_entry p.pages in
         let pages = [ block (Block.List (Block.Unordered, [ pages ])) ] in
         let pages = [ title @@ p.name ^ "'s Pages" ] @ pages in
         pages)
