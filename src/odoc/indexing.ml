@@ -150,22 +150,25 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
         let pages =
           List.iter
             (fun (id, title, fm) ->
-              (* let title = *)
-              (*   match title with *)
-              (*   | None -> *)
-              (*       [ *)
-              (*         Odoc_model.Location_.at *)
-              (*           (Odoc_model.Location_.span []) *)
-              (*           (`Word (Odoc_model.Paths.Identifier.name id)); *)
-              (*       ] *)
-              (*   | Some x -> x *)
-              (* in *)
+              let title =
+                match title with
+                | None ->
+                    [
+                      Odoc_model.Location_.at
+                        (Odoc_model.Location_.span [])
+                        (`Word (Odoc_model.Paths.Identifier.name id));
+                    ]
+                | Some x -> x
+              in
               let children_order =
-                Some
-                  (List.filter_map
-                     (function
-                       | `Resolved (`Identifier id) -> Some id | _ -> None)
-                     fm.Odoc_model.Frontmatter.children_order)
+                match fm.Odoc_model.Frontmatter.children_order with
+                | None -> None
+                | Some co ->
+                    Some
+                      (List.filter_map
+                         (function
+                           | `Resolved (`Identifier id) -> Some id | _ -> None)
+                         co)
               in
               let payload = Odoc_index.Index.{ title; children_order } in
               Odoc_index.Index.PageForest.add forest id

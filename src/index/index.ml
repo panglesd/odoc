@@ -63,8 +63,8 @@ module PageForest = struct
 end
 
 type index_payload = {
-  title : Odoc_model.Comment.link_content option;
-      (** 0-Title, if there is one *)
+  title : Odoc_model.Comment.link_content;
+      (** 0-Title, if there is one, otherwise the identifier name *)
   children_order : Odoc_model.Paths.Identifier.Page.t list option;
       (** Order of children *)
 }
