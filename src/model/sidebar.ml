@@ -9,13 +9,9 @@ type container_page = ContainerPage.t
 
 module PageToc = struct
   type title = Comment.link_content
+  type children_order = Paths.Identifier.Page.t list
 
-  type payload = {
-    title : title;
-        (** 0-Title, if there is one, otherwise the identifier name *)
-    children_order : Paths.Identifier.Page.t list option;
-        (** Order of children *)
-  }
+  type payload = { title : title; children_order : children_order option }
 
   type dir_content = { leafs : payload LPH.t; dirs : t CPH.t }
   and t = container_page option * dir_content
@@ -123,13 +119,13 @@ module PageToc = struct
         CPH.add parent_dirs id new_;
         new_
 
-  let add (dir : t) ((id : leaf_page), (payload : 'a)) =
+  let add (dir : t) ((id : leaf_page), title, children_order) =
     let _, dir_content =
       match get_parent id with
       | Some parent -> get_or_create dir parent
       | None -> dir
     in
-    LPH.replace dir_content.leafs id payload
+    LPH.replace dir_content.leafs id { title; children_order }
 
   let of_list l =
     let dir = empty_t None in

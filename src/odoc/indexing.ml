@@ -169,8 +169,7 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
                              | `Resolved (`Identifier id) -> Some id | _ -> None)
                            co)
                 in
-                let payload = { PageToc.title; children_order } in
-                (id, payload))
+                (id, title, children_order))
               (List.filter_map
                  (function
                    | Paths.Identifier.(

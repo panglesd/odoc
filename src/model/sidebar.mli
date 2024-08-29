@@ -4,22 +4,15 @@ module CPH : module type of Hashtbl.ContainerPage
 module LPH : module type of Hashtbl.LeafPage
 
 module PageToc : sig
-  type t
-
   type title = Comment.link_content
+  type children_order = Paths.Identifier.Page.t list
 
-  type payload = {
-    title : title;
-        (** 0-Title, if there is one, otherwise the identifier name *)
-    children_order : Paths.Identifier.Page.t list option;
-        (** Order of children *)
-  }
+  type t
+  type content = Entry of title | Dir of t
 
-  val of_list : (LeafPage.t * payload) list -> t
+  val of_list : (LeafPage.t * title * children_order option) list -> t
   (** Uses the convention that the [index] children passes its payload to the
       container directory to output a payload *)
-
-  type content = Entry of title | Dir of t
 
   val find : t -> Page.t -> content option
   val contents : t -> (Page.t * content) list
