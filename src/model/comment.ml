@@ -107,11 +107,14 @@ type heading_attrs = {
       (** Whether the label have been written by the user. *)
 }
 
+type heading = {
+  attrs : heading_attrs;
+  id : Identifier.Label.t;
+  content : inline_element with_location list;
+}
+
 type block_element =
-  [ nestable_block_element
-  | `Heading of
-    heading_attrs * Identifier.Label.t * inline_element with_location list
-  | `Tag of tag ]
+  [ nestable_block_element | `Heading of heading | `Tag of tag ]
 
 type docs = block_element with_location list
 
@@ -141,7 +144,8 @@ let find_zero_heading docs : link_content option =
   List.find_map
     (fun doc ->
       match doc.Location_.value with
-      | `Heading ({ heading_level = `Title; _ }, _, h_content) ->
+      | `Heading
+          { attrs = { heading_level = `Title; _ }; content = h_content; _ } ->
           Some (link_content_of_inline_elements h_content)
       | _ -> None)
     docs

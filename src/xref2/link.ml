@@ -51,9 +51,11 @@ let ambiguous_label_warning label_name labels =
     warning triggers even if one of the colliding labels have been automatically
     generated. *)
 let check_ambiguous_label ~loc env
-    ( attrs,
-      ({ Odoc_model.Paths.Identifier.iv = `Label (_, label_name); _ } as id),
-      _ ) =
+    {
+      Comment.attrs;
+      id = { Odoc_model.Paths.Identifier.iv = `Label (_, label_name); _ } as id;
+      _;
+    } =
   if attrs.Comment.heading_label_explicit then
     (* Looking for an identical identifier but a different location. *)
     let conflicting (`Label (id', comp)) =
@@ -340,12 +342,12 @@ and comment_block_element env parent ~loc (x : Comment.block_element) =
   | #Comment.nestable_block_element as x ->
       (comment_nestable_block_element env parent ~loc x
         :> Comment.block_element)
-  | `Heading (attrs, label, elems) ->
+  | `Heading { attrs; id = label; content = elems } ->
       let cie = comment_inline_element env in
       let elems =
         List.rev_map (fun ele -> with_location cie ele) elems |> List.rev
       in
-      let h = (attrs, label, elems) in
+      let h = { Comment.attrs; id = label; content = elems } in
       check_ambiguous_label ~loc env h;
       `Heading h
   | `Tag t -> `Tag (comment_tag env parent ~loc t)

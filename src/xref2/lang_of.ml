@@ -1079,7 +1079,7 @@ and block_element parent
               Ident.fmt label;
             raise Not_found
         in
-        `Heading (attrs, label, text)
+        `Heading { Comment.attrs; id = label; content = text }
     | (`Tag _ | `Media _) as orig -> orig
     | #Odoc_model.Comment.nestable_block_element as n -> n
   in

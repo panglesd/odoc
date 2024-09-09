@@ -2696,8 +2696,11 @@ module Of_Lang = struct
   and block_element _ b :
       CComment.block_element Odoc_model.Comment.with_location =
     match b with
-    | { Odoc_model.Location_.value = `Heading (attrs, label, text); location }
-      ->
+    | {
+     Odoc_model.Location_.value =
+       `Heading { Odoc_model.Comment.attrs; id = label; content = text };
+     location;
+    } ->
         let label = Ident.Of_Identifier.label label in
         Odoc_model.Location_.same b
           (`Heading { Label.attrs; label; text; location })

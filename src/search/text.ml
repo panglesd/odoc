@@ -53,7 +53,7 @@ module Of_comments = struct
     | `List (_, ls) ->
         List.map (fun x -> x |> List.map get_value |> List.map nestable) ls
         |> List.concat |> String.concat " "
-    | `Heading (_, _, h) -> inlines h
+    | `Heading { content = h; _ } -> inlines h
     | `Modules _ -> ""
     | `Code_block (_, s, _todo) -> s |> get_value
     | `Verbatim v -> v

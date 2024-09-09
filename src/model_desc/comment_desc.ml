@@ -29,8 +29,7 @@ type general_block_element =
   | `List of
     [ `Unordered | `Ordered ] * general_block_element with_location list list
   | `Table of general_block_element abstract_table
-  | `Heading of
-    Comment.heading_attrs * Identifier.Label.t * general_link_content
+  | `Heading of Comment.heading
   | `Tag of general_tag
   | `Media of
     [ `Reference of Paths.Reference.t | `Link of string ] * media * string
@@ -111,7 +110,12 @@ let heading =
         F ("heading_label_explicit", (fun h -> h.heading_label_explicit), bool);
       ]
   in
-  Triple (heading_attrs, identifier, link_content)
+  Record
+    [
+      F ("attrs", (fun h -> h.attrs), heading_attrs);
+      F ("id", (fun h -> h.id), identifier);
+      F ("content", (fun h -> (h.content :> general_link_content)), link_content);
+    ]
 
 let media_href =
   Variant

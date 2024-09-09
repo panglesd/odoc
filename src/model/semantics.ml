@@ -413,7 +413,10 @@ let section_heading :
 
   let mk_heading heading_level =
     let attrs = { Comment.heading_level; heading_label_explicit } in
-    let element = Location.at location (`Heading (attrs, label, text)) in
+    let element =
+      Location.at location
+        (`Heading { Comment.attrs; id = label; content = text })
+    in
     let top_heading_level =
       match top_heading_level with None -> Some level | some -> some
     in

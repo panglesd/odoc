@@ -269,7 +269,10 @@ let add_docs (docs : Comment.docs) env =
   assert env.linking;
   List.fold_left
     (fun env -> function
-      | { Location_.value = `Heading (attrs, id, text); location } ->
+      | {
+          Location_.value = `Heading { Comment.attrs; id; content = text };
+          location;
+        } ->
           let label = Ident.Of_Identifier.label id in
           add_label id { Component.Label.attrs; label; text; location } env
       | _ -> env)

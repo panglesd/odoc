@@ -382,7 +382,7 @@ let attached_block_element : Comment.attached_block_element -> Block.t =
 
 let block_element : Comment.block_element -> Block.t = function
   | #Comment.attached_block_element as e -> attached_block_element e
-  | `Heading (_, _, text) ->
+  | `Heading { content = text; _ } ->
       (* We are not supposed to receive Heading in this context.
          TODO: Remove heading in attached documentation in the model *)
       [ block @@ Paragraph (inline_element_list text) ]
@@ -396,7 +396,11 @@ let heading_level_to_int = function
   | `Subparagraph -> 5
 
 let heading
-    (attrs, { Odoc_model.Paths.Identifier.iv = `Label (_, label); _ }, text) =
+    {
+      Comment.attrs;
+      id = { Odoc_model.Paths.Identifier.iv = `Label (_, label); _ };
+      content = text;
+    } =
   let label = Odoc_model.Names.LabelName.to_string label in
   let title = inline_element_list text in
   let level = heading_level_to_int attrs.Comment.heading_level in

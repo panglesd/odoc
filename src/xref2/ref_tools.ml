@@ -393,10 +393,13 @@ module L = struct
       | hd :: tl -> (
           match Odoc_model.Location_.value hd with
           | `Heading
-              ( _,
-                ({ Odoc_model.Paths.Identifier.iv = `Label (_, name'); _ } as
-                 label),
-                content )
+              {
+                Odoc_model.Comment.id =
+                  { Odoc_model.Paths.Identifier.iv = `Label (_, name'); _ } as
+                  label;
+                content;
+                _;
+              }
             when name = LabelName.to_string name' ->
               Ok (`Identifier label, content)
           | _ -> find tl)
