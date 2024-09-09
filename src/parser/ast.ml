@@ -92,7 +92,11 @@ type ocamldoc_tag =
 (** ocamldoc tags are those that are specified in the {{:https://ocaml.org/releases/4.12/htmlman/ocamldoc.html#ss:ocamldoc-tags}manual}) *)
 
 type tag = [ ocamldoc_tag | internal_tag ]
-type heading = int * string option * inline_element with_location list
+type heading = {
+  level : int;
+  label : string option;
+  content : inline_element with_location list;
+}
 
 type block_element =
   [ nestable_block_element | `Heading of heading | `Tag of tag ]

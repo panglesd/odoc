@@ -1124,7 +1124,7 @@ let rec block_element_list :
               |> add_warning input;
 
             let location = Loc.span [ location; brace_location ] in
-            let heading = `Heading (level, label, content) in
+            let heading = `Heading { Ast.level; label; content } in
             let heading = Loc.at location heading in
             let acc = heading :: acc in
             consume_block_elements ~parsed_a_tag `After_text acc)

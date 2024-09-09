@@ -397,7 +397,7 @@ let section_heading :
     [ `Heading of _ ] ->
     int option * Comment.block_element with_location =
  fun status ~top_heading_level location heading ->
-  let (`Heading (level, label, content)) = heading in
+  let (`Heading { Ast.level; label; content }) = heading in
 
   let text = inline_elements status content in
 
@@ -460,7 +460,7 @@ let validate_first_page_heading status ast_element =
   match status.parent_of_sections.iv with
   | `Page (_, name) | `LeafPage (_, name) -> (
       match ast_element with
-      | { Location.value = `Heading (_, _, _); _ } -> ()
+      | { Location.value = `Heading _; _ } -> ()
       | _invalid_ast_element ->
           let filename = Names.PageName.to_string name ^ ".mld" in
           Error.raise_warning (page_heading_required filename))

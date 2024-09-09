@@ -167,7 +167,7 @@ module Ast_to_sexp = struct
 
   let block_element at : Ast.block_element -> sexp = function
     | #Ast.nestable_block_element as e -> nestable_block_element at e
-    | `Heading (level, label, es) ->
+    | `Heading { level; label; content = es } ->
         let label = List [ Atom "label"; opt str label ] in
         let level = string_of_int level in
         List
