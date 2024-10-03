@@ -23,29 +23,88 @@ interact with [odoc], or any curious passerby. This includes several subjects:
 - An explanation of the [odoc] pipeline,
 - A convention for building docs for [opam]-installed packages.
 
-{1 The model for Odoc 3}
+In addition to the documentation, the reference driver is a good tool to
+understand how to build [odoc] projects. It can be useful to look at the
+implementation code, but it can also help to simply look at all invocation of
+[odoc] during a run of the driver.
+
+{1 Units of documentation}
 
 In its third major version, [odoc] has been improved so that a single
 documentation can work on multiple scenarios, from local switches to big
 monorepos, or the ocaml.org hub of documentation for all packages.
 
 The idea is that we have named units of documentation. We have two kind of them:
-page units, and libraries units. Inside the units, everything is managed by
+page units, and modules units. Inside the units, everything is managed by
 [odoc]. Outside of the unit, the driver is free to arranged them however they
-like. Note that for building [opam] packages, there is a convention to follow
-for the driver. In order to reference another unit, a documentation author can
-use the name of the unit.
+like. (Note that however, for building [opam] packages there is a convention to
+follow for the driver.) In order to reference another unit, a documentation
+author can use the name of the unit.
 
-Let's take an example (you'll find more details on this in the convention for
-opam-installed packages). Any opam package will have an associated documentation
-unit, with the name of the package. Any of its libraries will have an associated
-library unit. Another package can refer to the doc using the package name, or to
-any of its library using the library name, no matter where the package is
-located in the hierarchy.
-
-The goal of these units of compilation
-
-Each of these units of documentation can refer to each others.
+Different situations will give different meanings to the units. In the case of
+[opam] packages, though, there is a natural meaning to give to those units
+(you'll find more details in the convention for opam-installed packages). Any
+opam package will have an associated "documentation unit", with the name of the
+package. Any of its libraries will have an associated "module unit", with the
+name of the library. Another package can refer to the doc using the package
+name, or to any of its library using the library name, no matter where the
+package is located in the hierarchy.
 
 {1 The doc generation pipeline}
 
+Just like when compiling OCaml modules, generating docs for these modules need
+to be run in a specific order, as some information for generating docs for a
+file might reside in another one. However, [odoc] actually allows a particular
+file to reference a module that depend on it, creating a circular dependency.
+
+This circular dependency problem is one of the reason we have several phases in
+[odoc]. Let's review them:
+
+- The [compile] phase, which is used to create the [.odoc] artifacts from
+  [.cm{i;t;ti}] and [.mld] files. This is where [odoc] does a similar work to
+  that of OCaml, computing expansions for each module types. The dependencies
+  between are the same as the ones for the [.cm{i;t;ti}] input.
+
+- The [link] phase transforms the [.odoc] artifacts to [.odocl]. The main result
+  of this phase is to resolve odoc reference, which also has an effect on
+  canonical modules.
+
+- The [indexing] phase generates [.odoc-index] files from sets of [.odocl]
+  files. These index files will be used both for generating a global sidebar,
+  and for generating a search index.
+
+- The [generation] phase takes the [.odocl] and [.odoc-index] files and turns
+  them into either HTML, man pages or Latex files.
+
+{2 The compile phase}
+
+The compile phase takes as input a set of [.cm{i;t;ti}] as well as [.mld] files,
+and builds a directory hierarchy of [.odoc] files.
+
+Let's have a look at a generic invocation of [odoc] during the compile phase:
+
+{@shell[
+  $ odoc compile --output-dir <od> --parent-id <pi> -I <dir1> -I <dir2> <input-file>.<ext>
+]}
+
+- [<input-file>.<ext>] is the input file, either a [.cm{i;t;ti}] file or an [.mld]
+  file. Prefer [.cmti] files over the other format!
+
+- [--output-dir <od>] allows to specify the directory that will contain all the
+  [.odoc] files. This directory has to be fully managed by [odoc] and should not
+  be modified by another tool!
+
+- [--parent-id <pi>] allows to place the output [.odoc] file in the
+  documentation hierarchy. This consists in a [/] separated sequence of non
+  empty strings (used as directory name). This "path" determines where the
+  [.odoc] file will be located below the [<od>] output dir. The name of the
+  output file is [<input-file>.odoc] for modules, and [page-<input-file>.odoc]
+  for pages.
+
+- [-I <dir>] corresponds to the search path for other [.odoc] file. It can be
+  given as many times as necessary, but should allow to access every [.odoc]
+  file generated from a [.cm{i;t;ti}] listed when calling [odoc compile-deps] on
+  the input file. [<dir>] are directories under the [<od>] directory, computed
+  from the [--parent-id] option given to previous call to [odoc compile].
+
+A concrete example for such 
