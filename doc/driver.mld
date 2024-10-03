@@ -28,7 +28,7 @@ understand how to build [odoc] projects. It can be useful to look at the
 implementation code, but it can also help to simply look at all invocation of
 [odoc] during a run of the driver.
 
-{1 Units of documentation}
+{1:units Units of documentation}
 
 In its third major version, [odoc] has been improved so that a single
 documentation can work on multiple scenarios, from local switches to big
@@ -81,6 +81,8 @@ This circular dependency problem is one of the reason we have several phases in
 The compile phase takes as input a set of [.cm{i;t;ti}] as well as [.mld] files,
 and builds a directory hierarchy of [.odoc] files.
 
+There are two distinct commands for this phase: [odoc compile] for interfaces and pages, and [odoc compile-impl] for implementations.
+
 Let's have a look at a generic invocation of [odoc] during the compile phase:
 
 {@shell[
@@ -99,7 +101,8 @@ Let's have a look at a generic invocation of [odoc] during the compile phase:
   empty strings (used as directory name). This "path" determines where the
   [.odoc] file will be located below the [<od>] output dir. The name of the
   output file is [<input-file>.odoc] for modules, and [page-<input-file>.odoc]
-  for pages.
+  for pages. Documentation artifacts that will be in the same {{!units}unit of
+  documentation} needs to hare a common root in their parent id.
 
 - [-I <dir>] corresponds to the search path for other [.odoc] file. It can be
   given as many times as necessary, but should allow to access every [.odoc]
@@ -107,4 +110,57 @@ Let's have a look at a generic invocation of [odoc] during the compile phase:
   the input file. [<dir>] are directories under the [<od>] directory, computed
   from the [--parent-id] option given to previous call to [odoc compile].
 
-A concrete example for such 
+A concrete example for such command would be:
+
+{@shell[
+  $ odoc compile ~/.opam/5.2.0/lib/ppxlib/ppxlib__Extension.cmti --output-dir _odoc/ -I _odoc/ocaml-base-compiler/lib/compiler-libs.common -I _odoc/ocaml-base-compiler/lib/stdlib -I _odoc/ocaml-compiler-libs/lib/ocaml-compiler-libs.common -I _odoc/ppxlib/lib/ppxlib -I _odoc/ppxlib/lib/ppxlib.ast -I _odoc/ppxlib/lib/ppxlib.astlib -I _odoc/ppxlib/lib/ppxlib.stdppx -I _odoc/ppxlib/lib/ppxlib.traverse_builtins -I _odoc/sexplib0/lib/sexplib0 --parent-id ppxlib/lib/ppxlib
+]}
+
+A [compile-impl] command is pretty similar:
+
+{@shell[
+  $ odoc compile-impl --output-dir <od> --source-id --parent-id <pi> -I <dir1> -I <dir2> <input-file>.<ext>
+]}
+
+- [<input-file>.<ext>] is the input file, either a [.cm{i;t;ti}] file or an [.mld]
+  file. Prefer [.cmti] files over the other format!
+
+- [--output-dir <od>] allows to specify the directory that will contain all the
+  [.odoc] files. This directory has to be fully managed by [odoc] and should not
+  be modified by another tool!
+
+- [--parent-id <pi>] allows to place the output [.odoc] file in the
+  documentation hierarchy. This consists in a [/] separated sequence of non
+  empty strings (used as directory name). This "path" determines where the
+  [.odoc] file will be located below the [<od>] output dir. The name of the
+  output file is [<input-file>.odoc] for modules, and [page-<input-file>.odoc]
+  for pages. Documentation artifacts that will be in the same {{!units}unit of
+  documentation} needs to hare a common root in their parent id.
+
+- [-I <dir>] corresponds to the search path for other [.odoc] file. It can be
+  given as many times as necessary, but should allow to access every [.odoc]
+  file generated from a [.cm{i;t;ti}] listed when calling [odoc compile-deps] on
+  the input file. [<dir>] are directories under the [<od>] directory, computed
+  from the [--parent-id] option given to previous call to [odoc compile].
+
+{2 The link phase}
+
+The link phase requires the directory of the [compile] phase to generate its set
+of [.odocl] files. This phase resolves references and canonicals.
+
+A generic link command is:
+
+{@shell[
+  $ odoc link
+      -I <dir1> -I <dir2>
+      -P <pname1>:<pdir1> -P <pname2>:<pdir2>
+      -L <lname1>:<ldir1> -L <lname2>:<ldir2>
+      <path/to/file.odoc>
+]}
+
+- [<path/to/file.odoc] is the input [.odoc] file. The result of this command is
+  [path/to/file.odocl]. This path was determined by [--output-dir] and
+  [--parent-id] from the link phase, and it is important for the indexing phase
+  that it stays in the same location.
+
+- [-P <name>:<dir>] 
