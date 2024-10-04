@@ -81,7 +81,11 @@ This circular dependency problem is one of the reason we have several phases in
 The compile phase takes as input a set of [.cm{i;t;ti}] as well as [.mld] files,
 and builds a directory hierarchy of [.odoc] files.
 
-There are two distinct commands for this phase: [odoc compile] for interfaces and pages, and [odoc compile-impl] for implementations.
+There are distinct commands for this phase: [odoc compile] for interfaces and
+pages, [odoc compile-impl] for implementations, and [odoc compile-asset] for
+assets.
+
+{2 Compiling interfaces}
 
 Let's have a look at a generic invocation of [odoc] during the compile phase:
 
@@ -117,6 +121,8 @@ A concrete example for such command would be:
   $ odoc compile ~/.opam/5.2.0/lib/ppxlib/ppxlib__Extension.cmti --output-dir _odoc/ -I _odoc/ocaml-base-compiler/lib/compiler-libs.common -I _odoc/ocaml-base-compiler/lib/stdlib -I _odoc/ocaml-compiler-libs/lib/ocaml-compiler-libs.common -I _odoc/ppxlib/lib/ppxlib -I _odoc/ppxlib/lib/ppxlib.ast -I _odoc/ppxlib/lib/ppxlib.astlib -I _odoc/ppxlib/lib/ppxlib.stdppx -I _odoc/ppxlib/lib/ppxlib.traverse_builtins -I _odoc/sexplib0/lib/sexplib0 --parent-id ppxlib/lib/ppxlib
 ]}
 
+{2 Compiling implementations}
+
 A [compile-impl] command is pretty similar:
 
 {@shell[
@@ -133,7 +139,7 @@ A [compile-impl] command is pretty similar:
   wants the implementation and interface [.odoc] files to share the same parent
   id.
 
-- [-I <dir>] also corresponds to the search path for other [.odoc] file.]
+- [-I <dir>] also corresponds to the search path for other [.odoc] file.
 
 - [source-id <sid>] is a new argument specific to [compile-impl]. This corresponds to the location of the rendering of the source, which is required to generate links to it.
 
@@ -142,6 +148,23 @@ A concrete example for such command would be:
 {@shell[
   $ odoc compile-impl ~/.opam/5.2.0/lib/ppxlib/ppxlib__Spellcheck.cmt --output-dir _odoc/ -I _odoc/ocaml-base-compiler/lib/compiler-libs.common -I _odoc/ocaml-base-compiler/lib/stdlib -I _odoc/ocaml-compiler-libs/lib/ocaml-compiler-libs.common -I _odoc/ppxlib/lib/ppxlib -I _odoc/ppxlib/lib/ppxlib.ast -I _odoc/ppxlib/lib/ppxlib.astlib -I _odoc/ppxlib/lib/ppxlib.stdppx -I _odoc/sexplib0/lib/sexplib0 --enable-missing-root-warning --parent-id ppxlib/lib/ppxlib --source-id ppxlib/src/ppxlib/spellcheck.ml
 ]}
+
+{2 Compiling assets}
+
+Assets are given during the generation phase. But we still need to create an
+[.odoc] file, for [odoc]'s resolution mechanism.
+
+{@shell[
+  $ odoc compile-asset --output-dir <od> --parent-id <pid> --name <assetname>
+]}
+
+- [--output-dir] and [--parent-id] are identical to the [compile] and
+  [compile-impl] commands,
+
+- [--name <assetname>] gives the asset name.
+
+- The output file name is computed from the previous values as
+  [<output-dir>/<parent-id>/asset-<assetname>.odoc].
 
 {2 The link phase}
 
@@ -174,18 +197,132 @@ A generic link command is:
 
 {2 The indexing phase}
 
+The indexing phase refers to the crunching of information found in several
+[.odocl] files. Currently, there are two use-cases for this phase:
+
+- Generating a search index. This requires all information from linked
+  interfaces and pages, but also form linked implementations in order to sort
+  results.
+
+- Generating a global sidebar.
+
 {3 Counting occurrences}
 
-a
+This step counts the number of occurrences of each value/type/... in the
+implementation, and stores them in a big table. A generic invocation is:
+
+TODO
 
 {3 Indexing entries}
 
-The indexing phase happens after the link phase, as it reads [.odocl] files. It
-produces [.odoc-index] files, which contains an index of all entries in odoc
-files. This file will be used both for search indexes,
+The [odoc compile-index] produces an [.odoc-index] file, from [.odocl] files,
+other [.odoc-index] files, and possibly some [.odoc-occurrence] files.
+
+To create an index for the page and documentation units, we use the [-P] and
+[-L] arguments.
+
+{@shell[
+  $ odoc compile-index -o path/to/<indexname>.odoc-index -P <pname1>:<ppath1> -P <pname2>:<ppath2> -L <lname1>:<lpath1> -L <lname2>:<lpath2> # TODO --occurence-file ...
+]}
+
+An example of such command:
+
+{@shell[
+  $ odoc compile-index -o _odoc/ppxlib/index.odoc-index -P ppxlib:_odoc/ppxlib/doc -L ppxlib:_odoc/ppxlib/lib/ppxlib -L ppxlib.ast:_odoc/ppxlib/lib/ppxlib.ast -L ppxlib.astlib:_odoc/ppxlib/lib/ppxlib.astlib -L ppxlib.metaquot:_odoc/ppxlib/lib/ppxlib.metaquot -L ppxlib.metaquot_lifters:_odoc/ppxlib/lib/ppxlib.metaquot_lifters -L ppxlib.print_diff:_odoc/ppxlib/lib/ppxlib.print_diff -L ppxlib.runner:_odoc/ppxlib/lib/ppxlib.runner -L ppxlib.runner_as_ppx:_odoc/ppxlib/lib/ppxlib.runner_as_ppx -L ppxlib.stdppx:_odoc/ppxlib/lib/ppxlib.stdppx -L ppxlib.traverse:_odoc/ppxlib/lib/ppxlib.traverse -L ppxlib.traverse_builtins:_odoc/ppxlib/lib/ppxlib.traverse_builtins
+]}
 
 {2 The generation phase}
 
+The generation phase is the phase that takes all information computed in
+previous files, and actually generates the documentation. It can take the form
+of HTML, Latex and manpages, although currently HTML is the [odoc] backend that
+supports the most functionalities (such as images, videos, ...).
+
+In this manual, we describe the situation for generating HTML. Usually,
+generating for other backend boils down to replacing [html-generate] by
+[latex-generate] or [man-generate], refer to the manpage to see the diverging
+options.
+
+Given an [.odocl] file, [odoc] might generate a single [.html] file, or a
+complete directory of [.html] files. The [--output-dir] option specifies the
+root for generating those output.
+
+{3 A javascript for performing search requests}
+
+[odoc] provides a way to plugin a javascript file, containing the code to answer
+user's queries. In order to never block the UI, this file will be loaded in a
+web worker to perform searches:
+
+- The search query will be sent as a plain string to the web worker, using the
+  standard mechanism of message passing.
+
+- The web worker has to send back the result as a message to the main thread,
+  containing the list of results. The format is defined in the TODO.
+
+- The file must be manually put in the [--output-dir] values, the driver can
+  decide where.
+
+{3 Generating docs for interfaces and pages}
+
+A generic [html-generate] command for interfaces has the following form:
+
+{@shell[
+  $ odoc html-generate
+    --output-dir <odir>
+    --index <path/to/file.odoc-index>
+    --search-uri <relative/to/output-dir/file.js> --search-uri <relative/to/output-dir/file2.js>
+    <path/to/file.odocl>
+]}
+
+- [--output-dir <odir>] is used to specify the root output for the generated
+  [.html].
+
+- [--index <path/to/file.odoc-index>] is given to [odoc] for sidebar generation.
+
+- [--search-uri <relative/to/output-dir/file.js>] tells [odoc] which file(s) to
+  load in a web worker.
+
+The output directory or file can be computed from this command's [--output-dir],
+the initial [--parent-id] given when creating the [.odoc] file, as well as the
+unit name. In the case of a module, the output is a directory named with the
+name of the module. In the case of a page, the output is a file with the name of
+the page and the [.html] extension.
+
+An example of such command is:
+
+{@shell[
+  $ odoc html-generate _odoc/ppxlib/doc/page-index.odocl --index _odoc/ppxlib/index.odoc-index --search-uri ppxlib/sherlodoc_db.js --search-uri sherlodoc.js -o _html/
+]}
+
 {3 Rendering source code}
 
-{3 Generating docs for interfaces}
+{@shell[
+  $ odoc html-generate-source --output-dir <odir> --impl <path/to/impl-file.odocl> <path/to/source/file.ml>
+]}
+
+- [--output-dir <odir>] has been covered already
+
+- [--impl <path/to/impl-file.odocl>] allows to give the implementation file.
+
+- [<path/to/source/file.ml>] is the source file.
+
+The output file can be computed from this command's [--output-dir], and the
+initial [--source-id] and [--name] given when creating the [impl-*.odoc] file.
+
+An example of such command is:
+
+{@shell[
+  $ odoc html-generate-source --impl _odoc/ppxlib/lib/ppxlib/impl-ppxlib__Reconcile.odocl /home/panglesd/.opam/5.2.0/lib/ppxlib/reconcile.ml -o _html/
+]}
+
+{3 Generating docs for assets}
+
+This is the phase where we pass the actual asset. We pass it as a positional
+argument, and give the asset unit using [--asset-unit].
+
+{@shell[
+  $ odoc html-generate-asset --output-dir <odir> --asset-unit <path/to/asset-file.odocl> <path/to/asset/file.ext>
+]}
+
+{1 Convention for generating the docs for installed packages}
+
