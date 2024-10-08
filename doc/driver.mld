@@ -326,8 +326,89 @@ argument, and give the asset unit using [--asset-unit].
 
 {1 Convention for installed packages}
 
-In order to build the documentation for installed package, we need to give some
-meaning to various of the concept above. In particular, we need to define the
-pages and libraries group, where to find the pages and assets, when linking the
-driver need to know to which group the artifact may be linking...
+In order to build the documentation for installed package, the driver needs to
+give a meaning to various of the concept above. In particular, it needs to
+define the pages and libraries group, know where to find the pages and assets,
+what id to give them, when linking it needs to know to which group the artifact
+may be linking...
+
+So that the different drivers and installed packages play well together, we
+define here a convention for building installed packages. If both the package
+and the driver follow it, building the docs should go well!
+
+{2 The [-P] and [-L] roots}
+
+Each package define a set of root ids. These roots will be used in [--parent-id]
+and in [-P] and [-L].
+
+The driver can decide any set of mutually disjoint set of roots, without posing
+problem to the reference resolution. For instance, both [-P
+pkg:<output_dir>/pkg/doc] and [-P pkg:<output_dir>/pkg/version/doc] are
+acceptable versions. However, we define here "canonical" roots.
+
+Each installed package [<p>] define a single page root id: [<p>/doc].
+
+For each package [<p>], each library [<l>] defines a library root id:
+[<p>/lib/<l>].
+
+{2 Reference dependencies}
+
+In addition to the [-I] dependencies, used by [odoc]'s internal model, an
+installed package needs to define the additional reference dependencies. Note
+that these dependencies can be circular without problem, as they happen during
+the link phase and only require the artifact from the compile phase.
+
+An installed package [<p>] specifies its resolve dependencies in a file at
+[<opam root>/doc/<p>/odoc-config.sexp]. This file contains
+s-expressions.
+
+Stanzas of the form [(package p1 p2 ...)] specifies that packages [p1], [p2],
+..., should be added using the [-P] argument: with the canonical roots, it would
+be [-P p1:<output_dir>/<p1>/doc -P p2:<output_dir>/<p2>/doc -P ...].
+
+Stanzas of the form [(libraries l1 l2 ...)] specifies that libraries [l1], [l2],
+..., should be added using the [-L] argument: with the canonical roots, it would
+be [-L <output_dir>/<p1>/lib/<l1> -L <output_dir>/<p2>/lib/<l2> -L ...].
+
+{2 The units}
+
+The module units of a package [p] are all files installed by [p] that can be
+found in [<opam root>/lib/p/] or a subdirectory.
+
+The page units are those files that can be found in [<opam
+root>/doc/odoc-pages/] or a subdirectory, and that have an [.mld] extension.
+
+The asset units are those files that can be found in [<opam
+root>/doc/odoc-pages/] or a subdirectory, but that do not have an [.mld]
+extension. Additionally, they are all files found in [<opam
+root>/doc/odoc-assets/].
+
+{2 The [--parent-id] arguments}
+
+For each odoc unit (page, module and assets), we will define their [--parent-id]
+argument in two parts: the "group" prefix and the "odoc" suffix.
+
+The "group" prefix is the part of the id that will be used in the [-P] and [-L]
+arguments. As such, the driver can modify them without disturbing the resolution
+of references. For instance, one can go from [--parent-id pkg/lib] to
+[--parent-id pkg/version/lib] as long as the corresponding [-L] goes from [-L
+pkg:pkg/lib] to [-L pkg:pkg/version/lib].
+
+We still define a canonical "group" prefix. For a page or asset unit, it will be
+[<p>/doc] where [<p>] is the package name. For an interface or implementation
+unit, it will be [<p>/lib/<lib>] where [<lib>] is the library the unit belongs
+to.
+
+Units do not have an "odoc" suffix.
+
+Implementation unit also have a [--source-id], which is
+[<p>/src/<lib>/<filename.ml>] where [<filename.ml>] is the source file name.
+
+{t
+  | kind   | [--parent-id]         | corresponding [-P] or [-L] | Comments                                            |
+  |--------|-----------------------|----------------------------|-----------------------------------------------------|
+  | Module | [<pkg>/lib/<lib>]     | [<lib>:<pkg>/lib/<lib>]    |                                                     |
+  | Page   | [<pkg>/doc/<relpath>] | [<lib>:<pkg>/doc/]         | For pages in [<opam root>/doc/<relpath>/<file.mld>] |
+  | Asset  | [<pkg>/doc/<relpath>] | [<lib>:<pkg>/doc/]         | For pages in [<opam root>/doc/<relpath>/<file.ext>] |
+}
 
