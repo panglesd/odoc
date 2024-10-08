@@ -211,24 +211,32 @@ The indexing phase refers to the crunching of information found in several
 This step counts the number of occurrences of each value/type/... in the
 implementation, and stores them in a big table. A generic invocation is:
 
-TODO
-
-{3 Indexing entries}
-
-The [odoc compile-index] produces an [.odoc-index] file, from [.odocl] files,
-other [.odoc-index] files, and possibly some [.odoc-occurrence] files.
-
-To create an index for the page and documentation units, we use the [-P] and
-[-L] arguments.
-
 {@shell[
-  $ odoc compile-index -o path/to/<indexname>.odoc-index -P <pname1>:<ppath1> -P <pname2>:<ppath2> -L <lname1>:<lpath1> -L <lname2>:<lpath2> # TODO --occurence-file ...
+  $ odoc count-occurrences <dir1> <dir2> -o <path/to/name.odoc-occurrences>
 ]}
 
 An example of such command:
 
 {@shell[
-  $ odoc compile-index -o _odoc/ppxlib/index.odoc-index -P ppxlib:_odoc/ppxlib/doc -L ppxlib:_odoc/ppxlib/lib/ppxlib -L ppxlib.ast:_odoc/ppxlib/lib/ppxlib.ast -L ppxlib.astlib:_odoc/ppxlib/lib/ppxlib.astlib -L ppxlib.metaquot:_odoc/ppxlib/lib/ppxlib.metaquot -L ppxlib.metaquot_lifters:_odoc/ppxlib/lib/ppxlib.metaquot_lifters -L ppxlib.print_diff:_odoc/ppxlib/lib/ppxlib.print_diff -L ppxlib.runner:_odoc/ppxlib/lib/ppxlib.runner -L ppxlib.runner_as_ppx:_odoc/ppxlib/lib/ppxlib.runner_as_ppx -L ppxlib.stdppx:_odoc/ppxlib/lib/ppxlib.stdppx -L ppxlib.traverse:_odoc/ppxlib/lib/ppxlib.traverse -L ppxlib.traverse_builtins:_odoc/ppxlib/lib/ppxlib.traverse_builtins
+  $ odoc count-occurrences _odoc/ -o _odoc/occurrences-all.odoc-occurrences
+]}
+
+{3 Indexing entries}
+
+The [odoc compile-index] produces an [.odoc-index] file, from [.odocl] files,
+other [.odoc-index] files, and possibly some [.odoc-occurrences] files.
+
+To create an index for the page and documentation units, we use the [-P] and
+[-L] arguments.
+
+{@shell[
+  $ odoc compile-index -o path/to/<indexname>.odoc-index -P <pname1>:<ppath1> -P <pname2>:<ppath2> -L <lname1>:<lpath1> -L <lname2>:<lpath2> --occurrences <path/to/name.odoc-occurrences>
+]}
+
+An example of such command:
+
+{@shell[
+  $ odoc compile-index -o _odoc/ppxlib/index.odoc-index -P ppxlib:_odoc/ppxlib/doc -L ppxlib:_odoc/ppxlib/lib/ppxlib -L ppxlib.ast:_odoc/ppxlib/lib/ppxlib.ast -L ppxlib.astlib:_odoc/ppxlib/lib/ppxlib.astlib -L ppxlib.metaquot:_odoc/ppxlib/lib/ppxlib.metaquot -L ppxlib.metaquot_lifters:_odoc/ppxlib/lib/ppxlib.metaquot_lifters -L ppxlib.print_diff:_odoc/ppxlib/lib/ppxlib.print_diff -L ppxlib.runner:_odoc/ppxlib/lib/ppxlib.runner -L ppxlib.runner_as_ppx:_odoc/ppxlib/lib/ppxlib.runner_as_ppx -L ppxlib.stdppx:_odoc/ppxlib/lib/ppxlib.stdppx -L ppxlib.traverse:_odoc/ppxlib/lib/ppxlib.traverse -L ppxlib.traverse_builtins:_odoc/ppxlib/lib/ppxlib.traverse_builtins --occurrences _odoc/occurrences-all.odoc-occurrences
 ]}
 
 {2 The generation phase}
