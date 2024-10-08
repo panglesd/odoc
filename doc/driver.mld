@@ -364,11 +364,12 @@ s-expressions.
 
 Stanzas of the form [(package p1 p2 ...)] specifies that packages [p1], [p2],
 ..., should be added using the [-P] argument: with the canonical roots, it would
-be [-P p1:<output_dir>/<p1>/doc -P p2:<output_dir>/<p2>/doc -P ...].
+be [-P p1:<output_dir>/p1/doc -P p2:<output_dir>/p2/doc -P ...].
 
 Stanzas of the form [(libraries l1 l2 ...)] specifies that libraries [l1], [l2],
 ..., should be added using the [-L] argument: with the canonical roots, it would
-be [-L <output_dir>/<p1>/lib/<l1> -L <output_dir>/<p2>/lib/<l2> -L ...].
+be [-L l1:<output_dir>/p1/lib/l1 -L l2<output_dir>/p2/lib/l2 -L ...], where [p1]
+is the package [l1] is in, etc.
 
 {2 The units}
 
@@ -385,30 +386,22 @@ root>/doc/odoc-assets/].
 
 {2 The [--parent-id] arguments}
 
-For each odoc unit (page, module and assets), we will define their [--parent-id]
-argument in two parts: the "group" prefix and the "odoc" suffix.
+Interface and implementation units have as parent id the root of the library
+they belong to: [<p>/lib/<l>].
 
-The "group" prefix is the part of the id that will be used in the [-P] and [-L]
-arguments. As such, the driver can modify them without disturbing the resolution
-of references. For instance, one can go from [--parent-id pkg/lib] to
-[--parent-id pkg/version/lib] as long as the corresponding [-L] goes from [-L
-pkg:pkg/lib] to [-L pkg:pkg/version/lib].
+Page units that are found in [<opam
+root>/doc/<p>/odoc-pages/<relpath>/<name>.mld] have the parent id
+[<p>/doc/<relpath>].
 
-We still define a canonical "group" prefix. For a page or asset unit, it will be
-[<p>/doc] where [<p>] is the package name. For an interface or implementation
-unit, it will be [<p>/lib/<lib>] where [<lib>] is the library the unit belongs
-to.
+Asset units that are found in [<opam
+root>/doc/<p>/odoc-pages/<relpath>/<name>.<ext>] have the parent id
+[<p>/doc/<relpath>].
 
-Units do not have an "odoc" suffix.
+Asset units that are found in [<opam root>/doc/<p>/odoc-assets/<name>.<ext>]
+have the parent id [<p>/doc/_assets/<relpath>].
 
-Implementation unit also have a [--source-id], which is
-[<p>/src/<lib>/<filename.ml>] where [<filename.ml>] is the source file name.
+{2 The [--source-id] arguments}
 
-{t
-  | kind   | [--parent-id]         | corresponding [-P] or [-L] | Comments                                            |
-  |--------|-----------------------|----------------------------|-----------------------------------------------------|
-  | Module | [<pkg>/lib/<lib>]     | [<lib>:<pkg>/lib/<lib>]    |                                                     |
-  | Page   | [<pkg>/doc/<relpath>] | [<lib>:<pkg>/doc/]         | For pages in [<opam root>/doc/<relpath>/<file.mld>] |
-  | Asset  | [<pkg>/doc/<relpath>] | [<lib>:<pkg>/doc/]         | For pages in [<opam root>/doc/<relpath>/<file.ext>] |
-}
-
+The driver can chose the source id without breaking references. However, if it
+follows the canonical roots, implementation units have as source id:
+[<p>/src/<l>/<filename>.ml].
