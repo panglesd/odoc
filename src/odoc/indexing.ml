@@ -60,7 +60,7 @@ let compile_to_json ~output ~occurrences files =
           handle_file
             ~unit:(print (Json_search.unit ?occurrences) acc)
             ~page:(print Json_search.page acc)
-            ~occ:(print Json_search.index acc)
+            ~occ:(fun _ -> true)
             file
         with
         | Ok acc -> acc
@@ -74,38 +74,41 @@ let compile_to_json ~output ~occurrences files =
   Ok ()
 
 let compile_to_marshall ~output sidebar files =
-  let final_index = H.create 10 in
+  (* let final_index = H.create 10 in *)
   let unit u =
-    Odoc_model.Fold.unit
-      ~f:(fun () item ->
-        let entries = Odoc_search.Entry.entries_of_item item in
-        List.iter
-          (fun entry -> H.add final_index entry.Odoc_search.Entry.id entry)
-          entries)
-      () u
+    let node = Odoc_index.Skeleton.unit u in
+    (* Odoc_model.Fold.unit *)
+    (*   ~f:(fun () item -> *)
+    (*     let entries = Odoc_search.Entry.entries_of_item item in *)
+    (*     List.iter *)
+    (*       (fun entry -> H.add final_index entry.Odoc_search.Entry.id entry) *)
+    (*       entries) *)
+    (*   () u *)
+    node
   in
-  let page p =
-    Odoc_model.Fold.page
-      ~f:(fun () item ->
-        let entries = Odoc_search.Entry.entries_of_item item in
-        List.iter
-          (fun entry -> H.add final_index entry.Odoc_search.Entry.id entry)
-          entries)
-      () p
+  let page _p =
+    None
+    (* Odoc_model.Fold.page *)
+    (*   ~f:(fun () item -> *)
+    (*     let entries = Odoc_search.Entry.entries_of_item item in *)
+    (*     List.iter *)
+    (*       (fun entry -> H.add final_index entry.Odoc_search.Entry.id entry) *)
+    (*       entries) *)
+    (*   () p *)
   in
-  let index i = H.iter (H.add final_index) i in
-  let () =
-    List.fold_left
-      (fun acc file ->
+  let index _i = (* H.iter (H.add final_index) i *) None in
+  let index =
+    List.filter_map
+      (fun file ->
         match handle_file ~unit ~page ~occ:index file with
-        | Ok acc -> acc
+        | Ok x -> x
         | Error (`Msg m) ->
             Error.raise_warning ~non_fatal:true
               (Error.filename_only "%s" m (Fs.File.to_string file));
-            acc)
-      () files
+            None)
+      files
   in
-  Ok (Odoc_file.save_index output { index = final_index; sidebar })
+  Ok (Odoc_file.save_index output { index; sidebar })
 
 let read_occurrences file =
   let ic = open_in_bin file in

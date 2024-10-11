@@ -2,7 +2,11 @@ open Odoc_utils
 open Types
 
 let sidebar_toc_entry id content =
-  let href = id |> Url.Path.from_identifier |> Url.from_path in
+  let href =
+    (id :> Odoc_model.Paths.Identifier.t)
+    |> Url.from_identifier ~stop_before:true
+    |> Result.get_ok
+  in
   let target = Target.Internal (Resolved href) in
   inline @@ Inline.Link { target; content; tooltip = None }
 
@@ -11,20 +15,25 @@ module Toc : sig
 
   val of_lang : Odoc_model.Sidebar.PageToc.t -> t
 
+  val of_skeleton : Odoc_index.Skeleton.node -> t
+
   val to_sidebar :
-    ?fallback:string -> (Url.Path.t * Inline.one -> Block.one) -> t -> Block.t
+    ?fallback:string -> (Url.t * Inline.one -> Block.one) -> t -> Block.t
+
+  val prune : t -> Url.Path.t -> t option
 end = struct
-  type t = Item of (Url.Path.t * Inline.one) option * t list
+  type t = Item of (Url.t * Inline.one) option * t list
 
   open Odoc_model.Sidebar
-  open Odoc_model.Paths.Identifier
+  open Odoc_model.Paths
 
   let of_lang (dir : PageToc.t) =
     let rec of_lang ~parent_id ((content, index) : PageToc.t) =
       let title, parent_id =
         match index with
-        | Some (index_id, title) -> (Some title, Some (index_id :> Page.t))
-        | None -> (None, (parent_id :> Page.t option))
+        | Some (index_id, title) ->
+            (Some title, Some (index_id :> Identifier.Page.t))
+        | None -> (None, (parent_id :> Identifier.Page.t option))
       in
       let entries =
         List.filter_map
@@ -33,7 +42,11 @@ end = struct
             | id, PageToc.Entry title ->
                 (* TODO warn on non empty children order if not index page somewhere *)
                 let payload =
-                  let path = Url.Path.from_identifier id in
+                  let path =
+                    Url.from_identifier ~stop_before:true
+                      (id : Identifier.Page.t :> Identifier.t)
+                    |> Result.get_ok
+                  in
                   let content = Comment.link_content title in
                   Some (path, sidebar_toc_entry id content)
                 in
@@ -45,7 +58,10 @@ end = struct
         match (title, parent_id) with
         | None, _ | _, None -> None
         | Some title, Some parent_id ->
-            let path = Url.Path.from_identifier parent_id in
+            let path =
+              Url.from_identifier ~stop_before:true (parent_id :> Identifier.t)
+              |> Result.get_ok
+            in
             let content = Comment.link_content title in
             Some (path, sidebar_toc_entry parent_id content)
       in
@@ -67,13 +83,58 @@ end = struct
           [ block (Block.List (Block.Unordered, content)) ]
     in
     name :: content
+
+  let rec of_skeleton ({ entry; children } : Odoc_index.Skeleton.node) =
+    let path = Url.from_identifier ~stop_before:true entry.id in
+    let name = Odoc_model.Paths.Identifier.name entry.id in
+    let payload =
+      match path with
+      | Ok path ->
+          let content =
+            let target = Target.Internal (Resolved path) in
+            inline
+              (Link { target; content = [ inline (Text name) ]; tooltip = None })
+          in
+          Some (path, content)
+      | Error _ -> None
+    in
+    let entries = List.map of_skeleton children in
+    Item (payload, entries)
+
+  let prune v url =
+    let rec is_prefix (url1 : Url.Path.t) (url2 : Url.Path.t) =
+      if url1 = url2 then true
+      else
+        match url2 with
+        | { parent = Some parent; _ } -> is_prefix url1 parent
+        | { parent = None; _ } -> false
+    in
+    let parent (url : Url.t) =
+      match url with
+      | { anchor = ""; page = { parent = Some parent; _ }; _ } -> parent
+      | { page; _ } -> page
+    in
+    let is_comparable u1 u2 = is_prefix u1 u2 || is_prefix u2 u1 in
+    let rec prune (Item (payload, children)) =
+      match payload with
+      | None -> Some (Item (payload, List.filter_map prune children))
+      | Some (u, _) ->
+          if is_comparable (parent u) url then
+            Some (Item (payload, List.filter_map prune children))
+          else None
+    in
+    prune v
 end
 type pages = { name : string; pages : Toc.t }
-type library = { name : string; units : (Url.Path.t * Inline.one) list }
+type library = {
+  name : string;
+  units : (* (Url.Path.t * Inline.one) list *) Toc.t;
+}
 
 type t = { pages : pages list; libraries : library list }
 
-let of_lang (v : Odoc_model.Sidebar.t) =
+let of_lang (v : Odoc_index.Index.t) =
+  let { Odoc_index.Index.sidebar = v; index } = v in
   let pages =
     let page_hierarchy { Odoc_model.Sidebar.hierarchy_name; pages } =
       let hierarchy = Toc.of_lang pages in
@@ -82,22 +143,24 @@ let of_lang (v : Odoc_model.Sidebar.t) =
     Odoc_utils.List.filter_map page_hierarchy v.pages
   in
   let units =
-    let item id =
-      let content = [ inline @@ Text (Odoc_model.Paths.Identifier.name id) ] in
-      (Url.Path.from_identifier id, sidebar_toc_entry id content)
-    in
-    let units =
-      List.map
-        (fun { Odoc_model.Sidebar.units; name } ->
-          let units = List.map item units in
-          { name; units })
-        v.libraries
-    in
-    units
+    (* let item id = *)
+    (*   let content = [ inline @@ Text (Odoc_model.Paths.Identifier.name id) ] in *)
+    (*   (Url.Path.from_identifier id, sidebar_toc_entry id content) *)
+    (* in *)
+    (* let units = *)
+    (*   List.map *)
+    (*     (fun { Odoc_model.Sidebar.units; name } -> *)
+    (*       let units = List.map item units in *)
+    (*       { name; units }) *)
+    (*     v.libraries *)
+    (* in *)
+    (* units *)
+    List.map (fun sk -> { units = Toc.of_skeleton sk; name = "yo" }) index
   in
   { pages; libraries = units }
 
-let to_block (sidebar : t) url =
+let to_block (sidebar : t) path =
+  let url = Url.from_path path in
   let { pages; libraries } = sidebar in
   let title t =
     block
@@ -123,10 +186,19 @@ let to_block (sidebar : t) url =
     let units =
       List.map
         (fun { units; name } ->
-          [
-            title name;
-            block (List (Block.Unordered, [ List.map render_entry units ]));
-          ])
+          let units =
+            match Toc.prune units path with
+            | None -> units
+            | Some units -> units
+          in
+          let units = Toc.to_sidebar render_entry units in
+          let units = [ block (Block.List (Block.Unordered, [ units ])) ] in
+          let units = [ title @@ name ^ "'s Units" ] @ units in
+          units
+          (* [ *)
+          (*   title name; *)
+          (*   block (List (Block.Unordered, [ List.map render_entry units ])); *)
+          (* ] *))
         libraries
     in
     let units = block (Block.List (Block.Unordered, units)) in
