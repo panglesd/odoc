@@ -4,7 +4,7 @@ open Types
 let sidebar_toc_entry id content =
   let href =
     (id :> Odoc_model.Paths.Identifier.t)
-    |> Url.from_identifier ~stop_before:true
+    |> Url.from_identifier ~stop_before:false
     |> Result.get_ok
   in
   let target = Target.Internal (Resolved href) in
@@ -43,7 +43,7 @@ end = struct
                 (* TODO warn on non empty children order if not index page somewhere *)
                 let payload =
                   let path =
-                    Url.from_identifier ~stop_before:true
+                    Url.from_identifier ~stop_before:false
                       (id : Identifier.Page.t :> Identifier.t)
                     |> Result.get_ok
                   in
@@ -59,7 +59,7 @@ end = struct
         | None, _ | _, None -> None
         | Some title, Some parent_id ->
             let path =
-              Url.from_identifier ~stop_before:true (parent_id :> Identifier.t)
+              Url.from_identifier ~stop_before:false (parent_id :> Identifier.t)
               |> Result.get_ok
             in
             let content = Comment.link_content title in
@@ -85,7 +85,7 @@ end = struct
     name :: content
 
   let rec of_skeleton ({ entry; children } : Odoc_index.Skeleton.node) =
-    let path = Url.from_identifier ~stop_before:true entry.id in
+    let path = Url.from_identifier ~stop_before:false entry.id in
     let name = Odoc_model.Paths.Identifier.name entry.id in
     let payload =
       match path with
@@ -97,6 +97,18 @@ end = struct
           in
           Some (path, content)
       | Error _ -> None
+    in
+    let children =
+      List.filter
+        (function
+          | {
+              Odoc_index.Skeleton.entry =
+                { kind = Module | Class_type _ | Class _ | ModuleType; _ };
+              _;
+            } ->
+              true
+          | _ -> false)
+        children
     in
     let entries = List.map of_skeleton children in
     Item (payload, entries)
@@ -117,7 +129,7 @@ end = struct
     let is_comparable u1 u2 = is_prefix u1 u2 || is_prefix u2 u1 in
     let rec prune (Item (payload, children)) =
       match payload with
-      | None -> Some (Item (payload, List.filter_map prune children))
+      | None -> (* Some (Item (payload, List.filter_map prune children)) *) None
       | Some (u, _) ->
           if is_comparable (parent u) url then
             Some (Item (payload, List.filter_map prune children))
@@ -126,10 +138,7 @@ end = struct
     prune v
 end
 type pages = { name : string; pages : Toc.t }
-type library = {
-  name : string;
-  units : (* (Url.Path.t * Inline.one) list *) Toc.t;
-}
+type library = { name : string; units : Toc.t }
 
 type t = { pages : pages list; libraries : library list }
 
@@ -186,15 +195,13 @@ let to_block (sidebar : t) path =
     let units =
       List.map
         (fun { units; name } ->
-          let units =
-            match Toc.prune units path with
-            | None -> units
-            | Some units -> units
-          in
-          let units = Toc.to_sidebar render_entry units in
-          let units = [ block (Block.List (Block.Unordered, [ units ])) ] in
-          let units = [ title @@ name ^ "'s Units" ] @ units in
-          units
+          match Toc.prune units path with
+          | Some units ->
+              let units = Toc.to_sidebar render_entry units in
+              let units = [ block (Block.List (Block.Unordered, [ units ])) ] in
+              let units = [ title @@ name ^ "'s Units" ] @ units in
+              units
+          | None -> []
           (* [ *)
           (*   title name; *)
           (*   block (List (Block.Unordered, [ List.map render_entry units ])); *)

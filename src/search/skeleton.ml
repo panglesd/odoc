@@ -66,7 +66,13 @@ and leaf id l =
   let id :> Identifier.t = id in
   let entry =
     match Entry.entries_of_item l with
-    | [] -> { Entry.id; doc = []; kind = Module }
+    | [] ->
+        {
+          Entry.id;
+          doc = [];
+          kind =
+            Method { private_ = true; virtual_ = true; type_ = TypeExpr.Any };
+        }
     | a :: _ -> a
   in
   let children = [] in
