@@ -121,18 +121,22 @@ end = struct
         | { parent = Some parent; _ } -> is_prefix url1 parent
         | { parent = None; _ } -> false
     in
+    let parent_path (url : Url.Path.t) =
+      match url with { parent = Some parent; _ } -> parent | _ -> url
+    in
     let parent (url : Url.t) =
       match url with
       | { anchor = ""; page = { parent = Some parent; _ }; _ } -> parent
       | { page; _ } -> page
     in
-    let is_comparable u1 u2 = is_prefix u1 u2 || is_prefix u2 u1 in
+    (* let is_comparable u1 u2 = is_prefix u1 u2 || is_prefix u2 u1 in *)
     let rec prune (Item (payload, children)) =
       match payload with
-      | None -> (* Some (Item (payload, List.filter_map prune children)) *) None
+      | None -> None
       | Some (u, _) ->
-          if is_comparable (parent u) url then
-            Some (Item (payload, List.filter_map prune children))
+          if
+            parent_path url = parent u || is_prefix u.page url || parent u = url
+          then Some (Item (payload, List.filter_map prune children))
           else None
     in
     prune v
