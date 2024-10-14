@@ -126,7 +126,7 @@ let of_entry ({ Entry.id; doc; kind } as entry) html occurrences =
             ("manifest", manifest);
             ("constraints", constraints);
           ]
-    | Module -> return "Module" []
+    | Module _ -> return "Module" []
     | Value { value = _; type_ } ->
         return "Value" [ ("type", `String (Text.of_type type_)) ]
     | Doc Paragraph -> return "Doc" [ ("subkind", `String "Paragraph") ]

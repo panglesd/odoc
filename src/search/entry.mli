@@ -40,9 +40,11 @@ type doc_entry = Paragraph | Heading | CodeBlock | MathBlock | Verbatim
 
 type value_entry = { value : Value.value; type_ : TypeExpr.t }
 
+type module_entry = { has_expansion : bool }
+
 type kind =
   | TypeDecl of type_decl_entry
-  | Module
+  | Module of module_entry
   | Value of value_entry
   | Doc of doc_entry
   | Exception of constructor_entry

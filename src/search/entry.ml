@@ -40,9 +40,11 @@ type doc_entry = Paragraph | Heading | CodeBlock | MathBlock | Verbatim
 
 type value_entry = { value : Value.value; type_ : TypeExpr.t }
 
+type module_entry = { has_expansion : bool }
+
 type kind =
   | TypeDecl of type_decl_entry
-  | Module
+  | Module of module_entry
   | Value of value_entry
   | Doc of doc_entry
   | Exception of constructor_entry
@@ -143,7 +145,8 @@ let entries_of_item (x : Odoc_model.Fold.item) =
   match x with
   | CompilationUnit u -> (
       match u.content with
-      | Module m -> [ entry ~id:u.id ~doc:m.doc ~kind:Module ]
+      | Module m ->
+          [ entry ~id:u.id ~doc:m.doc ~kind:(Module { has_expansion = true }) ]
       | Pack _ -> [])
   | TypeDecl td ->
       let kind =
@@ -165,7 +168,11 @@ let entries_of_item (x : Odoc_model.Fold.item) =
         | Some Extensible -> []
       in
       td_entry :: subtype_entries
-  | Module m -> [ entry ~id:m.id ~doc:m.doc ~kind:Module ]
+  | Module m ->
+      let has_expansion =
+        match m.type_ with Alias (_, None) -> false | _ -> true
+      in
+      [ entry ~id:m.id ~doc:m.doc ~kind:(Module { has_expansion }) ]
   | Value v ->
       let kind = Value { value = v.value; type_ = v.type_ } in
       [ entry ~id:v.id ~doc:v.doc ~kind ]

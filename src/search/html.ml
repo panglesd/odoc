@@ -160,7 +160,7 @@ let string_of_kind =
   | Field _ -> kind_field
   | ExtensionConstructor _ -> kind_extension_constructor
   | TypeDecl _ -> kind_typedecl
-  | Module -> kind_module
+  | Module _ -> kind_module
   | Value _ -> kind_value
   | Exception _ -> kind_exception
   | Class_type _ -> kind_class_type
@@ -185,7 +185,7 @@ let rhs_of_kind (entry : Entry.kind) =
   | Constructor t | ExtensionConstructor t | Exception t ->
       Some (constructor_rhs t)
   | Field f -> Some (field_rhs f)
-  | Module | Class_type _ | Method _ | Class _ | TypeExtension _ | ModuleType
+  | Module _ | Class_type _ | Method _ | Class _ | TypeExtension _ | ModuleType
   | Doc _ ->
       None
 
