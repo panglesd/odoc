@@ -13,8 +13,8 @@ module PageToc : sig
       container directory to output a payload *)
 end
 
-type library = { name : string; units : Id.RootModule.t list }
+(* type library = { name : string; units : Id.RootModule.t list } *)
 
-type page_hierarchy = { hierarchy_name : string; pages : PageToc.t }
+(* type page_hierarchy = { hierarchy_name : string; pages : PageToc.t } *)
 
-type t = { pages : page_hierarchy list; libraries : library list }
+(* type t = { pages : page_hierarchy list; libraries : library list } *)

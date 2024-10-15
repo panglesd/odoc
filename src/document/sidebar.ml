@@ -128,23 +128,30 @@ end = struct
 end
 
 type pages = { name : string; pages : Toc.t }
-type library = { name : string; units : Toc.t }
+type library = { name : string; units : Toc.t list }
 
 type t = { pages : pages list; libraries : library list }
 
 let of_lang (v : Odoc_index.Index.t) =
-  let { Odoc_index.Index.sidebar = v; index } = v in
+  let { Odoc_index.Index.pages; libs } = v in
   let pages =
-    let page_hierarchy { Odoc_model.Sidebar.hierarchy_name; pages } =
-      let hierarchy = Toc.of_lang pages in
-      Some { name = hierarchy_name; pages = hierarchy }
+    let page_hierarchy { Odoc_index.Index.p_name; p_hierarchy } =
+      let hierarchy = Toc.of_lang p_hierarchy in
+      { name = p_name; pages = hierarchy }
     in
-    Odoc_utils.List.filter_map page_hierarchy v.pages
+    Odoc_utils.List.map page_hierarchy pages
   in
-  let units =
-    List.map (fun sk -> { units = Toc.of_skeleton sk; name = "yo" }) index
+  let libraries =
+    let lib_hierarchies { Odoc_index.Index.l_name; l_hierarchies } =
+      let hierarchies = List.map Toc.of_skeleton l_hierarchies in
+      { units = hierarchies; name = l_name }
+    in
+    Odoc_utils.List.map lib_hierarchies libs
   in
-  { pages; libraries = units }
+  (* let units = *)
+  (*   List.map (fun sk -> { units = Toc.of_skeleton sk; name = "yo" }) libs *)
+  (* in *)
+  { pages; libraries }
 
 let to_block (sidebar : t) path =
   let { pages; libraries } = sidebar in
@@ -165,7 +172,9 @@ let to_block (sidebar : t) path =
     let units =
       List.map
         (fun { units; name } ->
-          let units = Toc.to_block ~prune:true path units in
+          let units =
+            List.concat_map ~f:(Toc.to_block ~prune:true path) units
+          in
           let units = [ block (Block.List (Block.Unordered, [ units ])) ] in
           let units = [ title @@ name ^ "'s Units" ] @ units in
           units)

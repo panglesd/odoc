@@ -196,10 +196,10 @@ module PageToc = struct
     t_of_in_progress dir |> remove_common_root
 end
 
-type toc = PageToc.t
+(* type toc = PageToc.t *)
 
-type library = { name : string; units : Paths.Identifier.RootModule.t list }
+(* type library = { name : string; units : Paths.Identifier.RootModule.t list } *)
 
-type page_hierarchy = { hierarchy_name : string; pages : toc }
+(* type page_hierarchy = { hierarchy_name : string; pages : toc } *)
 
-type t = { pages : page_hierarchy list; libraries : library list }
+(* type t = { pages : page_hierarchy list; libraries : library list } *)

@@ -9,7 +9,7 @@ module H = Odoc_model.Paths.Identifier.Hashtbl.Any
 let handle_file file ~unit ~page ~occ =
   match Fpath.basename file with
   | s when String.is_prefix ~affix:"index-" s ->
-      Odoc_file.load_index file >>= fun { index; _ } -> Ok (occ index)
+      Odoc_file.load_index file >>= fun { libs; _ } -> Ok (occ (* index *) libs)
   | _ -> (
       Odoc_file.load file >>= fun unit' ->
       match unit' with
@@ -151,7 +151,7 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
     List.map
       (fun (page_root, _) ->
         let pages = Resolver.all_pages ~root:page_root resolver in
-        let pages =
+        let p_hierarchy =
           let pages =
             pages
             |> List.filter_map
@@ -175,13 +175,15 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
           in
           PageToc.of_list pages
         in
-        { hierarchy_name = page_root; pages })
+        { Odoc_index.Index.p_name = page_root; p_hierarchy })
       page_roots
   in
   let libraries =
     List.map
       (fun (library, _) ->
-        { name = library; units = Resolver.all_units ~library resolver })
+        let units = Resolver.all_units ~library resolver in
+        let node = List.map Odoc_index.Skeleton.from_unit u in
+        { Odoc_index.Index.l_name = library; l_hierarchies = _ })
       lib_roots
   in
   let includes_rec =
