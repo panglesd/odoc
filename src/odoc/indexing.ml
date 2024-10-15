@@ -84,7 +84,7 @@ let compile_to_marshall ~output sidebar files =
     (*       (fun entry -> H.add final_index entry.Odoc_search.Entry.id entry) *)
     (*       entries) *)
     (*   () u *)
-    node
+    Some node
   in
   let page _p =
     None

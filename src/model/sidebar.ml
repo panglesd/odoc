@@ -77,10 +77,10 @@ module PageToc = struct
     | None -> None
 
   type index = Id.Page.t * title
-  type t = (Id.Page.t * content) list * index option
-  and content = Entry of title | Dir of t
 
-  let rec t_of_in_progress (dir : in_progress) =
+  type t = index option Odoc_utils.Tree.t
+
+  let rec t_of_in_progress (dir : in_progress) : t =
     let children_order, index =
       match dir_index dir with
       | Some ({ children_order; _ }, index_id, index_title) ->
@@ -103,12 +103,15 @@ module PageToc = struct
       let contents =
         let leafs =
           leafs dir
-          |> List.map (fun (id, payload) -> ((id :> Id.Page.t), Entry payload))
+          |> List.map (fun (id, payload) ->
+                 let id :> Id.Page.t = id in
+                 (id, Tree.leaf (Some (id, payload))))
         in
         let dirs =
           dirs dir
           |> List.map (fun (id, payload) ->
-                 ((id :> Id.Page.t), Dir (t_of_in_progress payload)))
+                 let id :> Id.Page.t = id in
+                 (id, t_of_in_progress payload))
         in
         leafs @ dirs
       in
@@ -179,11 +182,13 @@ module PageToc = struct
           String.compare (Paths.Identifier.name x) (Paths.Identifier.name y))
         unordered
     in
-    let contents = ordered @ unordered in
-    (contents, index)
+    let contents = ordered @ unordered |> List.map snd in
+    { Tree.entry = index; children = contents }
 
   let rec remove_common_root (v : t) =
-    match v with [ (_, Dir v) ], None -> remove_common_root v | _ -> v
+    match v with
+    | { Tree.children = [ v ]; entry = None } -> remove_common_root v
+    | _ -> v
 
   let of_list l =
     let dir = empty_t None in

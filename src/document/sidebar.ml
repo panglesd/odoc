@@ -15,56 +15,31 @@ module Toc : sig
 
   val of_lang : Odoc_model.Sidebar.PageToc.t -> t
 
-  val of_skeleton : Odoc_index.Entry.t Odoc_index.Skeleton.node -> t
+  val of_skeleton : Odoc_index.Entry.t Tree.t -> t
 
-  val to_sidebar : Url.Path.t -> t -> Block.t
+  val to_block : prune:bool -> Url.Path.t -> t -> Block.t
 end = struct
-  type t = Item of (Url.t * Inline.one) option * t list
+  type t = (Url.t * Inline.one) option Tree.t
 
   module Sidebar = Odoc_model.Sidebar
-  open Odoc_model.Paths
+  module Id = Odoc_model.Paths.Identifier
 
   let of_lang (dir : Sidebar.PageToc.t) =
-    let rec of_lang ~parent_id ((content, index) : Sidebar.PageToc.t) =
-      let title, parent_id =
-        match index with
-        | Some (index_id, title) ->
-            (Some title, Some (index_id :> Identifier.Page.t))
-        | None -> (None, (parent_id :> Identifier.Page.t option))
-      in
-      let entries =
-        List.filter_map
-          (fun id ->
-            match id with
-            | id, Sidebar.PageToc.Entry title ->
-                let payload =
-                  let path =
-                    Url.from_identifier ~stop_before:false
-                      (id : Identifier.Page.t :> Identifier.t)
-                    |> Result.get_ok
-                  in
-                  let content = Comment.link_content title in
-                  Some (path, sidebar_toc_entry id content)
-                in
-                Some (Item (payload, []))
-            | id, Sidebar.PageToc.Dir dir ->
-                Some (of_lang ~parent_id:(Some id) dir))
-          content
-      in
+    let fun_ index =
       let payload =
-        match (title, parent_id) with
-        | None, _ | _, None -> None
-        | Some title, Some parent_id ->
+        match index with
+        | None -> None
+        | Some (index_id, title) ->
             let path =
-              Url.from_identifier ~stop_before:false (parent_id :> Identifier.t)
+              Url.from_identifier ~stop_before:false (index_id :> Id.t)
               |> Result.get_ok
             in
             let content = Comment.link_content title in
-            Some (path, sidebar_toc_entry parent_id content)
+            Some (path, sidebar_toc_entry index_id content)
       in
-      Item (payload, entries)
+      payload
     in
-    of_lang ~parent_id:None dir
+    Tree.map_t fun_ dir
 
   let rec is_prefix (url1 : Url.Path.t) (url2 : Url.Path.t) =
     if url1 = url2 then true
@@ -78,55 +53,59 @@ end = struct
     | { anchor = ""; page = { parent = Some parent; _ }; _ } -> parent
     | { page; _ } -> page
 
-  let rec to_sidebar (current_url : Url.Path.t) (Item (name, content)) =
-    let content =
-      List.filter
-        (fun (Item (name, _)) ->
-          match name with
-          | None -> false
-          | Some (url, _) -> is_prefix (parent url) current_url)
-        content
-    in
-    let convert ((url : Url.t), b) =
-      let link =
-        let is_parent (url : Url.t) (current_url : Url.Path.t) =
-          match url.page.parent with None -> false | Some p -> p = current_url
+  let to_block ~prune (current_url : Url.Path.t) tree =
+    let block_tree_of_t (current_url : Url.Path.t) tree =
+      (* When transforming the tree, we use a filter_map to remove the nodes that
+         are irrelevant for the current url. However, we always want to keep the
+         root. So we apply the filter_map starting from the first children. *)
+      let convert ((url : Url.t), b) =
+        let link =
+          if url.page = current_url && String.equal url.anchor "" then
+            { b with Inline.attr = [ "current_unit" ] }
+          else b
         in
-        if url.page = current_url && String.equal url.anchor "" then
-          { b with Inline.attr = [ "current_unit" ] }
-        else if
-          is_parent url current_url
-          || ((not (String.equal url.anchor "")) && url.page = current_url)
-        then { b with Inline.attr = [ "in_current_unit" ] }
-        else b
+        Types.block @@ Inline [ link ]
       in
-      Types.block @@ Inline [ link ]
+      let fun_ name =
+        match name with
+        | Some ((url, _) as v)
+          when (not prune) || is_prefix (parent url) current_url ->
+            Some (convert v)
+        | _ -> None
+      in
+      let root_entry =
+        match tree.Tree.entry with
+        | Some v -> convert v
+        | None -> block (Block.Inline [ inline (Text "root") ])
+      in
+      {
+        Tree.entry = root_entry;
+        children = Tree.filter_map_f fun_ tree.children;
+      }
     in
-    let name =
-      match name with
-      | Some v -> convert v
-      | None -> block (Block.Inline [ inline (Text "root") ])
+    let rec block_of_block_tree { Tree.entry = name; children = content } =
+      let content =
+        match content with
+        | [] -> []
+        | _ :: _ ->
+            let content = List.map block_of_block_tree content in
+            [ block (Block.List (Block.Unordered, content)) ]
+      in
+      name :: content
     in
-    let content =
-      match content with
-      | [] -> []
-      | _ :: _ ->
-          let content = List.map (to_sidebar current_url) content in
-          [ block (Block.List (Block.Unordered, content)) ]
-    in
-    name :: content
+    let block_tree = block_tree_of_t current_url tree in
+    block_of_block_tree block_tree
 
-  let rec of_skeleton
-      ({ entry; children } : Odoc_index.Entry.t Odoc_index.Skeleton.node) =
-    let stop_before =
-      match entry.kind with
-      | ModuleType { has_expansion } | Module { has_expansion } ->
-          not has_expansion
-      | _ -> false
-    in
-    let path = Url.from_identifier ~stop_before entry.id in
-    let name = Odoc_model.Paths.Identifier.name entry.id in
-    let payload =
+  let of_skeleton ({ entry; children } : Odoc_index.Entry.t Tree.t) =
+    let map_entry entry =
+      let stop_before =
+        match entry.Odoc_index.Entry.kind with
+        | ModuleType { has_expansion } | Module { has_expansion } ->
+            not has_expansion
+        | _ -> false
+      in
+      let path = Url.from_identifier ~stop_before entry.id in
+      let name = Odoc_model.Paths.Identifier.name entry.id in
       match path with
       | Ok path ->
           let content =
@@ -137,24 +116,15 @@ end = struct
           Some (path, content)
       | Error _ -> None
     in
-    let children =
-      List.filter
-        (function
-          | {
-              Odoc_index.Skeleton.entry =
-                {
-                  Odoc_index.Entry.kind =
-                    Module _ | Class_type _ | Class _ | ModuleType _;
-                  _;
-                };
-              _;
-            } ->
-              true
-          | _ -> false)
-        children
+    let fun_ entry =
+      match entry.Odoc_index.Entry.kind with
+      | Module _ | Class_type _ | Class _ | ModuleType _ ->
+          Some (map_entry entry)
+      | _ -> None
     in
-    let entries = List.map of_skeleton children in
-    Item (payload, entries)
+    let entry = map_entry entry in
+    let children = Tree.filter_map_f fun_ children in
+    { Tree.entry; children }
 end
 
 type pages = { name : string; pages : Toc.t }
@@ -172,18 +142,6 @@ let of_lang (v : Odoc_index.Index.t) =
     Odoc_utils.List.filter_map page_hierarchy v.pages
   in
   let units =
-    (* let item id = *)
-    (*   let content = [ inline @@ Text (Odoc_model.Paths.Identifier.name id) ] in *)
-    (*   (Url.Path.from_identifier id, sidebar_toc_entry id content) *)
-    (* in *)
-    (* let units = *)
-    (*   List.map *)
-    (*     (fun { Odoc_model.Sidebar.units; name } -> *)
-    (*       let units = List.map item units in *)
-    (*       { name; units }) *)
-    (*     v.libraries *)
-    (* in *)
-    (* units *)
     List.map (fun sk -> { units = Toc.of_skeleton sk; name = "yo" }) index
   in
   { pages; libraries = units }
@@ -197,7 +155,7 @@ let to_block (sidebar : t) path =
   let pages =
     Odoc_utils.List.concat_map
       ~f:(fun (p : pages) ->
-        let pages = Toc.to_sidebar path p.pages in
+        let pages = Toc.to_block ~prune:false path p.pages in
         let pages = [ block (Block.List (Block.Unordered, [ pages ])) ] in
         let pages = [ title @@ p.name ^ "'s Pages" ] @ pages in
         pages)
@@ -207,17 +165,10 @@ let to_block (sidebar : t) path =
     let units =
       List.map
         (fun { units; name } ->
-          (* match Toc.prune units path with *)
-          (* | Some units -> *)
-          let units = Toc.to_sidebar path units in
+          let units = Toc.to_block ~prune:true path units in
           let units = [ block (Block.List (Block.Unordered, [ units ])) ] in
           let units = [ title @@ name ^ "'s Units" ] @ units in
-          units
-          (* | None -> [] *)
-          (* [ *)
-          (*   title name; *)
-          (*   block (List (Block.Unordered, [ List.map render_entry units ])); *)
-          (* ] *))
+          units)
         libraries
     in
     let units = block (Block.List (Block.Unordered, units)) in

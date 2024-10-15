@@ -4,7 +4,7 @@ val handle_file :
   Fpath.t ->
   unit:(Odoc_model.Lang.Compilation_unit.t -> 'a) ->
   page:(Odoc_model.Lang.Page.t -> 'a) ->
-  occ:(Odoc_index.Entry.t Odoc_index.Skeleton.node list -> 'a) ->
+  occ:(Odoc_index.Entry.t Odoc_utils.Tree.t list -> 'a) ->
   ('a, [> msg ]) result
 (** This function is exposed for custom indexers that uses [odoc] as a library
     to generate their search index *)

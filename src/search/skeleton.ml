@@ -1,11 +1,9 @@
 open Odoc_model.Lang
 open Odoc_model.Paths
 
-type 'a node = { entry : 'a; children : 'a node list }
+open Odoc_utils
 
 module Entry = struct
-  type t = Entry.t
-
   let of_comp_unit (u : Compilation_unit.t) =
     let has_expansion = true in
     let doc = match u.content with Pack _ -> [] | Module m -> m.doc in
@@ -57,13 +55,32 @@ module Entry = struct
   let of_value (v : Value.t) =
     let kind = Entry.Value { value = v.value; type_ = v.type_ } in
     Entry.entry ~id:v.id ~doc:v.doc ~kind
+
+  let of_class (cl : Class.t) =
+    let kind = Entry.Class { virtual_ = cl.virtual_; params = cl.params } in
+    Entry.entry ~id:cl.id ~doc:cl.doc ~kind
+
+  let of_class_type (ct : ClassType.t) =
+    let kind =
+      Entry.Class_type { virtual_ = ct.virtual_; params = ct.params }
+    in
+    Entry.entry ~id:ct.id ~doc:ct.doc ~kind
+
+  let _of_doc = [ "TODO" ]
+
+  let of_method (m : Method.t) =
+    let kind =
+      Entry.Method
+        { virtual_ = m.virtual_; private_ = m.private_; type_ = m.type_ }
+    in
+    Entry.entry ~id:m.id ~doc:m.doc ~kind
 end
 
 let if_non_hidden id f =
   if Identifier.is_hidden (id :> Identifier.t) then [] else f ()
 
-let entry_of_item i f =
-  match Entry.entries_of_item i with [] -> [] | e :: _ -> f e
+(* let entry_of_item i f = *)
+(*   match Entry.entries_of_item i with [] -> [] | e :: _ -> f e *)
 
 let rec unit (u : Compilation_unit.t) =
   let entry = Entry.of_comp_unit u in
@@ -72,10 +89,10 @@ let rec unit (u : Compilation_unit.t) =
     | Pack _ -> []
     | Module m -> signature (u.id :> Identifier.LabelParent.t) m
   in
-  { entry; children }
+  { Tree.entry; children }
 
 and signature id (s : Signature.t) =
-  List.concat_map (signature_item (id :> Identifier.LabelParent.t)) s.items
+  List.concat_map ~f:(signature_item (id :> Identifier.LabelParent.t)) s.items
 
 and signature_item id s_item =
   match s_item with
@@ -86,7 +103,7 @@ and signature_item id s_item =
   | Open _ -> []
   | Type (_, t_decl) -> type_decl t_decl
   | TypeSubstitution _ -> []
-  | TypExt te -> type_extension te
+  | TypExt _te -> []
   | Exception exc -> exception_ exc
   | Value v -> value v
   | Class (_, cl) -> class_ (cl.id :> Identifier.LabelParent.t) cl
@@ -103,7 +120,7 @@ and module_ id m =
     | Alias (_, Some s_e) -> simple_expansion id s_e
     | ModuleType mte -> module_type_expr id mte
   in
-  [ { entry; children } ]
+  [ { Tree.entry; children } ]
 
 and module_type id mt =
   if_non_hidden mt.id @@ fun () ->
@@ -113,64 +130,62 @@ and module_type id mt =
     | None -> []
     | Some mt_expr -> module_type_expr id mt_expr
   in
-  [ { entry; children } ]
+  [ { Tree.entry; children } ]
 
-and leaf id l =
-  let id :> Identifier.t = id in
-  let entry =
-    match Entry.entries_of_item l with
-    | [] ->
-        {
-          Entry.id;
-          doc = [];
-          kind =
-            Method { private_ = true; virtual_ = true; type_ = TypeExpr.Any };
-        }
-    | a :: _ -> a
-  in
-  let children = [] in
-  { entry; children }
+(* and leaf id l = *)
+(*   let id :> Identifier.t = id in *)
+(*   let entry = *)
+(*     match Entry.entries_of_item l with *)
+(*     | [] -> *)
+(*         { *)
+(*           Entry.id; *)
+(*           doc = []; *)
+(*           kind = *)
+(*             Method { private_ = true; virtual_ = true; type_ = TypeExpr.Any }; *)
+(*         } *)
+(*     | a :: _ -> a *)
+(*   in *)
+(*   let children = [] in *)
+(*   { Tree.entry; children } *)
 
 and type_decl td =
   if_non_hidden td.id @@ fun () ->
   let entry = Entry.of_type_decl td in
-  [ { entry; children = [] } ]
+  [ { Tree.entry; children = [] } ]
 
-and type_extension _te = [ (* leaf te.id (Extension te) *) ]
+and _type_extension _te = [ (* leaf te.id (Extension te) *) ]
 
 and exception_ exc =
   if_non_hidden exc.id @@ fun () ->
   let entry = Entry.of_exception exc in
-  [ { entry; children = [] } ]
+  [ { Tree.entry; children = [] } ]
 
 and value v =
-  if_non_hidden v.id @@ fun () -> (* [ leaf (v.id :> Identifier.t) (Value v) ] *)
+  if_non_hidden v.id @@ fun () ->
+  let entry = Entry.of_value v in
+  [ { Tree.entry; children = [] } ]
 
 and class_ id cl =
   if_non_hidden cl.id @@ fun () ->
-  entry_of_item (Class cl) @@ fun entry ->
+  let entry = Entry.of_class cl in
   let children =
     match cl.expansion with
     | None -> []
     | Some cl_signature -> class_signature id cl_signature
   in
-  [ { entry; children } ]
+  [ { Tree.entry; children } ]
 
 and class_type id ct =
-  (* This check is important because [is_internal] does not work on children of
-     internal items. This means that if [Fold] did not make this check here,
-     it would be difficult to filter for internal items afterwards. This also
-     applies to the same check in functions bellow. *)
   if_non_hidden ct.id @@ fun () ->
-  entry_of_item (ClassType ct) @@ fun entry ->
+  let entry = Entry.of_class_type ct in
   let children =
     match ct.expansion with None -> [] | Some cs -> class_signature id cs
   in
-  [ { entry; children } ]
+  [ { Tree.entry; children } ]
 
 and include_ id inc = signature id inc.expansion.content
 
-and docs id d = [ leaf (id :> Identifier.t) (Doc (id, d)) ]
+and docs _id _d = (* TODO *) []
 
 and simple_expansion id s_e =
   match s_e with
@@ -193,11 +208,13 @@ and module_type_expr id mte =
   | TypeOf { t_expansion = None; _ } -> []
 
 and class_signature id ct_expr =
-  List.concat_map (class_signature_item id) ct_expr.items
+  List.concat_map ~f:(class_signature_item id) ct_expr.items
 
 and class_signature_item id item =
   match item with
-  | Method m -> [ leaf (m.id :> Identifier.t) (Method m) ]
+  | Method m ->
+      let entry = Entry.of_method m in
+      [ { Tree.entry; children = [] } ]
   | InstanceVariable _ -> []
   | Constraint _ -> []
   | Inherit _ -> []
