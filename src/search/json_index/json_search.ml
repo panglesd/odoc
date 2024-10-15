@@ -156,7 +156,7 @@ let of_entry ({ Entry.id; doc; kind } as entry) html occurrences =
         let args = json_of_args args in
         let res = `String (Text.of_type res) in
         return "ExtensionConstructor" [ ("args", args); ("res", res) ]
-    | ModuleType -> return "ModuleType" []
+    | ModuleType _ -> return "ModuleType" []
     | Constructor { args; res } ->
         let args = json_of_args args in
         let res = `String (Text.of_type res) in

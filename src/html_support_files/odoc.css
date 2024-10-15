@@ -913,10 +913,6 @@ body.odoc:has( .odoc-search) .odoc-toc {
   background-color: var(--anchor-color);
 }
 
-.in_current_unit {
-  background-color: lightgreen;
-}
-
 :root {
   --search-bar-height: 25px;
   --search-padding-top: 1rem;
@@ -1229,6 +1225,12 @@ body.odoc:has( .odoc-search) .odoc-toc {
 
 .odoc-toc ul li li {
   border-left: 1px solid var(--toc-list-border);
+  margin-left: 5px;
+  padding-left: 12px;
+}
+
+.odoc-toc .current_unit + ul> li {
+  border-left: 3px solid var(--anchor-color);
   margin-left: 5px;
   padding-left: 12px;
 }

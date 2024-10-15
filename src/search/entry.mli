@@ -53,7 +53,7 @@ type kind =
   | Class of class_entry
   | TypeExtension of type_extension_entry
   | ExtensionConstructor of constructor_entry
-  | ModuleType
+  | ModuleType of module_entry
   | Constructor of constructor_entry
   | Field of field_entry
 
@@ -62,5 +62,11 @@ type t = {
   doc : Odoc_model.Comment.docs;
   kind : kind;
 }
+
+val entry :
+  id:[< Odoc_model.Paths.Identifier.Any.t_pv ] Odoc_model.Paths.Identifier.id ->
+  doc:Odoc_model.Comment.docs ->
+  kind:kind ->
+  t
 
 val entries_of_item : Odoc_model.Fold.item -> t list

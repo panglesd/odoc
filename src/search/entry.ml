@@ -53,7 +53,7 @@ type kind =
   | Class of class_entry
   | TypeExtension of type_extension_entry
   | ExtensionConstructor of constructor_entry
-  | ModuleType
+  | ModuleType of module_entry
   | Constructor of constructor_entry
   | Field of field_entry
 
@@ -218,6 +218,19 @@ let entries_of_item (x : Odoc_model.Fold.item) =
           :: List.map
                (entry_of_extension_constructor te.type_path te.type_params)
                te.constructors)
-  | ModuleType mt -> [ entry ~id:mt.id ~doc:mt.doc ~kind:ModuleType ]
+  | ModuleType mt ->
+      let has_expansion =
+        match mt.expr with
+        | Some expr -> (
+            match expr with
+            | Signature _ -> true
+            | Functor _ -> true
+            | Path { p_expansion = Some _; _ } -> true
+            | With { w_expansion = Some _; _ } -> true
+            | TypeOf { t_expansion = Some _; _ } -> true
+            | _ -> false)
+        | _ -> true
+      in
+      [ entry ~id:mt.id ~doc:mt.doc ~kind:(ModuleType { has_expansion }) ]
   | Doc (_, `Stop) -> []
   | Doc (id, `Docs d) -> entries_of_docs id d

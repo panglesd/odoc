@@ -76,7 +76,7 @@ let compile_to_json ~output ~occurrences files =
 let compile_to_marshall ~output sidebar files =
   (* let final_index = H.create 10 in *)
   let unit u =
-    let node = Odoc_index.Skeleton.unit u in
+    let node = Odoc_index.Skeleton.from_unit u in
     (* Odoc_model.Fold.unit *)
     (*   ~f:(fun () item -> *)
     (*     let entries = Odoc_search.Entry.entries_of_item item in *)

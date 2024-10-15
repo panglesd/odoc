@@ -167,7 +167,7 @@ let string_of_kind =
   | Method _ -> kind_method
   | Class _ -> kind_class
   | TypeExtension _ -> kind_extension
-  | ModuleType -> kind_module_type
+  | ModuleType _ -> kind_module_type
   | Doc _ -> kind_doc
 
 let value_rhs (t : Entry.value_entry) = " : " ^ Text.of_type t.type_
@@ -185,8 +185,8 @@ let rhs_of_kind (entry : Entry.kind) =
   | Constructor t | ExtensionConstructor t | Exception t ->
       Some (constructor_rhs t)
   | Field f -> Some (field_rhs f)
-  | Module _ | Class_type _ | Method _ | Class _ | TypeExtension _ | ModuleType
-  | Doc _ ->
+  | Module _ | Class_type _ | Method _ | Class _ | TypeExtension _
+  | ModuleType _ | Doc _ ->
       None
 
 let names_of_id id =

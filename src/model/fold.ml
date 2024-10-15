@@ -3,6 +3,7 @@ open Lang
 type item =
   | CompilationUnit of Compilation_unit.t
   | TypeDecl of TypeDecl.t
+  | Constructor of TypeDecl.t
   | Module of Module.t
   | Value of Value.t
   | Exception of Exception.t

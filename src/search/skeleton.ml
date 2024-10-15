@@ -1,7 +1,63 @@
 open Odoc_model.Lang
 open Odoc_model.Paths
 
-type node = { entry : Entry.t; children : node list }
+type 'a node = { entry : 'a; children : 'a node list }
+
+module Entry = struct
+  type t = Entry.t
+
+  let of_comp_unit (u : Compilation_unit.t) =
+    let has_expansion = true in
+    let doc = match u.content with Pack _ -> [] | Module m -> m.doc in
+    Entry.entry ~id:u.id ~doc ~kind:(Module { has_expansion })
+
+  let of_module (m : Module.t) =
+    let has_expansion =
+      match m.type_ with Alias (_, None) -> false | _ -> true
+    in
+    Entry.entry ~id:m.id ~doc:m.doc ~kind:(Module { has_expansion })
+
+  let of_module_type (mt : ModuleType.t) =
+    let has_expansion =
+      match mt.expr with
+      | Some expr -> (
+          match expr with
+          | Signature _ -> true
+          | Functor _ -> true
+          | Path { p_expansion = Some _; _ } -> true
+          | With { w_expansion = Some _; _ } -> true
+          | TypeOf { t_expansion = Some _; _ } -> true
+          | _ -> false)
+      | _ -> true
+    in
+    Entry.entry ~id:mt.id ~doc:mt.doc ~kind:(ModuleType { has_expansion })
+
+  let of_type_decl (td : TypeDecl.t) =
+    let kind =
+      Entry.TypeDecl
+        {
+          canonical = td.canonical;
+          equation = td.equation;
+          representation = td.representation;
+        }
+    in
+    let td_entry = Entry.entry ~id:td.id ~doc:td.doc ~kind in
+    (* TODO: add [of_constructor] *)
+    td_entry
+
+  let of_exception (exc : Exception.t) =
+    let res =
+      match exc.res with
+      | None -> TypeExpr.Constr (Odoc_model.Predefined.exn_path, [])
+      | Some x -> x
+    in
+    let kind = Entry.Exception { args = exc.args; res } in
+    Entry.entry ~id:exc.id ~doc:exc.doc ~kind
+
+  let of_value (v : Value.t) =
+    let kind = Entry.Value { value = v.value; type_ = v.type_ } in
+    Entry.entry ~id:v.id ~doc:v.doc ~kind
+end
 
 let if_non_hidden id f =
   if Identifier.is_hidden (id :> Identifier.t) then [] else f ()
@@ -9,17 +65,14 @@ let if_non_hidden id f =
 let entry_of_item i f =
   match Entry.entries_of_item i with [] -> [] | e :: _ -> f e
 
-let rec unit u =
-  let res =
-    entry_of_item (CompilationUnit u) @@ fun entry ->
-    let children =
-      match u.content with
-      | Module m -> signature (u.id :> Identifier.LabelParent.t) m
-      | Pack _ -> []
-    in
-    [ { entry; children } ]
+let rec unit (u : Compilation_unit.t) =
+  let entry = Entry.of_comp_unit u in
+  let children =
+    match u.content with
+    | Pack _ -> []
+    | Module m -> signature (u.id :> Identifier.LabelParent.t) m
   in
-  match res with [] -> None | [ a ] -> Some a | _ :: _ :: _ -> assert false
+  { entry; children }
 
 and signature id (s : Signature.t) =
   List.concat_map (signature_item (id :> Identifier.LabelParent.t)) s.items
@@ -43,7 +96,7 @@ and signature_item id s_item =
 
 and module_ id m =
   if_non_hidden m.id @@ fun () ->
-  entry_of_item (Module m) @@ fun entry ->
+  let entry = Entry.of_module m in
   let children =
     match m.type_ with
     | Alias (_, None) -> []
@@ -54,7 +107,7 @@ and module_ id m =
 
 and module_type id mt =
   if_non_hidden mt.id @@ fun () ->
-  entry_of_item (ModuleType mt) @@ fun entry ->
+  let entry = Entry.of_module_type mt in
   let children =
     match mt.expr with
     | None -> []
@@ -80,16 +133,18 @@ and leaf id l =
 
 and type_decl td =
   if_non_hidden td.id @@ fun () ->
-  [ leaf (td.id :> Identifier.t) (TypeDecl td) ]
+  let entry = Entry.of_type_decl td in
+  [ { entry; children = [] } ]
 
 and type_extension _te = [ (* leaf te.id (Extension te) *) ]
 
 and exception_ exc =
   if_non_hidden exc.id @@ fun () ->
-  [ leaf (exc.id :> Identifier.t) (Exception exc) ]
+  let entry = Entry.of_exception exc in
+  [ { entry; children = [] } ]
 
 and value v =
-  if_non_hidden v.id @@ fun () -> [ leaf (v.id :> Identifier.t) (Value v) ]
+  if_non_hidden v.id @@ fun () -> (* [ leaf (v.id :> Identifier.t) (Value v) ] *)
 
 and class_ id cl =
   if_non_hidden cl.id @@ fun () ->
@@ -152,3 +207,7 @@ and functor_parameter fp =
   match fp with
   | Unit -> []
   | Named n -> module_type_expr (n.id :> Identifier.LabelParent.t) n.expr
+
+let from_unit u = unit u
+
+let from_page _p = None

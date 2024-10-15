@@ -1,5 +1,9 @@
 (** Skeletons are a hierarchy organized map *)
 
-type node = { entry : Entry.t; children : node list }
+open Odoc_model.Lang
 
-val unit : Odoc_model.Lang.Compilation_unit.t -> node option
+type 'a node = { entry : 'a; children : 'a node list }
+
+val from_unit : Compilation_unit.t -> Entry.t node option
+
+val from_page : Page.t -> Entry.t node option

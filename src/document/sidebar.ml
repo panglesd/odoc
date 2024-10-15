@@ -15,11 +15,9 @@ module Toc : sig
 
   val of_lang : Odoc_model.Sidebar.PageToc.t -> t
 
-  val of_skeleton : Odoc_index.Skeleton.node -> t
+  val of_skeleton : Odoc_index.Entry.t Odoc_index.Skeleton.node -> t
 
   val to_sidebar : Url.Path.t -> t -> Block.t
-
-  (* val prune : t -> Url.Path.t -> t option *)
 end = struct
   type t = Item of (Url.t * Inline.one) option * t list
 
@@ -39,7 +37,6 @@ end = struct
           (fun id ->
             match id with
             | id, Sidebar.PageToc.Entry title ->
-                (* TODO warn on non empty children order if not index page somewhere *)
                 let payload =
                   let path =
                     Url.from_identifier ~stop_before:false
@@ -69,32 +66,25 @@ end = struct
     in
     of_lang ~parent_id:None dir
 
-  let prune url current_url =
-    let rec is_prefix (url1 : Url.Path.t) (url2 : Url.Path.t) =
-      if url1 = url2 then true
-      else
-        match url2 with
-        | { parent = Some parent; _ } -> is_prefix url1 parent
-        | { parent = None; _ } -> false
-    in
-    let parent_path (url : Url.Path.t) =
-      match url with { parent = Some parent; _ } -> parent | _ -> url
-    in
-    let parent (url : Url.t) =
-      match url with
-      | { anchor = ""; page = { parent = Some parent; _ }; _ } -> parent
-      | { page; _ } -> page
-    in
-    (* let is_comparable u1 u2 = is_prefix u1 u2 || is_prefix u2 u1 in *)
-    parent_path current_url = parent url
-    || is_prefix url.page current_url
-    || parent url = current_url
+  let rec is_prefix (url1 : Url.Path.t) (url2 : Url.Path.t) =
+    if url1 = url2 then true
+    else
+      match url2 with
+      | { parent = Some parent; _ } -> is_prefix url1 parent
+      | { parent = None; _ } -> false
+
+  let parent (url : Url.t) =
+    match url with
+    | { anchor = ""; page = { parent = Some parent; _ }; _ } -> parent
+    | { page; _ } -> page
 
   let rec to_sidebar (current_url : Url.Path.t) (Item (name, content)) =
     let content =
       List.filter
         (fun (Item (name, _)) ->
-          match name with None -> false | Some (u, _) -> prune u current_url)
+          match name with
+          | None -> false
+          | Some (url, _) -> is_prefix (parent url) current_url)
         content
     in
     let convert ((url : Url.t), b) =
@@ -126,10 +116,12 @@ end = struct
     in
     name :: content
 
-  let rec of_skeleton ({ entry; children } : Odoc_index.Skeleton.node) =
+  let rec of_skeleton
+      ({ entry; children } : Odoc_index.Entry.t Odoc_index.Skeleton.node) =
     let stop_before =
       match entry.kind with
-      | Module { has_expansion } -> not has_expansion
+      | ModuleType { has_expansion } | Module { has_expansion } ->
+          not has_expansion
       | _ -> false
     in
     let path = Url.from_identifier ~stop_before entry.id in
@@ -150,7 +142,11 @@ end = struct
         (function
           | {
               Odoc_index.Skeleton.entry =
-                { kind = Module _ | Class_type _ | Class _ | ModuleType; _ };
+                {
+                  Odoc_index.Entry.kind =
+                    Module _ | Class_type _ | Class _ | ModuleType _;
+                  _;
+                };
               _;
             } ->
               true
