@@ -133,7 +133,7 @@ type library = { name : string; units : Toc.t list }
 type t = { pages : pages list; libraries : library list }
 
 let of_lang (v : Odoc_index.Index.t) =
-  let { Odoc_index.Index.pages; libs } = v in
+  let { Odoc_index.Index.pages; libs; extra = _ } = v in
   let pages =
     let page_hierarchy { Odoc_index.Index.p_name; p_hierarchy } =
       let hierarchy = Toc.of_lang p_hierarchy in
