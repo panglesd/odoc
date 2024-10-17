@@ -528,7 +528,7 @@ let all_units ~library ({ libs; _ } : t) =
           match Odoc_file.load file with
           | Ok { content = Odoc_file.Unit_content u; _ } -> Some u
           | Ok { content = _; _ } -> assert false
-          | Error _ as _e -> (* TODO *) None
+          | Error _ -> (* TODO: Report as warning or propagate error *) None
         in
         Some (file, id)
     | _ -> None
