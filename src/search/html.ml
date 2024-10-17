@@ -10,14 +10,12 @@ let url { Entry.id; kind; doc = _ } =
     (* Some module/module types/... might not have an expansion, so we need to
        be careful and set [stop_before] to [true] for those kind of search
        entries, to avoid linking to an inexistant page.
-
-       Docstring do not have an ID in the model, and use the ID from the parent
-       signature in search entries. Therefore, links to doc comments need
-       [stop_before] to be [false] to point to the page where they are present.
-
-       Values, types, ... are not sensitive to [stop_before], allowing us to
-       shorten the match. *)
-    match kind with Doc _ -> false | _ -> true
+    *)
+    match kind with
+    | Module { has_expansion = false; _ }
+    | ModuleType { has_expansion = false; _ } ->
+        true
+    | _ -> false
   in
   match Odoc_document.Url.from_identifier ~stop_before id with
   | Ok url ->
@@ -168,7 +166,7 @@ let string_of_kind =
   | Class _ -> kind_class
   | TypeExtension _ -> kind_extension
   | ModuleType _ -> kind_module_type
-  | Doc _ -> kind_doc
+  | Doc -> kind_doc
 
 let value_rhs (t : Entry.value_entry) = " : " ^ Text.of_type t.type_
 
@@ -186,7 +184,7 @@ let rhs_of_kind (entry : Entry.kind) =
       Some (constructor_rhs t)
   | Field f -> Some (field_rhs f)
   | Module _ | Class_type _ | Method _ | Class _ | TypeExtension _
-  | ModuleType _ | Doc _ ->
+  | ModuleType _ | Doc ->
       None
 
 let names_of_id id =

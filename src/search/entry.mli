@@ -36,8 +36,6 @@ type instance_variable_entry = {
   type_ : TypeExpr.t;
 }
 
-type doc_entry = Paragraph | Heading | CodeBlock | MathBlock | Verbatim
-
 type value_entry = { value : Value.value; type_ : TypeExpr.t }
 
 type module_entry = { has_expansion : bool }
@@ -46,7 +44,7 @@ type kind =
   | TypeDecl of type_decl_entry
   | Module of module_entry
   | Value of value_entry
-  | Doc of doc_entry
+  | Doc
   | Exception of constructor_entry
   | Class_type of class_type_entry
   | Method of method_entry

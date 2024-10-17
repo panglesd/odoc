@@ -9,6 +9,12 @@ let rec fold_t fun_ acc { entry; children } =
 
 and fold_f fun_ acc f = List.fold_left (fold_t fun_) acc f
 
+let rec iter_t fun_ { entry; children } =
+  let () = fun_ entry in
+  iter_f fun_ children
+
+and iter_f fun_ f = List.iter (iter_t fun_) f
+
 let rec map_t fun_ { entry; children } =
   let entry = fun_ entry in
   let children = map_f fun_ children in

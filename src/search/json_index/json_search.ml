@@ -129,11 +129,7 @@ let of_entry ({ Entry.id; doc; kind } as entry) html occurrences =
     | Module _ -> return "Module" []
     | Value { value = _; type_ } ->
         return "Value" [ ("type", `String (Text.of_type type_)) ]
-    | Doc Paragraph -> return "Doc" [ ("subkind", `String "Paragraph") ]
-    | Doc Heading -> return "Doc" [ ("subkind", `String "Heading") ]
-    | Doc CodeBlock -> return "Doc" [ ("subkind", `String "CodeBlock") ]
-    | Doc MathBlock -> return "Doc" [ ("subkind", `String "MathBlock") ]
-    | Doc Verbatim -> return "Doc" [ ("subkind", `String "Verbatim") ]
+    | Doc -> return "Doc" []
     | Exception { args; res } ->
         let args = json_of_args args in
         let res = `String (Text.of_type res) in

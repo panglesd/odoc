@@ -38,8 +38,6 @@ type instance_variable_entry = {
   type_ : TypeExpr.t;
 }
 
-type doc_entry = Paragraph | Heading | CodeBlock | MathBlock | Verbatim
-
 type value_entry = { value : Value.value; type_ : TypeExpr.t }
 
 type module_entry = { has_expansion : bool }
@@ -48,7 +46,7 @@ type kind =
   | TypeDecl of type_decl_entry
   | Module of module_entry
   | Value of value_entry
-  | Doc of doc_entry
+  | Doc
   | Exception of constructor_entry
   | Class_type of class_type_entry
   | Method of method_entry
@@ -120,26 +118,7 @@ let entry_of_field id_parent params (field : TypeDecl.Field.t) =
 let rec entries_of_docs id (d : Odoc_model.Comment.docs) =
   Odoc_utils.List.concat_map ~f:(entries_of_doc id) d
 
-and entries_of_doc id d =
-  match d.value with
-  | `Paragraph _ -> [ entry ~id ~doc:[ d ] ~kind:(Doc Paragraph) ]
-  | `Tag _ -> []
-  | `List (_, ds) ->
-      Odoc_utils.List.concat_map ~f:(entries_of_docs id)
-        (ds :> Odoc_model.Comment.docs list)
-  | `Heading (_, lbl, _) -> [ entry ~id:lbl ~doc:[ d ] ~kind:(Doc Heading) ]
-  | `Modules _ -> []
-  | `Code_block (_, _, o) ->
-      let o =
-        match o with
-        | None -> []
-        | Some o -> entries_of_docs id (o :> Odoc_model.Comment.docs)
-      in
-      entry ~id ~doc:[ d ] ~kind:(Doc CodeBlock) :: o
-  | `Verbatim _ -> [ entry ~id ~doc:[ d ] ~kind:(Doc Verbatim) ]
-  | `Math_block _ -> [ entry ~id ~doc:[ d ] ~kind:(Doc MathBlock) ]
-  | `Table _ -> []
-  | `Media _ -> []
+and entries_of_doc id d = [ entry ~id ~doc:[ d ] ~kind:Doc ]
 
 let entries_of_item (x : Odoc_model.Fold.item) =
   match x with

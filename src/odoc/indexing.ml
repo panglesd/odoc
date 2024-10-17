@@ -79,43 +79,22 @@ let compile_to_json ~output ~occurrences files =
   Ok ()
 
 let compile_to_marshall ~output (pages, libs) files =
-  (* let final_index = H.create 10 in *)
-  let unit u =
-    let node = Odoc_index.Skeleton.from_unit u in
-    (* Odoc_model.Fold.unit *)
-    (*   ~f:(fun () item -> *)
-    (*     let entries = Odoc_index.Entry.entries_of_item item in *)
-    (*     List.iter *)
-    (*       (fun entry -> H.add final_index entry.Odoc_index.Entry.id entry) *)
-    (*       entries) *)
-    (*   () u *)
-    (* Some node *)
-    node
-  in
-  let page p =
-    (* None *)
-    Odoc_model.Fold.page
-      ~f:(fun () item ->
-        let entries = Odoc_index.Entry.entries_of_item item in
-        List.iter
-          (fun entry -> H.add final_index entry.Odoc_index.Entry.id entry)
-          entries)
-      () p
-  in
-  let index i = H.iter (H.add final_index) i (* None *) in
-  let (* index *) () =
-    List.iter (* filter_map *)
-      (fun file ->
+  let unit u = [ Odoc_index.Skeleton.from_unit u ] in
+  let page p = [ Odoc_index.Skeleton.from_page p ] in
+  let index i = i in
+  let extra =
+    List.concat_map
+      ~f:(fun file ->
         match handle_file ~unit ~page ~occ:index file with
-        | Ok () -> ()
+        | Ok l -> l
         | Error (`Msg m) ->
             Error.raise_warning ~non_fatal:true
               (Error.filename_only "%s" m (Fs.File.to_string file));
-            () (* None *))
+            [])
       files
   in
-  let content = { Odoc_index.Index.pages; libs; extra = final_index } in
-  Ok (Odoc_file.save_index output (* { index; sidebar } *) content)
+  let content = { Odoc_index.Index.pages; libs; extra } in
+  Ok (Odoc_file.save_index output content)
 
 let read_occurrences file =
   let ic = open_in_bin file in

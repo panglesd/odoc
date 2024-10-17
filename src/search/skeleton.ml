@@ -66,8 +66,6 @@ module Entry = struct
     in
     Entry.entry ~id:ct.id ~doc:ct.doc ~kind
 
-  let _of_doc = [ "TODO" ]
-
   let of_method (m : Method.t) =
     let kind =
       Entry.Method
@@ -75,14 +73,11 @@ module Entry = struct
     in
     Entry.entry ~id:m.id ~doc:m.doc ~kind
 
-  let of_paragraph ()
+  let of_docs id doc = Entry.entry ~id ~doc ~kind:Doc
 end
 
 let if_non_hidden id f =
   if Identifier.is_hidden (id :> Identifier.t) then [] else f ()
-
-(* let entry_of_item i f = *)
-(*   match Entry.entries_of_item i with [] -> [] | e :: _ -> f e *)
 
 let rec unit (u : Compilation_unit.t) =
   let entry = Entry.of_comp_unit u in
@@ -134,38 +129,22 @@ and module_type id mt =
   in
   [ { Tree.entry; children } ]
 
-(* and leaf id l = *)
-(*   let id :> Identifier.t = id in *)
-(*   let entry = *)
-(*     match Entry.entries_of_item l with *)
-(*     | [] -> *)
-(*         { *)
-(*           Entry.id; *)
-(*           doc = []; *)
-(*           kind = *)
-(*             Method { private_ = true; virtual_ = true; type_ = TypeExpr.Any }; *)
-(*         } *)
-(*     | a :: _ -> a *)
-(*   in *)
-(*   let children = [] in *)
-(*   { Tree.entry; children } *)
-
 and type_decl td =
   if_non_hidden td.id @@ fun () ->
   let entry = Entry.of_type_decl td in
-  [ { Tree.entry; children = [] } ]
+  [ Tree.leaf entry ]
 
-and _type_extension _te = [ (* leaf te.id (Extension te) *) ]
+and _type_extension _te = []
 
 and exception_ exc =
   if_non_hidden exc.id @@ fun () ->
   let entry = Entry.of_exception exc in
-  [ { Tree.entry; children = [] } ]
+  [ Tree.leaf entry ]
 
 and value v =
   if_non_hidden v.id @@ fun () ->
   let entry = Entry.of_value v in
-  [ { Tree.entry; children = [] } ]
+  [ Tree.leaf entry ]
 
 and class_ id cl =
   if_non_hidden cl.id @@ fun () ->
@@ -216,7 +195,7 @@ and class_signature_item id item =
   match item with
   | Method m ->
       let entry = Entry.of_method m in
-      [ { Tree.entry; children = [] } ]
+      [ Tree.leaf entry ]
   | InstanceVariable _ -> []
   | Constraint _ -> []
   | Inherit _ -> []
@@ -229,20 +208,8 @@ and functor_parameter fp =
 
 let from_unit u = unit u
 
-let rec block_element id
-    (b : Odoc_model.Comment.block_element Odoc_model.Comment.with_location) =
-  match b.value with
-  | `Paragraph _ -> [ entry ~id ~doc:[ d ] ~kind:(Doc Paragraph) ]
-  | `Tag _ -> _
-  | `List _ -> _
-  | `Media _ -> _
-  | `Heading _ -> _
-  | `Modules _ -> _
-  | `Table _ -> _
-  | `Code_block _ -> _
-  | `Verbatim _ -> _
-  | `Math_block _ -> _
-
 let from_page (p : Page.t) =
   match p with
-  | { name; content; _ } -> List.concat_map ~f:(block_element name) content
+  | { name; content; _ } ->
+      let entry = Entry.of_docs name content in
+      Tree.leaf entry
