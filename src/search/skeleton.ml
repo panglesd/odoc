@@ -166,7 +166,12 @@ and class_type id ct =
 
 and include_ id inc = signature id inc.expansion.content
 
-and docs _id _d = (* TODO *) []
+and docs id d =
+  match d with
+  | `Stop -> []
+  | `Docs d ->
+      let entry = Entry.of_docs id d in
+      [ Tree.leaf entry ]
 
 and simple_expansion id s_e =
   match s_e with
