@@ -11,7 +11,7 @@ type lib = { l_name : string; l_hierarchies : lib_hierarchies }
 type t = {
   pages : page list;
   libs : lib list;
-  extra : Entry.t Paths.Identifier.Hashtbl.Any.t;
+  extra : Entry.t Tree.t list;
       (** This extra table is used only for search. It was introduced before
           Odoc 3 *)
 }

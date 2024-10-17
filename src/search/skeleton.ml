@@ -74,6 +74,8 @@ module Entry = struct
         { virtual_ = m.virtual_; private_ = m.private_; type_ = m.type_ }
     in
     Entry.entry ~id:m.id ~doc:m.doc ~kind
+
+  let of_paragraph ()
 end
 
 let if_non_hidden id f =
@@ -227,4 +229,20 @@ and functor_parameter fp =
 
 let from_unit u = unit u
 
-let from_page _p = None
+let rec block_element id
+    (b : Odoc_model.Comment.block_element Odoc_model.Comment.with_location) =
+  match b.value with
+  | `Paragraph _ -> [ entry ~id ~doc:[ d ] ~kind:(Doc Paragraph) ]
+  | `Tag _ -> _
+  | `List _ -> _
+  | `Media _ -> _
+  | `Heading _ -> _
+  | `Modules _ -> _
+  | `Table _ -> _
+  | `Code_block _ -> _
+  | `Verbatim _ -> _
+  | `Math_block _ -> _
+
+let from_page (p : Page.t) =
+  match p with
+  | { name; content; _ } -> List.concat_map ~f:(block_element name) content

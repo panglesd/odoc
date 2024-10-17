@@ -79,17 +79,18 @@ let compile_to_json ~output ~occurrences files =
   Ok ()
 
 let compile_to_marshall ~output (pages, libs) files =
-  let final_index = H.create 10 in
+  (* let final_index = H.create 10 in *)
   let unit u =
-    (* let node = Odoc_index.Skeleton.from_unit u in *)
-    Odoc_model.Fold.unit
-      ~f:(fun () item ->
-        let entries = Odoc_index.Entry.entries_of_item item in
-        List.iter
-          (fun entry -> H.add final_index entry.Odoc_index.Entry.id entry)
-          entries)
-      () u
+    let node = Odoc_index.Skeleton.from_unit u in
+    (* Odoc_model.Fold.unit *)
+    (*   ~f:(fun () item -> *)
+    (*     let entries = Odoc_index.Entry.entries_of_item item in *)
+    (*     List.iter *)
+    (*       (fun entry -> H.add final_index entry.Odoc_index.Entry.id entry) *)
+    (*       entries) *)
+    (*   () u *)
     (* Some node *)
+    node
   in
   let page p =
     (* None *)

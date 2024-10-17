@@ -5,4 +5,4 @@ open Odoc_utils
 
 val from_unit : Compilation_unit.t -> Entry.t Tree.t
 
-val from_page : Page.t -> Entry.t Tree.t option
+val from_page : Page.t -> Entry.t Tree.t list

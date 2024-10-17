@@ -1,6 +1,8 @@
 open Odoc_model.Lang
 open Odoc_model.Paths
 
+module Html = Tyxml.Html
+
 type type_decl_entry = {
   canonical : Path.Type.t option;
   equation : TypeDecl.Equation.t;
@@ -56,8 +58,6 @@ type kind =
   | ModuleType of module_entry
   | Constructor of constructor_entry
   | Field of field_entry
-
-module Html = Tyxml.Html
 
 type t = {
   id : Odoc_model.Paths.Identifier.Any.t;
