@@ -66,5 +66,3 @@ val entry :
   doc:Odoc_model.Comment.docs ->
   kind:kind ->
   t
-
-val entries_of_item : Odoc_model.Fold.item -> t list

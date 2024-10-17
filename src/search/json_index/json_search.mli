@@ -9,4 +9,7 @@ val unit :
   unit
 val page : Format.formatter -> Odoc_model.Lang.Page.t -> unit
 val index :
-  Format.formatter -> Entry.t Odoc_model.Paths.Identifier.Hashtbl.Any.t -> unit
+  ?occurrences:Odoc_occurrences.Table.t ->
+  Format.formatter ->
+  Entry.t Odoc_utils.Tree.t list ->
+  unit
