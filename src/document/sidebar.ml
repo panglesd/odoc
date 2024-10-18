@@ -132,17 +132,17 @@ type library = { name : string; units : Toc.t list }
 
 type t = { pages : pages list; libraries : library list }
 
-let of_lang (v : Odoc_index.Index.t) =
-  let { Odoc_index.Index.pages; libs; extra = _ } = v in
+let of_lang (v : Odoc_index.t) =
+  let { Odoc_index.pages; libs; extra = _ } = v in
   let pages =
-    let page_hierarchy { Odoc_index.Index.p_name; p_hierarchy } =
+    let page_hierarchy { Odoc_index.p_name; p_hierarchy } =
       let hierarchy = Toc.of_lang p_hierarchy in
       { name = p_name; pages = hierarchy }
     in
     Odoc_utils.List.map page_hierarchy pages
   in
   let libraries =
-    let lib_hierarchies { Odoc_index.Index.l_name; l_hierarchies } =
+    let lib_hierarchies { Odoc_index.l_name; l_hierarchies } =
       let hierarchies = List.map Toc.of_skeleton l_hierarchies in
       { units = hierarchies; name = l_name }
     in

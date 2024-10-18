@@ -93,7 +93,7 @@ let compile_to_marshall ~output (pages, libs) files =
             [])
       files
   in
-  let content = { Odoc_index.Index.pages; libs; extra } in
+  let content = { Odoc_index.pages; libs; extra } in
   Ok (Odoc_file.save_index output content)
 
 let read_occurrences file =
@@ -131,7 +131,7 @@ let pages resolver page_roots =
         in
         PageToc.of_list page_toc_input
       in
-      { Odoc_index.Index.p_name = page_root; p_hierarchy })
+      { Odoc_index.p_name = page_root; p_hierarchy })
     page_roots
 
 let libs resolver lib_roots =
@@ -146,7 +146,7 @@ let libs resolver lib_roots =
             | None -> None)
           units
       in
-      { Odoc_index.Index.l_name = library; l_hierarchies })
+      { Odoc_index.l_name = library; l_hierarchies })
     lib_roots
 
 let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
