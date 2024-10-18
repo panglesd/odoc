@@ -11,5 +11,5 @@ val page : Format.formatter -> Odoc_model.Lang.Page.t -> unit
 val index :
   ?occurrences:Odoc_occurrences.Table.t ->
   Format.formatter ->
-  Entry.t Odoc_utils.Tree.t list ->
+  Skeleton.t list ->
   unit

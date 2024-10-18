@@ -231,7 +231,7 @@ let page ppf (page : Odoc_model.Lang.Page.t) =
   let _first = Odoc_utils.Tree.fold_t f true skel in
   ()
 
-let index ?occurrences ppf (index : Entry.t Odoc_utils.Tree.t list) =
+let index ?occurrences ppf (index : Skeleton.t list) =
   let get_occ id =
     match occurrences with
     | None -> None

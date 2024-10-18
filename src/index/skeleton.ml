@@ -3,6 +3,8 @@ open Odoc_model.Paths
 
 open Odoc_utils
 
+type t = Entry.t Tree.t
+
 module Entry = struct
   let of_comp_unit (u : Compilation_unit.t) =
     let has_expansion = true in
