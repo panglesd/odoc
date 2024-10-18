@@ -13,18 +13,17 @@ let sidebar_toc_entry id content =
 module Toc : sig
   type t
 
-  val of_lang : Odoc_model.Sidebar.PageToc.t -> t
+  val of_page_hierarchy : Odoc_index.Page_hierarchy.t -> t
 
-  val of_skeleton : Odoc_index.Entry.t Tree.t -> t
+  val of_skeleton : Odoc_index.Skeleton.t -> t
 
   val to_block : prune:bool -> Url.Path.t -> t -> Block.t
 end = struct
   type t = (Url.t * Inline.one) option Tree.t
 
-  module Sidebar = Odoc_model.Sidebar
   module Id = Odoc_model.Paths.Identifier
 
-  let of_lang (dir : Sidebar.PageToc.t) =
+  let of_page_hierarchy (dir : Odoc_index.Page_hierarchy.t) =
     let fun_ index =
       let payload =
         match index with
@@ -136,7 +135,7 @@ let of_lang (v : Odoc_index.t) =
   let { Odoc_index.pages; libs; extra = _ } = v in
   let pages =
     let page_hierarchy { Odoc_index.p_name; p_hierarchy } =
-      let hierarchy = Toc.of_lang p_hierarchy in
+      let hierarchy = Toc.of_page_hierarchy p_hierarchy in
       { name = p_name; pages = hierarchy }
     in
     Odoc_utils.List.map page_hierarchy pages
@@ -148,9 +147,6 @@ let of_lang (v : Odoc_index.t) =
     in
     Odoc_utils.List.map lib_hierarchies libs
   in
-  (* let units = *)
-  (*   List.map (fun sk -> { units = Toc.of_skeleton sk; name = "yo" }) libs *)
-  (* in *)
   { pages; libraries }
 
 let to_block (sidebar : t) path =

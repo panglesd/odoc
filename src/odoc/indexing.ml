@@ -101,8 +101,6 @@ let read_occurrences file =
   let htbl : Odoc_occurrences.Table.t = Marshal.from_channel ic in
   htbl
 
-open Odoc_model.Sidebar
-
 module Id = Odoc_model.Paths.Identifier
 
 let pages resolver page_roots =
@@ -129,7 +127,7 @@ let pages resolver page_roots =
           in
           List.filter_map prepare_input pages
         in
-        PageToc.of_list page_toc_input
+        Odoc_index.Page_hierarchy.of_list page_toc_input
       in
       { Odoc_index.p_name = page_root; p_hierarchy })
     page_roots

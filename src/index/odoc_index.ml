@@ -1,12 +1,11 @@
 open Odoc_model
-open Odoc_utils
 
 module Skeleton = Skeleton
 module Entry = Entry
+module Page_hierarchy = Page_hierarchy
 
 type title = Comment.link_content
-type page_hierarchy = (Paths.Identifier.Page.t * title) option Tree.t
-type page = { p_name : string; p_hierarchy : page_hierarchy }
+type page = { p_name : string; p_hierarchy : Page_hierarchy.t }
 
 type lib_hierarchies = Skeleton.t list
 type lib = { l_name : string; l_hierarchies : lib_hierarchies }
