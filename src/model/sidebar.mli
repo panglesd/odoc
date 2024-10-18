@@ -12,9 +12,3 @@ module PageToc : sig
   (** Uses the convention that the [index] children passes its payload to the
       container directory to output a payload *)
 end
-
-(* type library = { name : string; units : Id.RootModule.t list } *)
-
-(* type page_hierarchy = { hierarchy_name : string; pages : PageToc.t } *)
-
-(* type t = { pages : page_hierarchy list; libraries : library list } *)

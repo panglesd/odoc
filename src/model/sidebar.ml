@@ -183,11 +183,11 @@ module PageToc = struct
         unordered
     in
     let contents = ordered @ unordered |> List.map snd in
-    { Tree.entry = index; children = contents }
+    { Tree.node = index; children = contents }
 
   let rec remove_common_root (v : t) =
     match v with
-    | { Tree.children = [ v ]; entry = None } -> remove_common_root v
+    | { Tree.children = [ v ]; node = None } -> remove_common_root v
     | _ -> v
 
   let of_list l =
@@ -195,11 +195,3 @@ module PageToc = struct
     List.iter (add dir) l;
     t_of_in_progress dir |> remove_common_root
 end
-
-(* type toc = PageToc.t *)
-
-(* type library = { name : string; units : Paths.Identifier.RootModule.t list } *)
-
-(* type page_hierarchy = { hierarchy_name : string; pages : toc } *)
-
-(* type t = { pages : page_hierarchy list; libraries : library list } *)

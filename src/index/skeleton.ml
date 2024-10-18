@@ -122,7 +122,7 @@ let rec unit (u : Compilation_unit.t) =
     | Pack _ -> []
     | Module m -> signature (u.id :> Identifier.LabelParent.t) m
   in
-  { Tree.entry; children }
+  { Tree.node = entry; children }
 
 and signature id (s : Signature.t) =
   List.concat_map ~f:(signature_item (id :> Identifier.LabelParent.t)) s.items
@@ -153,7 +153,7 @@ and module_ id m =
     | Alias (_, Some s_e) -> simple_expansion id s_e
     | ModuleType mte -> module_type_expr id mte
   in
-  [ { Tree.entry; children } ]
+  [ { Tree.node = entry; children } ]
 
 and module_type id mt =
   if_non_hidden mt.id @@ fun () ->
@@ -163,7 +163,7 @@ and module_type id mt =
     | None -> []
     | Some mt_expr -> module_type_expr id mt_expr
   in
-  [ { Tree.entry; children } ]
+  [ { Tree.node = entry; children } ]
 
 and type_decl td =
   if_non_hidden td.id @@ fun () ->
@@ -176,7 +176,7 @@ and type_decl td =
     | Some (Record fl) -> List.concat_map ~f:(field td.id td.equation.params) fl
     | Some Extensible -> []
   in
-  [ { Tree.entry; children } ]
+  [ { Tree.node = entry; children } ]
 
 and constructor type_id params c =
   let entry = Entry.of_constructor type_id params c in
@@ -206,7 +206,7 @@ and class_ id cl =
     | None -> []
     | Some cl_signature -> class_signature id cl_signature
   in
-  [ { Tree.entry; children } ]
+  [ { Tree.node = entry; children } ]
 
 and class_type id ct =
   if_non_hidden ct.id @@ fun () ->
@@ -214,7 +214,7 @@ and class_type id ct =
   let children =
     match ct.expansion with None -> [] | Some cs -> class_signature id cs
   in
-  [ { Tree.entry; children } ]
+  [ { Tree.node = entry; children } ]
 
 and include_ id inc = signature id inc.expansion.content
 

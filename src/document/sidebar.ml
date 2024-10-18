@@ -74,16 +74,16 @@ end = struct
         | _ -> None
       in
       let root_entry =
-        match tree.Tree.entry with
+        match tree.Tree.node with
         | Some v -> convert v
         | None -> block (Block.Inline [ inline (Text "root") ])
       in
       {
-        Tree.entry = root_entry;
+        Tree.node = root_entry;
         children = Tree.filter_map_f fun_ tree.children;
       }
     in
-    let rec block_of_block_tree { Tree.entry = name; children = content } =
+    let rec block_of_block_tree { Tree.node = name; children = content } =
       let content =
         match content with
         | [] -> []
@@ -96,7 +96,7 @@ end = struct
     let block_tree = block_tree_of_t current_url tree in
     block_of_block_tree block_tree
 
-  let of_skeleton ({ entry; children } : Odoc_index.Entry.t Tree.t) =
+  let of_skeleton ({ node = entry; children } : Odoc_index.Entry.t Tree.t) =
     let map_entry entry =
       let stop_before =
         match entry.Odoc_index.Entry.kind with
@@ -124,7 +124,7 @@ end = struct
     in
     let entry = map_entry entry in
     let children = Tree.filter_map_f fun_ children in
-    { Tree.entry; children }
+    { Tree.node = entry; children }
 end
 
 type pages = { name : string; pages : Toc.t }
