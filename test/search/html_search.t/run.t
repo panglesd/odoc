@@ -79,6 +79,8 @@ An index entry contains:
 
 The index file, one entry per line:
   $ cat index.json | jq sort | jq '.[]' -c
+  {"id":[{"kind":"Root","name":"Main"},{"kind":"Type","name":"tdzdz"},{"kind":"Constructor","name":"A"}],"doc":"","kind":{"kind":"Constructor","args":{"kind":"Tuple","vals":["int","int"]},"res":"tdzdz"},"display":{"url":"page/Main/index.html#type-tdzdz.A","html":"<code class=\"entry-kind\">cons</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.tdzdz.</span><span class=\"entry-name\">A</span><code class=\"entry-rhs\"> : int * int -&gt; tdzdz</code></code><div class=\"entry-comment\"><div></div></div>"}}
+  {"id":[{"kind":"Root","name":"Main"},{"kind":"Type","name":"tdzdz"},{"kind":"Constructor","name":"B"}],"doc":"Bliiiiiiiiiii","kind":{"kind":"Constructor","args":{"kind":"Tuple","vals":["int list","int"]},"res":"tdzdz"},"display":{"url":"page/Main/index.html#type-tdzdz.B","html":"<code class=\"entry-kind\">cons</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.tdzdz.</span><span class=\"entry-name\">B</span><code class=\"entry-rhs\"> : int list * int -&gt; tdzdz</code></code><div class=\"entry-comment\"><div><p>Bliiiiiiiiiii</p></div></div>"}}
   {"id":[{"kind":"Root","name":"J"}],"doc":"a paragraph two","kind":{"kind":"Doc"},"display":{"url":"page/J/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">J</span></code><div class=\"entry-comment\"><div><p>a paragraph two</p></div></div>"}}
   {"id":[{"kind":"Root","name":"Main"}],"doc":"a paragraph two","kind":{"kind":"Doc"},"display":{"url":"page/Main/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div><p>a paragraph two</p></div></div>"}}
   {"id":[{"kind":"Root","name":"Main"}],"doc":"a paragraph\nand another\nverbatim\nx + 1\nblibli","kind":{"kind":"Doc"},"display":{"url":"page/Main/index.html","html":"<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div><p>a paragraph</p><p>and another</p><pre>verbatim</pre><p><code class=\"odoc-katex-math\">x + 1</code></p><pre class=\"language-ocaml\"><code>blibli</code></pre></div></div>"}}
@@ -114,32 +116,32 @@ and the first entries formatted:
       "id": [
         {
           "kind": "Root",
-          "name": "J"
-        }
-      ],
-      "doc": "a paragraph two",
-      "kind": {
-        "kind": "Doc"
-      },
-      "display": {
-        "url": "page/J/index.html",
-        "html": "<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">J</span></code><div class=\"entry-comment\"><div><p>a paragraph two</p></div></div>"
-      }
-    },
-    {
-      "id": [
-        {
-          "kind": "Root",
           "name": "Main"
+        },
+        {
+          "kind": "Type",
+          "name": "tdzdz"
+        },
+        {
+          "kind": "Constructor",
+          "name": "A"
         }
       ],
-      "doc": "a paragraph two",
+      "doc": "",
       "kind": {
-        "kind": "Doc"
+        "kind": "Constructor",
+        "args": {
+          "kind": "Tuple",
+          "vals": [
+            "int",
+            "int"
+          ]
+        },
+        "res": "tdzdz"
       },
       "display": {
-        "url": "page/Main/index.html",
-        "html": "<code class=\"entry-kind\">doc</code><code class=\"entry-title\"><span class=\"entry-name\">Main</span></code><div class=\"entry-comment\"><div><p>a paragraph two</p></div></div>"
+        "url": "page/Main/index.html#type-tdzdz.A",
+        "html": "<code class=\"entry-kind\">cons</code><code class=\"entry-title\"><span class=\"prefix-name\">Main.tdzdz.</span><span class=\"entry-name\">A</span><code class=\"entry-rhs\"> : int * int -&gt; tdzdz</code></code><div class=\"entry-comment\"><div></div></div>"
       }
     },
 
@@ -166,6 +168,8 @@ themselves).
   Root-Main.Module-X.Value-c
   Root-Main.Type-t
   Root-Main.Type-tdzdz
+  Root-Main.Type-tdzdz.Constructor-A
+  Root-Main.Type-tdzdz.Constructor-B
   Root-Main.Value-lorem
   Root-Main.Value-lorem2
   Root-Main.Value-lorem3

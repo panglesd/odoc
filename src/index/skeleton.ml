@@ -42,8 +42,42 @@ module Entry = struct
         }
     in
     let td_entry = Entry.entry ~id:td.id ~doc:td.doc ~kind in
-    (* TODO: add [of_constructor] *)
     td_entry
+
+  let varify_params =
+    List.mapi (fun i param ->
+        match param.TypeDecl.desc with
+        | Var name -> TypeExpr.Var name
+        | Any -> Var (Printf.sprintf "tv_%i" i))
+
+  let of_constructor id_parent params (c : TypeDecl.Constructor.t) =
+    let args = c.args in
+    let res =
+      match c.res with
+      | Some res -> res
+      | None ->
+          let params = varify_params params in
+          TypeExpr.Constr
+            ( `Identifier
+                ((id_parent :> Odoc_model.Paths.Identifier.Path.Type.t), false),
+              params )
+    in
+    let kind = Entry.Constructor { args; res } in
+    Entry.entry ~id:c.id ~doc:c.doc ~kind
+
+  let of_field id_parent params (field : TypeDecl.Field.t) =
+    let params = varify_params params in
+    let parent_type =
+      TypeExpr.Constr
+        ( `Identifier
+            ((id_parent :> Odoc_model.Paths.Identifier.Path.Type.t), false),
+          params )
+    in
+    let kind =
+      Entry.Field
+        { mutable_ = field.mutable_; type_ = field.type_; parent_type }
+    in
+    Entry.entry ~id:field.id ~doc:field.doc ~kind
 
   let of_exception (exc : Exception.t) =
     let res =
@@ -134,6 +168,22 @@ and module_type id mt =
 and type_decl td =
   if_non_hidden td.id @@ fun () ->
   let entry = Entry.of_type_decl td in
+  let children =
+    match td.representation with
+    | None -> []
+    | Some (Variant cl) ->
+        List.concat_map ~f:(constructor td.id td.equation.params) cl
+    | Some (Record fl) -> List.concat_map ~f:(field td.id td.equation.params) fl
+    | Some Extensible -> []
+  in
+  [ { Tree.entry; children } ]
+
+and constructor type_id params c =
+  let entry = Entry.of_constructor type_id params c in
+  [ Tree.leaf entry ]
+
+and field type_id params f =
+  let entry = Entry.of_field type_id params f in
   [ Tree.leaf entry ]
 
 and _type_extension _te = []
