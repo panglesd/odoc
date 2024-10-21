@@ -3,6 +3,11 @@ module List = Odoc_list
 type 'a t = { node : 'a; children : 'a forest }
 and 'a forest = 'a t list
 
+let rec to_json_t json_of { node; children } : Json.json =
+  `Object [ ("node", json_of node); ("children", to_json_f json_of children) ]
+
+and to_json_f json_of f = `Array (List.map (to_json_t json_of) f)
+
 let leaf node = { node; children = [] }
 
 let rec fold_t fun_ acc { node; children } =

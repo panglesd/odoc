@@ -1,4 +1,8 @@
-type t
+type toc = (Url.t * Types.Inline.one) option Odoc_utils.Tree.t
+type pages = { name : string; pages : toc }
+type library = { name : string; units : toc list }
+
+type t = { pages : pages list; libraries : library list }
 
 val of_lang : Odoc_index.t -> t
 

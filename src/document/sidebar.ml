@@ -15,7 +15,7 @@ let sidebar_toc_entry id content =
   inline @@ Inline.Link { target; content; tooltip = None }
 
 module Toc : sig
-  type t
+  type t = (Url.t * Inline.one) option Tree.t
 
   val of_page_hierarchy : Odoc_index.Page_hierarchy.t -> t
 
@@ -133,6 +133,8 @@ end = struct
     let children = Tree.filter_map_f fun_ children in
     { Tree.node = entry; children }
 end
+
+type toc = (Url.t * Types.Inline.one) option Odoc_utils.Tree.t
 
 type pages = { name : string; pages : Toc.t }
 type library = { name : string; units : Toc.t list }
