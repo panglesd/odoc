@@ -18,6 +18,8 @@ end
 
 let index_filename = "index.odoc-index"
 
+let sidebar_filename = "sidebar.odoc-sidebar"
+
 type compile_deps = { digest : Digest.t; deps : (string * Digest.t) list }
 
 let odoc = ref (Cmd.v "odoc")
@@ -161,11 +163,26 @@ let compile_index ?(ignore_output = false) ~output_file ?occurrence_file ~json
     Cmd_outputs.(
       add_prefixed_output cmd index_output (Fpath.to_string output_file) lines)
 
-let html_generate ~output_dir ?index ?(ignore_output = false)
+let sidebar_generate ?(ignore_output = false) ~output_file ~json input_file () =
+  let json = if json then Cmd.v "--json" else Cmd.empty in
+  let cmd =
+    Cmd.(
+      !odoc % "sidebar-generate" %% json %% v "-o" % p output_file
+      % p input_file)
+  in
+  let desc =
+    Printf.sprintf "Generating sidebar for %s" (Fpath.to_string output_file)
+  in
+  let lines = Cmd_outputs.submit desc cmd (Some output_file) in
+  if not ignore_output then
+    Cmd_outputs.(
+      add_prefixed_output cmd index_output (Fpath.to_string output_file) lines)
+
+let html_generate ~output_dir ?sidebar ?(ignore_output = false)
     ?(search_uris = []) ~input_file:file () =
   let open Cmd in
   let index =
-    match index with None -> empty | Some idx -> v "--index" % p idx
+    match sidebar with None -> empty | Some idx -> v "--sidebar" % p idx
   in
   let search_uris =
     List.fold_left

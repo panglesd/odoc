@@ -3,11 +3,13 @@ type pkg_args = {
   libs : (string * Fpath.t) list;
 }
 
+type sidebar = { output_file : Fpath.t; json : bool }
 type index = {
   pkg_args : pkg_args;
   output_file : Fpath.t;
   json : bool;
   search_dir : Fpath.t;
+  sidebar : sidebar option;
 }
 
 type 'a unit = {

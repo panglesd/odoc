@@ -3,11 +3,14 @@ type pkg_args = {
   libs : (string * Fpath.t) list;
 }
 
+type sidebar = { output_file : Fpath.t; json : bool }
+
 type index = {
   pkg_args : pkg_args;
   output_file : Fpath.t;
   json : bool;
   search_dir : Fpath.t;
+  sidebar : sidebar option;
 }
 
 type 'a unit = {
@@ -123,7 +126,17 @@ let of_packages ~output_dir ~linked_dir ~index_dir (pkgs : Packages.t list) :
   let index_of pkg =
     let pkg_args = pkg_args_of_pkg pkg in
     let output_file = Fpath.(index_dir / pkg.name / Odoc.index_filename) in
-    { pkg_args; output_file; json = false; search_dir = pkg.pkg_dir }
+    let sidebar =
+      let output_file = Fpath.(index_dir / pkg.name / Odoc.sidebar_filename) in
+      { output_file; json = false }
+    in
+    {
+      pkg_args;
+      output_file;
+      json = false;
+      search_dir = pkg.pkg_dir;
+      sidebar = Some sidebar;
+    }
   in
 
   let make_unit ~name ~kind ~rel_dir ~input_file ~pkg ~include_dirs : _ unit =
