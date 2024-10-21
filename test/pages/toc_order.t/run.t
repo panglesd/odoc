@@ -20,6 +20,7 @@
   File "index.mld", line 5, character 7 to line 7, character 0:
   Warning: (children) doesn't include 'omitted'.
 
+  $ odoc sidebar-generate index.odoc-index
   $ odoc sidebar-generate --json index.odoc-index
 
   $ cat sidebar.json | jq
@@ -82,12 +83,12 @@
     "libraries": []
   }
 
-  $ odoc html-generate --indent --index index.odoc-index -o _html  _odoc/pkg/doc/page-index.odocl
-  $ odoc html-generate --index index.odoc-index -o _html  _odoc/pkg/doc/page-content.odocl
-  $ odoc html-generate --index index.odoc-index -o _html  _odoc/pkg/doc/page-omitted.odocl
-  $ odoc html-generate --index index.odoc-index -o _html  _odoc/pkg/doc/dir1/page-index.odocl
-  $ odoc html-generate --index index.odoc-index -o _html  _odoc/pkg/doc/dir1/page-content_in_dir.odocl
-  $ odoc html-generate --index index.odoc-index -o _html  _odoc/pkg/doc/dir1/page-dontent.odocl
+  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o _html  _odoc/pkg/doc/page-index.odocl
+  $ odoc html-generate --sidebar sidebar.odoc-sidebar -o _html  _odoc/pkg/doc/page-content.odocl
+  $ odoc html-generate --sidebar sidebar.odoc-sidebar -o _html  _odoc/pkg/doc/page-omitted.odocl
+  $ odoc html-generate --sidebar sidebar.odoc-sidebar -o _html  _odoc/pkg/doc/dir1/page-index.odocl
+  $ odoc html-generate --sidebar sidebar.odoc-sidebar -o _html  _odoc/pkg/doc/dir1/page-content_in_dir.odocl
+  $ odoc html-generate --sidebar sidebar.odoc-sidebar -o _html  _odoc/pkg/doc/dir1/page-dontent.odocl
   $ odoc support-files -o _html
 
   $ odoc_print _odoc/pkg/doc/page-index.odocl | jq .frontmatter
