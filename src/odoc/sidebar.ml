@@ -11,6 +11,9 @@ let toc_to_json
         Odoc_html.Config.v ~semantic_uris:true ~indent:true ~flat:false
           ~open_details:false ~as_json:true ~remap:[] ()
       in
+      let kind =
+        Format.asprintf "%a" Odoc_document.Url.Anchor.pp_kind url.kind
+      in
       let href =
         Odoc_html.Link.href ~config ~resolve:(Odoc_html.Link.Base "") url
       in
@@ -21,7 +24,12 @@ let toc_to_json
         String.concat ""
         @@ List.map (Format.asprintf "%a" (Tyxml.Html.pp_elt ())) inline
       in
-      `Object [ ("url", `String href); ("content", `String inline) ]
+      `Object
+        [
+          ("url", `String href);
+          ("kind", `String kind);
+          ("content", `String inline);
+        ]
 
 let pages_to_json ({ name; pages } : Odoc_document.Sidebar.pages) =
   `Object

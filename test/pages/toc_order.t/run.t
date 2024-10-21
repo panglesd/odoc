@@ -30,12 +30,14 @@
         "pages": {
           "node": {
             "url": "pkg/doc/index.html",
+            "kind": "leaf-page",
             "content": "<a href=\"pkg/doc/index.html\">This is the main index</a>"
           },
           "children": [
             {
               "node": {
                 "url": "pkg/doc/content.html",
+                "kind": "leaf-page",
                 "content": "<a href=\"pkg/doc/content.html\">This is top level content</a>"
               },
               "children": []
@@ -43,12 +45,14 @@
             {
               "node": {
                 "url": "pkg/doc/dir1/index.html",
+                "kind": "leaf-page",
                 "content": "<a href=\"pkg/doc/dir1/index.html\">This is dir1's index</a>"
               },
               "children": [
                 {
                   "node": {
                     "url": "pkg/doc/dir1/content_in_dir.html",
+                    "kind": "leaf-page",
                     "content": "<a href=\"pkg/doc/dir1/content_in_dir.html\">This is some content in dir1</a>"
                   },
                   "children": []
@@ -56,6 +60,7 @@
                 {
                   "node": {
                     "url": "pkg/doc/dir1/dontent.html",
+                    "kind": "leaf-page",
                     "content": "<a href=\"pkg/doc/dir1/dontent.html\">The name is dontent</a>"
                   },
                   "children": []
@@ -65,6 +70,7 @@
             {
               "node": {
                 "url": "pkg/doc/omitted.html",
+                "kind": "leaf-page",
                 "content": "<a href=\"pkg/doc/omitted.html\">This one is omitted</a>"
               },
               "children": []
