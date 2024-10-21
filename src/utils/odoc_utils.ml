@@ -76,3 +76,5 @@ module Fun = struct
 end
 
 module Tree = Tree
+
+module Json = Json
