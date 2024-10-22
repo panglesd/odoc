@@ -114,7 +114,7 @@ let lib_args libs =
     Cmd.empty libs
 
 let link ?(ignore_output = false) ~input_file:file ?output_file ~includes ~docs
-    ~libs ~current_package () =
+    ~libs () =
   let open Cmd in
   let output_file =
     match output_file with Some f -> f | None -> Fpath.set_ext "odocl" file
@@ -128,7 +128,7 @@ let link ?(ignore_output = false) ~input_file:file ?output_file ~includes ~docs
   let libs = lib_args libs in
   let cmd =
     !odoc % "link" % p file % "-o" % p output_file %% includes %% docs %% libs
-    % "--current-package" % current_package % "--enable-missing-root-warning"
+    % "--enable-missing-root-warning"
   in
   let cmd =
     if Fpath.to_string file = "stdlib.odoc" then cmd % "--open=\"\"" else cmd
@@ -161,7 +161,7 @@ let compile_index ?(ignore_output = false) ~output_file ?occurrence_file ~json
   let lines = Cmd_outputs.submit desc cmd (Some output_file) in
   if not ignore_output then
     Cmd_outputs.(
-      add_prefixed_output cmd index_output (Fpath.to_string output_file) lines)
+      add_prefixed_output cmd link_output (Fpath.to_string output_file) lines)
 
 let sidebar_generate ?(ignore_output = false) ~output_file ~json input_file () =
   let json = if json then Cmd.v "--json" else Cmd.empty in

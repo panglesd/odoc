@@ -559,15 +559,20 @@ let run libs verbose packages_dir odoc_dir odocl_dir html_dir stats nb_workers
       (fun () ->
         let all =
           let all = Util.StringMap.bindings all |> List.map snd in
+          let () =
+            List.iter (fun p -> Format.printf "%a\n%!" Packages.pp p) all
+          in
+          (* let all = Landing_pages.add_landing_pages all in *)
           let internal =
             Odoc_unit.of_packages ~output_dir:odoc_dir ~linked_dir:odocl_dir
               ~index_dir:None all
           in
           let external_ =
-            let mld_dir = odoc_dir in
-            let odocl_dir = Option.value odocl_dir ~default:odoc_dir in
-            Landing_pages.of_packages ~mld_dir ~odoc_dir ~odocl_dir
-              ~output_dir:odoc_dir all
+            []
+            (* let mld_dir = odoc_dir in *)
+            (* let odocl_dir = Option.value odocl_dir ~default:odoc_dir in *)
+            (* Landing_pages.of_packages ~mld_dir ~odoc_dir ~odocl_dir *)
+            (*   ~output_dir:odoc_dir all *)
           in
           internal @ external_
         in

@@ -76,8 +76,8 @@ let of_packages ~output_dir ~linked_dir ~index_dir (pkgs : Packages.t list) :
              pkg.Packages.libraries)
          pkgs)
   in
-  let doc_dir pkg = Fpath.(pkg.Packages.pkg_dir / "doc") in
-  let lib_dir pkg libname = Fpath.(pkg.Packages.pkg_dir / "lib" / libname) in
+  let doc_dir pkg = pkg.Packages.pkg_dir in
+  let lib_dir pkg libname = Fpath.(pkg.Packages.pkg_dir / libname) in
   let make_absolute = Fpath.( // ) output_dir in
 
   let dash_p pkg = (pkg.Packages.name, doc_dir pkg |> make_absolute) in

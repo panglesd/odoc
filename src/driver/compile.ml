@@ -197,8 +197,7 @@ let link : compiled list -> _ =
     let link input_file output_file =
       let { Odoc_unit.libs; pages } = c.pkg_args in
       let includes = c.include_dirs |> Fpath.Set.of_list in
-      Odoc.link ~input_file ~output_file ~includes ~libs ~docs:pages
-        ~current_package:c.pkgname ()
+      Odoc.link ~input_file ~output_file ~includes ~libs ~docs:pages ()
     in
     match c.kind with
     | `Intf { hidden = true; _ } ->
