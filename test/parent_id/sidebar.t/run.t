@@ -1,24 +1,24 @@
   $ ocamlc -c -bin-annot unit.ml
 
-  $ odoc compile --output-dir _odoc/ --parent-id pkg/doc/dir1 dir1/my_page.mld
-  $ odoc compile --output-dir _odoc/ --parent-id pkg/doc/dir1 dir1/index.mld
-  $ odoc compile --output-dir _odoc/ --parent-id pkg/doc file.mld
-  $ odoc compile --output-dir _odoc/ --parent-id pkg/doc index.mld
-  $ odoc compile --output-dir _odoc/ --parent-id pkg/lib/libname unit.cmt
+  $ odoc compile --output-dir _odoc/ --parent-id pkg/dir1 dir1/my_page.mld
+  $ odoc compile --output-dir _odoc/ --parent-id pkg/dir1 dir1/index.mld
+  $ odoc compile --output-dir _odoc/ --parent-id pkg file.mld
+  $ odoc compile --output-dir _odoc/ --parent-id pkg index.mld
+  $ odoc compile --output-dir _odoc/ --parent-id pkg/libname unit.cmt
 
-  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/page-file.odoc
-  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/dir1/page-my_page.odoc
-  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/dir1/page-index.odoc
-  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/doc/page-index.odoc
-  $ odoc link -P pkg:_odoc/pkg/doc/ _odoc/pkg/lib/libname/unit.odoc
+  $ odoc link -P pkg:_odoc/pkg/ -L libname:_odoc/pkg/libname _odoc/pkg/page-file.odoc
+  $ odoc link -P pkg:_odoc/pkg/ _odoc/pkg/dir1/page-my_page.odoc
+  $ odoc link -P pkg:_odoc/pkg/ _odoc/pkg/dir1/page-index.odoc
+  $ odoc link -P pkg:_odoc/pkg/ _odoc/pkg/page-index.odoc
+  $ odoc link -P pkg:_odoc/pkg/ _odoc/pkg/libname/unit.odoc
 
-  $ odoc compile-index -P pkg:_odoc/pkg/doc/ -L libname:_odoc/pkg/lib/libname -o sidebar.odoc-index
+  $ odoc compile-index -P pkg:_odoc/pkg/ -L libname:_odoc/pkg/libname -o sidebar.odoc-index
   $ odoc sidebar-generate sidebar.odoc-index
-  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o html _odoc/pkg/doc/page-file.odocl
-  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o html _odoc/pkg/doc/dir1/page-my_page.odocl
-  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o html _odoc/pkg/doc/dir1/page-index.odocl
-  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o html _odoc/pkg/doc/page-index.odocl
-  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o html _odoc/pkg/lib/libname/unit.odocl
+  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o html _odoc/pkg/page-file.odocl
+  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o html _odoc/pkg/dir1/page-my_page.odocl
+  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o html _odoc/pkg/dir1/page-index.odocl
+  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o html _odoc/pkg/page-index.odocl
+  $ odoc html-generate --indent --sidebar sidebar.odoc-sidebar -o html _odoc/pkg/libname/unit.odocl
 
   $ odoc sidebar-generate --json sidebar.odoc-index
   $ cat sidebar.json | jq
@@ -28,23 +28,23 @@
         "name": "pkg",
         "pages": {
           "node": {
-            "url": "pkg/doc/index.html",
+            "url": "pkg/index.html",
             "kind": "leaf-page",
-            "content": "<a href=\"pkg/doc/index.html\">Package <code>pkg</code></a>"
+            "content": "<a href=\"pkg/index.html\">Package <code>pkg</code></a>"
           },
           "children": [
             {
               "node": {
-                "url": "pkg/doc/dir1/index.html",
+                "url": "pkg/dir1/index.html",
                 "kind": "leaf-page",
-                "content": "<a href=\"pkg/doc/dir1/index.html\">A directory</a>"
+                "content": "<a href=\"pkg/dir1/index.html\">A directory</a>"
               },
               "children": [
                 {
                   "node": {
-                    "url": "pkg/doc/dir1/my_page.html",
+                    "url": "pkg/dir1/my_page.html",
                     "kind": "leaf-page",
-                    "content": "<a href=\"pkg/doc/dir1/my_page.html\">My page</a>"
+                    "content": "<a href=\"pkg/dir1/my_page.html\">My page</a>"
                   },
                   "children": []
                 }
@@ -52,9 +52,9 @@
             },
             {
               "node": {
-                "url": "pkg/doc/file.html",
+                "url": "pkg/file.html",
                 "kind": "leaf-page",
-                "content": "<a href=\"pkg/doc/file.html\">File</a>"
+                "content": "<a href=\"pkg/file.html\">File</a>"
               },
               "children": []
             }
@@ -68,24 +68,24 @@
         "pages": [
           {
             "node": {
-              "url": "pkg/lib/libname/Unit/index.html",
+              "url": "pkg/libname/Unit/index.html",
               "kind": "module",
-              "content": "<a href=\"pkg/lib/libname/Unit/index.html\">Unit</a>"
+              "content": "<a href=\"pkg/libname/Unit/index.html\">Unit</a>"
             },
             "children": [
               {
                 "node": {
-                  "url": "pkg/lib/libname/Unit/X/index.html",
+                  "url": "pkg/libname/Unit/X/index.html",
                   "kind": "module",
-                  "content": "<a href=\"pkg/lib/libname/Unit/X/index.html\">X</a>"
+                  "content": "<a href=\"pkg/libname/Unit/X/index.html\">X</a>"
                 },
                 "children": []
               },
               {
                 "node": {
-                  "url": "pkg/lib/libname/Unit/module-type-Y/index.html",
+                  "url": "pkg/libname/Unit/module-type-Y/index.html",
                   "kind": "module-type",
-                  "content": "<a href=\"pkg/lib/libname/Unit/module-type-Y/index.html\">Y</a>"
+                  "content": "<a href=\"pkg/libname/Unit/module-type-Y/index.html\">Y</a>"
                 },
                 "children": []
               }
@@ -96,11 +96,11 @@
     ]
   }
 
-  $ cat html/pkg/doc/index.html | grep odoc-global-toc -A 15
+  $ cat html/pkg/index.html | grep odoc-global-toc -A 15
      <nav class="odoc-toc odoc-global-toc">
       <ul class="odoc-modules">
        <li><b>Library <code>libname</code></b>
-        <ul><li><a href="../lib/libname/Unit/index.html">Unit</a></li></ul>
+        <ul><li><a href="libname/Unit/index.html">Unit</a></li></ul>
        </li>
       </ul><b>Documentation</b>
       <ul class="odoc-pages">
@@ -114,7 +114,7 @@
       </ul>
      </nav>
 
-  $ cat html/pkg/lib/libname/Unit/index.html | grep odoc-global-toc -A 15
+  $ cat html/pkg/libname/Unit/index.html | grep odoc-global-toc -A 15
      <nav class="odoc-toc odoc-global-toc">
       <ul class="odoc-modules">
        <li><b>Library <code>libname</code></b>
@@ -128,9 +128,9 @@
        </li>
       </ul><b>Documentation</b>
       <ul class="odoc-pages">
-       <li><a href="../../../doc/index.html">Package <code>pkg</code></a>
+       <li><a href="../../index.html">Package <code>pkg</code></a>
         <ul>
-         <li><a href="../../../doc/dir1/index.html">A directory</a>
+         <li><a href="../../dir1/index.html">A directory</a>
 
   $ odoc support-files -o html
 $ cp -r html /tmp/html
