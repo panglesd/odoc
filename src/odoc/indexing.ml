@@ -162,20 +162,6 @@ let compile out_format ~output ~warnings_options ~occurrences ~lib_roots
     | None -> None
     | Some occurrences -> Some (read_occurrences (Fpath.to_string occurrences))
   in
-  (* if files = [] && then Error (`Msg "No .odocl files were included") *)
-  (* else *)
-  let includes_rec =
-    List.rev_append (List.map snd page_roots) (List.map snd lib_roots)
-  in
-  let files =
-    List.rev_append files
-      (includes_rec
-      |> List.map (fun include_rec ->
-             Fs.Directory.fold_files_rec ~ext:"odocl"
-               (fun files file -> file :: files)
-               [] include_rec)
-      |> List.concat)
-  in
   match out_format with
   | `JSON -> compile_to_json ~output ~occurrences files
   | `Marshall ->
