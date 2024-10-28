@@ -211,7 +211,7 @@ module Hierarchy : sig
 
   val make : hierarchy_root:Fs.Directory.t -> current_dir:Fs.Directory.t -> t
 
-  val resolve_relative : t -> Fs.File.t -> (Fs.File.t, error) result
+  val resolve_relative : t -> Fs.File.t -> (Fs.File.t option, error) result
   (** [resolve_relative h relpath] resolve [relpath] relatively to the current
       directory, making sure not to escape the hierarchy. *)
 end = struct
@@ -223,7 +223,12 @@ end = struct
 
   let resolve_relative t relpath =
     let path = Fs.File.append t.current_dir relpath in
-    if Fs.Directory.contains ~parentdir:t.hierarchy_root path then Ok path
+    if Fs.Directory.contains ~parentdir:t.hierarchy_root path then
+      Ok (Some path)
+    else if
+      Fs.Directory.contains ~parentdir:t.hierarchy_root
+        (Fs.File.dirname path |> Fs.Directory.to_fpath)
+    then Ok None
     else Error `Escape_hierarchy
 end
 
@@ -394,7 +399,7 @@ let add_unit_to_cache u =
     [possible_unit_names] should return a list of possible file names for the
     given unit name. *)
 let lookup_path ~possible_unit_names ~named_roots ~hierarchy (tag, path) :
-    (Odoc_file.content, [ `Not_found ]) result =
+    (Odoc_file.content, [ `Not_found | `Escape_hierarchy ]) result =
   let open Odoc_utils.OptionMonad in
   let option_to_result = function Some p -> Ok p | None -> Error `Not_found in
   (* TODO: We might want to differentiate when the file is not found and when
@@ -418,16 +423,17 @@ let lookup_path ~possible_unit_names ~named_roots ~hierarchy (tag, path) :
     find_by_path ?root named_roots path >>= fun path ->
     load_unit_from_file path |> handle_load_error
   in
-  let find_in_hierarchy path =
-    match hierarchy with
-    | None -> Ok None
-    | Some hierarchy -> (
+  let rec find_in_hierarchy paths =
+    match (hierarchy, paths) with
+    | None, _ | _, [] -> Ok None
+    | Some hierarchy, path :: paths -> (
         match Hierarchy.resolve_relative hierarchy path with
-        | Ok path ->
-            Result.map (fun x -> Some x) (load_unit_from_file path)
-            (* |> handle_load_error *)
-        | Error `Escape_hierarchy as e ->
-            e (* TODO: propagate more information *))
+        | Ok (Some path) -> (
+            match load_unit_from_file path with
+            | Ok c -> Ok (Some c)
+            | Error _ -> find_in_hierarchy paths)
+        | Ok None -> find_in_hierarchy paths
+        | Error `Escape_hierarchy as e -> e)
   in
   match tag with
   | `TCurrentPackage ->
@@ -442,10 +448,11 @@ let lookup_path ~possible_unit_names ~named_roots ~hierarchy (tag, path) :
           |> List.find_map (find_in_named_roots ~root)
       | [] -> None)
       |> option_to_result
-  | `TRelativePath ->
-      ref_path_to_file_path path
-      |> List.find_map find_in_hierarchy
-      |> option_to_result
+  | `TRelativePath -> (
+      match ref_path_to_file_path path |> find_in_hierarchy with
+      | Ok None -> Error `Not_found
+      | Ok (Some x) -> Ok x
+      | Error `Escape_hierarchy as e -> e)
 
 let lookup_asset_by_path ~pages ~hierarchy path =
   let possible_unit_names name = [ "asset-" ^ name ^ ".odoc" ] in
@@ -460,6 +467,43 @@ let lookup_page_by_path ~pages ~hierarchy path =
   | Ok (Odoc_file.Page_content page) -> Ok page
   | Ok _ -> Error `Not_found (* TODO: Report is not a page. *)
   | Error _ as e -> e
+
+let lookup_parent_pages ~hierarchy =
+  let rec load path unit acc =
+    let acc =
+      match load_unit_from_file unit with
+      | Ok (Page_content page) -> `Found page :: acc
+      | _ ->
+          let name = unit |> Fpath.parent |> Fpath.basename in
+          `Not_found name :: acc
+    in
+    let path = Fpath.(v ".." // path) in
+    aux path acc
+  and aux path acc =
+    Format.printf "Trying path %a\n%!" Fpath.pp path;
+    match Hierarchy.resolve_relative hierarchy path with
+    | Ok (Some unit) ->
+        Format.printf "path %a worked to %a\n%!" Fpath.pp path Fpath.pp unit;
+        load path unit acc
+    | Ok None ->
+        Format.printf "path %a not found, skipping\n%!" Fpath.pp path;
+        let path = Fpath.(v ".." // path) in
+        aux path acc
+    | Error `Escape_hierarchy ->
+        Format.printf "path %a escaped hierarchy\n%!" Fpath.pp path;
+        acc
+  in
+  let path = Fpath.v "page-index.odoc" in
+  aux path []
+(* match lookup_path ~possible_unit_names ~named_roots:pages ~hierarchy path with *)
+(* | Ok (Odoc_file.Page_content page) -> Ok page *)
+(* | Ok _ -> Error `Not_found (\* TODO: Report is not a page. *\) *)
+(* | Error _ as e -> e *)
+
+let lookup_parent_pages ~hierarchy =
+  match hierarchy with
+  | None -> None
+  | Some hierarchy -> Some (lookup_parent_pages ~hierarchy)
 
 let lookup_unit_by_path ~libs ~hierarchy path =
   let possible_unit_names name =
@@ -587,9 +631,17 @@ let build_compile_env_for_unit
     lookup_unit ~important_digests ~imports_map ap ~libs:None ~hierarchy:None
   and lookup_page _ = Error `Not_found
   and lookup_asset _ = Error `Not_found
-  and lookup_impl = lookup_impl ap in
+  and lookup_impl = lookup_impl ap
+  and lookup_parents () = None in
   let resolver =
-    { Env.open_units; lookup_unit; lookup_page; lookup_impl; lookup_asset }
+    {
+      Env.open_units;
+      lookup_unit;
+      lookup_page;
+      lookup_impl;
+      lookup_asset;
+      lookup_parents;
+    }
   in
   Env.env_of_unit m ~linking:false resolver
 
@@ -607,14 +659,26 @@ let build ?(imports_map = StringMap.empty) ?hierarchy_roots
     let open OptionMonad in
     current_dir >>= fun current_dir ->
     hierarchy_roots >>= Named_roots.current_root >>= fun hierarchy_root ->
+    Format.printf
+      "Creating hierarchy with hierarchy root %s\n  and current dir %s\n%!"
+      (Fs.Directory.to_string hierarchy_root)
+      (Fs.Directory.to_string current_dir);
     Some (Hierarchy.make ~hierarchy_root ~current_dir)
   in
   let lookup_unit =
     lookup_unit ~important_digests ~imports_map ap ~libs ~hierarchy
   and lookup_page = lookup_page ap ~pages ~hierarchy
   and lookup_asset = lookup_asset ~pages ~hierarchy
-  and lookup_impl = lookup_impl ap in
-  { Env.open_units; lookup_unit; lookup_page; lookup_impl; lookup_asset }
+  and lookup_impl = lookup_impl ap
+  and lookup_parents () = lookup_parent_pages ~hierarchy in
+  {
+    Env.open_units;
+    lookup_unit;
+    lookup_page;
+    lookup_impl;
+    lookup_asset;
+    lookup_parents;
+  }
 
 let build_compile_env_for_impl t i =
   let imports_map =
@@ -626,7 +690,7 @@ let build_compile_env_for_impl t i =
 let build_link_env_for_unit t m =
   add_unit_to_cache (Odoc_file.Unit_content m);
   let imports_map = build_imports_map m.imports in
-  let resolver = build ~imports_map ?hierarchy_roots:t.libs t in
+  let resolver = build ~imports_map ?hierarchy_roots:t.pages t in
   Env.env_of_unit m ~linking:true resolver
 
 let build_link_env_for_impl t i =

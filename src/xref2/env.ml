@@ -8,7 +8,7 @@ type lookup_unit_result = Forward_reference | Found of Lang.Compilation_unit.t
 
 type path_query = [ `Path of Reference.Hierarchy.t | `Name of string ]
 
-type lookup_error = [ `Not_found | `Out_of_tree ]
+type lookup_error = [ `Not_found | `Escape_hierarchy ]
 
 type resolver = {
   open_units : string list;
@@ -16,6 +16,8 @@ type resolver = {
   lookup_page : path_query -> (Lang.Page.t, lookup_error) result;
   lookup_asset : path_query -> (Lang.Asset.t, lookup_error) result;
   lookup_impl : string -> Lang.Implementation.t option;
+  lookup_parents :
+    unit -> [ `Found of Lang.Page.t | `Not_found of string ] list option;
 }
 
 type root =
@@ -406,7 +408,7 @@ let lookup_root_module name env =
     | Some r -> (
         match r.lookup_unit (`Name (ModuleName.to_string name)) with
         | Ok Forward_reference -> Some Forward
-        | Error `Not_found -> None
+        | Error (`Not_found | `Escape_hierarchy) -> None
         | Ok (Found u) ->
             let ({ Odoc_model.Paths.Identifier.iv = `Root _; _ } as id) =
               u.id
@@ -442,6 +444,9 @@ let lookup_unit query env =
   match env.resolver with
   | None -> Error `Not_found
   | Some r -> r.lookup_unit query
+
+let lookup_parents env =
+  match env.resolver with None -> None | Some r -> r.lookup_parents ()
 
 let lookup_impl name env =
   match env.resolver with None -> None | Some r -> r.lookup_impl name
@@ -539,7 +544,7 @@ let lookup_page_or_root_module_fallback name t =
   | None -> (
       match lookup_page_by_name name t with
       | Ok page -> Some (`Page (page.Lang.Page.name, page))
-      | Error `Not_found -> None)
+      | Error (`Not_found | `Escape_hierarchy) -> None)
 
 let s_signature : Component.Element.signature scope =
   make_scope ~root:lookup_root_module_fallback (function
@@ -877,7 +882,7 @@ let verify_lookups env lookups =
               match r.lookup_unit (`Name (ModuleName.to_string name)) with
               | Ok Forward_reference -> Some `Forward
               | Ok (Found u) -> Some (`Resolved u.root.digest)
-              | Error `Not_found -> None)
+              | Error (`Not_found | `Escape_hierarchy) -> None)
         in
         match (res, actual_result) with
         | None, None -> false

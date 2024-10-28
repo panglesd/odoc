@@ -1793,8 +1793,15 @@ module Make (Syntax : SYNTAX) = struct
         | Pack packed -> ([], pack packed)
       in
       let source_anchor = source_anchor t.source_loc in
+      let breadcrumbs =
+        t.breadcrumbs
+        |> Option.map @@ fun bs ->
+           List.map
+             (fun (name, id) -> (name, Option.map Url.Path.from_identifier id))
+             bs
+      in
       let page = make_expansion_page ~source_anchor url [ unit_doc ] items in
-      Document.Page page
+      Document.Page { page with breadcrumbs }
 
     let page (t : Odoc_model.Lang.Page.t) =
       (*let name =

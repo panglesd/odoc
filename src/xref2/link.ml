@@ -428,8 +428,66 @@ let rec unit env t =
           Module sg
       | Pack _ as p -> p
   in
+
+  let breadcrumbs =
+    (* let rec _make_breadcrumbs path = *)
+    (*   let r = `Page_path (`TRelativePath, path) in *)
+    (*   let b = *)
+    (*     match *)
+    (*       Ref_tools.resolve_page_reference env r |> Error.raise_warnings *)
+    (*     with *)
+    (*     | Ok (`Identifier id, _p) -> *)
+    (*         let title = *)
+    (*           (\*  p.frontmatter.short_title *\) Paths.Identifier.name id *)
+    (*         in *)
+    (*         `Continue (title, Some id) *)
+    (*     | Error `Escape_hierarchy -> `Stop *)
+    (*     | Error _ -> `Continue ("TODO", None) *)
+    (*   in *)
+    (*   match b with *)
+    (*   | `Stop -> [] *)
+    (*   | `Continue b -> *)
+    (*       let new_path = ".." :: path in *)
+    (*       b :: _make_breadcrumbs new_path *)
+    (* in *)
+    let current_page =
+      match t.id.iv with
+      | `Root (_, mn) ->
+          [
+            ( Names.ModuleName.to_string mn,
+              None (* Some (id :> Paths.Identifier.Page.t) *) );
+          ]
+      (* | "index" -> [] *)
+      (* | name -> [ (name, Some t.id) ] *)
+    in
+
+    (* let initial_ref = [ "index" ] in *)
+    let parents = Env.lookup_parents env |> Option.value ~default:[] in
+    let rec pagename (p : Paths.Identifier.Page.t) =
+      match p.iv with
+      | `Page (_, n) -> Names.PageName.to_string n
+      | `LeafPage (None, n) -> Names.PageName.to_string n
+      | `LeafPage (Some p, n) -> (
+          match Names.PageName.to_string n with
+          | "index" -> pagename (p :> Paths.Identifier.Page.t)
+          | n -> n)
+    in
+    let parents =
+      (* parents *)
+      (* |> Option.map *)
+      (*    @@  *)
+      List.map
+        (function
+          | `Found (p : Lang.Page.t) ->
+              (pagename p.name, Some p.name (* .name *))
+          | `Not_found s -> (s, None))
+        parents
+    in
+    Some (parents @ current_page)
+  in
+
   let source_loc = source_loc env t.id t.source_loc in
-  { t with content; linked = true; source_loc }
+  { t with content; linked = true; source_loc; breadcrumbs }
 
 and value_ env parent t =
   let open Value in
@@ -1121,8 +1179,8 @@ let page env page =
         | Page.Page_child page -> (
             match Env.lookup_page_by_name page env with
             | Ok _ -> ()
-            | Error `Not_found -> Errors.report ~what:(`Child_page page) `Lookup
-            )
+            | Error (`Not_found | `Escape_hierarchy) ->
+                Errors.report ~what:(`Child_page page) `Lookup)
         | Page.Module_child mod_ -> (
             match
               Env.lookup_root_module
@@ -1144,14 +1202,23 @@ let page env page =
             let title =
               (*  p.frontmatter.short_title *) Paths.Identifier.name id
             in
-            (title, Some id)
-        | Error _ -> ("TODO", None)
+            `Continue (title, Some id)
+        | Error `Escape_hierarchy -> `Stop
+        | Error _ -> `Continue ("TODO", None)
       in
-      let new_path = ".." :: path in
-      b :: make_breadcrumbs new_path
+      match b with
+      | `Stop -> []
+      | `Continue b ->
+          let new_path = ".." :: path in
+          b :: make_breadcrumbs new_path
+    in
+    let current_page =
+      match Paths.Identifier.name page.name with
+      | "index" -> []
+      | name -> [ (name, Some page.name) ]
     in
     let initial_ref = [ "index" ] in
-    Some (make_breadcrumbs initial_ref)
+    Some (List.rev @@ current_page @ make_breadcrumbs initial_ref)
   in
   {
     page with

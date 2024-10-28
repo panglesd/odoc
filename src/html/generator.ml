@@ -509,8 +509,13 @@ module Breadcrumbs = struct
       in
       { href_kind; name }
     in
-    let breadcrumbs = Option.value ~default:[] breadcrumbs in
-    (List.map to_breadcrumb) breadcrumbs
+    let breadcrumbs =
+      match breadcrumbs with
+      | None -> [ ("was none", None); ("was none", None) ]
+      | Some [] -> [ ("was []", None); ("was []", None) ]
+      | Some x -> x
+    in
+    List.map to_breadcrumb breadcrumbs
 end
 
 module Page = struct

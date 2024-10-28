@@ -116,6 +116,7 @@ module Tools_error = struct
   and reference_lookup_error =
     [ `Wrong_kind of reference_kind list * reference_kind (* Expected, got *)
     | `Lookup_by_name of [ reference_kind | `Any ] * string
+    | `Escape_hierarchy
     | `Find_by_name of [ reference_kind | `Any ] * string
     | `Path_error of
       [ `Not_found | `Is_directory | `Wrong_kind of path_kind list * path_kind ]
@@ -252,6 +253,7 @@ module Tools_error = struct
         )
     | `Path_error (err, tag, path) -> pp_path_error fmt err tag path
     | `Parent e -> pp fmt (e :> any)
+    | `Escape_hierarchy -> Format.fprintf fmt "Escaped hierarhy"
 end
 
 type kind = [ `OpaqueModule | `Root of string ]

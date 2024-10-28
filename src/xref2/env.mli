@@ -8,7 +8,7 @@ type lookup_unit_result = Forward_reference | Found of Lang.Compilation_unit.t
 
 type path_query = [ `Path of Reference.Hierarchy.t | `Name of string ]
 
-type lookup_error = [ `Not_found ]
+type lookup_error = [ `Not_found | `Escape_hierarchy ]
 
 type resolver = {
   open_units : string list;
@@ -16,6 +16,8 @@ type resolver = {
   lookup_page : path_query -> (Lang.Page.t, lookup_error) result;
   lookup_asset : path_query -> (Lang.Asset.t, lookup_error) result;
   lookup_impl : string -> Lang.Implementation.t option;
+  lookup_parents :
+    unit -> [ `Found of Lang.Page.t | `Not_found of string ] list option;
 }
 
 type root =
@@ -126,6 +128,9 @@ val lookup_by_name : 'a scope -> string -> t -> 'a maybe_ambiguous
 val lookup_by_id :
   'a scope -> [< Identifier.t_pv ] Paths.Identifier.id -> t -> 'a option
 (** Like [lookup_by_name] but use an identifier as key. *)
+
+val lookup_parents :
+  t -> [ `Found of Lang.Page.t | `Not_found of string ] list option
 
 val s_any : Component.Element.any scope
 

@@ -73,8 +73,13 @@ let html_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) =
     [ Html.nav ~a:[ Html.a_class [ "odoc-nav" ] ] (up @ rest) ]
   in
   match List.rev breadcrumbs with
-  | [] -> [] (* Can't happen - there's always the current page's breadcrumb. *)
-  | [ _ ] -> [] (* No parents *)
+  | [] -> make_navigation ~up_url:None [ Html.txt "yo" ]
+  (* [] *)
+  (* Can't happen - there's always the current page's breadcrumb. *)
+  (* | [ _ ] -> *)
+  (*     make_navigation ~up_url:None [ Html.txt "no parent" ] *)
+  (*     (\* [] *\) *)
+  (*     (\* No parents *\) *)
   | [ { name = "index"; _ }; x ] ->
       (* Special case leaf pages called 'index' with one parent. This is for files called
           index.mld that would otherwise clash with their parent. In particular,

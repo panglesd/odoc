@@ -662,6 +662,9 @@ end = struct
           find_map
             ~f:(fun (pkg, path) ->
               if Fpath.is_prefix path o then Some pkg else None)
+            (* match Fpath.rem_prefix path o with *)
+            (* | Some x -> Some (pkg, x) *)
+            (* | None -> None) *)
             l
         with
         | Some _ as r -> Ok r
@@ -706,6 +709,7 @@ end = struct
     >>= fun current_lib ->
     current_package_of_page page_roots input >>= fun current_package ->
     let current_dir = Fs.File.dirname output in
+    (* let current_lib = Option.map fst current_lib in *)
     let roots =
       Some
         {

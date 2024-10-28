@@ -230,10 +230,12 @@ module Path = struct
   (* let first_seg (`Root (s, _) | `Slash (_, s)) = s *)
 
   let mk_lookup_error (tag, path) = Error (`Path_error (`Not_found, tag, path))
+  let mk_escape_error () = Error `Escape_hierarchy
 
   let handle_lookup_error p = function
     | Ok _ as ok -> ok
     | Error `Not_found -> mk_lookup_error p
+    | Error `Escape_hierarchy -> mk_escape_error ()
 
   let page_in_env env p : page_lookup_result ref_result =
     Env.lookup_page_by_path p env |> handle_lookup_error p >>= fun p ->
@@ -634,6 +636,7 @@ module P = struct
     match Env.lookup_page_by_name name env with
     | Ok p -> Ok (`Identifier p.Odoc_model.Lang.Page.name, p)
     | Error `Not_found -> Error (`Lookup_by_name (`Page, name))
+    | Error `Escape_hierarchy as e -> e
 
   let of_element _env (`Page (id, page)) : t = (`Identifier id, page)
 end
@@ -645,6 +648,7 @@ module Asset = struct
     match Env.lookup_asset_by_name name env with
     | Ok p -> Ok (`Identifier p.Odoc_model.Lang.Asset.name)
     | Error `Not_found -> Error (`Lookup_by_name (`Page (* TODO *), name))
+    | Error `Escape_hierarchy as e -> e
 end
 
 module LP = struct
