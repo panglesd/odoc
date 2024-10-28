@@ -419,10 +419,15 @@ let lookup_path ~possible_unit_names ~named_roots ~hierarchy (tag, path) :
     load_unit_from_file path |> handle_load_error
   in
   let find_in_hierarchy path =
-    hierarchy >>= fun hierarchy ->
-    match Hierarchy.resolve_relative hierarchy path with
-    | Ok path -> load_unit_from_file path |> handle_load_error
-    | Error `Escape_hierarchy -> None (* TODO: propagate more information *)
+    match hierarchy with
+    | None -> Ok None
+    | Some hierarchy -> (
+        match Hierarchy.resolve_relative hierarchy path with
+        | Ok path ->
+            Result.map (fun x -> Some x) (load_unit_from_file path)
+            (* |> handle_load_error *)
+        | Error `Escape_hierarchy as e ->
+            e (* TODO: propagate more information *))
   in
   match tag with
   | `TCurrentPackage ->

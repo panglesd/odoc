@@ -5,6 +5,8 @@ type module_lookup_result =
 
 type asset_lookup_result = Resolved.Asset.t
 
+type page_lookup_result = Resolved.Page.t * Odoc_model.Lang.Page.t
+
 type 'a ref_result =
   ('a, Errors.Tools_error.reference_lookup_error) Result.result
 
@@ -23,3 +25,8 @@ val resolve_reference :
   t ->
   (Resolved.t * Odoc_model.Comment.paragraph option) ref_result
   Odoc_model.Error.with_warnings
+
+val resolve_page_reference :
+  Env.t ->
+  Page.t ->
+  page_lookup_result ref_result Odoc_model.Error.with_warnings

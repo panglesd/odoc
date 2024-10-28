@@ -627,7 +627,7 @@ module MV = struct
   let of_component _env parent' name = Ok (`InstanceVariable (parent', name))
 end
 
-module Page = struct
+module P = struct
   type t = page_lookup_result
 
   let in_env env name : t ref_result =
@@ -662,7 +662,7 @@ module LP = struct
     | `Type _ as e -> Ok (`T (DT.of_element env e))
     | `Class _ as e -> Ok (`C (CL.of_element env e))
     | `ClassType _ as e -> Ok (`CT (CT.of_element env e))
-    | `Page _ as e -> Ok (`P (Page.of_element env e))
+    | `Page _ as e -> Ok (`P (P.of_element env e))
 
   let in_env env name =
     env_lookup_by_name Env.s_label_parent name env >>= of_element env
@@ -720,7 +720,7 @@ let rec resolve_label_parent_reference env (r : LabelParent.t) =
       >>= signature_lookup_result_of_label_parent
       >>= fun p -> LP.in_signature env p name
   | `Root (name, `TPage) | `Root (name, `TChildPage) ->
-      Page.in_env env name >>= fun r -> Ok (`P r)
+      P.in_env env name >>= fun r -> Ok (`P r)
   | `Root (name, `TChildModule) ->
       resolve_signature_reference env (`Root (name, `TModule)) >>= fun s ->
       Ok (`S s)
@@ -815,6 +815,12 @@ and resolve_module_reference env (r : Module.t) : M.t ref_result =
       M.in_signature env p name
   | `Root (name, _) -> M.in_env env name
   | `Module_path p -> Path.module_in_env env p
+
+let resolve_page_reference env (r : Page.t) : page_lookup_result ref_result =
+  match r with
+  | `Resolved _r -> failwith "What's going on!?"
+  | `Root (name, _) -> P.in_env env name
+  | `Page_path p -> Path.page_in_env env p
 
 let resolve_class_signature_reference env (r : ClassSignature.t) =
   (* Casting from ClassSignature to LabelParent.
@@ -962,7 +968,7 @@ let resolve_reference :
     | `Label (parent, name) ->
         resolve_label_parent_reference env parent >>= fun p ->
         L.in_label_parent env p name >>= resolved_with_text
-    | `Root (name, (`TPage | `TChildPage)) -> Page.in_env env name >>= resolved2
+    | `Root (name, (`TPage | `TChildPage)) -> P.in_env env name >>= resolved2
     | `Root (name, `TAsset) -> Asset.in_env env name >>= resolved1
     | `Dot (parent, name) -> resolve_reference_dot env parent name
     | `Root (name, `TConstructor) -> CS.in_env env name >>= resolved1
@@ -1009,3 +1015,6 @@ let resolve_asset_reference env m =
 
 let resolve_reference env m =
   Odoc_model.Error.catch_warnings (fun () -> resolve_reference env m)
+
+let resolve_page_reference env m =
+  Odoc_model.Error.catch_warnings (fun () -> resolve_page_reference env m)

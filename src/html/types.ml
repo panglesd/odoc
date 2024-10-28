@@ -12,7 +12,6 @@ type toc = {
 }
 
 type breadcrumb = {
-  href : string;
+  href_kind : (string * Odoc_document.Url.Path.kind) option;
   name : string;
-  kind : Odoc_document.Url.Path.kind;
 }

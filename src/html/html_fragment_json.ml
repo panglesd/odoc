@@ -8,12 +8,13 @@ module Url = Odoc_document.Url
 
 let json_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) : Json.json =
   let breadcrumb (b : Types.breadcrumb) =
-    `Object
-      [
-        ("name", `String b.name);
-        ("href", `String b.href);
-        ("kind", `String (Url.Path.string_of_kind b.kind));
-      ]
+    let href, kind =
+      match b.href_kind with
+      | None -> (`Null, `Null)
+      | Some (href, kind) ->
+          (`String href, `String (Url.Path.string_of_kind kind))
+    in
+    `Object [ ("name", `String b.name); ("href", href); ("kind", kind) ]
   in
   let json_breadcrumbs = breadcrumbs |> List.map breadcrumb in
   `Array json_breadcrumbs

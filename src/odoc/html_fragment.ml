@@ -28,6 +28,7 @@ let from_mld ~xref_base_uri ~resolver ~output ~warnings_options input =
           digest;
           linked = false;
           frontmatter;
+          breadcrumbs = None;
         }
     in
     let env = Resolver.build_env_for_page resolver page in

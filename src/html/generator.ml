@@ -498,24 +498,19 @@ end
 module Breadcrumbs = struct
   open Types
 
-  let gen_breadcrumbs ~config ~url =
-    let rec get_parent_paths x =
-      match x with
-      | [] -> []
-      | x :: xs -> (
-          match Odoc_document.Url.Path.of_list (List.rev (x :: xs)) with
-          | Some x -> x :: get_parent_paths xs
-          | None -> get_parent_paths xs)
-    in
-    let to_breadcrumb path =
-      let href =
-        Link.href ~config ~resolve:(Current url)
-          (Odoc_document.Url.from_path path)
+  let gen_breadcrumbs ~config ~url (breadcrumbs : Page.breadcrumb list option) =
+    let to_breadcrumb (name, path) =
+      let href_kind =
+        path
+        |> Option.map (fun path ->
+               ( Link.href ~config ~resolve:(Current url)
+                   (Odoc_document.Url.from_path path),
+                 path.kind ))
       in
-      { href; name = path.name; kind = path.kind }
+      { href_kind; name }
     in
-    get_parent_paths (List.rev (Odoc_document.Url.Path.to_list url))
-    |> List.rev |> List.map to_breadcrumb
+    let breadcrumbs = Option.value ~default:[] breadcrumbs in
+    (List.map to_breadcrumb) breadcrumbs
 end
 
 module Page = struct
@@ -533,7 +528,7 @@ module Page = struct
     List.map (include_ ~config ~sidebar) subpages
 
   and page ~config ~sidebar p : Odoc_document.Renderer.page =
-    let { Page.preamble; items = i; url; source_anchor } =
+    let { Page.preamble; items = i; url; source_anchor; breadcrumbs } =
       Doctree.Labels.disambiguate_page ~enter_subpages:false p
     in
     let subpages = subpages ~config ~sidebar @@ Doctree.Subpages.compute p in
@@ -549,7 +544,7 @@ module Page = struct
     let i = Doctree.Shift.compute ~on_sub i in
     let uses_katex = Doctree.Math.has_math_elements p in
     let toc = Toc.gen_toc ~config ~resolve ~path:url i in
-    let breadcrumbs = Breadcrumbs.gen_breadcrumbs ~config ~url in
+    let breadcrumbs = Breadcrumbs.gen_breadcrumbs ~config ~url breadcrumbs in
     let content = (items ~config ~resolve i :> any Html.elt list) in
     if Config.as_json config then
       let source_anchor =
@@ -573,7 +568,7 @@ module Page = struct
     let resolve = Link.Current sp.url in
     let title = url.Url.Path.name
     and doc = Html_source.html_of_doc ~config ~resolve contents in
-    let breadcrumbs = Breadcrumbs.gen_breadcrumbs ~config ~url in
+    let breadcrumbs = Breadcrumbs.gen_breadcrumbs ~config ~url None in
     let header =
       items ~config ~resolve (Doctree.PageTitle.render_src_title sp)
     in

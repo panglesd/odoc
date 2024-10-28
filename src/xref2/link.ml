@@ -1133,10 +1133,31 @@ let page env page =
             | None -> Errors.report ~what:(`Child_module mod_) `Lookup))
       page.Lang.Page.children
   in
+  let breadcrumbs =
+    let rec make_breadcrumbs path =
+      let r = `Page_path (`TRelativePath, path) in
+      let b =
+        match
+          Ref_tools.resolve_page_reference env r |> Error.raise_warnings
+        with
+        | Ok (`Identifier id, _p) ->
+            let title =
+              (*  p.frontmatter.short_title *) Paths.Identifier.name id
+            in
+            (title, Some id)
+        | Error _ -> ("TODO", None)
+      in
+      let new_path = ".." :: path in
+      b :: make_breadcrumbs new_path
+    in
+    let initial_ref = [ "index" ] in
+    Some (make_breadcrumbs initial_ref)
+  in
   {
     page with
     Page.content = comment_docs env page.Page.name page.content;
     linked = true;
+    breadcrumbs;
   }
 
 let source_info env infos =

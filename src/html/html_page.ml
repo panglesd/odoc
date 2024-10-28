@@ -64,12 +64,13 @@ let sidebars ~global_toc ~local_toc =
 
 let html_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) =
   let make_navigation ~up_url rest =
-    [
-      Html.nav
-        ~a:[ Html.a_class [ "odoc-nav" ] ]
-        ([ Html.a ~a:[ Html.a_href up_url ] [ Html.txt "Up" ]; Html.txt " – " ]
-        @ rest);
-    ]
+    let up =
+      match up_url with
+      | Some up_url ->
+          [ Html.a ~a:[ Html.a_href up_url ] [ Html.txt "Up" ]; Html.txt " – " ]
+      | None -> []
+    in
+    [ Html.nav ~a:[ Html.a_class [ "odoc-nav" ] ] (up @ rest) ]
   in
   match List.rev breadcrumbs with
   | [] -> [] (* Can't happen - there's always the current page's breadcrumb. *)
@@ -78,28 +79,31 @@ let html_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) =
       (* Special case leaf pages called 'index' with one parent. This is for files called
           index.mld that would otherwise clash with their parent. In particular,
           dune and odig both cause this situation right now. *)
-      let up_url = "../index.html" in
+      let up_url = Some "../index.html" in
       let parent_name = x.name in
       make_navigation ~up_url [ Html.txt parent_name ]
-  | current :: up :: bs ->
+  | current :: bs ->
       let space = Html.txt " " in
       let sep = [ space; Html.entity "#x00BB"; space ] in
       let html =
         (* Create breadcrumbs *)
         Odoc_utils.List.concat_map ?sep:(Some sep)
           ~f:(fun (breadcrumb : Types.breadcrumb) ->
-            [
-              [
-                Html.a
-                  ~a:[ Html.a_href breadcrumb.href ]
-                  [ Html.txt breadcrumb.name ];
-              ];
-            ])
-          (up :: bs)
+            let b =
+              match breadcrumb.href_kind with
+              | Some (href, _kind) ->
+                  Html.a ~a:[ Html.a_href href ] [ Html.txt breadcrumb.name ]
+              | None -> Html.span ~a:[] [ Html.txt breadcrumb.name ]
+            in
+            [ [ b ] ])
+          bs
         |> List.flatten
       in
-      make_navigation ~up_url:up.href
-        (List.rev html @ sep @ [ Html.txt current.name ])
+      let up_url =
+        List.find_map (fun (b : Types.breadcrumb) -> b.href_kind) bs
+        |> Option.map fst
+      in
+      make_navigation ~up_url (List.rev html @ sep @ [ Html.txt current.name ])
 
 let file_uri ~config ~url (base : Types.uri) file =
   match base with

@@ -448,6 +448,13 @@ and TypeExpr : sig
 end =
   TypeExpr
 
+module rec Breadcrumbs : sig
+  type breadcrumb = string * Identifier.Page.t option
+
+  type t = breadcrumb list
+end =
+  Breadcrumbs
+
 (** {3 Compilation units} *)
 
 module rec Compilation_unit : sig
@@ -482,6 +489,7 @@ module rec Compilation_unit : sig
     linked : bool;  (** Whether this unit has been linked. *)
     source_loc : Identifier.SourceLocation.t option;
     canonical : Path.Module.t option;
+    breadcrumbs : Breadcrumbs.t option;
   }
 end =
   Compilation_unit
@@ -533,6 +541,7 @@ module rec Page : sig
     content : Comment.docs;
     children : child list;
     frontmatter : Frontmatter.t;
+    breadcrumbs : Breadcrumbs.t option;
     digest : Digest.t;
     linked : bool;
   }

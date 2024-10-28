@@ -261,7 +261,16 @@ let mld ~parent_id ~parents_children ~output ~children ~warnings_options input =
     in
     let page =
       Lang.Page.
-        { name; root; children; content; digest; linked = false; frontmatter }
+        {
+          name;
+          root;
+          children;
+          content;
+          digest;
+          linked = false;
+          frontmatter;
+          breadcrumbs = None;
+        }
     in
     Odoc_file.save_page output ~warnings:[] page;
     ()

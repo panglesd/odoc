@@ -89,7 +89,8 @@ let prepare_preamble comment items =
 let make_expansion_page ~source_anchor url comments items =
   let comment = List.concat comments in
   let preamble, items = prepare_preamble comment items in
-  { Page.preamble; items; url; source_anchor }
+  let breadcrumbs = None in
+  { Page.preamble; items; url; source_anchor; breadcrumbs }
 
 include Generator_signatures
 
@@ -1803,7 +1804,14 @@ module Make (Syntax : SYNTAX) = struct
       let url = Url.Path.from_identifier t.name in
       let preamble, items = Sectioning.docs t.content in
       let source_anchor = None in
-      Document.Page { Page.preamble; items; url; source_anchor }
+      let breadcrumbs =
+        t.breadcrumbs
+        |> Option.map @@ fun bs ->
+           List.map
+             (fun (name, id) -> (name, Option.map Url.Path.from_identifier id))
+             bs
+      in
+      Document.Page { Page.preamble; items; url; source_anchor; breadcrumbs }
 
     let implementation (v : Odoc_model.Lang.Implementation.t) syntax_info
         source_code =

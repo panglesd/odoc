@@ -8,7 +8,7 @@ type lookup_unit_result = Forward_reference | Found of Lang.Compilation_unit.t
 
 type path_query = [ `Path of Reference.Hierarchy.t | `Name of string ]
 
-type lookup_error = [ `Not_found ]
+type lookup_error = [ `Not_found | `Out_of_tree ]
 
 type resolver = {
   open_units : string list;
