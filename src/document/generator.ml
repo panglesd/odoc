@@ -89,7 +89,7 @@ let prepare_preamble comment items =
 let make_expansion_page ~source_anchor url comments items =
   let comment = List.concat comments in
   let preamble, items = prepare_preamble comment items in
-  let breadcrumbs = None in
+  let breadcrumbs = None (*  We fill this in a second phase *) in
   { Page.preamble; items; url; source_anchor; breadcrumbs }
 
 include Generator_signatures
@@ -1799,9 +1799,11 @@ module Make (Syntax : SYNTAX) = struct
            List.map
              (fun (name, id) -> (name, Option.map Url.Path.from_identifier id))
              bs
+           @ [ (url.name, Some url) ]
       in
       let page = make_expansion_page ~source_anchor url [ unit_doc ] items in
-      Document.Page { page with breadcrumbs }
+      let page = Doctree.Breadcrumbs.add breadcrumbs page in
+      Document.Page page
 
     let page (t : Odoc_model.Lang.Page.t) =
       (*let name =

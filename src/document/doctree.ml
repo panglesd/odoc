@@ -417,3 +417,56 @@ end = struct
 
   let has_math_elements = page
 end
+
+module Breadcrumbs = struct
+  let of_url (base_breadcrumb : Page.breadcrumb list option) url =
+    let rec loop base_url acc url =
+      if base_url = Some url then acc
+      else
+        let acc = (url.Url.Path.name, Some url) :: acc in
+        match url.parent with
+        | None -> acc
+        | Some parent -> loop base_url acc parent
+    in
+    match base_breadcrumb with
+    | None | Some [] -> loop None [] url
+    | Some (_ :: _ as l) -> (
+        let last = List.hd (* List.rev  *) l in
+        match last with
+        | _, base_url -> l @ (* List.rev @@ *) loop base_url [] url)
+
+  let rec walk_documentedsrc bb (l : DocumentedSrc.t) =
+    List.map
+      (function
+        | DocumentedSrc.Code _ as e -> e
+        | Documented _ as e -> e
+        | Nested n ->
+            let code = walk_documentedsrc bb n.code in
+            Nested { n with code }
+        | Subpage p ->
+            let p = { p with content = add bb p.content } in
+            Subpage p
+        | Alternative (Expansion r) ->
+            let expansion = walk_documentedsrc bb r.expansion in
+            Alternative (Expansion { r with expansion }))
+      l
+
+  and walk_items bb (l : Item.t list) =
+    List.map
+      (function
+        | Item.Text _ as e -> e
+        | Heading _ as e -> e
+        | Declaration d ->
+            let content = walk_documentedsrc bb d.content in
+            Declaration { d with content }
+        | Include i ->
+            let content = walk_items bb i.content.content in
+            Include { i with content = { i.content with content } })
+      l
+
+  and add bb (p : Page.t) : Page.t =
+    let preamble = walk_items bb p.preamble in
+    let items = walk_items bb p.items in
+    let breadcrumbs = Some (of_url bb p.url) in
+    { p with preamble; items; breadcrumbs }
+end
