@@ -565,7 +565,7 @@ and render_page (p : Page.t) =
   { Renderer.filename; content; children; path = p.url }
 
 let render = function
-  | Document.Page page -> [ render_page page ]
+  | Document.Page (page, _) -> [ render_page page ]
   | Source_page _ -> []
 
 let filepath url = Link.as_filename ~add_ext:false url

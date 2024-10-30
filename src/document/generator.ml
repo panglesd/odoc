@@ -89,8 +89,7 @@ let prepare_preamble comment items =
 let make_expansion_page ~source_anchor url comments items =
   let comment = List.concat comments in
   let preamble, items = prepare_preamble comment items in
-  let breadcrumbs = None (*  We fill this in a second phase *) in
-  { Page.preamble; items; url; source_anchor; breadcrumbs }
+  { Page.preamble; items; url; source_anchor }
 
 include Generator_signatures
 
@@ -1794,16 +1793,15 @@ module Make (Syntax : SYNTAX) = struct
       in
       let source_anchor = source_anchor t.source_loc in
       let breadcrumbs =
-        t.breadcrumbs
-        |> Option.map @@ fun bs ->
-           List.map
-             (fun (name, id) -> (name, Option.map Url.Path.from_identifier id))
-             bs
-           @ [ (url.name, Some url) ]
+        t.breadcrumbs |> Option.value ~default:[]
+        |> List.map (fun (name, id) ->
+               (name, Option.map Url.Path.from_identifier id))
+        (* |> fun res ->  *)
+        (*      @ [ (url.name, Some url) ] *)
       in
       let page = make_expansion_page ~source_anchor url [ unit_doc ] items in
-      let page = Doctree.Breadcrumbs.add breadcrumbs page in
-      Document.Page page
+      (* let page = Doctree.Breadcrumbs.add breadcrumbs page in *)
+      Document.Page (page, breadcrumbs)
 
     let page (t : Odoc_model.Lang.Page.t) =
       (*let name =
@@ -1814,13 +1812,11 @@ module Make (Syntax : SYNTAX) = struct
       let preamble, items = Sectioning.docs t.content in
       let source_anchor = None in
       let breadcrumbs =
-        t.breadcrumbs
-        |> Option.map @@ fun bs ->
-           List.map
-             (fun (name, id) -> (name, Option.map Url.Path.from_identifier id))
-             bs
+        t.breadcrumbs |> Option.value ~default:[]
+        |> List.map (fun (name, id) ->
+               (name, Option.map Url.Path.from_identifier id))
       in
-      Document.Page { Page.preamble; items; url; source_anchor; breadcrumbs }
+      Document.Page ({ Page.preamble; items; url; source_anchor }, breadcrumbs)
 
     let implementation (v : Odoc_model.Lang.Implementation.t) syntax_info
         source_code =

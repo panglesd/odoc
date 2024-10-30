@@ -157,3 +157,20 @@ let extract_frontmatter docs : _ =
       (Frontmatter.empty, []) docs
   in
   (fm, List.rev rev_content)
+
+let string_of_link_content (lc : link_content) =
+  let rec string_of_non_link_inline_element (nl : non_link_inline_element) =
+    match nl with
+    | `Code_span c -> c
+    | `Word w -> w
+    | `Math_span ms -> ms
+    | `Space -> " "
+    | `Styled (_, mll) -> f mll
+    | `Raw_markup _ -> ""
+  and f (lc : link_content) =
+    String.concat ""
+    @@ List.map
+         (fun { Location_.value; _ } -> string_of_non_link_inline_element value)
+         lc
+  in
+  f lc

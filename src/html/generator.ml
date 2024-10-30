@@ -498,7 +498,27 @@ end
 module Breadcrumbs = struct
   open Types
 
-  let gen_breadcrumbs ~config ~url (breadcrumbs : Page.breadcrumb list option) =
+  let module_breadcrumbs ~config ~url =
+    let rec collect acc (path : Odoc_document.Url.Path.t) =
+      match path.kind with
+      | `Page | `LeafPage -> acc
+      | `Module | `ModuleType | `Parameter _ | `Class | `ClassType | `File
+      | `SourcePage -> (
+          let b = to_breadcrumb path in
+          let acc = b :: acc in
+          match path.parent with None -> acc | Some path -> collect acc path)
+    and to_breadcrumb path =
+      let href =
+        Link.href ~config ~resolve:(Current url)
+          (Odoc_document.Url.from_path path)
+      in
+      { href_kind = Some (href, path.kind); name = path.name }
+    in
+    collect [] url
+  (* get_parent_paths (List.rev (Odoc_document.Url.Path.to_list url)) *)
+  (* |> List.rev |> List.map to_breadcrumb *)
+
+  let page_breadcrumbs ~config ~url (breadcrumbs : Document.breadcrumb list) =
     let to_breadcrumb (name, path) =
       let href_kind =
         path
@@ -509,13 +529,12 @@ module Breadcrumbs = struct
       in
       { href_kind; name }
     in
-    let breadcrumbs =
-      match breadcrumbs with
-      | None -> [ ("was none", None); ("was none", None) ]
-      | Some [] -> [ ("was []", None); ("was []", None) ]
-      | Some x -> x
-    in
     List.map to_breadcrumb breadcrumbs
+
+  let gen_breadcrumbs ~config ~url (breadcrumbs : Document.breadcrumb list) =
+    let page_breadcrumbs = page_breadcrumbs ~config ~url breadcrumbs in
+    let module_breadcrumbs = module_breadcrumbs ~config ~url in
+    page_breadcrumbs @ module_breadcrumbs
 end
 
 module Page = struct
@@ -526,17 +545,19 @@ module Page = struct
         | `Closed | `Open | `Default -> None
         | `Inline -> Some 0)
 
-  let rec include_ ~config ~sidebar { Subpage.content; _ } =
-    page ~config ~sidebar content
+  let rec include_ ~config ~sidebar ~breadcrumbs { Subpage.content; _ } =
+    page ~config ~sidebar ~breadcrumbs content
 
-  and subpages ~config ~sidebar subpages =
-    List.map (include_ ~config ~sidebar) subpages
+  and subpages ~config ~sidebar ~breadcrumbs subpages =
+    List.map (include_ ~config ~sidebar ~breadcrumbs) subpages
 
-  and page ~config ~sidebar p : Odoc_document.Renderer.page =
-    let { Page.preamble; items = i; url; source_anchor; breadcrumbs } =
+  and page ~config ~sidebar ~breadcrumbs p : Odoc_document.Renderer.page =
+    let { Page.preamble; items = i; url; source_anchor } =
       Doctree.Labels.disambiguate_page ~enter_subpages:false p
     in
-    let subpages = subpages ~config ~sidebar @@ Doctree.Subpages.compute p in
+    let subpages =
+      subpages ~config ~sidebar ~breadcrumbs @@ Doctree.Subpages.compute p
+    in
     let resolve = Link.Current url in
     let sidebar =
       match sidebar with
@@ -573,7 +594,7 @@ module Page = struct
     let resolve = Link.Current sp.url in
     let title = url.Url.Path.name
     and doc = Html_source.html_of_doc ~config ~resolve contents in
-    let breadcrumbs = Breadcrumbs.gen_breadcrumbs ~config ~url None in
+    let breadcrumbs = Breadcrumbs.gen_breadcrumbs ~config ~url [] in
     let header =
       items ~config ~resolve (Doctree.PageTitle.render_src_title sp)
     in
@@ -583,7 +604,8 @@ module Page = struct
 end
 
 let render ~config ~sidebar = function
-  | Document.Page page -> [ Page.page ~config ~sidebar page ]
+  | Document.Page (page, breadcrumbs) ->
+      [ Page.page ~config ~sidebar ~breadcrumbs page ]
   | Source_page src -> [ Page.source_page ~config src ]
 
 let filepath ~config url = Link.Path.as_filename ~config url

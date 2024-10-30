@@ -31,11 +31,11 @@ module PackageLanding = struct
     fpf ppf "{0 %s}\n" pkg.name;
     if not (List.is_empty pkg.mlds) then
       fpf ppf
-        "{1 Documentation pages}@\n@\n{{!/%s/doc/index}Documentation for %s}@\n"
+        "{1 Documentation pages}@\n@\n{{!/%s/index}Documentation for %s}@\n"
         pkg.name pkg.name;
     if not (List.is_empty pkg.libraries) then
-      fpf ppf "{1 Libraries}@\n@\n{{!/%s/lib/index}Libraries for %s}@\n"
-        pkg.name pkg.name
+      fpf ppf "{1 Libraries}@\n@\n{{!/%s/index}Libraries for %s}@\n" pkg.name
+        pkg.name
 
   let page ~odoc_dir ~odocl_dir ~mld_dir ~output_dir ~pkg =
     let content = content pkg in
@@ -121,5 +121,9 @@ let of_package ~mld_dir ~odoc_dir ~odocl_dir ~output_dir pkg =
   package_landing_page :: library_list_page :: library_pages
 
 let of_packages ~mld_dir ~odoc_dir ~odocl_dir ~output_dir all =
+  (* ignore *)
+  (* @@ List.concat_map (of_package ~mld_dir ~odoc_dir ~odocl_dir ~output_dir) all; *)
+  ignore @@ of_package;
   PackageList.page ~mld_dir ~odoc_dir ~odocl_dir ~output_dir all
-  :: List.concat_map (of_package ~mld_dir ~odoc_dir ~odocl_dir ~output_dir) all
+  :: (* List.concat_map (of_package ~mld_dir ~odoc_dir ~odocl_dir ~output_dir) all *)
+     []

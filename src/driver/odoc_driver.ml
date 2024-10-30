@@ -568,11 +568,11 @@ let run libs verbose packages_dir odoc_dir odocl_dir html_dir stats nb_workers
               ~index_dir:None all
           in
           let external_ =
-            []
-            (* let mld_dir = odoc_dir in *)
-            (* let odocl_dir = Option.value odocl_dir ~default:odoc_dir in *)
-            (* Landing_pages.of_packages ~mld_dir ~odoc_dir ~odocl_dir *)
-            (*   ~output_dir:odoc_dir all *)
+            (* [] *)
+            let mld_dir = odoc_dir in
+            let odocl_dir = Option.value odocl_dir ~default:odoc_dir in
+            Landing_pages.of_packages ~mld_dir ~odoc_dir ~odocl_dir
+              ~output_dir:odoc_dir all
           in
           internal @ external_
         in

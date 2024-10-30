@@ -84,7 +84,7 @@ let html_of_breadcrumbs (breadcrumbs : Types.breadcrumb list) =
       (* Special case leaf pages called 'index' with one parent. This is for files called
           index.mld that would otherwise clash with their parent. In particular,
           dune and odig both cause this situation right now. *)
-      let up_url = Some "../index.html" in
+      let up_url = (* Some "../index.html" *) None in
       let parent_name = x.name in
       make_navigation ~up_url [ Html.txt parent_name ]
   | current :: bs ->
