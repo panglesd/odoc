@@ -614,7 +614,7 @@ let run libs verbose packages_dir odoc_dir odocl_dir html_dir stats nb_workers
     if voodoo then
       match Util.StringMap.to_list all with
       | [ (_, p) ] ->
-          let output_path = Fpath.(odoc_dir // p.pkg_dir / "doc") in
+          let output_path = Fpath.(odoc_dir // p.pkg_dir) in
           Some output_path
       | _ -> failwith "Error, expecting singleton library in voodoo mode"
     else None
