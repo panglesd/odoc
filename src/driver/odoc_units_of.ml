@@ -165,8 +165,7 @@ let packages ~dirs ~extra_paths (pkgs : Packages.t list) : t list =
         let kind =
           let src_name = Fpath.filename src_path in
           let src_id =
-            Fpath.(pkg.pkg_dir / "src" / lib.lib_name / src_name)
-            |> Odoc.Id.of_fpath
+            Fpath.(src_lib_dir pkg lib / src_name) |> Odoc.Id.of_fpath
           in
           `Impl { src_id; src_path }
         in
