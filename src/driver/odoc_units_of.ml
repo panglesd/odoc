@@ -88,13 +88,7 @@ let packages ~dirs ~extra_paths (pkgs : Packages.t list) : t list =
       let output_file = Fpath.(index_dir / pkg.name / Odoc.sidebar_filename) in
       { output_file; json = false }
     in
-    {
-      pkg_args;
-      output_file;
-      json = false;
-      search_dir = pkg.pkg_dir;
-      sidebar = Some sidebar;
-    }
+    { pkg_args; output_file; json = false; search_dir = pkg.pkg_dir; sidebar }
   in
 
   let make_unit ~name ~kind ~rel_dir ~input_file ~pkg ~lib_deps ~enable_warnings

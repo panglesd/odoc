@@ -22,7 +22,7 @@ type index = {
   output_file : Fpath.t;
   json : bool;
   search_dir : Fpath.t;
-  sidebar : sidebar option;
+  sidebar : sidebar;
 }
 
 type 'a unit = {

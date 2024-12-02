@@ -278,11 +278,9 @@ let html_generate ~occurrence_file output_dir linked =
           ~docs:pages_linked ()
       in
       let sidebar =
-        match sidebar with
-        | None -> None
-        | Some { output_file; json } ->
-            Odoc.sidebar_generate ~output_file ~json index.output_file ();
-            Some output_file
+        let { output_file; json } : Odoc_unit.sidebar = sidebar in
+        Odoc.sidebar_generate ~output_file ~json index.output_file ();
+        output_file
       in
       (sherlodoc_index_one ~output_dir index, sidebar)
     in
@@ -318,7 +316,7 @@ let html_generate ~occurrence_file output_dir linked =
           | Some index ->
               let db_path, sidebar = compile_index index in
               let search_uris = [ db_path; Sherlodoc.js_file ] in
-              (Some search_uris, sidebar)
+              (Some search_uris, Some sidebar)
         in
         Odoc.html_generate ?search_uris ?sidebar ~output_dir ~input_file ();
         Odoc.html_generate ?search_uris ?sidebar ~output_dir ~input_file
