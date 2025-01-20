@@ -120,7 +120,6 @@ let package_list ~dirs ~remap all =
 
 let content dir _pkg libs _src subdirs all_libs pfp =
   let is_root = Fpath.to_string dir = "./" in
-  fpf pfp "{0 Directory: %a}\n\n" Fpath.pp dir;
 
   if is_root then (
     fpf pfp "@short_title /\n";
@@ -131,7 +130,9 @@ let content dir _pkg libs _src subdirs all_libs pfp =
           fpf pfp "%s/ " (Fpath.basename x))
       subdirs;
     fpf pfp "opam_switch\n%!")
-  else fpf pfp "@short_title %s\n" (Fpath.basename dir);
+  else fpf pfp "@short_title %s/\n\n" (Fpath.basename dir);
+
+  fpf pfp "{0 Directory: %a}\n\n" Fpath.pp dir;
 
   if Fpath.Set.cardinal subdirs > 0 then (
     fpf pfp "{1 Subdirectories}\n";
