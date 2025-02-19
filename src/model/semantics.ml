@@ -217,7 +217,7 @@ let rec nestable_block_element :
   | { value = `Paragraph content; location } ->
       Location.at location (`Paragraph (inline_elements content))
   | {
-   value = `Code_block { meta; delimiter = _; content; output; layout = _ };
+   value = `Code_block { meta; delimiter = _; content; output; layout };
    location;
   } ->
       let lang_tag =
@@ -230,7 +230,10 @@ let rec nestable_block_element :
         | None -> None
         | Some l -> Some (List.map nestable_block_element l)
       in
-      Location.at location (`Code_block (lang_tag, content, outputs))
+      let layout =
+        { Comment.top = layout.top; left = layout.left; bottom = layout.bottom }
+      in
+      Location.at location (`Code_block (lang_tag, content, outputs, layout))
   | { value = `Math_block s; location } -> Location.at location (`Math_block s)
   | { value = `Verbatim _; _ } as element -> element
   | { value = `Modules modules; location } ->

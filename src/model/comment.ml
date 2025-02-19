@@ -60,12 +60,15 @@ type media_href = [ `Link of string | `Reference of Reference.Asset.t ]
 
 type media_element = [ `Media of media_href * media * string ]
 
+type code_block_layout = { top : string; left : int list; bottom : string }
+
 type nestable_block_element =
   [ `Paragraph of paragraph
   | `Code_block of
     string option
     * string with_location
     * nestable_block_element with_location list option
+    * code_block_layout
   | `Math_block of string
   | `Verbatim of string
   | `Modules of module_reference list
