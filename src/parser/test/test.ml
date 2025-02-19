@@ -66,6 +66,15 @@ module Ast_to_sexp = struct
   let code_block_lang at { Ast.language; tags } =
     List [ at.at str language; opt (at.at str) tags ]
 
+  let code_block_layout { Ast.top; left; bottom } =
+    List
+      [
+        Atom "layout:";
+        Atom top;
+        List (List.map (fun i -> Atom (string_of_int i)) left);
+        Atom bottom;
+      ]
+
   let media_href = function
     | `Reference href -> List [ Atom "Reference"; Atom href ]
     | `Link href -> List [ Atom "Link"; Atom href ]
@@ -78,6 +87,9 @@ module Ast_to_sexp = struct
     | `Math_block s -> List [ Atom "math_block"; Atom s ]
     | `Code_block { Ast.meta = None; content; output = None; _ } ->
         List [ Atom "code_block"; at.at str content ]
+    | `Code_block { meta = Some meta; content; output = None; layout; _ }
+      when meta.language.value = "show_layout" ->
+        List [ Atom "code_block"; code_block_layout layout; at.at str content ]
     | `Code_block { meta = Some meta; content; output = None; _ } ->
         List [ Atom "code_block"; code_block_lang at meta; at.at str content ]
     | `Code_block { meta = Some meta; content; output = Some output; _ } ->
@@ -2694,15 +2706,36 @@ let%expect_test _ =
 
     let leading_whitespace_when_box_model_not_applicable =
       test {|
- {[  foo
+ {@show_layout[  foo
  bar
  ]}
 |};
       [%expect
         {|
         ((output
-          (((f.ml (2 1) (4 3)) (code_block ((f.ml (2 3) (4 1))  "  foo\
-                                                               \nbar")))))
+          (((f.ml (2 1) (4 3))
+            (code_block (layout: "" (0 1)  "\
+                                          \n ")
+             ((f.ml (2 15) (4 1))  "  foo\
+                                  \nbar")))))
+         (warnings ()))
+        |}]
+
+    let layout =
+      test {|
+ {@show_layout[   
+        foo
+  bar
+  ]}
+|};
+      [%expect
+        {|
+        ((output
+          (((f.ml (2 1) (5 4))
+            (code_block (layout: "   \n" (2 2)  "\
+                                               \n  ")
+             ((f.ml (2 15) (5 2))  "      foo\
+                                  \nbar")))))
          (warnings ()))
         |}]
 
