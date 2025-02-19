@@ -44,7 +44,10 @@ type code_block_meta = {
 type media = Token.media
 type media_href = Token.media_href
 
+type code_block_layout = { top : string; left : int list; bottom : string }
+
 type code_block = {
+  layout : code_block_layout;
   meta : code_block_meta option;
   delimiter : string option;
   content : string with_location;

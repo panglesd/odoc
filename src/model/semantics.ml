@@ -216,8 +216,10 @@ let rec nestable_block_element :
   match element with
   | { value = `Paragraph content; location } ->
       Location.at location (`Paragraph (inline_elements content))
-  | { value = `Code_block { meta; delimiter = _; content; output }; location }
-    ->
+  | {
+   value = `Code_block { meta; delimiter = _; content; output; layout = _ };
+   location;
+  } ->
       let lang_tag =
         match meta with
         | Some { language = { Location.value; _ }; _ } -> Some value

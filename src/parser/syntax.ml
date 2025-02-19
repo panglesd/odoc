@@ -902,8 +902,12 @@ let rec block_element_list : type block stops_at_which_tokens.
         consume_block_elements `After_text acc
     | {
         value =
-          `Code_block (meta, delim, { value = s; location = v_loc }, has_outputs)
-          as token;
+          `Code_block
+            ( meta,
+              delim,
+              { value = s; location = v_loc },
+              has_outputs,
+              (top, left, bottom) ) as token;
         location;
       } as next_token ->
         warn_if_after_text next_token;
@@ -941,6 +945,7 @@ let rec block_element_list : type block stops_at_which_tokens.
                  delimiter;
                  content = { value = s; location = v_loc };
                  output;
+                 layout = { top; left; bottom };
                })
         in
         let block = Loc.at location block in
