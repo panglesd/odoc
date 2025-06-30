@@ -700,8 +700,7 @@ module Page = struct
       items ~config ~resolve (Doctree.PageTitle.render_src_title sp)
     in
     if Config.as_json config then
-      Html_fragment_json.make_src ~config ~url ~breadcrumbs ~sidebar ~header
-        [ doc ]
+      Html_fragment_json.make_src ~config ~url ~breadcrumbs ~header [ doc ]
     else
       Html_page.make_src ~breadcrumbs ~header ~config ~url ~sidebar title
         [ doc ]

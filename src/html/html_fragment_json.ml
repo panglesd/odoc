@@ -36,11 +36,6 @@ let json_of_toc (toc : Types.toc list) : Json.json =
   let toc_json_list = toc |> List.map section in
   `Array toc_json_list
 
-let json_of_sidebar config sidebar =
-  match sidebar with
-  | None -> `Null
-  | Some sidebar -> `String (json_of_html config sidebar)
-
 let make ~config ~preamble ~url ~breadcrumbs ~toc ~uses_katex ~source_anchor
     ~header content children =
   let filename = Link.Path.as_filename ~config url in
@@ -66,12 +61,11 @@ let make ~config ~preamble ~url ~breadcrumbs ~toc ~uses_katex ~source_anchor
   in
   { Odoc_document.Renderer.filename; content; children; path = url }
 
-let make_src ~config ~url ~breadcrumbs ~sidebar ~header content =
+let make_src ~config ~url ~breadcrumbs ~header content =
   let filename = Link.Path.as_filename ~config url in
   let filename = Fpath.add_ext ".json" filename in
   let htmlpp = Html.pp_elt ~indent:(Config.indent config) () in
   let json_to_string json = Json.to_string json in
-  let global_toc = json_of_sidebar config sidebar in
   let content ppf =
     Format.pp_print_string ppf
       (json_to_string
@@ -79,7 +73,6 @@ let make_src ~config ~url ~breadcrumbs ~sidebar ~header content =
             [
               ("type", `String "source");
               ("breadcrumbs", json_of_breadcrumbs config breadcrumbs);
-              ("global_toc", global_toc);
               ("header", `String (json_of_html config header));
               ( "content",
                 `String
