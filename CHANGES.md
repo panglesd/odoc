@@ -6,6 +6,8 @@
 - Support for OxCaml modalities (@art-w, #1420)
 - Support OxCaml 5.2.0minus39 (@jonludlam, #1469)
 - Fix resolving functor through `module type of` (@Leonidas-from-XIV, #1471)
+- Display items included via `include functor` as included via the functor
+  (@Leonidas-from-XIV, #1452)
 
 # 3.2.1
 
