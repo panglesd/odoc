@@ -1430,7 +1430,7 @@ let generate_wrapper_module =
     incr wrapper_counter;
     let dummy_id =
       let dummy_name =
-        let sep = match hidden with | true -> "__" | false -> "_" in
+        let sep = match hidden with | true -> "__" | false -> "__" in
         let name = Printf.sprintf "%s%s%d" prefix sep !wrapper_counter in
         match hidden with
         | false -> Odoc_model.Names.ModuleName.make_std name
