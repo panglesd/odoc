@@ -17,27 +17,6 @@
   </header>
   <div class="odoc-content">
    <div class="odoc-spec">
-    <div class="spec module anchored" id="module-Make">
-     <a href="#module-Make" class="anchor"></a>
-     <code>
-      <span><span class="keyword">module</span> 
-       <a href="Oxcaml-No_include_functor-Make.html">Make</a>
-      </span>
-      <span> (
-       <a href="Oxcaml-No_include_functor-Make-argument-1-T.html">T</a>
-        : <span class="keyword">sig</span> ... 
-       <span class="keyword">end</span>) : <span class="keyword">sig</span>
-        ... <span class="keyword">end</span>
-      </span>
-     </code>
-    </div>
-    <div class="spec-doc">
-     <p>Module without any <code>include functor</code> features, this
-       is how things are done in plain OCaml at the moment.
-     </p>
-    </div>
-   </div>
-   <div class="odoc-spec">
     <div class="spec module anchored" id="module-T">
      <a href="#module-T" class="anchor"></a>
      <code>
@@ -48,6 +27,11 @@
        <span class="keyword">end</span>
       </span>
      </code>
+    </div>
+    <div class="spec-doc">
+     <p>Module without any <code>include functor</code> features, this
+       is how things are done in plain OCaml at the moment.
+     </p>
     </div>
    </div>
    <div class="odoc-include">
@@ -82,10 +66,7 @@
       <div class="spec type anchored" id="type-included">
        <a href="#type-included" class="anchor"></a>
        <code><span><span class="keyword">type</span> included</span>
-        <span> = 
-         <a href="Oxcaml-No_include_functor-Make.html#type-included">
-          Make(T).included
-         </a>
+        <span> = <a href="Oxcaml-No_include_functor-T.html#type-t">T.t</a>
         </span>
        </code>
       </div>

@@ -686,7 +686,11 @@ contended modality applied to all definitions in the module, except the ones whi
 \fB15 Include functor on signatures\fR
 .in 
 .sp 
+\f[CB]module\fR Make2 (T : \f[CB]sig\fR \.\.\. \f[CB]end\fR) : \f[CB]sig\fR \.\.\. \f[CB]end\fR
+.sp 
 \f[CB]module\fR No_include_functor : \f[CB]sig\fR \.\.\. \f[CB]end\fR
+.sp 
+\f[CB]module\fR Make (T : \f[CB]sig\fR \.\.\. \f[CB]end\fR) : \f[CB]sig\fR \.\.\. \f[CB]end\fR
 .sp 
 \f[CB]module\fR Include_functor : \f[CB]sig\fR \.\.\. \f[CB]end\fR
 .sp 

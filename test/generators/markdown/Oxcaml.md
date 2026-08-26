@@ -350,7 +350,13 @@ module M3 : sig ... end
 ## Include functor on signatures
 
 ```ocaml
+module Make2 (T : sig ... end) : sig ... end
+```
+```ocaml
 module No_include_functor : sig ... end
+```
+```ocaml
+module Make (T : sig ... end) : sig ... end
 ```
 ```ocaml
 module Include_functor : sig ... end
