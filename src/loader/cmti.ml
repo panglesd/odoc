@@ -807,7 +807,7 @@ and read_module_equation env p =
   let open Module in
     Alias (Env.Path.read_module env.ident_env p, None)
 
-and read_signature_item env parent include_functor_wrapper item =
+and read_signature_item env parent ~preceding item =
   let open Signature in
     match item.sig_desc with
     | Tsig_value vd ->
@@ -841,7 +841,7 @@ and read_signature_item env parent include_functor_wrapper item =
 #else
     | Tsig_include incl ->
 #endif
-        read_include env parent include_functor_wrapper incl
+        read_include env parent ~preceding incl
     | Tsig_class cls ->
         read_class_descriptions env parent cls
     | Tsig_class_type cltyps ->
@@ -888,7 +888,7 @@ and read_module_type_substitution env parent mtd =
 
 
 
-and read_include env parent include_functor_wrapper incl =
+and read_include env parent ~preceding incl =
   let open Include in
   let loc = Doc_attr.read_location incl.incl_loc in
   let container = (parent : Identifier.Signature.t :> Identifier.LabelParent.t) in
@@ -913,20 +913,25 @@ and read_include env parent include_functor_wrapper incl =
     let decl = Include.ModuleType uexpr in
     [Include {parent; doc; decl; expansion; status; strengthened=None; loc }]
 #if defined OXCAML
-  | _, Tmty_typeof _, (Tincl_functor _ | Tincl_gen_functor _)
-  | _, Tmty_ident (_, _), (Tincl_functor _ | Tincl_gen_functor _) -> (
-    let hidden = false in
-    let type_ : Module.decl = ModuleType expr in
-    let id, functor_path = Cmi.generate_wrapper_module parent ~prefix:"INCLUDE" ~hidden in
-    let functor_ : Module.t = {id; source_loc=None; doc; type_; canonical=None; hidden} in
-    let functor_ = Signature.Module (Ordinary, functor_) in
-    let module_path : Path.Module.t = `Apply (functor_path, include_functor_wrapper) in
-
-    (* include that module *)
-    let mt : ModuleType.expr = ModuleType.TypeOf {t_desc = StructInclude module_path; t_original_path = module_path; t_expansion = None } in
-    let decl = Functor {target=ModuleType mt; original_ref=ModuleType expr} in
+  | _, _, (Tincl_functor _ | Tincl_gen_functor _) -> (
+    (* Desugar [include functor F] into [module type of F(DUMMY__)], where
+       [DUMMY__] contains aliases to the items that precede the include. *)
+    let dummy_item, dummy_path = Cmi.dummy_module parent preceding in
+    let original_ref, functor_items, functor_path =
+      match expr with
+      | ModuleType.TypeOf { t_desc = ModPath p; _ } ->
+        (Include.Path p, [], p)
+      | _ ->
+        (* In interfaces (so in cmti) [include functor MT] takes a module type
+           (of type functor), which cannot be applied as it is not a functor
+           (but a functor type). Create a fake moduleto be able to apply it. *)
+        let item, path = Cmi.functor_module parent expr in
+        (Include.ModuleType expr, [ item ], path)
+    in
+    let applied : Path.Module.t = `Apply (functor_path, dummy_path) in
+    let decl = Functor {target = Path applied; original_ref} in
     let include_ = Signature.Include {parent; doc; decl; expansion; status; strengthened=None; loc } in
-    [functor_; include_])
+    (dummy_item :: functor_items) @ [include_])
 #endif
   | _ ->
     content.items
@@ -953,26 +958,13 @@ and read_signature :
     in
     Doc_attr.extract_top_comment internal_tags ~warnings_tag:env.warnings_tag ~classify parent sg.sig_items
   in
-  let hidden = false in
-  let dummy_id, dummy_path = Cmi.generate_wrapper_module parent ~prefix:"BODY" ~hidden in
-  let items, include_functors =
+  let items =
     List.fold_left
-      (fun (items, include_functors) item ->
-        let signature_items, include_functors =
-          read_signature_item env parent dummy_path item
-          |> Odoc_utils.List.partition_map (function
-            | Signature.Include ({ decl = Include.Functor _ } as include_functor) -> Odoc_utils.Either.Right include_functor
-            | otherwise -> Odoc_utils.Either.Left otherwise)
-        in
-        (List.rev_append signature_items items, include_functors))
-      ([], []) items
-  in
-  let items = List.rev items in
-  let items = match include_functors with
-  | [] -> items
-  | include_functors ->
-    (* if we have any include functor, we need to wrap  *)
-    Cmi.generate_wrapper_module_functor_type parent ~include_functors (dummy_id, dummy_path) ~hidden items
+      (fun items item ->
+        List.rev_append (read_signature_item env parent ~preceding:items item)
+          items)
+      [] items
+    |> List.rev
   in
   match doc_post with
   | {elements=[]; _} ->

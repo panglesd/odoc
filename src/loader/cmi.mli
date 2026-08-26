@@ -120,6 +120,12 @@ val read_label_modalities :
 
 val generate_wrapper_module : Paths.Identifier.Signature.t -> prefix:string -> hidden:bool -> Paths.Identifier.Module.t * Paths.Path.Module.t
 
-val generate_wrapper_module_sig : Paths.Identifier.Signature.t -> include_functors:Odoc_model.Lang.Include.t list -> (Paths.Identifier.Module.t * Paths.Path.Module.t) -> hidden:bool -> Odoc_model.Lang.Signature.item list -> Odoc_model.Lang.Signature.item list
+val dummy_module :
+  Paths.Identifier.Signature.t ->
+  Odoc_model.Lang.Signature.item list ->
+  Odoc_model.Lang.Signature.item * Paths.Path.Module.t
 
-val generate_wrapper_module_functor_type : Paths.Identifier.Signature.t -> include_functors:Odoc_model.Lang.Include.t list -> (Paths.Identifier.Module.t * Paths.Path.Module.t) -> hidden:bool -> Odoc_model.Lang.Signature.item list -> Odoc_model.Lang.Signature.item list
+val functor_module :
+  Paths.Identifier.Signature.t ->
+  Odoc_model.Lang.ModuleType.expr ->
+  Odoc_model.Lang.Signature.item * Paths.Path.Module.t

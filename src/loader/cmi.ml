@@ -1441,47 +1441,87 @@ let generate_wrapper_module =
     let dummy_path = `Identifier (dummy_id, hidden) in
     (dummy_id, dummy_path)
 
-let shadow_nothing : Include.shadowed =
-  {s_modules=[]; s_module_types=[]; s_values=[]; s_types=[]; s_classes=[]; s_class_types=[]}
-
 let no_doc : Odoc_model.Comment.docs = { elements = []; warnings_tag = None }
-let no_loc = Odoc_model.Location_.span []
 
-let wrapper_and_include parent (dummy_id, dummy_path) ~hidden items =
-  let doc = no_doc in
-  let sig_ : Signature.t = {items; compiled=true; removed=[]; doc} in
-  let type_ : Module.decl = ModuleType (Signature sig_) in
-  let module_ : Module.t = {id=dummy_id; source_loc=None; doc; type_; canonical=None; hidden} in
-  let dummy_module : Signature.item = Module (Ordinary, module_) in
-  let umt : ModuleType.U.expr = TypeOf (StructInclude dummy_path, dummy_path) in
-  let decl : Include.decl = ModuleType umt in
-  let expansion : Include.expansion = {shadowed=shadow_nothing; content=sig_} in
-  let include_ : Include.t = {loc=no_loc; parent; strengthened=None; doc; status=`Inline; decl; expansion} in
-  let include_dummy : Signature.item = Include include_ in
-  (dummy_module, include_dummy)
+let rec alias_of_item parent (item : Signature.item) : Signature.item list =
+  let open Signature in
+  match item with
+  | Type (_, t) ->
+      let id =
+        Identifier.Mk.type_ (parent, TypeName.make_std (Identifier.name t.id))
+      in
+      let params =
+        List.map
+          (fun (p : TypeDecl.param) ->
+            match p.desc with Var v -> TypeExpr.Var v | Any -> TypeExpr.Any)
+          t.equation.params
+      in
+      let manifest =
+        TypeExpr.Constr
+          ( `Resolved (`Identifier (t.id :> Paths.Identifier.Path.Type.t)),
+            params )
+      in
+      let equation = { t.equation with manifest = Some manifest } in
+      [
+        Type
+          ( Ordinary,
+            { t with id; doc = no_doc; equation; representation = None } );
+      ]
+  | Module (_, m) ->
+      let id =
+        Identifier.Mk.module_
+          (parent, ModuleName.make_std (Identifier.name m.id))
+      in
+      let type_ =
+        Module.Alias
+          ( `Resolved (`Identifier (m.id :> Paths.Identifier.Path.Module.t)),
+            None )
+      in
+      [ Module (Ordinary, { m with id; doc = no_doc; type_ }) ]
+  | ModuleType mt ->
+      let id =
+        Identifier.Mk.module_type
+          (parent, ModuleTypeName.make_std (Identifier.name mt.id))
+      in
+      let expr =
+        Some
+          (ModuleType.Path
+             { p_path = `Resolved (`Identifier mt.id); p_expansion = None })
+      in
+      [ ModuleType { mt with id; doc = no_doc; expr } ]
+  | Value v ->
+      let id =
+        Identifier.Mk.value (parent, ValueName.make_std (Identifier.name v.id))
+      in
+      [ Value { v with id; doc = no_doc } ]
+  | Include inc ->
+      List.concat_map (alias_of_item parent) inc.expansion.content.items
+  (* TODO: check if computed expansion of [Include] is good enough *)
+  | Class _ | ClassType _ | TypExt _ | Exception _ ->
+      [] (* TODO but this is just a test *)
+  | ModuleSubstitution _ | ModuleTypeSubstitution _ | TypeSubstitution _
+  | Comment _ | Open _ ->
+      (* This is normal a priori. *)
+      []
 
-let generate_wrapper_module_sig parent ~include_functors wrapper ~hidden items =
-  let dummy_module, include_dummy = wrapper_and_include parent wrapper ~hidden items in
-  let include_functors = List.rev_map (fun include_ -> Signature.Include include_) include_functors in
-  [dummy_module; include_dummy] @ include_functors
-
-let generate_wrapper_module_functor_type parent ~include_functors (dummy_id, dummy_path) ~hidden items =
-  let dummy_module, include_dummy = wrapper_and_include parent (dummy_id, dummy_path) ~hidden items in
-  (* functor type applied modules *)
-  let modules_and_applications = List.map (fun include_functor ->
-    match include_functor with
-    | {Include.decl = Include.Functor ({target=ModuleType mty; _} as f)} -> (
-      let (id, path) = generate_wrapper_module parent ~prefix:"APPLIED" ~hidden in
-      let type_ = Module.ModuleType mty in
-      let functor_module : Module.t = {id; source_loc=None; doc=no_doc; type_; canonical=None; hidden} in
-      let module_ = Signature.Module (Ordinary, functor_module) in
-      let expansion = include_functor.Include.expansion in
-      let decl = Include.Functor {f with target = Path path} in
-      let application = Signature.Include {decl; parent; doc=no_doc; strengthened=None; loc=no_loc;expansion;status=`Default} in
-      [module_; application]
-      )
-    | _ -> failwith "unexpected include which is not an include functor") include_functors
-    |> List.concat
+(* [dummy_module] is DUMMY__ is a module containing aliases to all preceding items. *)
+let dummy_module parent preceding =
+  let id, path = generate_wrapper_module parent ~prefix:"DUMMY" ~hidden:true in
+  let sig_parent = (id :> Identifier.Signature.t) in
+  let items = List.concat_map (alias_of_item sig_parent) (List.rev preceding) in
+  let sig_ : Signature.t = { items; compiled = false; removed = []; doc = no_doc } in
+  let m : Module.t =
+    { id; source_loc = None; doc = no_doc;
+      type_ = ModuleType (Signature sig_); canonical = None; hidden = true }
   in
-  [dummy_module; include_dummy] @ modules_and_applications
+  (Signature.Module (Ordinary, m), path)
 
+(* Given a module type, create a hidden module with the module type.
+   See where it is used to understand what it is for!  *)
+let functor_module parent expr =
+  let id, path = generate_wrapper_module parent ~prefix:"FUNCTOR" ~hidden:true in
+  let m : Module.t =
+    { id; source_loc = None; doc = no_doc; type_ = ModuleType expr;
+      canonical = None; hidden = true }
+  in
+  (Signature.Module (Ordinary, m), path)

@@ -311,7 +311,7 @@ module Include_functor_desugared : sig
   end
   include module type of DUMMY__
 
-  include module type of Make2(struct include DUMMY__ with type t = int end)
+  include module type of Make2(DUMMY__)
 end
 
 module Include_functor_named_type_desugared : sig
